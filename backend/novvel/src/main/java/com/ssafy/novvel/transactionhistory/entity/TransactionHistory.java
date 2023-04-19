@@ -1,6 +1,6 @@
 package com.ssafy.novvel.transactionhistory.entity;
 
-import com.ssafy.novvel.user.entity.User;
+import com.ssafy.novvel.member.entity.Member;
 import com.ssafy.novvel.util.BaseEntity;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -16,7 +16,7 @@ public class TransactionHistory extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private User user;
+    private Member member;
 
     @Enumerated(EnumType.STRING)
     private PointChangeType pointChangeType;

@@ -1,8 +1,10 @@
-package com.ssafy.novvel.user.entity;
+package com.ssafy.novvel.member.entity;
 
-import com.ssafy.novvel.file.entity.File;
+import com.ssafy.novvel.file.entity.Resource;
 import com.ssafy.novvel.util.BaseEntity;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -10,14 +12,16 @@ import javax.validation.constraints.*;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class User extends BaseEntity {
+@AllArgsConstructor
+@Builder
+public class Member extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    private File profile;
+    private Resource profile;
 
     @NotBlank
     @Size(min = 4, max = 20)
