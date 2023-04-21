@@ -4,15 +4,20 @@ import com.ssafy.novvel.member.entity.Member;
 import java.util.Collection;
 import java.util.Set;
 import lombok.Builder;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 @Builder
-@RequiredArgsConstructor
+@NoArgsConstructor
 public class CustomUserDetails implements UserDetails {
 
     private Member member;
+
+    public CustomUserDetails(Member member) {
+        this.member = member;
+    }
 
     public Member getMember() {
         return this.member;
