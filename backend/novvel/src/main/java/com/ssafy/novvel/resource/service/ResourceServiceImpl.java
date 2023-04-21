@@ -1,21 +1,19 @@
-package com.ssafy.novvel.file.service;
+package com.ssafy.novvel.resource.service;
 
 import com.madgag.gif.fmsware.GifDecoder;
 import com.ssafy.novvel.exception.NotSupportFormatException;
-import com.ssafy.novvel.file.entity.Resource;
-import com.ssafy.novvel.file.repository.ResourceRepository;
+import com.ssafy.novvel.resource.entity.Resource;
+import com.ssafy.novvel.resource.repository.ResourceRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.UUID;
@@ -30,8 +28,25 @@ public class ResourceServiceImpl implements ResourceService {
 
 
     @Override
+    public Resource saveFile(MultipartFile multipartFile) throws IOException {
+        Resource result = null;
+        File file = null;
+        try {
+            file = convert(multipartFile);
+            result = saveFile(file);
+        } finally {
+            if (file != null) {
+                file.delete();
+            }
+        }
+        return result;
+    }
+
+    @Override
     @Transactional
     public Resource saveFile(File file) throws IOException {
+
+
         String fileExtension = getFileExtension(file);
         String fileNamePrefix = "files/" + LocalDate.now(ZoneId.of("Asia/Seoul")) + UUID.randomUUID() + "-";
         File thumbnail = null, mid = null;
@@ -185,6 +200,15 @@ public class ResourceServiceImpl implements ResourceService {
         String fileName = file.getName();
         int index = fileName.lastIndexOf('.');
         return fileName.substring(index);
+    }
+
+    private File convert(MultipartFile file) throws IOException {
+        File convFile = new File(file.getOriginalFilename());
+        convFile.createNewFile();
+        FileOutputStream fos = new FileOutputStream(convFile);
+        fos.write(file.getBytes());
+        fos.close();
+        return convFile;
     }
 
 }

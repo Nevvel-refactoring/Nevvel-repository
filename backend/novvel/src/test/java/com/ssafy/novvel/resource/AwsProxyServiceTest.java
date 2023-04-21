@@ -1,6 +1,6 @@
-package com.ssafy.novvel.file;
+package com.ssafy.novvel.resource;
 
-import com.ssafy.novvel.file.service.AwsProxyService;
+import com.ssafy.novvel.resource.service.AwsProxyService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

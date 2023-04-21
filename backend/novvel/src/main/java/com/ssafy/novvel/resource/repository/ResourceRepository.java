@@ -1,6 +1,6 @@
-package com.ssafy.novvel.file.repository;
+package com.ssafy.novvel.resource.repository;
 
-import com.ssafy.novvel.file.entity.Resource;
+import com.ssafy.novvel.resource.entity.Resource;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

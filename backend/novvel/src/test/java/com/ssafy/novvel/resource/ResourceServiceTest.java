@@ -1,9 +1,9 @@
-package com.ssafy.novvel.file;
+package com.ssafy.novvel.resource;
 
-import com.ssafy.novvel.file.entity.Resource;
-import com.ssafy.novvel.file.repository.ResourceRepository;
-import com.ssafy.novvel.file.service.AwsProxyServiceImpl;
-import com.ssafy.novvel.file.service.ResourceServiceImpl;
+import com.ssafy.novvel.resource.entity.Resource;
+import com.ssafy.novvel.resource.repository.ResourceRepository;
+import com.ssafy.novvel.resource.service.AwsProxyService;
+import com.ssafy.novvel.resource.service.ResourceServiceImpl;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,9 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import java.io.File;
 import java.io.IOException;
 
@@ -24,9 +22,8 @@ class ResourceServiceTest {
     private ResourceServiceImpl resourceService;
     @Mock
     private ResourceRepository resourceRepository;
-
-    @Spy
-    private AwsProxyServiceImpl awsProxyService;
+    @Mock
+    private AwsProxyService awsProxyService;
 
     @Test
 //    @Disabled
@@ -45,18 +42,14 @@ class ResourceServiceTest {
 
         //when
         Mockito.doReturn(expect).when(resourceRepository).save(Mockito.any());
-        resourceService = new ResourceServiceImpl(awsProxyService, resourceRepository);
+        Mockito.doReturn("urlPath").when(awsProxyService).uploadFile(Mockito.any(),Mockito.any());
+//        resourceService = new ResourceServiceImpl(awsProxyService, resourceRepository);
 
         //then
         Resource result = resourceService.saveFile(file);
-        File resultOrigin = new File(result.getUrl());
-        File resultThumbnail = new File(result.getThumbnailUrl());
-
         Assertions.assertThat(result.getUrl()).isNotNull();
-        Assertions.assertThat(resultOrigin.canRead()).isTrue();
-        Assertions.assertThat(resultThumbnail.canRead()).isTrue();
-        resultOrigin.delete();
-        resultThumbnail.delete();
+        Assertions.assertThat(result.getOriginName()).isEqualTo("test.gif");
+
     }
 
 
@@ -77,18 +70,15 @@ class ResourceServiceTest {
 
         //when
         Mockito.doReturn(expect).when(resourceRepository).save(Mockito.any());
-        resourceService = new ResourceServiceImpl(awsProxyService, resourceRepository);
+        Mockito.doReturn("urlPath").when(awsProxyService).uploadFile(Mockito.any(),Mockito.any());
+//        resourceService = new ResourceServiceImpl(awsProxyService, resourceRepository);
 
         //then
         Resource result = resourceService.saveFile(file);
-        File resultOrigin = new File(result.getUrl());
-        File resultThumbnail = new File(result.getThumbnailUrl());
 
         Assertions.assertThat(result.getUrl()).isNotNull();
-        Assertions.assertThat(resultOrigin.canRead()).isTrue();
-        Assertions.assertThat(resultThumbnail.canRead()).isTrue();
-        resultOrigin.delete();
-        resultThumbnail.delete();
+        Assertions.assertThat(result.getOriginName()).isEqualTo("test.jpg");
+
     }
 
     @Test
@@ -108,14 +98,14 @@ class ResourceServiceTest {
 
         //when
         Mockito.doReturn(expect).when(resourceRepository).save(Mockito.any());
-        resourceService = new ResourceServiceImpl(awsProxyService, resourceRepository);
+        Mockito.doReturn("urlPath").when(awsProxyService).uploadFile(Mockito.any(),Mockito.any());
+//        resourceService = new ResourceServiceImpl(awsProxyService, resourceRepository);
 
         //then
         Resource result = resourceService.saveFile(file);
-        File resultOrigin = new File(result.getUrl());
 
         Assertions.assertThat(result.getUrl()).isNotNull();
-        Assertions.assertThat(resultOrigin.canRead()).isTrue();
+        Assertions.assertThat(result.getOriginName()).isEqualTo("sample.mp3");
 //        resultOrigin.delete();
     }
 

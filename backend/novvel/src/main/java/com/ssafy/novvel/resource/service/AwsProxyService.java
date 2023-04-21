@@ -1,4 +1,4 @@
-package com.ssafy.novvel.file.service;
+package com.ssafy.novvel.resource.service;
 
 import java.io.File;
 import java.io.IOException;

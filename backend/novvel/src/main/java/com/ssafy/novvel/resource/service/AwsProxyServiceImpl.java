@@ -1,4 +1,4 @@
-package com.ssafy.novvel.file.service;
+package com.ssafy.novvel.resource.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

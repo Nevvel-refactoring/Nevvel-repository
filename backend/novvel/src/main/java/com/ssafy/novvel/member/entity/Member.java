@@ -1,6 +1,6 @@
 package com.ssafy.novvel.member.entity;
 
-import com.ssafy.novvel.file.entity.Resource;
+import com.ssafy.novvel.resource.entity.Resource;
 import com.ssafy.novvel.util.BaseEntity;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

@@ -1,4 +1,4 @@
-package com.ssafy.novvel.file.entity;
+package com.ssafy.novvel.resource.entity;
 
 import com.ssafy.novvel.util.BaseEntity;
 import lombok.*;
