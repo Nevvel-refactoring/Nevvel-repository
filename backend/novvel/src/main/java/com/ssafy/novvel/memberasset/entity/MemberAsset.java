@@ -1,7 +1,6 @@
-package com.ssafy.novvel.transactionhistory.entity;
+package com.ssafy.novvel.memberasset.entity;
 
 import com.ssafy.novvel.asset.entity.Asset;
-import com.ssafy.novvel.episode.entity.Episode;
 import com.ssafy.novvel.member.entity.Member;
 import com.ssafy.novvel.util.BaseEntity;
 import lombok.*;
@@ -9,14 +8,12 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
-
 @Entity
 @Getter
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Builder
-public class TransactionHistory extends BaseEntity {
-
+public class MemberAsset extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -28,20 +25,10 @@ public class TransactionHistory extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @Setter
+    @NotNull
     private Asset asset;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @Setter
-    private Episode episode;
-
-    @Enumerated(EnumType.STRING)
-    @Setter
-    @Column(name = "type")
-    @NotNull
-    private PointChangeType pointChangeType;
-
     @Setter
     @NotNull
-    private Long point;
-
+    private String type;
 }
