@@ -1,0 +1,3 @@
+[submodule "d106_config"]
+	path = d106_config
+	url = https://lab.ssafy.com/qgw13467/d106_config.git
