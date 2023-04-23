@@ -15,21 +15,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
-    private final JWTProvider jwtProvider;
-
-    public OAuth2LoginSuccessHandler(JWTProvider jwtProvider) {
-        this.jwtProvider = jwtProvider;
-    }
-
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
         Authentication authentication) {
 
         OidcUser oidcUser = (OidcUser) authentication.getPrincipal();
 
-        Cookie accessToken = new Cookie("accessToken", jwtProvider.createAccessToken(
-            oidcUser.getAttribute(CustomUserInfo.CLIENT_SUB.getValue())));
-        Cookie refreshToken = new Cookie("refreshToken", jwtProvider.createRefreshToken());
+        Cookie accessToken = new Cookie("accessToken", oidcUser.getAttribute("accessToken"));
+        Cookie refreshToken = new Cookie("refreshToken", oidcUser.getAttribute("refreshToken"));
         accessToken.setHttpOnly(true);
         refreshToken.setHttpOnly(true);
         accessToken.setPath("/");
