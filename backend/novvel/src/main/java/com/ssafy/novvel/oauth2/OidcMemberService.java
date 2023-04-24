@@ -5,6 +5,7 @@ import com.ssafy.novvel.member.repository.MemberRepository;
 import com.ssafy.novvel.util.token.jwt.JWTProvider;
 import java.util.HashSet;
 import java.util.Set;
+import javax.servlet.http.Cookie;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -38,15 +39,14 @@ public class OidcMemberService implements OAuth2UserService<OidcUserRequest, Oid
 
         String clientName = userRequest.getClientRegistration().getClientName();
         String clientSub = clientName + "_" + oidcUser.getName();
-        String refreshToken = jwtProvider.createRefreshToken();
-        String accessToken = jwtProvider.createAccessToken(clientSub);
+        Cookie refreshToken = jwtProvider.createRefreshToken();
         Set<GrantedAuthority> mappedAuthorities = getAuthority(
-            clientSub, oidcUser.getEmail(), refreshToken);
+            clientSub, oidcUser.getEmail(), refreshToken.getValue());
 
         return new DefaultOidcUser(mappedAuthorities, oidcUser.getIdToken(),
             OidcUserInfo.builder().claim(CustomUserInfo.CLIENT_SUB.getValue(), clientSub)
-                .claim("refreshToken", refreshToken)
-                .claim("accessToken", accessToken).build());
+                .claim(JWTProvider.getRefreshToken(), refreshToken)
+                .claim(JWTProvider.getAccessToken(), jwtProvider.createAccessToken(clientSub)).build());
     }
 
     private Set<GrantedAuthority> getAuthority(String sub, String email, String refreshToken) {

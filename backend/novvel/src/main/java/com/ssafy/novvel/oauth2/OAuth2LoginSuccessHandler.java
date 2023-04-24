@@ -1,8 +1,6 @@
 package com.ssafy.novvel.oauth2;
 
 
-import com.ssafy.novvel.util.token.jwt.JWTProvider;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -21,14 +19,8 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
         OidcUser oidcUser = (OidcUser) authentication.getPrincipal();
 
-        Cookie accessToken = new Cookie("accessToken", oidcUser.getAttribute("accessToken"));
-        Cookie refreshToken = new Cookie("refreshToken", oidcUser.getAttribute("refreshToken"));
-        accessToken.setHttpOnly(true);
-        refreshToken.setHttpOnly(true);
-        accessToken.setPath("/");
-        refreshToken.setPath("/");
-        response.addCookie(accessToken);
-        response.addCookie(refreshToken);
+        response.addCookie(oidcUser.getAttribute("accessToken"));
+        response.addCookie(oidcUser.getAttribute("refreshToken"));
 
         if (authentication.getAuthorities().stream()
             .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_GUEST"))) {

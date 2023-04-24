@@ -9,4 +9,6 @@ import org.springframework.stereotype.Repository;
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
     Optional<Member> findBySub(String sub);
+
+    Optional<Member> findByRefreshToken(String refreshToken);
 }
