@@ -23,7 +23,6 @@ public class MemberServiceImpl implements MemberService {
         this.memberRepository = memberRepository;
     }
 
-    @Override
     public MemberInfoDto getMemberInfo(Member member) {
 
         return new MemberInfoDto(member.getPoint(), member.getProfile().getUrl(),
@@ -43,5 +42,13 @@ public class MemberServiceImpl implements MemberService {
             memberInfoRegistDto.getDescription(), member.getRefreshToken(), member.getPoint());
 
         return memberRepository.save(fullInfoMember);
+    }
+
+    @Override
+    @Transactional
+    public void signOut(Member member) {
+
+        member.removeToken();
+        memberRepository.save(member);
     }
 }

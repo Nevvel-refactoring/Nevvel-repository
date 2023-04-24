@@ -44,8 +44,7 @@ public class Member extends BaseEntity {
     private Long point;
 
 
-
-
-
-
+    public void removeToken() {
+        this.refreshToken = null;
+    }
 }

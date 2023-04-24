@@ -12,4 +12,6 @@ public interface MemberService {
 
     Member addMemberInfo(MultipartFile file, MemberInfoRegistDto memberInfoRegistDto,
         Member member) throws IOException;
+
+    void signOut(Member member);
 }
