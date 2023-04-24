@@ -112,4 +112,24 @@ class MemberServiceTest {
         Assertions.assertThat(result.getNickname()).isEqualTo(memberInfoRegistDto.getNickname());
         Assertions.assertThat(result.getRole()).isEqualTo(member.getRole());
     }
+
+    @Test
+    @DisplayName("sign out test")
+    void userSignOut() {
+
+        // given
+        Member member = Member.builder()
+            .id(1L)
+            .email("email@naver.com")
+            .nickname("nickname")
+            .refreshToken("token")
+            .point(0L)
+            .build();
+
+        // when
+        memberServiceImpl.signOut(member);
+
+        // then
+        Assertions.assertThat(member.getRefreshToken()).isEqualTo(null);
+    }
 }
