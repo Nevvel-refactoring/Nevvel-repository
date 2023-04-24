@@ -57,6 +57,7 @@ public class TestUtil {
             .point(0L)
             .description("test")
             .refreshToken("testToken")
+            .profile(getMemberProfile())
             .build();
     }
 

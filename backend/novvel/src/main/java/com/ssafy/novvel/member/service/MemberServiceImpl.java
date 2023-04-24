@@ -1,6 +1,7 @@
 package com.ssafy.novvel.member.service;
 
-import com.ssafy.novvel.member.dto.MemberInfoRegistDto;
+import com.ssafy.novvel.member.dto.request.MemberInfoRegistDto;
+import com.ssafy.novvel.member.dto.response.MemberInfoDto;
 import com.ssafy.novvel.member.entity.Member;
 import com.ssafy.novvel.member.repository.MemberRepository;
 import com.ssafy.novvel.resource.entity.Resource;
@@ -20,6 +21,13 @@ public class MemberServiceImpl implements MemberService {
         MemberRepository memberRepository) {
         this.resourceService = resourceService;
         this.memberRepository = memberRepository;
+    }
+
+    @Override
+    public MemberInfoDto getMemberInfo(Member member) {
+
+        return new MemberInfoDto(member.getPoint(), member.getProfile().getUrl(),
+            member.getNickname(), member.getDescription());
     }
 
     @Override

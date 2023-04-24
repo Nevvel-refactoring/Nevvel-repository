@@ -52,6 +52,8 @@ public class OidcMemberService implements OAuth2UserService<OidcUserRequest, Oid
     private Set<GrantedAuthority> getAuthority(String sub, String email, String refreshToken) {
         Set<GrantedAuthority> mappedAuthorities = new HashSet<>();
 
+        // TODO default profile image 생성
+
         memberRepository.findBySub(sub)
             .ifPresentOrElse(
                 member -> mappedAuthorities.add(new SimpleGrantedAuthority(member.getRole())),

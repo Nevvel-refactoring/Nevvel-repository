@@ -1,6 +1,7 @@
 package com.ssafy.novvel.member.service;
 
-import com.ssafy.novvel.member.dto.MemberInfoRegistDto;
+import com.ssafy.novvel.member.dto.request.MemberInfoRegistDto;
+import com.ssafy.novvel.member.dto.response.MemberInfoDto;
 import com.ssafy.novvel.member.entity.Member;
 import com.ssafy.novvel.member.repository.MemberRepository;
 import com.ssafy.novvel.resource.entity.Resource;
@@ -33,8 +34,27 @@ class MemberServiceTest {
     private MemberRepository memberRepository;
 
     @Test
+    @DisplayName("getMemberInfo Test")
+    void getMemberInfo() {
+
+        // given
+        Member member = TestUtil.getUSERMemberHasDesc();
+        
+        // when
+        MemberInfoDto result = memberServiceImpl.getMemberInfo(member);
+
+        Assertions.assertThat(result.getDescription())
+            .isEqualTo(member.getDescription());
+        Assertions.assertThat(result.getNickname()).isEqualTo(member.getNickname());
+        Assertions.assertThat(result.getPoint()).isEqualTo(member.getPoint());
+        Assertions.assertThat(result.getProfileImage()).isEqualTo(member.getProfile().getUrl());
+    }
+
+    @Test
     @DisplayName("addMemberInfo with Desc Test")
     void addMemberInfo() throws IOException {
+
+        // given
         File file = new File("src/test/resources/cat.jpeg");
 
         MultipartFile multipartFile = new MockMultipartFile(file.getName(), file.getName(),
@@ -48,12 +68,14 @@ class MemberServiceTest {
 
         Member member = TestUtil.getUSERMemberHasDesc();
 
+        // when
         Mockito.doReturn(resource).when(resourceService).saveFile(multipartFile);
         Mockito.doReturn(member).when(memberRepository).save(Mockito.any());
 
         Member result = memberServiceImpl.addMemberInfo(multipartFile, memberInfoRegistDto,
             TestUtil.getGUESTMember().get());
 
+        // then
         Assertions.assertThat(result.getDescription())
             .isEqualTo(memberInfoRegistDto.getDescription());
         Assertions.assertThat(result.getNickname()).isEqualTo(memberInfoRegistDto.getNickname());
@@ -63,6 +85,8 @@ class MemberServiceTest {
     @Test
     @DisplayName("addMemberInfo without Desc Test")
     void addMemberInfoWithoutDesc() throws IOException {
+
+        // given
         File file = new File("src/test/resources/cat.jpeg");
 
         MultipartFile multipartFile = new MockMultipartFile(file.getName(), file.getName(),
@@ -75,12 +99,14 @@ class MemberServiceTest {
 
         Member member = TestUtil.getUSERMember().get();
 
+        // when
         Mockito.doReturn(resource).when(resourceService).saveFile(multipartFile);
         Mockito.doReturn(member).when(memberRepository).save(Mockito.any());
 
         Member result = memberServiceImpl.addMemberInfo(multipartFile, memberInfoRegistDto,
             TestUtil.getGUESTMember().get());
 
+        // then
         Assertions.assertThat(result.getDescription())
             .isEqualTo(null);
         Assertions.assertThat(result.getNickname()).isEqualTo(memberInfoRegistDto.getNickname());
