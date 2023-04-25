@@ -14,6 +14,8 @@ import com.ssafy.novvel.resource.entity.Resource;
 import com.ssafy.novvel.resource.service.ResourceService;
 import com.ssafy.novvel.member.entity.Member;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
@@ -28,6 +30,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AssetServiceImpl implements AssetService {
@@ -53,6 +56,7 @@ public class AssetServiceImpl implements AssetService {
         //에셋, 태그 매핑
         List<AssetTag> assetTags = new ArrayList<>();
         for (Tag savedTag : savedTags) {
+            savedTag.setUseCount(savedTag.getUseCount() + 1);
             assetTags.add(new AssetTag(asset, savedTag));
         }
         assetTags = assetTagRepository.saveAll(assetTags);
@@ -100,6 +104,12 @@ public class AssetServiceImpl implements AssetService {
                 pageable,
                 assetSlice.hasNext()
         );
+    }
+
+    @Override
+    public Page<Tag> findPageTags(Pageable pageable) {
+
+        return tagRepository.findByOrderByUseCountDesc(pageable);
     }
 
 

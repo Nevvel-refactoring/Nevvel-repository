@@ -3,22 +3,25 @@ package com.ssafy.novvel.asset.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.novvel.asset.dto.AssetRegistDto;
 import com.ssafy.novvel.asset.entity.AssetType;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import com.ssafy.novvel.member.entity.Member;
+import com.ssafy.novvel.member.repository.MemberRepository;
+import com.ssafy.novvel.util.TestUtil;
+import com.ssafy.novvel.util.token.CustomUserDetails;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.mock.web.MockPart;
-import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.transaction.annotation.Transactional;
 import java.io.FileInputStream;
-import java.util.HashMap;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -28,22 +31,33 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 public class AssetControllerTest {
 
     @Autowired
+    private MemberRepository memberRepository;
+    @Autowired
     private ObjectMapper mapper;
     @Autowired
     private MockMvc mockMvc;
+    Member member = TestUtil.getTestMember();
 
+    @BeforeEach
+    void setContext(){
+        CustomUserDetails customUserDetails = new CustomUserDetails(member);
+        SecurityContextHolder.getContext()
+                .setAuthentication(new UsernamePasswordAuthenticationToken(customUserDetails, null,
+                        customUserDetails.getAuthorities()));
+    }
 
-    //todo 컨트롤러 테스트 코드 고칠것
     @Test
-    @Disabled
+    @Transactional
     @DisplayName("registAsset Test")
-    @WithMockUser(roles = "USER")
+//    @WithMockUser(roles = "USER")
+//    @WithUserDetails("Kakao_2755574745")
     void registAssetTest() throws Exception {
+
         //given
+        member = memberRepository.save(member);
 
-
-        //when
-        AssetRegistDto requestDto = new AssetRegistDto(AssetType.IMAGE, "title", "description", 10L, List.of("공포", "호러"));
+        AssetRegistDto requestDto =
+                new AssetRegistDto(AssetType.IMAGE, "title", "description", 10L, List.of("공포", "호러"));
         final String fileName = "test"; //파일명
         final String contentType = "gif"; //파일타입
         final String filePath = "src/test/resources/test.gif"; //파일경로
@@ -57,17 +71,16 @@ public class AssetControllerTest {
                 fileInputStream
         );
 
-        String assetRegistDtoJson =mapper.writeValueAsString(requestDto);
+        String assetRegistDtoJson = mapper.writeValueAsString(requestDto);
+        MockMultipartFile assetRegistDto = new MockMultipartFile("assetRegistDto", "assetRegistDto", "application/json", assetRegistDtoJson.getBytes(StandardCharsets.UTF_8));
 
-        new HashMap<String,String>().put("assetRegistDto",assetRegistDtoJson);
+
+        //when
         //then
-        mockMvc.perform(MockMvcRequestBuilders.multipart(HttpMethod.POST,"/assets")
+        mockMvc.perform(MockMvcRequestBuilders.multipart(HttpMethod.POST, "/assets")
                         .file(image)
-                        .part(new MockPart("assetRegistDto",assetRegistDtoJson.getBytes()))
-//                        .param("assetRegistDto",assetRegistDtoJson)
+                        .file(assetRegistDto)
                         .contentType(MediaType.MULTIPART_FORM_DATA)
-//                        .characterEncoding("UTF-8")
-//                        .accept(MediaType.APPLICATION_JSON)
                         .with(csrf())
                 )
                 .andExpect(MockMvcResultMatchers.status().isCreated());
