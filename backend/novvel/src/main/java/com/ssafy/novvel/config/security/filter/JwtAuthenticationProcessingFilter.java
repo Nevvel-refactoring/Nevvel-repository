@@ -34,11 +34,13 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 
         String accessToken = null;
         String refreshToken = null;
-        for (Cookie cookie : request.getCookies()) {
-            if (cookie.getName().equals("accessToken")) {
-                accessToken = cookie.getValue();
-            } else if (cookie.getName().equals("refreshToken")) {
-                refreshToken = cookie.getValue();
+        if(request.getCookies()!=null){
+            for(Cookie cookie : request.getCookies()) {
+                if(cookie.getName().equals("accessToken")) {
+                    accessToken = cookie.getValue();
+                } else if(cookie.getName().equals("refreshToken")) {
+                    refreshToken = cookie.getValue();
+                }
             }
         }
 
