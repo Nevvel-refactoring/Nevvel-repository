@@ -29,6 +29,13 @@ public class MemberAsset extends BaseEntity {
     private Asset asset;
 
     @Setter
+    @Enumerated(EnumType.STRING)
     @NotNull
-    private String type;
+    private DealType type;
+
+    public MemberAsset(Member member, Asset asset, DealType dealType){
+        this.member =member;
+        this.asset = asset;
+        this.type =dealType;
+    }
 }
