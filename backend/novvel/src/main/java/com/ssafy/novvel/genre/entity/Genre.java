@@ -1,4 +1,4 @@
-package com.ssafy.novvel.cover.entity;
+package com.ssafy.novvel.genre.entity;
 
 import lombok.*;
 
@@ -21,4 +21,6 @@ public class Genre {
     @Setter
     @NotNull
     private String name;
+
+
 }
