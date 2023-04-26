@@ -47,4 +47,8 @@ public class Member extends BaseEntity {
     public void removeToken() {
         this.refreshToken = null;
     }
+
+    public void updateToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
 }

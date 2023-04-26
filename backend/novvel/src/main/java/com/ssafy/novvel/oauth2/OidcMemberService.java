@@ -46,7 +46,8 @@ public class OidcMemberService implements OAuth2UserService<OidcUserRequest, Oid
         return new DefaultOidcUser(mappedAuthorities, oidcUser.getIdToken(),
             OidcUserInfo.builder().claim(CustomUserInfo.CLIENT_SUB.getValue(), clientSub)
                 .claim(JWTProvider.getRefreshToken(), refreshToken)
-                .claim(JWTProvider.getAccessToken(), jwtProvider.createAccessToken(clientSub)).build());
+                .claim(JWTProvider.getAccessToken(), jwtProvider.createAccessToken(clientSub))
+                .build());
     }
 
     private Set<GrantedAuthority> getAuthority(String sub, String email, String refreshToken) {
@@ -56,7 +57,11 @@ public class OidcMemberService implements OAuth2UserService<OidcUserRequest, Oid
 
         memberRepository.findBySub(sub)
             .ifPresentOrElse(
-                member -> mappedAuthorities.add(new SimpleGrantedAuthority(member.getRole())),
+                member -> {
+                    mappedAuthorities.add(new SimpleGrantedAuthority(member.getRole()));
+                    member.updateToken(refreshToken);
+                    memberRepository.save(member);
+                },
                 () -> mappedAuthorities.add(new SimpleGrantedAuthority(
                         memberRepository.save(Member.builder()
                             .sub(sub)

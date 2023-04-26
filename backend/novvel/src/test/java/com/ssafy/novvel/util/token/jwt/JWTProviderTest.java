@@ -113,4 +113,22 @@ class JWTProviderTest {
         Assertions.assertThatThrownBy(() -> jwtProvider.validateToken(refreshToken))
             .isInstanceOf(RuntimeException.class);
     }
+
+    @Test
+    void createEmptyCookie() {
+
+        // given
+        Cookie expect = new Cookie(JWTProvider.getAccessToken(), "");
+        expect.setHttpOnly(true);
+        expect.setPath("/");
+        expect.setMaxAge(0);
+
+        // when
+        Cookie result = jwtProvider.createEmptyCookie(JWTProvider.getAccessToken());
+
+        // then
+        Assertions.assertThat(result.getName()).isEqualTo(expect.getName());
+        Assertions.assertThat(result.getPath()).isEqualTo(expect.getPath());
+        Assertions.assertThat(result.getMaxAge()).isEqualTo(expect.getMaxAge());
+    }
 }

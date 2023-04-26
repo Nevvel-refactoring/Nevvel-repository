@@ -1,7 +1,6 @@
 package com.ssafy.novvel.util.token.jwt;
 
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.JwtException;
+
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -20,22 +19,26 @@ public class JWTProvider {
     private static final String REFRESH_TOKEN = "refreshToken";
     private static final String PATH = "/";
 
+
     public Cookie createAccessToken(String clientSub) {
-        int accessTokenExpiredTime = 1800000;
+
+        int expiredSecond = 1800;
+        int expiredTime = expiredSecond * 1000;
 
         return makeCookie(ACCESS_TOKEN, Jwts.builder()
             .setSubject(clientSub)
-            .setExpiration(new Date(System.currentTimeMillis() + accessTokenExpiredTime))
-            .signWith(KEY).compact());
+            .setExpiration(new Date(System.currentTimeMillis() + expiredTime))
+            .signWith(KEY).compact(), expiredSecond);
     }
 
     public Cookie createRefreshToken() {
-        Calendar expiredDate = Calendar.getInstance();
-        expiredDate.add(Calendar.DAY_OF_MONTH, 14);
+
+        int expiredSecond = 1209600;
+        int expiredTime = expiredSecond * 1000;
 
         return makeCookie(REFRESH_TOKEN, Jwts.builder()
-            .setExpiration(expiredDate.getTime())
-            .signWith(KEY).compact());
+            .setExpiration(new Date(System.currentTimeMillis() + expiredTime))
+            .signWith(KEY).compact(), expiredSecond);
     }
 
     /**
@@ -52,12 +55,18 @@ public class JWTProvider {
             .getSubject();
     }
 
-    private Cookie makeCookie(String tokenType, String token) {
+    private Cookie makeCookie(String tokenType, String token, int expiredTime) {
         Cookie tokenCookie = new Cookie(tokenType, token);
         tokenCookie.setPath(PATH);
+        tokenCookie.setMaxAge(expiredTime);
         tokenCookie.setHttpOnly(true);
 
         return tokenCookie;
+    }
+
+    public Cookie createEmptyCookie(String tokenType) {
+
+        return makeCookie(tokenType, "", 0);
     }
 
     public static String getAccessToken() {
