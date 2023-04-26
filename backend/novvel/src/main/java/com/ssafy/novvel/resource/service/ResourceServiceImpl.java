@@ -86,7 +86,7 @@ public class ResourceServiceImpl implements ResourceService {
                 String thumbnailUrl = awsProxyService.uploadFile(thumbnail, fileNamePrefix + thumbnail.getName());
                 resourceEntity.setThumbnailUrl(thumbnailUrl);
             }
-            resourceRepository.save(resourceEntity);
+            resourceEntity = resourceRepository.save(resourceEntity);
 
         } finally {
             if (thumbnail != null) {
