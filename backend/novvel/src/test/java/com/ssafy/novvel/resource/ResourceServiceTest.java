@@ -2,7 +2,7 @@ package com.ssafy.novvel.resource;
 
 import com.ssafy.novvel.resource.entity.Resource;
 import com.ssafy.novvel.resource.repository.ResourceRepository;
-import com.ssafy.novvel.resource.service.AwsProxyService;
+import com.ssafy.novvel.resource.service.S3Service;
 import com.ssafy.novvel.resource.service.ResourceServiceImpl;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -23,7 +23,7 @@ class ResourceServiceTest {
     @Mock
     private ResourceRepository resourceRepository;
     @Mock
-    private AwsProxyService awsProxyService;
+    private S3Service s3Service;
 
     @Test
 //    @Disabled
@@ -42,7 +42,7 @@ class ResourceServiceTest {
 
         //when
         Mockito.doReturn(expect).when(resourceRepository).save(Mockito.any());
-        Mockito.doReturn("urlPath").when(awsProxyService).uploadFile(Mockito.any(),Mockito.any());
+        Mockito.doReturn("urlPath").when(s3Service).uploadFile(Mockito.any(),Mockito.any());
 //        resourceService = new ResourceServiceImpl(awsProxyService, resourceRepository);
 
         //then
@@ -70,7 +70,7 @@ class ResourceServiceTest {
 
         //when
         Mockito.doReturn(expect).when(resourceRepository).save(Mockito.any());
-        Mockito.doReturn("urlPath").when(awsProxyService).uploadFile(Mockito.any(),Mockito.any());
+        Mockito.doReturn("urlPath").when(s3Service).uploadFile(Mockito.any(),Mockito.any());
 //        resourceService = new ResourceServiceImpl(awsProxyService, resourceRepository);
 
         //then
@@ -98,7 +98,7 @@ class ResourceServiceTest {
 
         //when
         Mockito.doReturn(expect).when(resourceRepository).save(Mockito.any());
-        Mockito.doReturn("urlPath").when(awsProxyService).uploadFile(Mockito.any(),Mockito.any());
+        Mockito.doReturn("urlPath").when(s3Service).uploadFile(Mockito.any(),Mockito.any());
 //        resourceService = new ResourceServiceImpl(awsProxyService, resourceRepository);
 
         //then

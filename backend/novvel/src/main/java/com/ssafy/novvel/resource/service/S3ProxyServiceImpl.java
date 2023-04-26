@@ -1,13 +1,12 @@
 package com.ssafy.novvel.resource.service;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
 
 import java.io.*;
 
-@Service
+//@Service
 @Slf4j
-public class AwsProxyServiceImpl implements AwsProxyService {
+public class S3ProxyServiceImpl implements S3Service {
 
     @Override
     public String uploadFile(File sourceFile, String fileName) throws IOException {
@@ -36,5 +35,10 @@ public class AwsProxyServiceImpl implements AwsProxyService {
     @Override
     public String findByUrl(String url) {
         return null;
+    }
+
+    @Override
+    public void deleteFile(String fileName) {
+
     }
 }

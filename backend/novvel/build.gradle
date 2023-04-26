@@ -44,10 +44,9 @@ dependencies {
     implementation files("libs/animated-gif-lib.jar")
 
     // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-aws
-//    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
-// https://mvnrepository.com/artifact/org.springframework.security/spring-security-test
+    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+    // https://mvnrepository.com/artifact/org.springframework.security/spring-security-test
     testImplementation 'org.springframework.security:spring-security-test'
-
 
 
 }
