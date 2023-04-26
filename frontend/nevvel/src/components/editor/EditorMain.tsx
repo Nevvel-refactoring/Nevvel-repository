@@ -21,6 +21,8 @@ function EditorMain() {
       <EditorMainButton />
       <EditorMainList
 			textBlocks={textBlocks}
+			setTextBlocks={setTextBlocks}
+			
 			/>
       <EditorMainInput
 			currentText={currentText}
