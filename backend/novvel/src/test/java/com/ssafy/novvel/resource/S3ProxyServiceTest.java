@@ -1,7 +1,7 @@
 package com.ssafy.novvel.resource;
 
-import com.ssafy.novvel.resource.service.AwsProxyService;
-import com.ssafy.novvel.resource.service.AwsProxyServiceImpl;
+import com.ssafy.novvel.resource.service.S3Service;
+import com.ssafy.novvel.resource.service.S3ProxyServiceImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import java.io.File;
@@ -10,8 +10,8 @@ import java.time.LocalDate;
 
 
 
-public class AwsProxyServiceTest {
-    private AwsProxyService awsProxyService;
+public class S3ProxyServiceTest {
+    private S3Service s3Service;
 
     @Test
 //    @Disabled
@@ -19,10 +19,10 @@ public class AwsProxyServiceTest {
     void uploadFileTest() throws IOException {
         File file = new File("src/test/resources/test.gif");
 
-        awsProxyService = new AwsProxyServiceImpl();
+        s3Service = new S3ProxyServiceImpl();
 
         String fileNamePrefix = "files/" + LocalDate.of(2023,4,19) + "UUID" + "-";
-        String saveFile = awsProxyService.uploadFile(file, fileNamePrefix + file.getName());
+        String saveFile = s3Service.uploadFile(file, fileNamePrefix + file.getName());
         File result = new File(saveFile);
         result.delete();
 
