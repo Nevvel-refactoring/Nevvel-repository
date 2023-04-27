@@ -1,6 +1,7 @@
 package com.ssafy.novvel.exception;
 
 import com.ssafy.novvel.exception.exceptiondto.ExceptionDto;
+import javax.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -28,5 +29,11 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> iOException(Exception e) {
         e.printStackTrace();
         return new ResponseEntity<>(new ExceptionDto("입출력에 문제가 생겼습니다.", e.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<?> entityNotFoundException(Exception e) {
+        e.printStackTrace();
+        return new ResponseEntity<>(new ExceptionDto("관련 정보를 찾을 수 없습니다.", e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 }

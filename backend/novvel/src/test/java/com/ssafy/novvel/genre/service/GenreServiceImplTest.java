@@ -1,8 +1,6 @@
 package com.ssafy.novvel.genre.service;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import com.ssafy.novvel.genre.dto.GenreGetAllDto;
+import com.ssafy.novvel.genre.dto.GenreDto;
 import com.ssafy.novvel.genre.entity.Genre;
 import com.ssafy.novvel.genre.repository.GenreRepository;
 import java.util.ArrayList;
@@ -32,12 +30,12 @@ class GenreServiceImplTest {
         genreList.add(new Genre(1L, "name1"));
         genreList.add(new Genre(2L, "name2"));
 
-        List<GenreGetAllDto> expect = new ArrayList<>();
-        expect.add(new GenreGetAllDto(1L, "name1"));
-        expect.add(new GenreGetAllDto(2L, "name2"));
+        List<GenreDto> expect = new ArrayList<>();
+        expect.add(new GenreDto(1L, "name1"));
+        expect.add(new GenreDto(2L, "name2"));
 
         Mockito.doReturn(genreList).when(genreRepository).findAll();
-        List<GenreGetAllDto> result = genreService.getAllGenre();
+        List<GenreDto> result = genreService.getAllGenre();
 
         Assertions.assertThat(result.getClass()).isEqualTo(expect.getClass());
         Assertions.assertThat(result.get(0).getId()).isEqualTo(expect.get(0).getId());

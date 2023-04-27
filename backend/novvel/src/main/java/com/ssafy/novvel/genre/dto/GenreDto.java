@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class GenreGetAllDto {
+public class GenreDto {
 
     @NotNull
     private Long id;

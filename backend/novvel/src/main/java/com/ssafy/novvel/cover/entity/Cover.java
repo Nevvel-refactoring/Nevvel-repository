@@ -1,9 +1,11 @@
 package com.ssafy.novvel.cover.entity;
 
+import com.ssafy.novvel.cover.dto.CoverRegisterDto;
 import com.ssafy.novvel.genre.entity.Genre;
 import com.ssafy.novvel.member.entity.Member;
 import com.ssafy.novvel.resource.entity.Resource;
 import com.ssafy.novvel.util.BaseEntity;
+import javax.validation.constraints.Size;
 import lombok.*;
 
 import javax.persistence.*;
@@ -23,36 +25,38 @@ public class Cover extends BaseEntity {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "thumbnail_id")
-    @Setter
     private Resource resource;
 
     @OneToOne
-    @Setter
     private Genre genre;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @Setter
     @NotNull
     private Member member;
 
-    @Setter
     @NotNull
     private String title;
 
-    @Setter
+    @Size(max = 500)
     private String description;
 
-    @Setter
     @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(name = "status")
+    @Column(name = "status_type")
     private CoverStatusType coverStatusType;
 
-    @Setter
     private LocalDate publishDate;
 
-    @Setter
     @NotNull
     private Long likes;
 
+    public Cover(Resource resource, CoverRegisterDto coverRegisterDto, Member member, Genre genre) {
+
+        this.coverStatusType = CoverStatusType.SERIALIZED;
+        this.resource = resource;
+        this.member = member;
+        this.description = coverRegisterDto.getDescription();
+        this.title = coverRegisterDto.getTitle();
+        this.genre = genre;
+    }
 }

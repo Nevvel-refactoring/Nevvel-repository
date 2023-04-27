@@ -1,10 +1,10 @@
 package com.ssafy.novvel.genre.service;
 
-import com.ssafy.novvel.genre.dto.GenreGetAllDto;
+import com.ssafy.novvel.genre.dto.GenreDto;
 import java.util.List;
 
 public interface GenreService {
 
-    List<GenreGetAllDto> getAllGenre();
+    List<GenreDto> getAllGenre();
 
 }

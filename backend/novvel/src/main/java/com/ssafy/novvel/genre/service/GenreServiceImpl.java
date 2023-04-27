@@ -1,6 +1,6 @@
 package com.ssafy.novvel.genre.service;
 
-import com.ssafy.novvel.genre.dto.GenreGetAllDto;
+import com.ssafy.novvel.genre.dto.GenreDto;
 import com.ssafy.novvel.genre.repository.GenreRepository;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,9 +16,9 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    public List<GenreGetAllDto> getAllGenre() {
+    public List<GenreDto> getAllGenre() {
         return genreRepository.findAll().stream()
-            .map(genre -> new GenreGetAllDto(genre.getId(), genre.getName()))
+            .map(genre -> new GenreDto(genre.getId(), genre.getName()))
             .collect(Collectors.toList());
     }
 }

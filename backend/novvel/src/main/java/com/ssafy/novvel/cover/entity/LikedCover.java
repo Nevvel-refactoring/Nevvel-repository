@@ -6,14 +6,13 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 
 @Entity
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Getter
-@IdClass(LikedCover.LikedCoverID.class)
+@IdClass(CoverMemberID.class)
 public class LikedCover extends BaseEntity {
     @Id
     @ManyToOne(fetch = FetchType.LAZY)
@@ -26,9 +25,4 @@ public class LikedCover extends BaseEntity {
     @NotNull
     @Setter
     private Member member;
-
-    public static class LikedCoverID implements Serializable {
-        private Cover cover;
-        private Member member;
-    }
 }
