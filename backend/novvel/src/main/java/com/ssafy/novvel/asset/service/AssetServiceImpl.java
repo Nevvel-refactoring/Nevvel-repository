@@ -25,9 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -51,7 +49,7 @@ public class AssetServiceImpl implements AssetService {
         Asset asset = new Asset(assetRegistDto, resource, member);
         asset = assetRepository.save(asset);
 
-        Set<Tag> savedTags = savedTags(assetRegistDto.getTags());
+        List<Tag> savedTags = savedTags(assetRegistDto.getTags());
 
         //에셋, 태그 매핑
         List<AssetTag> assetTags = new ArrayList<>();
@@ -114,21 +112,25 @@ public class AssetServiceImpl implements AssetService {
 
 
     //저장되지 않은 태그는 저장
-    private Set<Tag> savedTags(List<String> tags) {
+    private List<Tag> savedTags(List<String> tags) {
         List<Tag> newTags = new ArrayList<>();
-        Set<Tag> savedTags = tagRepository.findSetByTagNameIn(tags);
-        Set<Tag> result = new HashSet<>(savedTags);
+        List<Tag> savedTags = tagRepository.findByTagNameIn(tags);
+        List<Tag> result = new ArrayList<>(savedTags);
         for (String tag : tags) {
-            if (!savedTags.contains(tag)) {
+            boolean check = false;
+            for (Tag savedTag : savedTags) {
+                if (savedTag.getTagName().equals(tag)) {
+                    check = true;
+                    break;
+                }
+            }
+            if (!check){
                 newTags.add(new Tag(tag));
             }
         }
         newTags = tagRepository.saveAll(newTags);
-
-        for (Tag newTag : newTags) {
-            result.add(newTag);
-        }
-        return savedTags;
+        result.addAll(newTags);
+        return result;
     }
 
 
