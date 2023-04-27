@@ -1,6 +1,6 @@
-
-import { useAtomValue } from "jotai";
 import styled from "styled-components";
+
+
 export default function Home() {
 
   return (

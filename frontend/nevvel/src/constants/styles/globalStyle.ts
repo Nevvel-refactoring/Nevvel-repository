@@ -10,6 +10,7 @@ export const GlobalStyle = createGlobalStyle`
     padding: 0;
     margin: 0px auto;
     -webkit-text-size-adjust: none;
+    font-family: Pretendard;
     }
     a {
     color: inherit;

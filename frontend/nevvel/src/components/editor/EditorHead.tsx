@@ -16,7 +16,7 @@ function EditorHead() {
         </WriteButtonContainer>
       </ButtonWrapper>
       <InputWrapper>
-        <TitleInput placeholder="에피소드 명" />
+        <TitleInput placeholder="에피소드 명을 입력하세요" />
         <TagInput placeholder="태그를 입력하세요" />
       </InputWrapper>
     </Wrapper>
@@ -57,8 +57,15 @@ const InputWrapper = styled.div`
 `;
 
 const TitleInput = styled.input`
+  height: 32px;
+  font-size: 24px;
   margin-top: 10px;
   margin-bottom: 10px;
+  border: none;
+
+  ::placeholder{
+    font-size: 28px;
+  }
 `;
 const TagInput = styled.input`
   margin-bottom: 10px;
