@@ -15,6 +15,8 @@ type EditorMainInputProps = {
   setTextBlocks: React.Dispatch<React.SetStateAction<TextBlock[]>>;
 };
 
+
+
 function EditorMainInput({
   currentText,
   setCurrentText,

@@ -1,5 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
+import { BiImageAdd } from "react-icons/bi";
+import { BsFillTrashFill } from "react-icons/bs";
+import { AiOutlineSound } from "react-icons/ai";
+import { atom,useAtom } from "jotai";
+
 
 interface TextBlock {
   id: number;
@@ -12,12 +17,14 @@ type EditorMainListItemProps = {
   block: TextBlock;
   textBlocks: TextBlock[];
   setTextBlocks: React.Dispatch<React.SetStateAction<TextBlock[]>>;
+  setAssetOpen:React.Dispatch<React.SetStateAction<number>>;
 };
 
 function EditorMainListItem({
   block,
   textBlocks,
   setTextBlocks,
+  setAssetOpen
 }: EditorMainListItemProps) {
   const [plus, setPlus] = useState(false);
   const textRef = useRef<HTMLDivElement>(null);
@@ -51,6 +58,7 @@ function EditorMainListItem({
     }
   };
 
+
   const handleCompositionStart = () => {
     setIsComposing(true);
   };
@@ -64,12 +72,18 @@ function EditorMainListItem({
     <BlockContainer>
       {plus ? (
         <>
-          <AssetButton onClick={() => setPlus(!plus)}>-</AssetButton>
-          <div>{block.image}</div>
-          <div>{block.sound}</div>
+          <PlusButton onClick={() => setPlus(!plus)}>-</PlusButton>
+          <AssetButtonContainer>
+            <AssetButton onClick={()=>setAssetOpen(1)}>
+              <BiImageAdd className="image" size="24" />
+            </AssetButton>
+            <AssetButton onClick={()=>setAssetOpen(2)}>
+              <AiOutlineSound className="sound" size="24" />
+            </AssetButton >
+          </AssetButtonContainer>
         </>
       ) : (
-        <AssetButton onClick={() => setPlus(!plus)}>+</AssetButton>
+        <PlusButton onClick={() => setPlus(!plus)}>+</PlusButton>
       )}
       <TextBlock
         key={block.id}
@@ -82,7 +96,9 @@ function EditorMainListItem({
       >
         {block.text}
       </TextBlock>
-      <RemoveButton onClick={() => RemoveHandler(block)}>X</RemoveButton>
+      <RemoveButton onClick={() => RemoveHandler(block)}>
+        <BsFillTrashFill size="24" />
+      </RemoveButton>
     </BlockContainer>
   );
 }
@@ -96,7 +112,37 @@ const BlockContainer = styled.div`
   margin-bottom: 0.5rem;
   width: 100%;
 `;
+const AssetButtonContainer = styled.div`
+  width: 10rem;
+  display: inline-flex;
+  text-align: center;
+  align-items: center;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+  justify-content: center;
+`;
+
 const AssetButton = styled.button`
+  width: 3.5rem;
+  height: 2.5rem;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  margin-left: 0.3rem;
+  border: 2px solid ${({ theme }) => theme.color.hover};
+  border-radius: 10px;
+  color: ${({ theme }) => theme.color.hover};
+  :hover {
+    color: ${({ theme }) => theme.color.point};
+    border: 2px solid ${({ theme }) => theme.color.point};
+  }
+`;
+
+const PlusButton = styled.button`
+  width: 2rem;
+  color: ${({ theme }) => theme.color.point};
+  font-size: 2rem;
   margin-left: 1rem;
   display: flex;
   text-align: center;
@@ -113,6 +159,16 @@ const TextBlock = styled.div`
   align-items: center;
 `;
 
-const RemoveButton = styled.button``;
+const RemoveButton = styled.button`
+  display: flex;
+  width: 2rem;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: ${({ theme }) => theme.color.hover};
+  :hover {
+    ${({ theme }) => theme.color.point};
+  }
+`;
 
 export default EditorMainListItem;

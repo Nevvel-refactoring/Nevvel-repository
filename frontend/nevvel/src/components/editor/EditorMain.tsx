@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import EditorMainButton from "./Main/EditorMainButton";
-import EditorMainList from "./Main/EditorMainList";
-import EditorMainInput from "./Main/EditorMainInput";
+import EditorMainButton from "./Main/Text/EditorMainButton";
+import EditorMainList from "./Main/Text/EditorMainList";
+import EditorMainInput from "./Main/Text/EditorMainInput";
 
 interface TextBlock {
   id: number;

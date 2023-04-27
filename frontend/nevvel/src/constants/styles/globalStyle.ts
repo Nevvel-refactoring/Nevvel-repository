@@ -1,14 +1,16 @@
-import { createGlobalStyle } from 'styled-components'
-import { reset } from 'styled-reset'
+import { createGlobalStyle } from "styled-components";
+import { reset } from "styled-reset";
 
 export const GlobalStyle = createGlobalStyle`
     ${reset}
     
     html,
     body {
+    font-family: Pretendard;
     padding: 0;
     margin: 0px auto;
     -webkit-text-size-adjust: none;
+    font-family: Pretendard;
     }
     a {
     color: inherit;
@@ -44,4 +46,4 @@ export const GlobalStyle = createGlobalStyle`
         border: none;
         cursor: pointer;
     }
-`
+`;

@@ -3,7 +3,8 @@ import { useEffect } from "react";
 import { ThemeProvider } from "styled-components";
 import { lightTheme, darkTheme } from "../constants/styles/theme";
 import { GlobalStyle } from "../constants/styles/globalStyle";
-import type { AppProps } from 'next/app'
+import Layout from "../components/layout/Layout";
+import type { AppProps } from "next/app";
 
 const themeAtom = atom<"light" | "dark">("light");
 
@@ -23,7 +24,7 @@ function App({ Component, pageProps }: AppProps) {
 
   const toggleTheme = () => {
     setTheme(theme === "light" ? "dark" : "light");
-    console.log(theme)
+    console.log(theme);
   };
 
   return (
@@ -33,7 +34,9 @@ function App({ Component, pageProps }: AppProps) {
         <button onClick={toggleTheme}>
           {theme === "light" ? "Toggle Dark Mode" : "Toggle Light Mode"}
         </button>
-        <Component {...pageProps} />
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
       </ThemeProvider>
     </Provider>
   );
