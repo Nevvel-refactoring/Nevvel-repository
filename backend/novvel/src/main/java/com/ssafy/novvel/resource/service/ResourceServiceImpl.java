@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -23,7 +22,7 @@ import java.util.UUID;
 @Slf4j
 public class ResourceServiceImpl implements ResourceService {
 
-    private final AwsProxyService awsProxyService;
+    private final S3Service s3Service;
     private final ResourceRepository resourceRepository;
 
 
@@ -79,14 +78,14 @@ public class ResourceServiceImpl implements ResourceService {
                     throw new NotSupportFormatException();
             }
 
-            url = awsProxyService.uploadFile(file, fileNamePrefix + file.getName());
+            url = s3Service.uploadFile(file, fileNamePrefix + file.getName());
 
             resourceEntity.setUrl(url);
             if (thumbnail != null) {
-                String thumbnailUrl = awsProxyService.uploadFile(thumbnail, fileNamePrefix + thumbnail.getName());
+                String thumbnailUrl = s3Service.uploadFile(thumbnail, fileNamePrefix + thumbnail.getName());
                 resourceEntity.setThumbnailUrl(thumbnailUrl);
             }
-            resourceRepository.save(resourceEntity);
+            resourceEntity = resourceRepository.save(resourceEntity);
 
         } finally {
             if (thumbnail != null) {
