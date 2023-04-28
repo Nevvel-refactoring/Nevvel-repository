@@ -9,6 +9,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
 
+
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
@@ -27,12 +28,13 @@ public class Asset {
     private Member member;
     @Enumerated(EnumType.STRING)
     private AssetType type;
-    @Size(min = 0, max = 500)
+    @Size(max = 500)
     private String description;
     @PositiveOrZero
     private Long point;
 
-    public Asset(AssetRegistDto assetRegistDto, Resource resource, Member member){
+
+    public Asset(AssetRegistDto assetRegistDto, Resource resource, Member member) {
         this.title = assetRegistDto.getTitle();
         this.description = assetRegistDto.getDescription();
         this.point = assetRegistDto.getPoint();
@@ -41,6 +43,25 @@ public class Asset {
         this.member = member;
     }
 
+    public Asset(String title, AssetType type, String description, Long point) {
+        this.title = title;
+        this.type = type;
+        this.description = description;
+        this.point = point;
+    }
 
+    public Asset(Long id, String title, AssetType type, String description, Long point) {
+        this.id = id;
+        this.title = title;
+        this.type = type;
+        this.description = description;
+        this.point = point;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        Asset asset = (Asset)obj;
+        return this.id.equals(asset.getId());
+    }
 }
 
