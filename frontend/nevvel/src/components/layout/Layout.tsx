@@ -11,6 +11,13 @@ function Layout(props: { children: React.ReactNode }) {
   );
 }
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+  padding: 0;
+  margin: 0;
+  height: 100vh;
+  width: 100wh;
+  background-color: ${({ theme }) => theme.color.background};
+  color: ${({ theme }) => theme.color.text1};
+`;
 
 export default Layout;
