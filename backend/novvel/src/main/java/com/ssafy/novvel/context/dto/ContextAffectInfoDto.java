@@ -1,5 +1,6 @@
 package com.ssafy.novvel.context.dto;
 
+import com.ssafy.novvel.asset.entity.AssetType;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -10,7 +11,7 @@ import java.util.List;
 public class ContextAffectInfoDto {
     /**
      * {
-     *       "myAssetId": "integer",
+     *       "assetId": "integer",
      *       "type": "string",
      *       "effect": "string",
      *  },
@@ -18,7 +19,7 @@ public class ContextAffectInfoDto {
      */
     private Long assetId;
 
-    private String type;
+    private AssetType type;
 
     private String effect;
 

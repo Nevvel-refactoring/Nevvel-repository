@@ -13,10 +13,9 @@ public class ContextTouchsDto {
      *     {
      *       "idx": "integer",
      *       "context": "String"
-     *       "isEvent": "bool",
      *       "event": [
      *         {
-     *           "myAssetId": "integer",
+     *           "assetId": "integer",
      *           "type": "string",
      *           "effect": "string",
      *         },
@@ -27,8 +26,6 @@ public class ContextTouchsDto {
     private Long idx;
 
     private String context;
-
-    private Boolean isEvent;
 
     private List<ContextAffectInfoDto> event;
 
