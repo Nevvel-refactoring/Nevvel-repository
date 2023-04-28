@@ -4,6 +4,7 @@ import com.ssafy.novvel.member.entity.Member;
 import com.ssafy.novvel.member.repository.MemberRepository;
 import com.ssafy.novvel.oauth2.OidcMemberService;
 import com.ssafy.novvel.util.TestUtil;
+import com.ssafy.novvel.util.token.jwt.JWTProvider;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Optional;
@@ -25,6 +26,9 @@ class OidcMemberServiceTest {
     @Mock
     private MemberRepository memberRepository;
 
+    @Mock
+    private JWTProvider jwtProvider;
+
     private final String GET_AUTHORITY = "getAuthority";
 
     @Test
@@ -33,17 +37,17 @@ class OidcMemberServiceTest {
         throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
 
         //reflection
-        oidcMemberService = new OidcMemberService(memberRepository);
+        oidcMemberService = new OidcMemberService(memberRepository, jwtProvider);
         Method getAuthority = OidcMemberService.class.getDeclaredMethod(GET_AUTHORITY,
-            String.class, String.class);
+            String.class, String.class, String.class);
         getAuthority.setAccessible(true);
 
+        Optional<Member> guestMember = TestUtil.getGUESTMember();
         // when
-        Mockito.doReturn(TestUtil.getGUESTMember()).when(memberRepository)
-            .findBySub(TestUtil.getGUESTMember().get().getSub());
+        Mockito.doReturn(guestMember).when(memberRepository)
+            .findBySub(guestMember.get().getSub());
         Set<GrantedAuthority> result = (Set<GrantedAuthority>) getAuthority.invoke(
-            oidcMemberService, TestUtil.getGUESTMember().get().getSub(),
-            TestUtil.getGUESTMember().get().getEmail());
+            oidcMemberService, guestMember.get().getSub(), guestMember.get().getEmail(), "testToken");
 
         // then
         Assertions.assertThat(result.stream()
@@ -56,17 +60,18 @@ class OidcMemberServiceTest {
     public void loginUSER()
         throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         //reflection
-        oidcMemberService = new OidcMemberService(memberRepository);
+        oidcMemberService = new OidcMemberService(memberRepository, jwtProvider);
         Method getAuthority = OidcMemberService.class.getDeclaredMethod(GET_AUTHORITY,
-            String.class, String.class);
+            String.class, String.class, String.class);
         getAuthority.setAccessible(true);
+        Optional<Member> userMember = TestUtil.getUSERMember();
 
         // when
-        Mockito.doReturn(TestUtil.getUSERMember()).when(memberRepository)
-            .findBySub(TestUtil.getUSERMember().get().getSub());
+        Mockito.doReturn(userMember).when(memberRepository)
+            .findBySub(userMember.get().getSub());
         Set<GrantedAuthority> result = (Set<GrantedAuthority>) getAuthority.invoke(
-            oidcMemberService, TestUtil.getUSERMember().get().getSub(),
-            TestUtil.getUSERMember().get().getEmail());
+            oidcMemberService, userMember.get().getSub(),
+            userMember.get().getEmail(), "testToken");
 
         // then
         Assertions.assertThat(result.stream()
@@ -79,19 +84,20 @@ class OidcMemberServiceTest {
     public void signUp()
         throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         //reflection
-        oidcMemberService = new OidcMemberService(memberRepository);
+        oidcMemberService = new OidcMemberService(memberRepository, jwtProvider);
         Method getAuthority = OidcMemberService.class.getDeclaredMethod(GET_AUTHORITY,
-            String.class, String.class);
+            String.class, String.class, String.class);
         getAuthority.setAccessible(true);
+        Optional<Member> guestMember = TestUtil.getGUESTMember();
 
         //when
         Mockito.doReturn(Optional.empty()).when(memberRepository).
-            findBySub(TestUtil.getGUESTMember().get().getSub());
-        Mockito.doReturn(TestUtil.getGUESTMember().get()).when(memberRepository).
+            findBySub(guestMember.get().getSub());
+        Mockito.doReturn(guestMember.get()).when(memberRepository).
             save(Mockito.any(Member.class));
         Set<GrantedAuthority> result = (Set<GrantedAuthority>) getAuthority.invoke(
-            oidcMemberService, TestUtil.getGUESTMember().get().getSub(),
-            TestUtil.getGUESTMember().get().getEmail());
+            oidcMemberService, guestMember.get().getSub(),
+            guestMember.get().getEmail(), "testToken");
 
         // then
         Assertions.assertThat(result.stream()

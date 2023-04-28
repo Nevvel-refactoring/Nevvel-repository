@@ -2,8 +2,10 @@ package com.ssafy.novvel.oauth2;
 
 import com.ssafy.novvel.member.entity.Member;
 import com.ssafy.novvel.member.repository.MemberRepository;
+import com.ssafy.novvel.util.token.jwt.JWTProvider;
 import java.util.HashSet;
 import java.util.Set;
+import javax.servlet.http.Cookie;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -21,9 +23,12 @@ import org.springframework.stereotype.Service;
 public class OidcMemberService implements OAuth2UserService<OidcUserRequest, OidcUser> {
 
     private final MemberRepository memberRepository;
+    private final JWTProvider jwtProvider;
 
-    public OidcMemberService(MemberRepository memberRepository) {
+    public OidcMemberService(MemberRepository memberRepository,
+        JWTProvider jwtProvider) {
         this.memberRepository = memberRepository;
+        this.jwtProvider = jwtProvider;
     }
 
     @Override
@@ -34,24 +39,35 @@ public class OidcMemberService implements OAuth2UserService<OidcUserRequest, Oid
 
         String clientName = userRequest.getClientRegistration().getClientName();
         String clientSub = clientName + "_" + oidcUser.getName();
+        Cookie refreshToken = jwtProvider.createRefreshToken();
         Set<GrantedAuthority> mappedAuthorities = getAuthority(
-            clientSub, oidcUser.getEmail());
+            clientSub, oidcUser.getEmail(), refreshToken.getValue());
 
         return new DefaultOidcUser(mappedAuthorities, oidcUser.getIdToken(),
-            OidcUserInfo.builder().claim(CustomUserInfo.CLIENT_SUB.getValue(), clientSub).build());
+            OidcUserInfo.builder().claim(CustomUserInfo.CLIENT_SUB.getValue(), clientSub)
+                .claim(JWTProvider.getRefreshToken(), refreshToken)
+                .claim(JWTProvider.getAccessToken(), jwtProvider.createAccessToken(clientSub))
+                .build());
     }
 
-    private Set<GrantedAuthority> getAuthority(String sub, String email) {
+    private Set<GrantedAuthority> getAuthority(String sub, String email, String refreshToken) {
         Set<GrantedAuthority> mappedAuthorities = new HashSet<>();
+
+        // TODO default profile image 생성
 
         memberRepository.findBySub(sub)
             .ifPresentOrElse(
-                member -> mappedAuthorities.add(new SimpleGrantedAuthority(member.getRole())),
+                member -> {
+                    mappedAuthorities.add(new SimpleGrantedAuthority(member.getRole()));
+                    member.updateToken(refreshToken);
+                    memberRepository.save(member);
+                },
                 () -> mappedAuthorities.add(new SimpleGrantedAuthority(
                         memberRepository.save(Member.builder()
                             .sub(sub)
                             .email(email)
                             .role("ROLE_GUEST")
+                            .refreshToken(refreshToken)
                             .build()
                         ).getRole()
                     )

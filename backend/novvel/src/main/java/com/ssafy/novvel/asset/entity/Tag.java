@@ -1,9 +1,6 @@
 package com.ssafy.novvel.asset.entity;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -20,7 +17,15 @@ public class Tag {
     private Long id;
     private String tagName;
 
-    public Tag(String tagName){
+    @Setter
+    private Long useCount = 0L;
+
+    public Tag(String tagName) {
+        this.tagName = tagName;
+    }
+
+    public Tag(Long id, String tagName) {
+        this.id = id;
         this.tagName = tagName;
     }
 }

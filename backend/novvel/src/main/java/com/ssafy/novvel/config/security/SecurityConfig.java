@@ -27,10 +27,10 @@ public class SecurityConfig {
     private final MemberRepository memberRepository;
 
     public SecurityConfig(
-        AuthenticationSuccessHandler OAuth2LoginSuccessHandler,
-        OAuth2UserService<OidcUserRequest, OidcUser> oidcUserService,
-        JWTProvider jwtProvider,
-        MemberRepository memberRepository) {
+            AuthenticationSuccessHandler OAuth2LoginSuccessHandler,
+            OAuth2UserService<OidcUserRequest, OidcUser> oidcUserService,
+            JWTProvider jwtProvider,
+            MemberRepository memberRepository) {
         this.OAuth2LoginSuccessHandler = OAuth2LoginSuccessHandler;
         this.oidcUserService = oidcUserService;
         this.jwtProvider = jwtProvider;
@@ -40,17 +40,18 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .authorizeHttpRequests(authorize -> authorize
-                .anyRequest().authenticated()
-            )
-            .oauth2Login(oauth2 -> oauth2
-                .userInfoEndpoint(userInfo -> userInfo
-                    .oidcUserService(oidcUserService)
+                .csrf().disable()
+                .authorizeHttpRequests(authorize -> authorize
+                        .anyRequest().authenticated()
                 )
-                .successHandler(OAuth2LoginSuccessHandler)
-            )
-            .addFilterBefore(new JwtAuthenticationProcessingFilter(jwtProvider, memberRepository),
-                UsernamePasswordAuthenticationFilter.class);
+                .oauth2Login(oauth2 -> oauth2
+                        .userInfoEndpoint(userInfo -> userInfo
+                                .oidcUserService(oidcUserService)
+                        )
+                        .successHandler(OAuth2LoginSuccessHandler)
+                )
+                .addFilterBefore(new JwtAuthenticationProcessingFilter(jwtProvider, memberRepository),
+                        UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 }
