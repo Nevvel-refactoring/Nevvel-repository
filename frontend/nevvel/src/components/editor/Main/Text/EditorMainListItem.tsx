@@ -3,8 +3,8 @@ import styled from "styled-components";
 import { BiImageAdd } from "react-icons/bi";
 import { BsFillTrashFill } from "react-icons/bs";
 import { AiOutlineSound } from "react-icons/ai";
-import { atom,useAtom } from "jotai";
-
+import EditorMainMenu from "./EditorMainMenu";
+import { mobile } from "@/src/util/Mixin";
 
 interface TextBlock {
   id: number;
@@ -17,22 +17,28 @@ type EditorMainListItemProps = {
   block: TextBlock;
   textBlocks: TextBlock[];
   setTextBlocks: React.Dispatch<React.SetStateAction<TextBlock[]>>;
-  setAssetOpen:React.Dispatch<React.SetStateAction<number>>;
+  setAssetOpen: React.Dispatch<React.SetStateAction<number>>;
 };
 
 function EditorMainListItem({
   block,
   textBlocks,
   setTextBlocks,
-  setAssetOpen
+  setAssetOpen,
 }: EditorMainListItemProps) {
   const [plus, setPlus] = useState(false);
   const textRef = useRef<HTMLDivElement>(null);
   const [isComposing, setIsComposing] = useState(false);
+  const [text, setText] = useState(block.text);
+  const [menuBlock, setMenuBlock] = useState(false);
+  const [tooltipPos, setTooltipPos] = useState<{ x: number; y: number }>({
+    x: 0,
+    y: 0,
+  });
 
   useEffect(() => {
-    console.log(textBlocks);
-  }, [textBlocks]);
+    console.log(text);
+  }, [text]);
 
   const RemoveHandler = (block: TextBlock) => {
     const id = block.id;
@@ -56,8 +62,8 @@ function EditorMainListItem({
       selection?.removeAllRanges();
       selection?.addRange(range);
     }
+    setText(event.currentTarget.innerHTML);
   };
-
 
   const handleCompositionStart = () => {
     setIsComposing(true);
@@ -68,38 +74,50 @@ function EditorMainListItem({
     handleChange(event);
   };
 
+  
+
+  const handleContextMenu = (event: any) => {
+    event.preventDefault();
+    setTooltipPos({ x: event.clientX, y: event.clientY });
+    setMenuBlock(true);
+  };
+
   return (
-    <BlockContainer>
-      {plus ? (
-        <>
-          <PlusButton onClick={() => setPlus(!plus)}>-</PlusButton>
-          <AssetButtonContainer>
-            <AssetButton onClick={()=>setAssetOpen(1)}>
-              <BiImageAdd className="image" size="24" />
-            </AssetButton>
-            <AssetButton onClick={()=>setAssetOpen(2)}>
-              <AiOutlineSound className="sound" size="24" />
-            </AssetButton >
-          </AssetButtonContainer>
-        </>
-      ) : (
-        <PlusButton onClick={() => setPlus(!plus)}>+</PlusButton>
-      )}
-      <TextBlock
-        key={block.id}
-        contentEditable="true"
-        suppressContentEditableWarning
-        onInput={handleChange}
-        onCompositionStart={handleCompositionStart}
-        onCompositionEnd={handleCompositionEnd}
-        ref={textRef}
-      >
-        {block.text}
-      </TextBlock>
-      <RemoveButton onClick={() => RemoveHandler(block)}>
-        <BsFillTrashFill size="24" />
-      </RemoveButton>
-    </BlockContainer>
+    <div onMouseLeave={()=>setMenuBlock(false)}>
+      {menuBlock ? <EditorMainMenu x={tooltipPos.x} y={tooltipPos.y} setText={setText} /> : null}
+      <BlockContainer >
+        {plus ? (
+          <>
+            <PlusButton onClick={() => setPlus(!plus)}>-</PlusButton>
+            <AssetButtonContainer>
+              <AssetButton onClick={() => setAssetOpen(1)}>
+                <BiImageAdd className="image" size="24" />
+              </AssetButton>
+              <AssetButton onClick={() => setAssetOpen(2)}>
+                <AiOutlineSound className="sound" size="24" />
+              </AssetButton>
+            </AssetButtonContainer>
+          </>
+        ) : (
+          <PlusButton onClick={() => setPlus(!plus)}>+</PlusButton>
+        )}
+        <TextBlock
+          key={block.id}
+          contentEditable="true"
+          suppressContentEditableWarning
+          onInput={handleChange}
+          onCompositionStart={handleCompositionStart}
+          onCompositionEnd={handleCompositionEnd}
+          ref={textRef}
+          dangerouslySetInnerHTML={{ __html: text }}
+          onContextMenu={handleContextMenu}
+          
+        />
+        <RemoveButton onClick={() => RemoveHandler(block)}>
+          <BsFillTrashFill size="24" />
+        </RemoveButton>
+      </BlockContainer>
+    </div>
   );
 }
 
@@ -147,6 +165,7 @@ const PlusButton = styled.button`
   display: flex;
   text-align: center;
   align-items: center;
+
 `;
 
 const TextBlock = styled.div`

@@ -17,6 +17,7 @@ type EditorMainListProps = {
 
 function EditorMainList({ textBlocks, setTextBlocks }: EditorMainListProps) {
   const [assetOpen, setAssetOpen] = useState<number>(0);
+  
 
   return (
     <MainContainer>
@@ -45,7 +46,7 @@ const MainContainer = styled.div`
 
 const ListWrapper = styled.div`
   /* border: 2px solid ${({ theme }) => theme.color.hover}; */
-  height: 60vh;
+  height: 55vh;
   display: flex;
   flex-direction: column;
   overflow: scroll;
@@ -54,4 +55,7 @@ const ListWrapper = styled.div`
 
 const AssetWrapper = styled.div``;
 
+const ItemContainer = styled.div`
+  
+`
 export default EditorMainList;

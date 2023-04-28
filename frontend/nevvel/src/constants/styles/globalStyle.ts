@@ -17,6 +17,12 @@ export const GlobalStyle = createGlobalStyle`
     text-decoration: none;
     cursor: pointer;
     }
+    b {
+        font-weight: 800;
+    }
+    i {
+        font-style: italic;
+    }
     *,
     *:before,
     *:after {

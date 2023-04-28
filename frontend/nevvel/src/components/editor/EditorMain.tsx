@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import EditorMainButton from "./Main/Text/EditorMainButton";
 import EditorMainList from "./Main/Text/EditorMainList";
 import EditorMainInput from "./Main/Text/EditorMainInput";
 
@@ -18,7 +17,6 @@ function EditorMain() {
 
 	return (
     <Wrapper>
-      <EditorMainButton />
       <EditorMainList
 			textBlocks={textBlocks}
 			setTextBlocks={setTextBlocks}
@@ -34,6 +32,11 @@ function EditorMain() {
   );
 }
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+  @media (max-width: ${({ theme })=> theme.breakpoints.small}px){
+    background-color: black;
+  }
+
+`;
 
 export default EditorMain;
