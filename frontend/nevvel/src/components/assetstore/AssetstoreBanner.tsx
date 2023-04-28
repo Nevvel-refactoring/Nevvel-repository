@@ -17,7 +17,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 100vh;
+  height: 4%;
   padding-top: 1%;
   padding-bottom: 1%;
   /* padding-left: 10%;
