@@ -12,20 +12,21 @@ function NavigationBottom() {
   return (
     <Wrapper>
       <Link href="/">
-        <Image
-          src={nevvel_light}
-          alt="Logo"
-          width={100}
-          height={25}
-        />
+        <Image src={nevvel_light} alt="Logo" width={100} height={25} />
       </Link>
       <Novel>
-        <Genre>장르별 소설</Genre>
-        <Completed>완결 소설</Completed>
-        <Latest>최신 소설</Latest>
-        <Link href="/assetstore/assetstore">
-          <AssetStore>에셋 스토어</AssetStore>
-        </Link>
+        <Genre>
+          <Link href="/novels/genres">장르별 소설</Link>
+        </Genre>
+        <Completed>
+          <Link href="/novels/completed">완결 소설</Link>
+        </Completed>
+        <Latest>
+          <Link href="/novels/latest">최신 소설</Link>
+        </Latest>
+        <AssetStore>
+          <Link href="/assetstore/assetstore">에셋 스토어</Link>
+        </AssetStore>
       </Novel>
     </Wrapper>
   );

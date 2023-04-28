@@ -9,7 +9,9 @@ function NavigationTop() {
     <Wrapper>
       <SearchBar>
         <SearchBarInput placeholder="작품명, 작가명을 입력하세요" />
-        <AiOutlineSearch />
+        <Link href="/novels/search">
+          <AiOutlineSearch />
+        </Link>
       </SearchBar>
       <Profile>
         <SignIn>
