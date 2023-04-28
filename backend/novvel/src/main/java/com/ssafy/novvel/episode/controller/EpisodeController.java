@@ -1,35 +1,50 @@
 package com.ssafy.novvel.episode.controller;
 
-import com.ssafy.novvel.episode.entity.Episode;
+import com.ssafy.novvel.episode.dto.EpisodeContextDto;
+import com.ssafy.novvel.episode.dto.EpisodeRegistDto;
+import com.ssafy.novvel.context.repository.ContextRepository;
+import com.ssafy.novvel.episode.repository.EpisodeRepository;
+import com.ssafy.novvel.episode.service.EpisodeService;
+import com.ssafy.novvel.util.token.CustomUserDetails;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping
+@RequestMapping("/episodes")
+@RequiredArgsConstructor
 public class EpisodeController {
 
-    @PostMapping("/episodes")
-    public String createEpisode() {
+    private final EpisodeService episodeService;
 
-        return null;
+    @PostMapping
+    public ResponseEntity<Long> registEpisode(@RequestBody EpisodeRegistDto episodeRegistDto,
+                                              @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        Long result = episodeService.createEpisode(episodeRegistDto, customUserDetails.getMember());
+        return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
 
-    @GetMapping("/episodes/{episodeID}")
-    public String getEpisode() {
-
-        return null;
+    @GetMapping("/{episodeId}")
+    public ResponseEntity<EpisodeContextDto> getEpisode(@PathVariable Long episodeId,
+                                                        @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        EpisodeContextDto result = episodeService.getEpisodeInfo(episodeId, customUserDetails.getId());
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-    @DeleteMapping("/episodes/{episodeID}")
-    public String deleteEpisode() {
-
-        return null;
+    @DeleteMapping("/{episodeId}")
+    public ResponseEntity<?> deleteEpisode(@PathVariable Long episodeId,
+                                                @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        episodeService.deleteEpisode(episodeId, customUserDetails.getId());
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PutMapping("/episodes/{episodeID}")
-    public String editEpisode() {
-
-        return null;
+    @PutMapping("/{episodeId}")
+    public ResponseEntity<?> editEpisode(@PathVariable Long episodeId,
+                                              @RequestBody EpisodeRegistDto episodeRegistDto,
+                                              @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        episodeService.updateEpisode(episodeId, episodeRegistDto, customUserDetails.getMember());
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
