@@ -3,32 +3,36 @@ import styled from "styled-components";
 import EditorMainListItem from "./EditorMainListItem";
 import EditorMainAssetContainer from "../Asset/EditorMainAssetContainer";
 
-interface TextBlock {
-  id: number;
-  text: string;
-  image: string;
-  sound: string;
+interface content {
+  idx: number;
+  context: string;
+  event:event[]
+}
+
+interface event {
+  assetId: number;
+  type:string
 }
 
 type EditorMainListProps = {
-  textBlocks: TextBlock[];
-  setTextBlocks: React.Dispatch<React.SetStateAction<TextBlock[]>>;
+  contents: content[];
+  setContents: React.Dispatch<React.SetStateAction<content[]>>;
 };
 
-function EditorMainList({ textBlocks, setTextBlocks }: EditorMainListProps) {
+function EditorMainList({ contents, setContents }: EditorMainListProps) {
   const [assetOpen, setAssetOpen] = useState<number>(0);
   
 
   return (
     <MainContainer>
       <ListWrapper>
-        {textBlocks.map((block, index) => (
+        {contents.map((content, index) => (
           <EditorMainListItem
             setAssetOpen={setAssetOpen}
             key={index}
-            block={block}
-            textBlocks={textBlocks}
-            setTextBlocks={setTextBlocks}
+            content={content}
+            contents={contents}
+            setContents={setContents}
           />
         ))}
       </ListWrapper>
@@ -42,6 +46,7 @@ const MainContainer = styled.div`
   display: flex;
   flex-direction: row;
   width: 100%;
+  background-color: ${({ theme })=> theme.color.background};
 `
 
 const ListWrapper = styled.div`

@@ -26,6 +26,8 @@ function EditorHead() {
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
+ padding-top: 3rem;
+ padding-bottom: 2rem;
 `;
 const ButtonWrapper = styled.div`
   display: flex;
@@ -35,21 +37,21 @@ const ButtonWrapper = styled.div`
 const NovelButtonContainer = styled.div``;
 const NovelButton = styled.button`
   color: ${({ theme }) => theme.color.text1};
-  border: 1px solid ${({ theme }) => theme.color.button};
+  border: 2px solid ${({ theme }) => theme.color.button};
   margin: 1px;
-  border-radius: 1rem;
+  border-radius: 10px;
   height: 2.75rem;
-  width: 6.25rem;
+  width: 5rem;
 `;
 const WriteButtonContainer = styled.div``;
 
 const WriteButton = styled.button`
   color: ${({ theme }) => theme.color.text1};
-  border: 1px solid ${({ theme }) => theme.color.point};
+  border: 2px solid ${({ theme }) => theme.color.point};
   margin: 1px;
   border-radius: 10px;
   height: 2.75rem;
-  width: 6.25rem;
+  width:5rem;
 `;
 const InputWrapper = styled.div`
   display: flex;
@@ -59,16 +61,24 @@ const InputWrapper = styled.div`
 const TitleInput = styled.input`
   height: 32px;
   font-size: 24px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  border: none;
-
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: 1px solid gray;
+  padding-left: 1rem;
+  background-color: ${({ theme })=>theme.color.background};
+ 
   ::placeholder{
     font-size: 28px;
   }
 `;
 const TagInput = styled.input`
   margin-bottom: 10px;
+  border:none;
+  padding-left: 1rem;
+  background-color: ${({ theme })=>theme.color.background};
 `;
 
 export default EditorHead;

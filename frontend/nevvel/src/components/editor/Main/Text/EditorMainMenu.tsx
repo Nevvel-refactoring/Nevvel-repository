@@ -10,7 +10,7 @@ type EditorMainMenuProps = {
 };
 
 function EditorMainMenu({ setText, x, y }: EditorMainMenuProps) {
-  const positionY = y - 30;
+  const positionY = y;
   const [colorDrop, setColorDrop] = useState(false);
 
   const handleSelectionStyle = (style: string) => {

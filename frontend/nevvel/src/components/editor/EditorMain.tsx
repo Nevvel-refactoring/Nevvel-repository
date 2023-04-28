@@ -3,40 +3,53 @@ import styled from "styled-components";
 import EditorMainList from "./Main/Text/EditorMainList";
 import EditorMainInput from "./Main/Text/EditorMainInput";
 
-interface TextBlock {
-  id: number;
-  text: string;
-  image: string;
-  sound: string; 
+interface Episode {
+  coverId: number;
+  statusType: string;
+  point:number;
+  contents:content[];
 }
 
+interface content {
+  idx: number;
+  context: string; 
+  event:event[]
+}
+
+interface event {
+  assetId: number;
+  type:string
+}
+
+
 function EditorMain() {
+  const [episode, setEpisode] =useState<Episode[]>([])
+  const [contents, setContents] =useState<content[]>([]);
   const [currentText, setCurrentText] = useState("");
-	const [textBlocks, setTextBlocks] =useState<TextBlock[]>([]);
+  
 
 
 	return (
     <Wrapper>
       <EditorMainList
-			textBlocks={textBlocks}
-			setTextBlocks={setTextBlocks}
+			contents={contents}
+			setContents={setContents}
 			
 			/>
       <EditorMainInput
 			currentText={currentText}
 			setCurrentText={setCurrentText}
-			textBlocks={textBlocks}
-			setTextBlocks={setTextBlocks}
+			contents={contents}
+			setContents={setContents}
 			/>
     </Wrapper>
   );
 }
 
 const Wrapper = styled.div`
-  @media (max-width: ${({ theme })=> theme.breakpoints.small}px){
-    background-color: black;
-  }
-
+background-color: ${({ theme })=> theme.color.background};
+  /* border: 2px solid ${({ theme }) => theme.color.hover}; */
+  border-radius: 10px;
 `;
 
 export default EditorMain;

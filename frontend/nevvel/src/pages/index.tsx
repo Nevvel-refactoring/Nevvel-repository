@@ -14,6 +14,6 @@ const HomeWrapper = styled.div`
   padding: 0;
   margin: 0;
   height: 100vh;
-  background-color: ${({ theme }) => theme.color.background};
-  color: ${({ theme }) => theme.color.text1};
+  /* background-color: ${({ theme }) => theme.color.background};
+  color: ${({ theme }) => theme.color.text1}; */
 `;

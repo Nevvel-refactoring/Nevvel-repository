@@ -19,6 +19,7 @@ function EditorMainAssetContainer({assetOpen}:EditorMainAssetContainerProps) {
 
 const AssetContainer = styled.div`
   border: 1px solid ${({ theme }) => theme.color.hover};
+  background-color: ${({ theme })=> theme.color.background};
 
 `
 const AssetStoreTitle = styled.div`

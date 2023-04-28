@@ -1,52 +1,53 @@
 import React, { Dispatch, SetStateAction } from "react";
 import styled from "styled-components";
 
-interface TextBlock {
-  id: number;
-  text: string;
-  image: string;
-  sound: string;
+interface content {
+  idx: number;
+  context: string;
+  event:event[]
+}
+
+interface event {
+  assetId: number;
+  type:string
 }
 
 type EditorMainInputProps = {
   currentText: string;
   setCurrentText: Dispatch<SetStateAction<string>>;
-  textBlocks: TextBlock[];
-  setTextBlocks: React.Dispatch<React.SetStateAction<TextBlock[]>>;
-};
-
+  contents: content[];
+  setContents: React.Dispatch<React.SetStateAction<content[]>>;
+}
 
 
 function EditorMainInput({
   currentText,
   setCurrentText,
-  textBlocks,
-  setTextBlocks,
+  contents,
+  setContents,
 }: EditorMainInputProps) {
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key == "Enter") {
       event.preventDefault();
 
-      const newBlock: TextBlock = {
-        id: Date.now(),
-        text: currentText,
-        image: "",
-        sound: "",
+      const newBlock: content = {
+        idx: Date.now(),
+        context: currentText,
+        event:[]
       };
-      setTextBlocks([...textBlocks, newBlock]);
+      setContents([...contents, newBlock]);
       setCurrentText("");
     }
   };
 
   const handleClick = () => {
-    const newBlock: TextBlock = {
-      id: Date.now(),
-      text: currentText,
-      image: "",
-      sound: "",
+    const newBlock: content = {
+      idx: Date.now(),
+      context: currentText,
+      event:[]
     };
-    setTextBlocks([...textBlocks, newBlock]);
+    setContents([...contents, newBlock]);
     setCurrentText("");
   }
 
@@ -67,26 +68,35 @@ function EditorMainInput({
 }
 
 const InputWrapper = styled.div`
-  border: 1px solid ${({ theme }) => theme.color.text1};
+  /* border: 1px solid ${({ theme }) => theme.color.text1}; */
   width: 100%;
   display: flex;
   height: 5rem;
   flex-direction: row;
-  justify-content: center;
+  justify-content: flex-end;
   align-items: center;
 `
 
 const BlockInput = styled.input`
+  display: flex;
+  justify-content: flex-end;
   background-color: ${({ theme }) => theme.color.editor};
   width: 90% ;
   height: 3rem;
   border: none;
   border-radius: 10px;
+  padding-left: 1rem;
   
 `;
 
 const SubmitButton = styled.button`
-  width: 10%;
+  width:4rem;
+  border-radius: 10px;
+  background-color: ${({ theme })=> theme.color.point};
+  height: 3rem;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+  color: ${({ theme })=> theme.color.text2};
 `
 
 export default EditorMainInput;

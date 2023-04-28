@@ -6,30 +6,33 @@ import { AiOutlineSound } from "react-icons/ai";
 import EditorMainMenu from "./EditorMainMenu";
 import { mobile } from "@/src/util/Mixin";
 
-interface TextBlock {
-  id: number;
-  text: string;
-  image: string;
-  sound: string;
+interface content {
+  idx: number;
+  context: string;
+  event: event[];
 }
 
+interface event {
+  assetId: number;
+  type: string;
+}
 type EditorMainListItemProps = {
-  block: TextBlock;
-  textBlocks: TextBlock[];
-  setTextBlocks: React.Dispatch<React.SetStateAction<TextBlock[]>>;
+  content: content;
+  contents: content[];
+  setContents: React.Dispatch<React.SetStateAction<content[]>>;
   setAssetOpen: React.Dispatch<React.SetStateAction<number>>;
 };
 
 function EditorMainListItem({
-  block,
-  textBlocks,
-  setTextBlocks,
+  content,
+  contents,
+  setContents,
   setAssetOpen,
 }: EditorMainListItemProps) {
   const [plus, setPlus] = useState(false);
   const textRef = useRef<HTMLDivElement>(null);
   const [isComposing, setIsComposing] = useState(false);
-  const [text, setText] = useState(block.text);
+  const [text, setText] = useState(content.context);
   const [menuBlock, setMenuBlock] = useState(false);
   const [tooltipPos, setTooltipPos] = useState<{ x: number; y: number }>({
     x: 0,
@@ -37,22 +40,30 @@ function EditorMainListItem({
   });
 
   useEffect(() => {
-    console.log(text);
+    // console.log(content);
+    // console.log(text)
+    // 텍스트에 style 적용한 경우
+    setContents(
+      contents.map((con: content) => {
+        // console.log("con",con)
+        return con.idx === content.idx ? { ...content, context: text } : con;
+      })
+    );
   }, [text]);
 
-  const RemoveHandler = (block: TextBlock) => {
-    const id = block.id;
-    setTextBlocks(textBlocks.filter((el) => el.id !== id));
+  const RemoveHandler = (content: content) => {
+    const idx = content.idx;
+    setContents(contents.filter((el) => el.idx !== idx));
   };
 
   const handleChange = (event: React.FormEvent<HTMLDivElement>) => {
     if (isComposing) {
       return;
     }
-    const newBlocks = [...textBlocks];
-    const index = newBlocks.findIndex((el) => el.id === block.id);
-    newBlocks[index].text = event.currentTarget.textContent ?? "";
-    setTextBlocks(newBlocks);
+    const newBlocks = [...contents];
+    const index = newBlocks.findIndex((el) => el.idx === content.idx);
+    newBlocks[index].context = event.currentTarget.textContent ?? "";
+    setContents(newBlocks);
 
     if (textRef.current) {
       const range = document.createRange();
@@ -74,8 +85,6 @@ function EditorMainListItem({
     handleChange(event);
   };
 
-  
-
   const handleContextMenu = (event: any) => {
     event.preventDefault();
     setTooltipPos({ x: event.clientX, y: event.clientY });
@@ -83,9 +92,11 @@ function EditorMainListItem({
   };
 
   return (
-    <div onMouseLeave={()=>setMenuBlock(false)}>
-      {menuBlock ? <EditorMainMenu x={tooltipPos.x} y={tooltipPos.y} setText={setText} /> : null}
-      <BlockContainer >
+    <div onMouseLeave={() => setMenuBlock(false)}>
+      {menuBlock ? (
+        <EditorMainMenu x={tooltipPos.x} y={tooltipPos.y} setText={setText} />
+      ) : null}
+      <BlockContainer>
         {plus ? (
           <>
             <PlusButton onClick={() => setPlus(!plus)}>-</PlusButton>
@@ -102,7 +113,7 @@ function EditorMainListItem({
           <PlusButton onClick={() => setPlus(!plus)}>+</PlusButton>
         )}
         <TextBlock
-          key={block.id}
+          key={content.idx}
           contentEditable="true"
           suppressContentEditableWarning
           onInput={handleChange}
@@ -111,9 +122,8 @@ function EditorMainListItem({
           ref={textRef}
           dangerouslySetInnerHTML={{ __html: text }}
           onContextMenu={handleContextMenu}
-          
         />
-        <RemoveButton onClick={() => RemoveHandler(block)}>
+        <RemoveButton onClick={() => RemoveHandler(content)}>
           <BsFillTrashFill size="24" />
         </RemoveButton>
       </BlockContainer>
@@ -165,7 +175,6 @@ const PlusButton = styled.button`
   display: flex;
   text-align: center;
   align-items: center;
-
 `;
 
 const TextBlock = styled.div`
