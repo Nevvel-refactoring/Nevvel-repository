@@ -26,7 +26,7 @@ export const darkTheme: DefaultTheme = {
     buttonText:"#000000",
     pointText:"5c5db3",
     navbar: "#000000",
-    subNavbar:"#000000",
+    subNavbar:"#dadaff",
     background: "#1a1a1a",
     button:"#e6e6e6",
     point:"#696acc",
