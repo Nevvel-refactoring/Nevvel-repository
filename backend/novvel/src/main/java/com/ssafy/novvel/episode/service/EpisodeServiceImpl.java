@@ -68,7 +68,7 @@ public class EpisodeServiceImpl implements EpisodeService{
         if (!episode.getCover().getMember().getId().equals(memberId)) {
             episode.setViewCount(episode.getViewCount() + 1);
         }
-        return new EpisodeContextDto(episode.getId(), context.getContents());
+        return new EpisodeContextDto(episode.getTitle(), episode.getId(), context.getContents());
     }
 
     @Override
@@ -103,6 +103,7 @@ public class EpisodeServiceImpl implements EpisodeService{
 
         myAssetCheck(episodeRegistDto, member);
 
+        episode.setTitle(episodeRegistDto.getTitle());
         episode.setPoint(episodeRegistDto.getPoint());
         episode.setStatusType(episodeRegistDto.getStatusType());
 

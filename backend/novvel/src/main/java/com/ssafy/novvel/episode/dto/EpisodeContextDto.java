@@ -15,6 +15,7 @@ import java.util.List;
 public class EpisodeContextDto {
     /**
      *
+     *   "title": "string",
      *   "contents": [
      *     {
      *       "idx": "integer",
@@ -29,6 +30,9 @@ public class EpisodeContextDto {
      *     },
      *   ]
      */
+
+    private String title;
+
     private Long episodeId;
 
     private List<ContextTouchsDto> contents;

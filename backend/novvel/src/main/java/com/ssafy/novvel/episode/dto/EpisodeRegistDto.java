@@ -22,6 +22,9 @@ public class EpisodeRegistDto {
  private Long coverId;
 
  @NotNull
+ private String title;
+
+ @NotNull
  private Long point;
 
  @NotNull

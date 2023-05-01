@@ -28,6 +28,10 @@ public class Episode extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private Cover cover;
 
+    @Setter
+    @NotNull
+    private String title;
+
     @Enumerated(EnumType.STRING)
     @Setter
     @NotNull
@@ -52,6 +56,7 @@ public class Episode extends BaseEntity {
     public Episode(Cover cover, EpisodeRegistDto episodeRegistDto, ObjectId contextId) {
 //    public Episode(EpisodeRegistDto episodeRegistDto, ObjectId contextId) {
         this.cover = cover;
+        this.title = episodeRegistDto.getTitle();
         this.statusType = episodeRegistDto.getStatusType();
         this.point = episodeRegistDto.getPoint();
         this.viewCount = 0L;
