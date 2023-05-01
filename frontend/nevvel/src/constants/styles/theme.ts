@@ -23,7 +23,7 @@ export const darkTheme: DefaultTheme = {
   color: {
     text1: "#e6e6e6",
     text2: "#000000",
-    buttonText:"#e6e6e6",
+    buttonText:"#000000",
     pointText:"5c5db3",
     navbar: "#000000",
     subNavbar:"#000000",

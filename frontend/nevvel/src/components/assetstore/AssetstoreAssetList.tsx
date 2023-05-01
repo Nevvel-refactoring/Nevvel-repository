@@ -79,9 +79,10 @@ const Wrapper = styled.div`
   background-color: ${({ theme }) => theme.color.background};
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
   /* flex-direction: column; */
   width: 100%;
-  height: 10vh;
+  height: 45%;
   padding-top: 1%;
   padding-bottom: 1%;
   padding-left: 7%;
