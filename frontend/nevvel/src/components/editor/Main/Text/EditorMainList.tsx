@@ -2,18 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import EditorMainListItem from "./EditorMainListItem";
 import EditorMainAssetContainer from "../Asset/EditorMainAssetContainer";
-
-interface content {
-  idx: number;
-  context: string;
-  event:event[]
-}
-
-interface event {
-  assetId: number;
-  type:string
-}
-
+import { content } from "editor";
 type EditorMainListProps = {
   contents: content[];
   setContents: React.Dispatch<React.SetStateAction<content[]>>;

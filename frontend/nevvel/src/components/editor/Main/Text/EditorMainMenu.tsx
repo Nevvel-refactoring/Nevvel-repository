@@ -7,9 +7,11 @@ type EditorMainMenuProps = {
   setText: React.Dispatch<React.SetStateAction<string>>;
   x: number;
   y: number;
+  style:boolean;
+  setStyle: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function EditorMainMenu({ setText, x, y }: EditorMainMenuProps) {
+function EditorMainMenu({ setText, x, y, style, setStyle }: EditorMainMenuProps) {
   const positionY = y;
   const [colorDrop, setColorDrop] = useState(false);
 
@@ -27,6 +29,7 @@ function EditorMainMenu({ setText, x, y }: EditorMainMenuProps) {
       if (textElement) {
         setText(textElement!.innerHTML);
       }
+      setStyle(!style)
     }
   };
 

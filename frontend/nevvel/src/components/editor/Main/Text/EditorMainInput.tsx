@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction,useRef } from "react";
 import styled from "styled-components";
 
 interface content {
@@ -27,27 +27,31 @@ function EditorMainInput({
   setContents,
 }: EditorMainInputProps) {
 
+  const nextId = useRef(1);
+
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key == "Enter") {
       event.preventDefault();
 
       const newBlock: content = {
-        idx: Date.now(),
+        idx: nextId.current,
         context: currentText,
         event:[]
       };
       setContents([...contents, newBlock]);
+      nextId.current++;
       setCurrentText("");
     }
   };
 
   const handleClick = () => {
     const newBlock: content = {
-      idx: Date.now(),
+      idx: nextId.current,
       context: currentText,
       event:[]
     };
     setContents([...contents, newBlock]);
+    nextId.current++;
     setCurrentText("");
   }
 

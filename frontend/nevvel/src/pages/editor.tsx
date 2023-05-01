@@ -1,13 +1,25 @@
-import React from "react";
+import React,{useState} from "react";
 import EditorHead from "@/src/components/editor/EditorHead";
 import EditorMain from "@/src/components/editor/EditorMain";
 import styled from "styled-components";
-
+import { episode } from "editor";
 function editor() {
+  const [episode, setEpisode] =useState<episode>({
+    coverId:1,
+    statusType:"PUBLISHED",
+    point:0,
+    title:"",
+    contents:[]
+  })
+
   return (
     <Wrapper>
-      <EditorHead />
-      <EditorMain />
+      <EditorHead 
+      episode={episode}
+      setEpisode={setEpisode}/>
+      <EditorMain 
+      setEpisode={setEpisode}
+      episode={episode}/>
     </Wrapper>
   );
 }
