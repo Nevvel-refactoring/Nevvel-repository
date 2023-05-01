@@ -4,6 +4,7 @@ import com.ssafy.novvel.asset.dto.AssetRegistDto;
 import com.ssafy.novvel.resource.entity.Resource;
 import com.ssafy.novvel.member.entity.Member;
 import lombok.*;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
@@ -31,8 +32,9 @@ public class Asset {
     @Size(max = 500)
     private String description;
     @PositiveOrZero
-    private Long point;
-
+    private Long point = 0L;
+    @PositiveOrZero
+    private Long downloadCount = 0L;
 
     public Asset(AssetRegistDto assetRegistDto, Resource resource, Member member) {
         this.title = assetRegistDto.getTitle();
@@ -60,7 +62,7 @@ public class Asset {
 
     @Override
     public boolean equals(Object obj) {
-        Asset asset = (Asset)obj;
+        Asset asset = (Asset) obj;
         return this.id.equals(asset.getId());
     }
 }

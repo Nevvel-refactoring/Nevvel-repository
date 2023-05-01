@@ -17,7 +17,7 @@ public interface AssetService {
 
     Asset addAsset(MultipartFile file, Member member, AssetRegistDto assetRegistDto) throws IOException;
     Slice<AssetSearchDto> searchAssetByTag(List<String> tags, Pageable pageable, Member member);
-
+    Page<AssetSearchDto> searchAssetByUploader(Long uploaderId,Member member, Pageable pageable);
     Page<Tag> findPageTags(Pageable pageable);
 
 

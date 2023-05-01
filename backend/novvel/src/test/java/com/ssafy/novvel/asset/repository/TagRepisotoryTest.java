@@ -4,13 +4,14 @@ import com.ssafy.novvel.asset.entity.Tag;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 
 @DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+//@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@ActiveProfiles("test")
 public class TagRepisotoryTest {
 
     @Autowired
@@ -27,6 +28,7 @@ public class TagRepisotoryTest {
 
         List<Tag> tags = tagRepository.findByTagNameIn(List.of("공포", "호러"));
 
+        Assertions.assertThat(tags.size()).isEqualTo(2);
         Assertions.assertThat(tags.get(0).getTagName()).isEqualTo("공포");
         Assertions.assertThat(tags.get(1).getTagName()).isEqualTo("호러");
 
