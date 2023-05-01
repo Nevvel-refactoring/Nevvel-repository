@@ -86,8 +86,8 @@ export default AssetCard
 const Wrapper = styled.div`
   background-color: ${({ theme }) => theme.color.background};
   /* flex-direction: column; */
-  width: 18%;
-  height: 100%;
+  width: 13rem;
+  height: 17rem;
   margin-top: 1%;
   margin-bottom: 5%;
   margin-right: 1%;
