@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Set;
+import java.util.Optional;
 
 @Repository
 public interface MemberAssetRepository extends JpaRepository<MemberAsset, Long> {
@@ -18,4 +18,7 @@ public interface MemberAssetRepository extends JpaRepository<MemberAsset, Long> 
 
     @Query("SELECT ma FROM MemberAsset ma LEFT JOIN fetch ma.asset WHERE ma.member = :member")
     List<MemberAsset> findByMember(@Param("member") Member member);
+
+    Optional<MemberAsset> findByAssetAndMember(Asset asset, Member member);
+
 }

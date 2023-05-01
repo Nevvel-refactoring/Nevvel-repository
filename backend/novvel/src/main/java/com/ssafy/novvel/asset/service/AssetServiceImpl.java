@@ -1,5 +1,6 @@
 package com.ssafy.novvel.asset.service;
 
+import com.ssafy.novvel.asset.dto.AssetPurchaseType;
 import com.ssafy.novvel.asset.dto.AssetRegistDto;
 import com.ssafy.novvel.asset.dto.AssetSearchDto;
 import com.ssafy.novvel.asset.entity.Asset;
@@ -15,15 +16,20 @@ import com.ssafy.novvel.memberasset.repository.MemberAssetRepository;
 import com.ssafy.novvel.resource.entity.Resource;
 import com.ssafy.novvel.resource.service.ResourceService;
 import com.ssafy.novvel.member.entity.Member;
+import com.ssafy.novvel.transactionhistory.entity.PointChangeType;
+import com.ssafy.novvel.transactionhistory.entity.TransactionHistory;
+import com.ssafy.novvel.transactionhistory.repository.TransactionHistoryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -37,6 +43,7 @@ public class AssetServiceImpl implements AssetService {
     private final ResourceService resourceService;
     private final MemberAssetRepository memberAssetRepository;
     private final MemberRepository memberRepository;
+    private final TransactionHistoryRepository historyRepository;
 
     @Override
     @Transactional
@@ -126,9 +133,34 @@ public class AssetServiceImpl implements AssetService {
                 }
             }
         }
+
+
         return assetSearchDtos;
     }
 
+    @Override
+    @Transactional
+    public Integer purchaseAsset(Long assetId, Member member) {
+        Asset asset = assetRepository.findById(assetId).orElseThrow(() -> new NotFoundException("에셋을 찾을 수 없습니다"));
+        Optional<MemberAsset> memberAsset = memberAssetRepository.findByAssetAndMember(asset, member);
+        if (!memberAsset.isEmpty()) {
+            return 204;
+        }
+
+        if (asset.getPoint() > member.getPoint()) {
+            return 200;
+        }
+
+        Member seller = asset.getMember();
+        member.setPoint(member.getPoint() - asset.getPoint());
+        seller.setPoint(seller.getPoint() + asset.getPoint());
+
+        TransactionHistory buyTransactionHistory = new TransactionHistory(member, asset, PointChangeType.BUY_ASSET, asset.getPoint());
+        TransactionHistory sellTransactionHistory = new TransactionHistory(asset.getMember(), asset, PointChangeType.SELL_ASSET, asset.getPoint());
+        historyRepository.saveAll(List.of(buyTransactionHistory, sellTransactionHistory));
+
+        return 201;
+    }
 
     //사용자가 해당 에셋을 보유하였는지 확인하고, dto에 표시
     private List<AssetSearchDto> isAvailable(List<Asset> assets, List<AssetSearchDto> assetSearchDtos, Member member) {

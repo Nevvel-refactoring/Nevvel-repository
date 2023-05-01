@@ -1,5 +1,6 @@
 package com.ssafy.novvel.asset.service;
 
+import com.ssafy.novvel.asset.dto.AssetPurchaseType;
 import com.ssafy.novvel.asset.dto.AssetRegistDto;
 import com.ssafy.novvel.asset.dto.AssetSearchDto;
 import com.ssafy.novvel.asset.entity.Asset;
@@ -16,7 +17,11 @@ import java.util.List;
 public interface AssetService {
 
     Asset addAsset(MultipartFile file, Member member, AssetRegistDto assetRegistDto) throws IOException;
+
     Slice<AssetSearchDto> searchAssetByTag(List<String> tags, Pageable pageable, Member member);
+
+    Integer purchaseAsset(Long assetId, Member member);
+
     Page<AssetSearchDto> searchAssetByUploader(Long uploaderId,Member member, Pageable pageable);
     Page<Tag> findPageTags(Pageable pageable);
 

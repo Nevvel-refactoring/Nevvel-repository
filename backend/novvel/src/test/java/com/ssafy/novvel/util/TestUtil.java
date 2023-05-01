@@ -138,6 +138,22 @@ public class TestUtil {
         return result;
     }
 
+    public static List<Asset> getAssetList(int index) {
+        List<Asset> result = new ArrayList<>();
+        for (int i = 0; i < index; i++) {
+            Asset asset = Asset.builder()
+                    .id(Long.valueOf(i))
+                    .title(i + "title")
+                    .type(AssetType.IMAGE)
+                    .description(String.valueOf(i))
+                    .point(100L)
+                    .downloadCount(0L)
+                    .build();
+            result.add(asset);
+        }
+        return result;
+    }
+
     public static Resource getResource() {
         return new Resource(1L, "test.gif", "path", true, "thumbnailpath");
     }
