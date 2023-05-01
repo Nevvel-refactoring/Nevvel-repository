@@ -47,7 +47,7 @@ public class AssetController {
 
         return new ResponseEntity<>(assetSearchDtoPage, HttpStatus.OK);
     }
-    @GetMapping("/purchasing/{assetId}")
+    @PostMapping("/purchasing/{assetId}")
     public ResponseEntity<?> searchByMemberId(@PathVariable("assetId") Long assetId,
                                               @AuthenticationPrincipal CustomUserDetails customUserDetails) {
 

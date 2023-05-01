@@ -102,6 +102,18 @@ public class TestUtil {
         return result;
     }
 
+    public static Asset getAsset(Member member){
+        return Asset.builder()
+                .id(1L)
+                .title("title")
+                .type(AssetType.IMAGE)
+                .description("desc")
+                .point(100L)
+                .member(member)
+                .downloadCount(0L)
+                .build();
+    }
+
     public static List<Asset> getAssetList(int index, List<Member> members, List<Resource> resources) {
         List<Asset> result = new ArrayList<>();
         for (int i = 0; i < index; i++) {

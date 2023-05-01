@@ -1,6 +1,5 @@
 package com.ssafy.novvel.asset.service;
 
-import com.ssafy.novvel.asset.dto.AssetPurchaseType;
 import com.ssafy.novvel.asset.dto.AssetRegistDto;
 import com.ssafy.novvel.asset.dto.AssetSearchDto;
 import com.ssafy.novvel.asset.entity.Asset;
@@ -241,11 +240,12 @@ public class AssetServiceTest {
         Optional<MemberAsset> memberAssetOptional = Optional.of(new MemberAsset(1L, member, assets.get(0), DealType.BUY));
 
         Mockito.doReturn(Optional.of(assets.get(0))).when(assetRepository).findById(assets.get(0).getId());
+        assetService.purchaseAsset(assets.get(0).getId(), member);
         Mockito.doReturn(memberAssetOptional).when(memberAssetRepository).findByAssetAndMember(assets.get(0), member);
 
-        AssetPurchaseType assetPurchaseType = assetService.purchaseAsset(assets.get(0).getId(), member);
+         Integer result = assetService.purchaseAsset(assets.get(0).getId(), member);
 
-        Assertions.assertThat(assetPurchaseType).isEqualTo(AssetPurchaseType.DUPLICATED);
+        Assertions.assertThat(result).isEqualTo(204);
 
     }
 
@@ -258,24 +258,24 @@ public class AssetServiceTest {
         Mockito.doReturn(Optional.of(assets.get(0))).when(assetRepository).findById(assets.get(0).getId());
         Mockito.doReturn(memberAssetOptional).when(memberAssetRepository).findByAssetAndMember(assets.get(0), member);
 
-        AssetPurchaseType assetPurchaseType = assetService.purchaseAsset(assets.get(0).getId(), member);
+        Integer result  = assetService.purchaseAsset(assets.get(0).getId(), member);
 
-        Assertions.assertThat(assetPurchaseType).isEqualTo(AssetPurchaseType.NEED_POINT);
+        Assertions.assertThat(result).isEqualTo(200);
     }
     @Test
     void purchaseAssetPurchaseTest() {
-        Member member = TestUtil.getUSERMember().get();
-        member.setPoint(1000l);
-        List<Asset> assets = TestUtil.getAssetList(1);
+        List<Member> members = TestUtil.getUSERMembers(2);
+        members.get(0).setPoint(1000L);
+        Asset asset = TestUtil.getAsset(members.get(1));
         Optional<MemberAsset> memberAssetOptional = Optional.ofNullable(null);
 
-        Mockito.doReturn(Optional.of(assets.get(0))).when(assetRepository).findById(assets.get(0).getId());
-        Mockito.doReturn(memberAssetOptional).when(memberAssetRepository).findByAssetAndMember(assets.get(0), member);
+        Mockito.doReturn(Optional.of(asset)).when(assetRepository).findById(asset.getId());
+        Mockito.doReturn(memberAssetOptional).when(memberAssetRepository).findByAssetAndMember(asset, members.get(0));
         Mockito.doReturn(new ArrayList<TransactionHistory>()).when(historyRepository).saveAll(Mockito.anyIterable());
 
-        AssetPurchaseType assetPurchaseType = assetService.purchaseAsset(assets.get(0).getId(), member);
+        Integer result = assetService.purchaseAsset(asset.getId(), members.get(0));
 
-        Assertions.assertThat(assetPurchaseType).isEqualTo(AssetPurchaseType.PUCHASE);
+        Assertions.assertThat(result).isEqualTo(201);
     }
 
 
