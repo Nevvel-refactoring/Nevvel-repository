@@ -45,6 +45,9 @@ const ListWrapper = styled.div`
   flex-direction: column;
   overflow: scroll;
   width: 100%;
+  ::-webkit-scrollbar {
+  display: none;
+}
 `;
 
 const AssetWrapper = styled.div``;

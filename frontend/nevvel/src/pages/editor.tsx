@@ -32,6 +32,7 @@ const Wrapper = styled.div`
   height: 91vh;
   padding-left: 10%;
   padding-right: 10%;
+
 `;
 
 export default editor;

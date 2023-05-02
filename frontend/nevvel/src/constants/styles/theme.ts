@@ -30,9 +30,9 @@ export const darkTheme: DefaultTheme = {
     background: "#1a1a1a",
     button:"#e6e6e6",
     point:"#696acc",
-    hover:"#c1c2ff",
+    hover:"#616180",
     searchBar: "#dadaff",
-    editor: "#dadaff",
+    editor: "#27284c",
     wrongButton:"#808080"
   },
 };
