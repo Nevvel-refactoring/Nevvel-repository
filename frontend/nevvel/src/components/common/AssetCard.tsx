@@ -26,15 +26,18 @@ function AssetCard({
 
   const audioRef = useRef<any>(null)
 
-
+  // hover 트리거
   const [hoverTrigger, setHoverTrigger] = useState(0)
 
+  // 이미지 gif on/off 함수
   const ImgTriggerOn = () => {
     setHoverTrigger(1)
   }
   const ImgTriggerOff = () => {
     setHoverTrigger(0)
   }
+
+  // 음성 on/off 함수
   const AudTriggerOn = () => {
     setHoverTrigger(1)
     audioRef.current.play()    
@@ -48,18 +51,25 @@ function AssetCard({
     
     <Wrapper>
       <CardImgDiv>
+        {/* 오디오 재생 ref */}
         <audio ref={audioRef} src={`${url}`} />
+
+        {/* 이중 삼항연산자 */}
+        {/* type이 AUDIO면 오디오 트리거 */}
         {
           type === "AUDIO"?
           (
             hoverTrigger === 0?
+            // hovertrigger에 따라 트리거가 오디오 on/off
             <CardImg src="https://cdn4.iconfinder.com/data/icons/proglyphs-multimedia/512/Volume_Off-512.png" alt="썸네일" onMouseOver={AudTriggerOn} />
             :
             <CardImg src={thumbnail} alt="썸네일" onMouseLeave={AudTriggerOff} />
           )
           :
+          // type이 AUDIO가 아니면 (IMAGE), 이미지 트리거
           (
             hoverTrigger === 0?
+            // hovertrigger에 따라 트리거가 이미지 스위치(썸네일 <-> 원본)
             <CardImg src={thumbnail} alt="썸네일" onMouseOver={ImgTriggerOn} />:
             <CardImg src={url} alt="썸네일" onMouseLeave={ImgTriggerOff} />
           )
@@ -67,6 +77,7 @@ function AssetCard({
       </CardImgDiv>
       <CardInfo1>{title}</CardInfo1>
       <CardInfo2>
+        {/* 태그 객체 리스트 1,2,3번째까지만 매핑 */}
         {
           tags.slice(0,3).map((tag, index:number) => {
             return (

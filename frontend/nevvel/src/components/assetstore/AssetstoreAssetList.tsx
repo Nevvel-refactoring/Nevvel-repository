@@ -49,6 +49,7 @@ function AssetstoreAssetList() {
   return(
     <div>
       <div>
+        {/* 이미지 데이터/사운드 데이터 스위치 버튼 */}
         <button onClick={changeImg}>이미지</button>
         <button onClick={changeSound}>사운드</button>
       </div>
