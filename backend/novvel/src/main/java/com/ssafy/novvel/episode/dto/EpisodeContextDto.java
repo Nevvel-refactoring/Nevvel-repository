@@ -1,6 +1,7 @@
 package com.ssafy.novvel.episode.dto;
 
 import com.ssafy.novvel.context.dto.ContextTouchsDto;
+import com.ssafy.novvel.cover.entity.Cover;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -30,6 +31,9 @@ public class EpisodeContextDto {
      *     },
      *   ]
      */
+    private Long coverId;
+
+    private String coverTitle;
 
     private String title;
 

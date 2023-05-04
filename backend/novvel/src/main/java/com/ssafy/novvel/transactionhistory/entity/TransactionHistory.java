@@ -51,4 +51,11 @@ public class TransactionHistory extends BaseEntity {
         this.point = point;
     }
 
+    public TransactionHistory(Member member, Episode episode, PointChangeType type, Long point) {
+        this.member = member;
+        this.episode = episode;
+        this.pointChangeType = type;
+        this.point = point;
+    }
+
 }

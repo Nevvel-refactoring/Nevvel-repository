@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CoverMemberID implements Serializable {
 
-    private Cover cover;
-    private Member member;
+    private Long cover;
+    private Long member;
 }
