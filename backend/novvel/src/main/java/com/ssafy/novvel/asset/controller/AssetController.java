@@ -1,6 +1,5 @@
 package com.ssafy.novvel.asset.controller;
 
-import com.ssafy.novvel.asset.dto.AssetPurchaseType;
 import com.ssafy.novvel.asset.dto.AssetRegistDto;
 import com.ssafy.novvel.asset.dto.AssetSearchDto;
 import com.ssafy.novvel.asset.service.AssetService;
@@ -54,6 +53,15 @@ public class AssetController {
         Integer statusCode = assetService.purchaseAsset(assetId, customUserDetails.getMember());
 
         return new ResponseEntity<>(HttpStatus.valueOf(statusCode));
+    }
+
+    @GetMapping("/purchased-on")
+    public ResponseEntity<Page<AssetSearchDto>> myAssets(@AuthenticationPrincipal CustomUserDetails customUserDetails,
+                                      Pageable pageable){
+
+        Page<AssetSearchDto> result = assetService.searchMyAssets(customUserDetails.getMember(), pageable);
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
 

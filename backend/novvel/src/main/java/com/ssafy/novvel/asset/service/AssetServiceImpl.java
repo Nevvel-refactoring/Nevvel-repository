@@ -1,6 +1,5 @@
 package com.ssafy.novvel.asset.service;
 
-import com.ssafy.novvel.asset.dto.AssetPurchaseType;
 import com.ssafy.novvel.asset.dto.AssetRegistDto;
 import com.ssafy.novvel.asset.dto.AssetSearchDto;
 import com.ssafy.novvel.asset.entity.Asset;
@@ -121,6 +120,23 @@ public class AssetServiceImpl implements AssetService {
     public Page<Tag> findPageTags(Pageable pageable) {
 
         return tagRepository.findByOrderByUseCountDesc(pageable);
+    }
+
+    @Override
+    public Page<AssetSearchDto> searchMyAssets(Member member, Pageable pageable) {
+        Page<MemberAsset> assetPage = memberAssetRepository.findPageByMember(member, pageable);
+        List<Asset> assets = assetPage.getContent().stream()
+                .map(MemberAsset::getAsset)
+                .collect(Collectors.toList());
+        assets = assetRepository.findJoinMemberByAssets(assets);
+
+        return new PageImpl<>(
+                assets.stream()
+                        .map(AssetSearchDto::new)
+                        .collect(Collectors.toList()),
+                pageable,
+                assetPage.getTotalPages()
+        );
     }
 
     //각 에셋에 태그목록을 추가
