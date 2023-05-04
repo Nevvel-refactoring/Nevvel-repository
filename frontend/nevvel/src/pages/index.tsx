@@ -1,9 +1,11 @@
 import AssetSwiper from "../components/main/AssetSwiper";
 import styled from "styled-components";
+import NovelSwiper from "../components/main/NovelSwiper";
 
 export default function Home() {
   return (
     <HomeWrapper>
+      <NovelSwiper />
       <AssetSwiper />
     </HomeWrapper>
   );
