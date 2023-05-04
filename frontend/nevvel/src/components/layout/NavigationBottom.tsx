@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useRouter } from "next/router";
 import Image from "next/image";
 import nevvel_light from "../../assets/img/nevvel_light.png";
 import nevvel_dark from "../../assets/img/nevvel_dark.png";
@@ -9,21 +10,47 @@ import { tabletH } from "../../util/Mixin";
 import { mobile } from "../../util/Mixin";
 
 function NavigationBottom() {
+  const router = useRouter();
+
+  const genreSelectHandler = () => {
+    router.push(
+      {
+        pathname: "/novels/genres",
+        query: { genre: 1, sort: "like" },
+      },
+      `/novels/genres`
+    );
+  };
+
+  const completedSelectHandler = () => {
+    router.push(
+      {
+        pathname: "/novels/completed",
+        query: { genre: 1, sort: "like" },
+      },
+      `/novels/completed`
+    );
+  };
+
+  const latestSelectHandler = () => {
+    router.push(
+      {
+        pathname: "/novels/latest",
+        query: { genre: 1, sort: "like" },
+      },
+      `/novels/latest`
+    );
+  };
+
   return (
     <Wrapper>
       <Link href="/">
         <Image src={nevvel_light} alt="Logo" width={100} height={25} />
       </Link>
       <Novel>
-        <Genre>
-          <Link href="/novels/genres">장르별 소설</Link>
-        </Genre>
-        <Completed>
-          <Link href="/novels/completed">완결 소설</Link>
-        </Completed>
-        <Latest>
-          <Link href="/novels/latest">최신 소설</Link>
-        </Latest>
+        <Genre onClick={genreSelectHandler}>장르별 소설</Genre>
+        <Completed onClick={completedSelectHandler}>완결 소설</Completed>
+        <Latest onClick={latestSelectHandler}>최신 소설</Latest>
         <AssetStore>
           <Link href="/assetstore/assetstore">에셋 스토어</Link>
         </AssetStore>
@@ -66,11 +93,17 @@ const Novel = styled.div`
   }
 `;
 
-const Genre = styled.div``;
+const Genre = styled.div`
+  cursor: pointer;
+`;
 
-const Completed = styled.div``;
+const Completed = styled.div`
+  cursor: pointer;
+`;
 
-const Latest = styled.div``;
+const Latest = styled.div`
+  cursor: pointer;
+`;
 
 const AssetStore = styled.div``;
 

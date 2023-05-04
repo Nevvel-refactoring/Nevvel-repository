@@ -4,6 +4,7 @@ import AssetCard from "../common/AssetCard";
 import imgdata from "./DummyAssetData_Image.json"
 import sounddata from "./DummyAssetData_Audio.json"
 
+
 interface AssetTag {
   id : number,
   name : string,
@@ -49,6 +50,7 @@ function AssetstoreAssetList() {
   return(
     <div>
       <div>
+        {/* 이미지 데이터/사운드 데이터 스위치 버튼 */}
         <button onClick={changeImg}>이미지</button>
         <button onClick={changeSound}>사운드</button>
       </div>
@@ -79,9 +81,10 @@ const Wrapper = styled.div`
   background-color: ${({ theme }) => theme.color.background};
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
   /* flex-direction: column; */
   width: 100%;
-  height: 10vh;
+  height: 45%;
   padding-top: 1%;
   padding-bottom: 1%;
   padding-left: 7%;

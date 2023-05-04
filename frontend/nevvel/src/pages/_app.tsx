@@ -3,8 +3,10 @@ import { useEffect } from "react";
 import { ThemeProvider } from "styled-components";
 import { lightTheme, darkTheme } from "../constants/styles/theme";
 import { GlobalStyle } from "../constants/styles/globalStyle";
+import styled from "styled-components";
 import Layout from "../components/layout/Layout";
 import type { AppProps } from "next/app";
+import { MdDarkMode, MdLightMode } from "react-icons/md";
 
 const themeAtom = atom<"light" | "dark">("light");
 
@@ -31,9 +33,9 @@ function App({ Component, pageProps }: AppProps) {
     <Provider>
       <ThemeProvider theme={theme === "light" ? lightTheme : darkTheme}>
         <GlobalStyle />
-        <button onClick={toggleTheme}>
-          {theme === "light" ? "Toggle Dark Mode" : "Toggle Light Mode"}
-        </button>
+        <DarkModeBtn onClick={toggleTheme}>
+          {theme === "light" ? <MdLightMode size="28"/> : <MdDarkMode size="28" />}
+        </DarkModeBtn>
         <Layout>
           <Component {...pageProps} />
         </Layout>
@@ -42,4 +44,14 @@ function App({ Component, pageProps }: AppProps) {
   );
 }
 
+const DarkModeBtn = styled.button`
+  position: fixed;
+  left: 90%;
+  top: 89%;
+  border-radius: 50%;
+  width: 3rem;
+  height: 3rem;
+  box-shadow: 0rem 0rem 0.5rem ${({ theme }) => theme.color.text1};
+  color:${({ theme }) => theme.color.text1};
+`;
 export default App;

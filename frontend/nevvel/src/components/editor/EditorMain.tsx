@@ -1,40 +1,30 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import EditorMainList from "./Main/Text/EditorMainList";
 import EditorMainInput from "./Main/Text/EditorMainInput";
+import { episode,content } from "editor";
 
-interface Episode {
-  coverId: number;
-  statusType: string;
-  point:number;
-  contents:content[];
+type EditorMainProps = {
+  setEpisode:React.Dispatch<React.SetStateAction<episode>>;
+  episode:episode;
 }
 
-interface content {
-  idx: number;
-  context: string; 
-  event:event[]
-}
-
-interface event {
-  assetId: number;
-  type:string
-}
-
-
-function EditorMain() {
-  const [episode, setEpisode] =useState<Episode[]>([])
+function EditorMain({setEpisode,episode}:EditorMainProps) {
   const [contents, setContents] =useState<content[]>([]);
   const [currentText, setCurrentText] = useState("");
   
+  useEffect(()=>{
+    setEpisode({...episode,contents:contents})
+    console.log("episode",episode)
 
+  },[contents])
+  
 
 	return (
     <Wrapper>
       <EditorMainList
 			contents={contents}
 			setContents={setContents}
-			
 			/>
       <EditorMainInput
 			currentText={currentText}
@@ -51,5 +41,4 @@ background-color: ${({ theme })=> theme.color.background};
   /* border: 2px solid ${({ theme }) => theme.color.hover}; */
   border-radius: 10px;
 `;
-
 export default EditorMain;

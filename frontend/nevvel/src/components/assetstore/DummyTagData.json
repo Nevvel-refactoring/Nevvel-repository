@@ -1,0 +1,24 @@
+{
+  "content": [
+  {
+  "id": 1,
+  "tagName": "호러",
+  "useCount": 100
+  },
+  {
+  "id": 2,
+  "tagName": "공포",
+  "useCount": 200
+  },
+  {
+  "id": 3,
+  "tagName": "디장고",
+  "useCount": 300
+  },
+  {
+    "id": 4,
+    "tagName": "쥰모닝",
+    "useCount": 100
+  }
+  ]
+}

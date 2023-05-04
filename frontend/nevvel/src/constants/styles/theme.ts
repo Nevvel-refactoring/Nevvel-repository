@@ -23,16 +23,16 @@ export const darkTheme: DefaultTheme = {
   color: {
     text1: "#e6e6e6",
     text2: "#000000",
-    buttonText:"#e6e6e6",
+    buttonText:"#000000",
     pointText:"5c5db3",
     navbar: "#000000",
-    subNavbar:"#000000",
+    subNavbar:"#dadaff",
     background: "#1a1a1a",
     button:"#e6e6e6",
     point:"#696acc",
-    hover:"#c1c2ff",
+    hover:"#616180",
     searchBar: "#dadaff",
-    editor: "#dadaff",
+    editor: "#27284c",
     wrongButton:"#808080"
   },
 };

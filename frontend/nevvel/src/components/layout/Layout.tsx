@@ -1,11 +1,22 @@
-import React from "react";
+import React,{useEffect, useState} from "react";
 import styled from "styled-components";
 import Navigation from "./Navigation";
+import { useRouter } from 'next/router';
 
 function Layout(props: { children: React.ReactNode }) {
+  const router = useRouter();
+  const [hidden, setHidden] =useState(true);
+
+  useEffect(()=>{
+    if(router.pathname ==='/viewer/[id]'||router.pathname ==='/editor/[id]'){
+      setHidden(false)
+    }
+  },[router])
   return (
     <Wrapper>
-      <Navigation />
+      {hidden ? (
+        <Navigation />
+      ):(null)}
       <div>{props.children}</div>
     </Wrapper>
   );
