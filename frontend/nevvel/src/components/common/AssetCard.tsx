@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
 import styled from "styled-components";
+import { Modal } from "@/src/components/common/Modal";
 
 interface AssetTag {
   id : number,
@@ -47,9 +48,17 @@ function AssetCard({
     audioRef.current.pause() 
   }
 
+  // 에셋 디테일 모달 오픈 트리거
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+
+  // 에셋 디테일 모달 오픈
+  const AssetDetail = () => {
+    setModalOpen(true);
+  };
+
   return(
-    
-    <Wrapper>
+    <div>
+    <Wrapper onClick={AssetDetail}>
       <CardImgDiv>
         {/* 오디오 재생 ref */}
         <audio ref={audioRef} src={`${url}`} />
@@ -61,17 +70,17 @@ function AssetCard({
           (
             hoverTrigger === 0?
             // hovertrigger에 따라 트리거가 오디오 on/off
-            <CardImg src="https://cdn4.iconfinder.com/data/icons/proglyphs-multimedia/512/Volume_Off-512.png" alt="썸네일" onMouseOver={AudTriggerOn} />
+            <CardImg1 src="https://cdn4.iconfinder.com/data/icons/proglyphs-multimedia/512/Volume_Off-512.png" alt="썸네일" onMouseOver={AudTriggerOn} />
             :
-            <CardImg src={thumbnail} alt="썸네일" onMouseLeave={AudTriggerOff} />
+            <CardImg1 src={thumbnail} alt="썸네일" onMouseLeave={AudTriggerOff} />
           )
           :
           // type이 AUDIO가 아니면 (IMAGE), 이미지 트리거
           (
             hoverTrigger === 0?
             // hovertrigger에 따라 트리거가 이미지 스위치(썸네일 <-> 원본)
-            <CardImg src={thumbnail} alt="썸네일" onMouseOver={ImgTriggerOn} />:
-            <CardImg src={url} alt="썸네일" onMouseLeave={ImgTriggerOff} />
+            <CardImg1 src={thumbnail} alt="썸네일" onMouseOver={ImgTriggerOn} />:
+            <CardImg1 src={url} alt="썸네일" onMouseLeave={ImgTriggerOff} />
           )
         }
       </CardImgDiv>
@@ -88,6 +97,19 @@ function AssetCard({
         {/* {tags[0].name} */}
       </CardInfo2>
     </Wrapper>
+      {/* 여기부터 모달 */}
+      {modalOpen ? (
+        <Modal
+          modal={modalOpen}
+          setModal={setModalOpen}
+          width="800"
+          height="700"
+          element={
+            <p>{title}</p>
+          }
+        />
+      ) : null}
+    </div>
   )
 }
 
@@ -98,7 +120,7 @@ const Wrapper = styled.div`
   background-color: ${({ theme }) => theme.color.background};
   /* flex-direction: column; */
   width: 13rem;
-  height: 17rem;
+  height: 20rem;
   margin-top: 1%;
   margin-bottom: 5%;
   margin-right: 1%;
@@ -116,11 +138,16 @@ const CardImgDiv = styled.div`
   margin-right: 2.5%;
 `
 
-const CardImg = styled.img`
-  width: 100%;
-  height: 30vh;
+const CardImg1 = styled.img`
+  width: 13rem;
+  height: 13rem;
   border-radius: 5%;
 `
+// const CardImg2 = styled.img`
+//   width: auto;
+//   height: 30vh;
+//   border-radius: 5%;
+// `
 const CardInfo1 = styled.p`
   color: ${({ theme }) => theme.color.text1};
   width: 100%;

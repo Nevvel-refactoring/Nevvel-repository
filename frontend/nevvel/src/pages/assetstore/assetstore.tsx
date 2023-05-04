@@ -13,9 +13,10 @@ import ImgUpload from "@/src/components/assetstore/ImgUpload";
 import AudUpload from "@/src/components/assetstore/AudUpload";
 
 
+
 function assetstore() {
   // Modal Open trigger
-  const [ModalOpen, setModalOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
 
   // Modal Change Trigger
   const [modalChange, setModalChange] = useState(0);
@@ -25,6 +26,10 @@ function assetstore() {
     setModalOpen(true);
     setModalChange(0)
   };
+
+  const CloseAssetUpload = () => {
+    setModalOpen(false)
+  }
 
   const UploadImg = () => {
     setModalChange(1)
@@ -49,12 +54,12 @@ function assetstore() {
       <AssetstoreAssetList />
       
       {/* 여기부터 모달 */}
-      {ModalOpen ? (
+      {modalOpen ? (
         <Modal
-          modal={ModalOpen}
+          modal={modalOpen}
           setModal={setModalOpen}
           width="600"
-          height="600"
+          height="700"
           element={
             (
               modalChange === 0?
@@ -64,11 +69,12 @@ function assetstore() {
                 <ModalUploadBtn onClick={UploadImg} src="/UploadImgBtn.png" alt="UploadImgBtn" />
                 <ModalUploadBtn onClick={UploadAud} src="/UploadAudBtn.png" alt="UploadAudBtn" />
               </ModalUploadBtnDiv>
+              <ModalCloseBtn onClick={CloseAssetUpload}>닫기</ModalCloseBtn>
             </ModalDiv1>:
             (
               modalChange === 1?
-              <ImgUpload />:
-              <AudUpload />
+              <ImgUpload modalOpen={modalOpen} setModalOpen={setModalOpen} />:
+              <AudUpload modalOpen={modalOpen} setModalOpen={setModalOpen} />
             )
             )
           }
@@ -158,3 +164,13 @@ const ModalUploadBtn = styled.img`
     box-shadow: 0.1rem 0.1rem 0.5rem;
   }
 `;
+
+const ModalCloseBtn = styled.button`
+  background-color: ${({ theme }) => theme.color.button};
+  color: ${({ theme }) => theme.color.buttonText};
+  width: 12rem;
+  height: 3rem;
+  border: 0.1rem solid black;
+  border-radius: 0.5rem;
+  font-size: 1.5rem;
+`

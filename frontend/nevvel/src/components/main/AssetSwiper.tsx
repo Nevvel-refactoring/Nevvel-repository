@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 
 // import Swiper core and required modules
-import { Navigation, Pagination, Scrollbar, A11y } from "swiper";
+import { Navigation, Pagination, Scrollbar, A11y, Autoplay } from "swiper";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 
@@ -53,11 +53,26 @@ function AssetSwiper() {
     <Wrapper>
       <Swiper
         // install Swiper modules
-        modules={[Navigation, Pagination, Scrollbar, A11y]}
+        modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
         spaceBetween={0}
-        slidesPerView={5}
+        slidesPerView={1}
+        breakpoints={{
+          500:{
+            slidesPerView: 2
+          },
+          750:{
+            slidesPerView: 3
+          },
+          1000:{
+            slidesPerView: 4
+          },
+          1250:{
+            slidesPerView: 5
+          },
+        }}
         navigation
         pagination={{ clickable: true }}
+        autoplay={{ delay: 3000 }}
         // scrollbar={{ draggable: true }}
         // onSwiper={(swiper) => console.log(swiper)}
         // onSlideChange={() => console.log("slide change")}

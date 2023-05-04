@@ -17,7 +17,7 @@ export const Modal = ({ width, height, element, setModal }: ModalProps) => {
   return (
     <>
       <Container width={width} height={height}>
-        <ExitWrapper onClick={disableModal}>Close</ExitWrapper>
+        {/* <ExitWrapper onClick={disableModal}>Close</ExitWrapper> */}
         <Wrapper>{element}</Wrapper>
       </Container>
       <Canvas onClick={disableModal} />
