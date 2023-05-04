@@ -9,7 +9,7 @@ interface Novel {
 }
 
 function NovelCard(props: Novel) {
-  console.log(props);
+  // console.log(props);
 
   return (
     <Wrapper>
