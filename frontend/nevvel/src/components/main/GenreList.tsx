@@ -12,7 +12,10 @@ function GenreList({ id, name, nav }: Props) {
 
   const genreSelectHandler = () => {
     router.push(
-      { pathname: `/novels/${nav}`, query: { genre: id, sort: "like" } },
+      {
+        pathname: `/novels/${nav}`,
+        query: { genre: id, sort: "like", name: name },
+      },
       `/novels/${nav}`
     );
   };

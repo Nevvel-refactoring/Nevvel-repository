@@ -1,11 +1,10 @@
+import AssetSwiper from "../components/main/AssetSwiper";
 import styled from "styled-components";
 
-
 export default function Home() {
-
   return (
     <HomeWrapper>
-      <span>Home</span>
+      <AssetSwiper />
     </HomeWrapper>
   );
 }
