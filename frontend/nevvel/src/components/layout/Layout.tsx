@@ -8,7 +8,7 @@ function Layout(props: { children: React.ReactNode }) {
   const [hidden, setHidden] =useState(true);
 
   useEffect(()=>{
-    if(router.pathname ==='/viewer'||router.pathname ==='/editor'){
+    if(router.pathname ==='/viewer/[id]'||router.pathname ==='/editor/[id]'){
       setHidden(false)
     }
   },[router])

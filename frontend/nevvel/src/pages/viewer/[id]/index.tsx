@@ -1,25 +1,20 @@
 import React, { useEffect, useState } from "react";
-import ViewHeader from "../components/viewer/ViewHeader";
-import ViewerMain from "../components/viewer/ViewerMain";
+import ViewHeader from "../../../components/viewer/ViewHeader";
+import ViewerTabMain from "../../../components/viewer/Main/ViewerTabMain";
+import ViewerPageMain from "@/src/components/viewer/Main/ViewerPageMain";
 import styled from "styled-components";
-import { useRouter } from "next/router";
-import { atom } from "jotai";
-import EpisodeData from "../components/viewer/DummyEpisodeData.json";
-import AssetData from "../components/assetstore/DummyAssetData_Image.json";
+import EpisodeData from "../../../components/viewer/DummyEpisodeData.json";
 import { AiFillSetting } from "react-icons/ai";
-import { event } from "viewer";
 import Image from "next/image";
-import my_dog from "../assets/img/my_dog.png";
+import my_dog from "../../../assets/img/my_dog.png";
+import SettingBox from "@/src/components/viewer/SettingBox";
 
-function viewer() {
-  // const router = useRouter()
-  // const { episode }:any=router.query
-  // const postEpisode = JSON.parse(episode)
-  // console.log(postEpisode)
-  const [tabNumber, setTabNumber] = useState(0);
-  const [headerToggle, setHeaderToggle] = useState(true);
-  const [modeToggle, setModeToggle] = useState(false);
-  const [eventCatch, setEventCatch] = useState(false);
+function index() {
+  const [headerToggle, setHeaderToggle] = useState(true); // header on/off 
+  const [tabNumber, setTabNumber] = useState(0); // tab mode 일 때 사용
+  const [eventCatch, setEventCatch] = useState(false); // tab mode 일때 이벤트 있는 경우 사용  
+  const [settingBox, setSettingBox] = useState(false); // 설정 box 보여 줄 때 사용 
+  const [writeMode, setWriteMode] = useState(false); // tab or page 모드 설정 토글 
 
   useEffect(() => {
     if (EpisodeData.contents[tabNumber].event.length !== 0) {
@@ -50,6 +45,16 @@ function viewer() {
     }
   };
 
+  const countHandler = () => {
+    const contentLength = EpisodeData.contents.length;
+    if (tabNumber < contentLength - 1) {
+      setTabNumber(tabNumber + 1);
+    } else if (tabNumber === contentLength - 1) {
+      console.log("마지막 입니다. ");
+    }
+    console.log(tabNumber);
+  };
+
   return (
     <ViewerWrapper>
       <HeaderContainer onClick={() => clickhandler("head")}>
@@ -61,21 +66,35 @@ function viewer() {
             <Image src={my_dog} alt="Logo" width={600} height={200} />
           </ImageEvent>
         ) : null}
-        <MainContainer onClick={() => setTabNumber(tabNumber + 1)}>
+        {writeMode ? (
+         <MainContainer>
+          <ViewerPageMain 
+          EpisodeData={EpisodeData}
+          />
+         </MainContainer>
+        ):(
+          <MainContainer onClick={countHandler}>
           {tabNumber === 0 ? (
             <div>{EpisodeData.title}</div>
           ) : (
-            <ViewerMain
+            <ViewerTabMain
               EpisodeData={EpisodeData}
               tabNumber={tabNumber}
               setEventCatch={setEventCatch}
             />
           )}
         </MainContainer>
+        )}
+        
       </MainWrapper>
-      <SettingBtn>
+      <SettingBtn onClick={() => setSettingBox(!settingBox)}>
         <AiFillSetting size="28" />
       </SettingBtn>
+      {settingBox ? (
+        <>
+          <SettingBox setWriteMode={setWriteMode}/>
+        </>
+      ) : null}
     </ViewerWrapper>
   );
 }
@@ -84,6 +103,10 @@ const ViewerWrapper = styled.div`
   display: flex;
   flex-direction: column;
   height: 100vh;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 `;
 
 const HeaderContainer = styled.div`
@@ -98,8 +121,8 @@ const MainWrapper = styled.div``;
 
 const MainContainer = styled.div`
   height: 70vh;
-  margin-left: 20%;
-  margin-right: 20%;
+  margin-left: 30%;
+  margin-right: 30%;
   overflow-y: scroll;
   ::-webkit-scrollbar {
     display: none;
@@ -124,4 +147,4 @@ const SettingBtn = styled.button`
   left: 90%;
   color: ${({ theme }) => theme.color.text1};
 `;
-export default viewer;
+export default index;

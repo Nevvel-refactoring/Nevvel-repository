@@ -1,7 +1,7 @@
 import React from "react";
 import { EpisodeView } from "viewer";
 import styled from "styled-components";
-import ViewerTextBlock from "./ViewerTextBlock";
+import ViewerTextBlock from "../ViewerTextBlock";
 import { event } from "viewer";
 
 type viwerMainProps = {
@@ -9,7 +9,7 @@ type viwerMainProps = {
   EpisodeData: EpisodeView;
   setEventCatch: React.Dispatch<React.SetStateAction<boolean>>;
 };
-function ViewerMain({ EpisodeData,tabNumber,setEventCatch }: viwerMainProps) {
+function ViewerTabMain({ EpisodeData,tabNumber,setEventCatch }: viwerMainProps) {
   const contents = EpisodeData.contents;
 
   return (<>
@@ -37,4 +37,4 @@ const TextBlock = styled.div`
   padding: 0.5rem;
 `
 
-export default ViewerMain;
+export default ViewerTabMain;

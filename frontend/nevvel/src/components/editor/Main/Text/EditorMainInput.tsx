@@ -59,6 +59,7 @@ function EditorMainInput({
     setCurrentText(event.target.value);
   };
 
+  // < ;quot 파싱하기 
   return (
     <InputWrapper>
       <BlockInput

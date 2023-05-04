@@ -3,7 +3,7 @@ import EditorHead from "@/src/components/editor/EditorHead";
 import EditorMain from "@/src/components/editor/EditorMain";
 import styled from "styled-components";
 import { episode } from "editor";
-function editor() {
+function index() {
   const [episode, setEpisode] =useState<episode>({
     coverId:1,
     statusType:"PUBLISHED",
@@ -35,4 +35,4 @@ const Wrapper = styled.div`
 
 `;
 
-export default editor;
+export default index;
