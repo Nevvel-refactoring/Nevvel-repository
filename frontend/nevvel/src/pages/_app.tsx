@@ -34,7 +34,11 @@ function App({ Component, pageProps }: AppProps) {
       <ThemeProvider theme={theme === "light" ? lightTheme : darkTheme}>
         <GlobalStyle />
         <DarkModeBtn onClick={toggleTheme}>
-          {theme === "light" ? <MdLightMode size="28"/> : <MdDarkMode size="28" />}
+          {theme === "light" ? (
+            <MdLightMode size="28" />
+          ) : (
+            <MdDarkMode size="28" />
+          )}
         </DarkModeBtn>
         <Layout>
           <Component {...pageProps} />
@@ -52,6 +56,7 @@ const DarkModeBtn = styled.button`
   width: 3rem;
   height: 3rem;
   box-shadow: 0rem 0rem 0.5rem ${({ theme }) => theme.color.text1};
-  color:${({ theme }) => theme.color.text1};
+  color: ${({ theme }) => theme.color.text1};
+  z-index: 100;
 `;
 export default App;
