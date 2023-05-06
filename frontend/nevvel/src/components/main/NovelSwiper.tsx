@@ -22,7 +22,7 @@ interface Novel {
     status: string;
     thumbnail: string;
     genre: string;
-    writter: {
+    writer: {
       id: number;
       nickname: string;
     };
@@ -72,6 +72,20 @@ function NovelSwiper() {
         modules={[Navigation, Pagination, Scrollbar, A11y]}
         spaceBetween={0}
         slidesPerView={5}
+        breakpoints={{
+          500: {
+            slidesPerView: 2,
+          },
+          750: {
+            slidesPerView: 3,
+          },
+          1000: {
+            slidesPerView: 4,
+          },
+          1250: {
+            slidesPerView: 5,
+          },
+        }}
         navigation
         pagination={{ clickable: true }}
         // scrollbar={{ draggable: true }}
@@ -85,6 +99,9 @@ function NovelSwiper() {
                 key={index}
                 id={novel.id}
                 title={novel.title}
+                writer={novel.writer.nickname}
+                writerId={novel.writer.id}
+                genre={novel.genre}
                 thumbnail={novel.thumbnail}
               />
             </SwiperSlide>
@@ -104,9 +121,9 @@ const Wrapper = styled.div`
   flex-wrap: wrap;
   /* flex-direction: column; */
   width: 100%;
-  height: 45%;
+  /* height: 100%; */
   padding-top: 1%;
   padding-bottom: 1%;
-  padding-left: 7%;
-  padding-right: 7%;
+  padding-left: 10%;
+  padding-right: 12%;
 `;

@@ -109,6 +109,6 @@ const Wrapper = styled.div`
   height: 45%;
   padding-top: 1%;
   padding-bottom: 1%;
-  padding-left: 7%;
-  padding-right: 7%;
+  padding-left: 10%;
+  padding-right: 12%;
 `;

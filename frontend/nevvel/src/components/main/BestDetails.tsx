@@ -14,37 +14,38 @@ function BestNovels({ title, more }: Details) {
   };
 
   return (
-    <BestNovelsWrapper>
-      <BestNovelsTitle>{title}</BestNovelsTitle>
-      <MoreNovels
+    <BestWrapper>
+      <BestTitle>{title}</BestTitle>
+      <ViewMore
         onClick={() => {
           moreHandler(`${more}`);
         }}
       >
         전체보기
-      </MoreNovels>
-    </BestNovelsWrapper>
+      </ViewMore>
+    </BestWrapper>
   );
 }
 
 export default BestNovels;
 
-const BestNovelsWrapper = styled.div`
+const BestWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-top: 2%;
-  padding-left: 5%;
-  padding-right: 7%;
+  padding-left: 10%;
+  padding-right: 12%;
 `;
 
-const BestNovelsTitle = styled.div`
+const BestTitle = styled.div`
   /* font-size: 24px; */
   font-size: 1.5rem;
   font-weight: 800;
 `;
 
-const MoreNovels = styled.div`
+const ViewMore = styled.div`
   font-size: 1rem;
   border-bottom: 1px solid;
+  cursor: pointer;
 `;

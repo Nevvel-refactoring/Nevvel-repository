@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <HomeWrapper>
       <DetailWrapper>
-        <BestDetails title="베스트 콘텐츠" more="/novels/genres" />
+        <BestDetails title="베스트 콘텐츠" more="/novels" />
         <NovelSwiper />
       </DetailWrapper>
       <Line />
@@ -29,5 +29,5 @@ const HomeWrapper = styled.div`
 const DetailWrapper = styled.div``;
 
 const Line = styled.hr`
-  width: 90%;
+  width: 82%;
 `;

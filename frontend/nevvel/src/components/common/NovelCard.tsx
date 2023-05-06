@@ -5,6 +5,9 @@ import unupload from "../../../public/UnUploadImgBtn.png";
 interface Novel {
   id: number;
   title: string;
+  writer: string;
+  writerId: number;
+  genre: string;
   thumbnail: string;
 }
 
@@ -13,10 +16,11 @@ function NovelCard(props: Novel) {
 
   return (
     <Wrapper>
-      <div>{props.id}</div>
-      <div>{props.title}</div>
       {/* <Image src={props.thumbnail} alt="thumbnail" width={25} height={25} /> */}
-      <Image src={unupload} alt="thumbnail" width={150} height={150} />
+      <Image src={unupload} alt="thumbnail" width={208} height={295} />
+      <div>{props.title}</div>
+      <div>{props.writer}</div>
+      <div>{props.genre}</div>
     </Wrapper>
   );
 }
@@ -24,6 +28,10 @@ function NovelCard(props: Novel) {
 export default NovelCard;
 
 const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  align-items: center;
   width: 13rem;
-  height: 17rem;
+  height: 21rem;
 `;

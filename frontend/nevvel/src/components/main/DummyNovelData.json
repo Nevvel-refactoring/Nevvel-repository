@@ -6,7 +6,7 @@
       "status": "FINISHED",
       "thumbnail": "https://blog.kakaocdn.net/dn/c6pAkf/btrn4rgw5la/7m06GPUMq1155ou7EEYo21/img.gif",
       "genre": "무협",
-      "writter": {
+      "writer": {
         "id": 8,
         "nickname": "가나다 작가"
       },
@@ -18,8 +18,8 @@
       "title": "오늘의 타로는 어떨까요",
       "status": "DELETED",
       "thumbnail": "https://blog.kakaocdn.net/dn/c6pAkf/btrn4rgw5la/7m06GPUMq1155ou7EEYo21/img.gif",
-      "genre": "로맨스:",
-      "writter": {
+      "genre": "로맨스",
+      "writer": {
         "id": 2,
         "nickname": "타로버블티"
       },
@@ -32,7 +32,7 @@
       "status": "SERIALIZED",
       "thumbnail": "https://blog.kakaocdn.net/dn/c6pAkf/btrn4rgw5la/7m06GPUMq1155ou7EEYo21/img.gif",
       "genre": "모험",
-      "writter": {
+      "writer": {
         "id": 106,
         "nickname": "장고는과연장고라고발음할까"
       },
@@ -45,7 +45,7 @@
       "status": "FINISHED",
       "thumbnail": "https://blog.kakaocdn.net/dn/c6pAkf/btrn4rgw5la/7m06GPUMq1155ou7EEYo21/img.gif",
       "genre": "무협",
-      "writter": {
+      "writer": {
         "id": 8,
         "nickname": "가나다 작가"
       },
@@ -57,8 +57,8 @@
       "title": "오늘의 타로는 어떨까요",
       "status": "DELETED",
       "thumbnail": "https://blog.kakaocdn.net/dn/c6pAkf/btrn4rgw5la/7m06GPUMq1155ou7EEYo21/img.gif",
-      "genre": "로맨스:",
-      "writter": {
+      "genre": "로맨스",
+      "writer": {
         "id": 2,
         "nickname": "타로버블티"
       },
@@ -71,7 +71,7 @@
       "status": "SERIALIZED",
       "thumbnail": "https://blog.kakaocdn.net/dn/c6pAkf/btrn4rgw5la/7m06GPUMq1155ou7EEYo21/img.gif",
       "genre": "모험",
-      "writter": {
+      "writer": {
         "id": 106,
         "nickname": "장고는과연장고라고발음할까"
       },
@@ -84,7 +84,7 @@
       "status": "FINISHED",
       "thumbnail": "https://blog.kakaocdn.net/dn/c6pAkf/btrn4rgw5la/7m06GPUMq1155ou7EEYo21/img.gif",
       "genre": "무협",
-      "writter": {
+      "writer": {
         "id": 8,
         "nickname": "가나다 작가"
       },
@@ -96,8 +96,8 @@
       "title": "오늘의 타로는 어떨까요",
       "status": "DELETED",
       "thumbnail": "https://blog.kakaocdn.net/dn/c6pAkf/btrn4rgw5la/7m06GPUMq1155ou7EEYo21/img.gif",
-      "genre": "로맨스:",
-      "writter": {
+      "genre": "로맨스",
+      "writer": {
         "id": 2,
         "nickname": "타로버블티"
       },
@@ -110,7 +110,7 @@
       "status": "SERIALIZED",
       "thumbnail": "https://blog.kakaocdn.net/dn/c6pAkf/btrn4rgw5la/7m06GPUMq1155ou7EEYo21/img.gif",
       "genre": "모험",
-      "writter": {
+      "writer": {
         "id": 106,
         "nickname": "장고는과연장고라고발음할까"
       },
