@@ -1,13 +1,19 @@
 package com.ssafy.novvel.cover.controller;
 
+import com.ssafy.novvel.cover.dto.CoverModifyDto;
 import com.ssafy.novvel.cover.dto.CoverRegisterDto;
 import com.ssafy.novvel.cover.service.CoverService;
+import com.ssafy.novvel.resource.service.S3Service;
 import com.ssafy.novvel.util.token.CustomUserDetails;
 import java.io.IOException;
+import java.util.Optional;
+import javax.naming.AuthenticationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,9 +24,12 @@ import org.springframework.web.multipart.MultipartFile;
 public class CoverController {
 
     private final CoverService coverService;
+    private final S3Service S3Service;
 
-    public CoverController(CoverService coverService) {
+    public CoverController(CoverService coverService,
+        com.ssafy.novvel.resource.service.S3Service s3Service) {
         this.coverService = coverService;
+        S3Service = s3Service;
     }
 
     @PostMapping()
@@ -30,5 +39,23 @@ public class CoverController {
 
         coverService.registerCover(file, coverRegisterDto, customUserDetails.getMember());
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{cover-num}")
+    public ResponseEntity<?> modifyCover(@PathVariable("cover-num") Long coverId,
+        @RequestPart(value = "file") MultipartFile file,
+        @RequestPart(value = "coverModifyDto") CoverModifyDto coverModifyDto,
+        @AuthenticationPrincipal CustomUserDetails customUserDetails)
+        throws AuthenticationException, IOException {
+
+        Optional.ofNullable(
+                coverService.updateCover(file, coverId, coverModifyDto, customUserDetails.getId()))
+            .ifPresent(strings -> {
+                for (String s : strings) {
+                    S3Service.deleteFile(s);
+                }
+            });
+        return new ResponseEntity<>(HttpStatus.OK);
+
     }
 }
