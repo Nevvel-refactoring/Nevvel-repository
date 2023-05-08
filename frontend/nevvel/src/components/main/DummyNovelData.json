@@ -1,0 +1,146 @@
+{
+  "content": [
+    {
+      "id": 1,
+      "title": "가나다",
+      "status": "FINISHED",
+      "thumbnail": "https://blog.kakaocdn.net/dn/c6pAkf/btrn4rgw5la/7m06GPUMq1155ou7EEYo21/img.gif",
+      "genre": "무협",
+      "writter": {
+        "id": 8,
+        "nickname": "가나다 작가"
+      },
+      "isUploaded": true,
+      "isNew": false
+    },
+    {
+      "id": 3,
+      "title": "오늘의 타로는 어떨까요",
+      "status": "DELETED",
+      "thumbnail": "https://blog.kakaocdn.net/dn/c6pAkf/btrn4rgw5la/7m06GPUMq1155ou7EEYo21/img.gif",
+      "genre": "로맨스:",
+      "writter": {
+        "id": 2,
+        "nickname": "타로버블티"
+      },
+      "isUploaded": false,
+      "isNew": false
+    },
+    {
+      "id": 5,
+      "title": "D106 화이팅",
+      "status": "SERIALIZED",
+      "thumbnail": "https://blog.kakaocdn.net/dn/c6pAkf/btrn4rgw5la/7m06GPUMq1155ou7EEYo21/img.gif",
+      "genre": "모험",
+      "writter": {
+        "id": 106,
+        "nickname": "장고는과연장고라고발음할까"
+      },
+      "isUploaded": true,
+      "isNew": true
+    },
+    {
+      "id": 7,
+      "title": "가나다",
+      "status": "FINISHED",
+      "thumbnail": "https://blog.kakaocdn.net/dn/c6pAkf/btrn4rgw5la/7m06GPUMq1155ou7EEYo21/img.gif",
+      "genre": "무협",
+      "writter": {
+        "id": 8,
+        "nickname": "가나다 작가"
+      },
+      "isUploaded": true,
+      "isNew": false
+    },
+    {
+      "id": 9,
+      "title": "오늘의 타로는 어떨까요",
+      "status": "DELETED",
+      "thumbnail": "https://blog.kakaocdn.net/dn/c6pAkf/btrn4rgw5la/7m06GPUMq1155ou7EEYo21/img.gif",
+      "genre": "로맨스:",
+      "writter": {
+        "id": 2,
+        "nickname": "타로버블티"
+      },
+      "isUploaded": false,
+      "isNew": false
+    },
+    {
+      "id": 11,
+      "title": "D106 화이팅",
+      "status": "SERIALIZED",
+      "thumbnail": "https://blog.kakaocdn.net/dn/c6pAkf/btrn4rgw5la/7m06GPUMq1155ou7EEYo21/img.gif",
+      "genre": "모험",
+      "writter": {
+        "id": 106,
+        "nickname": "장고는과연장고라고발음할까"
+      },
+      "isUploaded": true,
+      "isNew": true
+    },
+    {
+      "id": 13,
+      "title": "가나다",
+      "status": "FINISHED",
+      "thumbnail": "https://blog.kakaocdn.net/dn/c6pAkf/btrn4rgw5la/7m06GPUMq1155ou7EEYo21/img.gif",
+      "genre": "무협",
+      "writter": {
+        "id": 8,
+        "nickname": "가나다 작가"
+      },
+      "isUploaded": true,
+      "isNew": false
+    },
+    {
+      "id": 15,
+      "title": "오늘의 타로는 어떨까요",
+      "status": "DELETED",
+      "thumbnail": "https://blog.kakaocdn.net/dn/c6pAkf/btrn4rgw5la/7m06GPUMq1155ou7EEYo21/img.gif",
+      "genre": "로맨스:",
+      "writter": {
+        "id": 2,
+        "nickname": "타로버블티"
+      },
+      "isUploaded": false,
+      "isNew": false
+    },
+    {
+      "id": 17,
+      "title": "D106 화이팅",
+      "status": "SERIALIZED",
+      "thumbnail": "https://blog.kakaocdn.net/dn/c6pAkf/btrn4rgw5la/7m06GPUMq1155ou7EEYo21/img.gif",
+      "genre": "모험",
+      "writter": {
+        "id": 106,
+        "nickname": "장고는과연장고라고발음할까"
+      },
+      "isUploaded": true,
+      "isNew": true
+    }
+  ],
+  "pageable": {
+    "sort": {
+      "sorted": false,
+      "unsorted": true,
+      "empty": true
+    },
+    "pageSize": 5,
+    "pageNumber": 0,
+    "offset": 0,
+    "paged": true,
+    "unpaged": false
+  },
+  "totalPages": 20,
+  "totalElements": 100,
+  "last": false,
+  "number": 0,
+  "sort": {
+    "sorted": false,
+    "unsorted": true,
+    "empty": true
+  },
+  "size": 5,
+  "numberOfElements": 5,
+  "first": true,
+  "empty": false
+}

@@ -22,13 +22,17 @@
     },
     {
       "id": 1,
-      "title": "Sound2",
+      "title": "이 사운드 엄청 시끄러우니까 주의하세요!!",
       "type": "AUDIO",
       "thumbnail": "https://cdn.dribbble.com/users/1614722/screenshots/4419914/soundboard_animatie__zwart_.gif",
       "url": "http://commondatastorage.googleapis.com/codeskulptor-assets/Evillaugh.ogg",
       "price": 1000,
       "downloadCount": 100,
       "tags": [
+        {
+          "id": 0,
+          "name": "장르0"
+        },
         {
           "id": 1,
           "name": "장르1"
@@ -49,6 +53,14 @@
       "price": 2000,
       "downloadCount": 200,
       "tags": [
+        {
+          "id": 0,
+          "name": "장르0"
+        },
+        {
+          "id": 1,
+          "name": "장르1"
+        },
         {
           "id": 2,
           "name": "장르2"
@@ -90,6 +102,10 @@
       "downloadCount": 400,
       "tags": [
         {
+          "id": 3,
+          "name": "장르3"
+        },
+        {
           "id": 4,
           "name": "장르4"
         }
@@ -109,6 +125,14 @@
       "price": 5000,
       "downloadCount": 500,
       "tags": [
+        {
+          "id": 3,
+          "name": "장르3"
+        },
+        {
+          "id": 4,
+          "name": "장르4"
+        },
         {
           "id": 5,
           "name": "장르5"
@@ -150,6 +174,10 @@
       "downloadCount": 300,
       "tags": [
         {
+          "id": 6,
+          "name": "장르6"
+        },
+        {
           "id": 7,
           "name": "장르7"
         }
@@ -169,6 +197,14 @@
       "price": 2000,
       "downloadCount": 200,
       "tags": [
+        {
+          "id": 6,
+          "name": "장르6"
+        },
+        {
+          "id": 7,
+          "name": "장르7"
+        },
         {
           "id": 8,
           "name": "장르8"
