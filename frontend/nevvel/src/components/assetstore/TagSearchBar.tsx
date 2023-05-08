@@ -2,7 +2,13 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import DummyTagData from './DummyTagData.json'
 
-function TagSearchBar(){
+
+type ImageUploadProps = {
+  selectTag: string[];
+  AddTag: (newSelectTag:string) => void;
+}
+
+function TagSearchBar(props:ImageUploadProps){
 
   // axios로 태그 데이터 받아오기
 
@@ -38,6 +44,16 @@ function TagSearchBar(){
     )
   },[keyword])
 
+  
+  // 자동완성 결과 클릭 시, 저장
+  const handleAdd = (result:string) => {
+    if (!props.selectTag.includes(result.trim())) {
+      props.AddTag(result.trim())
+    }
+    setKeyword("")
+  }
+
+
   return(
     <AssetInfoInputDiv>
       <AssetInfoInput1
@@ -47,7 +63,15 @@ function TagSearchBar(){
        {
         keyword?
         <ResultDiv>
-          검색결과 자동완성
+            <ResultUl>
+              {
+                resultTagList.map((result, index) => (
+                  <ResultLi onClick={() => handleAdd(result)}>
+                    <p>{result}</p>
+                  </ResultLi>
+                ))
+              }
+            </ResultUl>
         </ResultDiv>
         :
         null
@@ -61,6 +85,7 @@ export default TagSearchBar
 const AssetInfoInputDiv = styled.div`
   width: 15rem;
   height: 2.5rem;
+  z-index: 999;
 `
 
 const AssetInfoInput1 = styled.input`
@@ -72,8 +97,22 @@ const AssetInfoInput1 = styled.input`
 
 const ResultDiv = styled.div`
   width: 15rem;
-  height: 5rem;
+  height: auto;
   border: 0.15rem solid #4D4D4D;
   border-radius: 0.6rem;
   background-color: white;
+`
+
+const ResultUl = styled.ul`
+  margin: 0rem;
+  padding: 0.25rem;
+`
+
+const ResultLi = styled.li`
+  width: 15rem;
+  height: 2rem;
+  font-size: 1.5rem;
+  &:hover{
+    cursor: pointer;
+  }
 `
