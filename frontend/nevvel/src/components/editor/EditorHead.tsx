@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { episode } from "editor";
 import { useRouter } from "next/router";
 import { Modal } from "../common/Modal";
+import EditorPreview from "./Head/EditorPreview";
 
 type EditorHeadProps = {
   setEpisode: React.Dispatch<React.SetStateAction<episode>>;
@@ -12,6 +13,7 @@ type EditorHeadProps = {
 function EditorHead({ episode, setEpisode }: EditorHeadProps) {
   const router = useRouter();
   const [postEpisode, setPostEpisode] = useState<episode>();
+  const [modalOpen, setModalOpen] = useState(false)
 
   useEffect(()=>{
     console.log(episode)
@@ -38,7 +40,7 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
     <Wrapper>
       <ButtonWrapper>
         <WriteButtonContainer>
-          <WriteButton>미리보기</WriteButton>
+          <WriteButton onClick={()=>setModalOpen(true)}>미리보기</WriteButton>
           <WriteButton>임시저장</WriteButton>
           <WriteButton onClick={PublishHandler}>발행하기</WriteButton>
         </WriteButtonContainer>
@@ -51,6 +53,22 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
           placeholder="에피소드 명을 입력하세요"
         />
       </InputWrapper>
+      {modalOpen &&
+                <Modal
+                    modal={modalOpen}
+                    setModal={setModalOpen}
+                    width="1200"
+                    height="600"
+                    element={<div>{
+                      episode.contents ?(
+                        <EditorPreview 
+                          postEpisode={episode}
+                        />
+                      ):(<>없다</>)
+                    }
+                    </div>
+                  }
+                    />}
     </Wrapper>
   );
 }

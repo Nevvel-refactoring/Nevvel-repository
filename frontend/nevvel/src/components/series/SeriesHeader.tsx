@@ -17,7 +17,7 @@ type SeriesHeaderProps = {
 function SeriesHeader({ SeriesData }: SeriesHeaderProps) {
     const router = useRouter();
     const Info = SeriesData
-    const [ModalOpen, setModalOpen] = useState(false);
+    const [modalOpen, setModalOpen] = useState(false);
 
     const clickHandler = (e: string) => {
         if (e === "first") {
@@ -54,9 +54,9 @@ function SeriesHeader({ SeriesData }: SeriesHeaderProps) {
                     </SeriesBtnContainer>
                 </SeriesEx>
             </SeriesInfo>
-            {ModalOpen &&
+            {modalOpen &&
                 <Modal
-                    modal={ModalOpen}
+                    modal={modalOpen}
                     setModal={setModalOpen}
                     width="300"
                     height="600"
