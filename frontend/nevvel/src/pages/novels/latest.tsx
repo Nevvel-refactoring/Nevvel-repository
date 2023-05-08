@@ -1,4 +1,5 @@
 import NovelNav from "@/src/components/main/NovelNav";
+import NovelPagination from "@/src/components/common/NovelPagination";
 import { useRouter } from "next/dist/client/router";
 import { useEffect } from "react";
 import styled from "styled-components";
@@ -65,6 +66,7 @@ function LatestNovel() {
           </SortContent>
         </SortWrapper>
       </NovelTop>
+      <NovelPagination />
     </Wrapper>
   );
 }
@@ -77,14 +79,16 @@ const NovelTop = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-left: 2rem;
-  margin-right: 2rem;
+  margin-left: 10%;
+  margin-right: 10%;
   margin-top: 1rem;
 `;
 
 const SortWrapper = styled.div``;
 
 const SortContent = styled.span`
+  font-size: 13.5px;
   padding-left: 1rem;
   padding-right: 1rem;
+  cursor: pointer;
 `;

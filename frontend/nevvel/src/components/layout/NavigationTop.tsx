@@ -32,6 +32,7 @@ const Wrapper = styled.div`
   height: 2.5rem;
   justify-content: space-between;
   padding-left: 30%;
+  padding-top: 10px;
 
   ${tabletH} {
     padding-left: 15%;
@@ -74,9 +75,13 @@ const Profile = styled.div`
   }
 `;
 
-const SignIn = styled.div``;
+const SignIn = styled.div`
+  font-size: 13.5px;
+`;
 
-const LogIn = styled.div``;
+const LogIn = styled.div`
+  font-size: 13.5px;
+`;
 
 const MyPage = styled.div``;
 
