@@ -2,11 +2,21 @@ import React from "react";
 import { EpisodeView } from "viewer";
 import { AiFillCaretLeft, AiFillCaretRight, AiOutlineHome } from "react-icons/ai";
 import styled from "styled-components";
+import { useRouter } from "next/dist/client/router";
+
 type ViewHeaderProps = {
   EpisodeData: EpisodeView;
 };
 
 function ViewHeader({ EpisodeData }: ViewHeaderProps) {
+  const router = useRouter();
+
+  const clickHandler = () => {
+    router.push({
+      pathname:'/series/[id]',
+      query:{id:1}
+    })
+  }
   return (
     <>
       <HeaderTopContainer>
@@ -14,7 +24,7 @@ function ViewHeader({ EpisodeData }: ViewHeaderProps) {
         <EpisodeTitle>
           <EpisodeTitle>
             <EpisodeHome>
-              <AiOutlineHome size={24} />
+              <AiOutlineHome onClick={clickHandler} size={24} />
             </EpisodeHome>
             <>{EpisodeData.title}</>
           </EpisodeTitle>

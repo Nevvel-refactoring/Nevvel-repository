@@ -9,6 +9,7 @@ type viewerPageMainProps = {
 function ViewerPageMain({ EpisodeData }: viewerPageMainProps) {
   const contents = EpisodeData.contents;
   
+  
   return (
     <>
       <Container>

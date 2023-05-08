@@ -35,6 +35,13 @@ function index() {
     };
   }, [tabNumber]);
 
+  useEffect(()=>{
+    const contents = EpisodeData.contents
+    for(const content of contents){
+      console.log(content)
+    }
+  },[])
+
   const clickhandler = (e: string) => {
     console.log(e);
     if (e === "head") {

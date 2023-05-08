@@ -11,7 +11,6 @@ type EditorHeadProps = {
 
 function EditorHead({ episode, setEpisode }: EditorHeadProps) {
   const router = useRouter();
-  const [ModalOpen, setModalOpen] = useState(false);
   const [postEpisode, setPostEpisode] = useState<episode>();
 
   useEffect(()=>{
@@ -29,8 +28,8 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
     setPostEpisode(episode)
     if (postEpisode){
       router.push({
-        pathname: "/viewer",
-        query:{episode:JSON.stringify(postEpisode)}
+        pathname: "/viewer/[id]",
+        query:{id:1}
       });
     }
   }
@@ -52,15 +51,6 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
           placeholder="에피소드 명을 입력하세요"
         />
       </InputWrapper>
-      {/* {ModalOpen ? (
-        <Modal
-        modal={ModalOpen}
-        setModal={setModalOpen}
-        width="300"
-        height="300"
-        element={<div>발행이 완료 되었습니다.</div>}
-        />
-      ):(null)} */}
     </Wrapper>
   );
 }

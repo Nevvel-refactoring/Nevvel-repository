@@ -15,6 +15,8 @@ import "swiper/css/scrollbar";
 import NovelCard from "../common/NovelCard";
 import noveldata from "./DummyNovelData.json";
 
+import { useRouter } from "next/router";
+
 interface Novel {
   content: {
     id: number;
@@ -57,6 +59,7 @@ interface Novel {
 }
 
 function NovelSwiper() {
+  const router = useRouter();
   const [novelData, setNovelData] = useState<Novel | undefined>(undefined);
 
   // axios로 데이터 get받아오기, 현재는 더미데이터
@@ -64,6 +67,14 @@ function NovelSwiper() {
     setNovelData(noveldata);
     // console.log(novelData)
   }, [novelData]);
+
+  const clickHandler = ()=>{
+    router.push({
+      pathname:'series/[id]',
+      query:{id:1}
+      // 나중에 novel.id로 수정하시면 될 것 같습니다! 
+    })
+  }
 
   return (
     <Wrapper>
@@ -94,7 +105,7 @@ function NovelSwiper() {
       >
         {novelData?.content.map((novel, index: number) => {
           return (
-            <SwiperSlide key={index}>
+            <SwiperSlide key={index} onClick={clickHandler}>
               <NovelCard
                 key={index}
                 id={novel.id}
