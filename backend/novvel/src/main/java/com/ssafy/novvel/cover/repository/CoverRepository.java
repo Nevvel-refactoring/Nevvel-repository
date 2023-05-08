@@ -10,7 +10,8 @@ import org.springframework.data.repository.query.Param;
 public interface CoverRepository extends JpaRepository<Cover, Long> {
 
     @Query(
-        "SELECT new com.ssafy.novvel.cover.dto.EpisodeInfoDto(e.id, e.point, e.viewCount, e.localDateTime, th.pointChangeType, (me.member.id IS NOT NULL)) "
+        "SELECT new com.ssafy.novvel.cover.dto.EpisodeInfoDto(e.id, e.point, e.viewCount, e.lastModifyedDateTime"
+            + ", th.pointChangeType, (me.member.id IS NOT NULL)) "
             +
             "FROM Episode as e " +
             "LEFT JOIN ReadEpisode me ON me.episode = e AND me.member.id = :memberId " +
