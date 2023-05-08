@@ -12,6 +12,7 @@ import com.ssafy.novvel.asset.repository.TagRepository;
 import com.ssafy.novvel.exception.NotFoundException;
 import com.ssafy.novvel.exception.NotYourAuthorizationException;
 import com.ssafy.novvel.member.repository.MemberRepository;
+import com.ssafy.novvel.memberasset.entity.DealType;
 import com.ssafy.novvel.memberasset.entity.MemberAsset;
 import com.ssafy.novvel.memberasset.repository.MemberAssetRepository;
 import com.ssafy.novvel.resource.entity.Resource;
@@ -66,7 +67,8 @@ public class AssetServiceImpl implements AssetService {
         }
         assetTags = assetTagRepository.saveAll(assetTags);
 
-        //todo memberAssetRepository에 sell로 추가
+        MemberAsset memberAsset = new MemberAsset(member, asset, DealType.SELL);
+        memberAssetRepository.save(memberAsset);
 
         return asset;
     }
@@ -198,8 +200,8 @@ public class AssetServiceImpl implements AssetService {
     @Transactional
     public Integer purchaseAsset(Long assetId, Member member) {
         Asset asset = assetRepository.findById(assetId).orElseThrow(() -> new NotFoundException("에셋을 찾을 수 없습니다"));
-        Optional<MemberAsset> memberAsset = memberAssetRepository.findByAssetAndMember(asset, member);
-        if (!memberAsset.isEmpty()) {
+        Optional<MemberAsset> memberAssetOptional = memberAssetRepository.findByAssetAndMember(asset, member);
+        if (!memberAssetOptional.isEmpty()) {
             return 204;
         }
 
@@ -215,7 +217,8 @@ public class AssetServiceImpl implements AssetService {
         TransactionHistory sellTransactionHistory = new TransactionHistory(asset.getMember(), asset, PointChangeType.SELL_ASSET, asset.getPoint());
         historyRepository.saveAll(List.of(buyTransactionHistory, sellTransactionHistory));
 
-        //todo 에셋 구매시 memberAssetRepository에 추가
+        MemberAsset memberAsset = new MemberAsset(member, asset, DealType.BUY);
+        memberAssetRepository.save(memberAsset);
 
         return 201;
     }
