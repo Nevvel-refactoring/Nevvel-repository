@@ -3,6 +3,7 @@ package com.ssafy.novvel.asset.service;
 import com.ssafy.novvel.asset.dto.AssetFilterDto;
 import com.ssafy.novvel.asset.dto.AssetRegistDto;
 import com.ssafy.novvel.asset.dto.AssetSearchDto;
+import com.ssafy.novvel.asset.dto.AssetSearchReqKeywordTagDto;
 import com.ssafy.novvel.asset.entity.Asset;
 import com.ssafy.novvel.asset.entity.AssetTag;
 import com.ssafy.novvel.asset.entity.Tag;
@@ -27,7 +28,6 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -139,6 +139,8 @@ public class AssetServiceImpl implements AssetService {
         );
     }
 
+
+
     @Override
     public Page<AssetSearchDto> searchAssetByUploader(Long uploaderId, Member member, Pageable pageable) {
         Member uploader = memberRepository.findById(uploaderId).orElseThrow(() -> new NotFoundException("uploader not found"));
@@ -230,13 +232,37 @@ public class AssetServiceImpl implements AssetService {
 
         log.info("assetSearchDtos: " + assetSearchDtos.toString());
 
+        assetSearchDtos =getAssetSearchDtoTags(assetSearchDtos);
+
+        return new PageImpl<>(
+                assetSearchDtos,
+                pageable,
+                assetSearchDtoPage.getTotalPages()
+        );
+
+    }
+    @Override
+    public Page<AssetSearchDto> searchAssetByKeywordAndTags(AssetSearchReqKeywordTagDto reqKeywordTagDto, Member member, Pageable pageable) {
+        Page<AssetSearchDto> assetSearchDtoPage = assetRepository.searchAssetByKeywordAndTags(reqKeywordTagDto, member, pageable);
+        List<AssetSearchDto> assetSearchDtos = assetSearchDtoPage.getContent();
+
+        log.info("assetSearchDtos: " + assetSearchDtos.toString());
+        assetSearchDtos =getAssetSearchDtoTags(assetSearchDtos);
+
+
+        return new PageImpl<>(
+                assetSearchDtos,
+                pageable,
+                assetSearchDtoPage.getTotalPages()
+        );
+    }
+    private List<AssetSearchDto> getAssetSearchDtoTags(List<AssetSearchDto> assetSearchDtos){
         //각 에셋의 태그 조회
         List<AssetTag> assetTags = assetTagRepository.findByAssetIdIn(
                 assetSearchDtos.stream()
                         .map(AssetSearchDto::getId)
                         .collect(Collectors.toList())
         );
-
         for (AssetTag assetTag : assetTags) {
             for (AssetSearchDto assetSearchDto : assetSearchDtos) {
                 if (assetSearchDto.getId().equals(assetTag.getAsset().getId())) {
@@ -245,13 +271,7 @@ public class AssetServiceImpl implements AssetService {
             }
         }
         log.info("assetSearchDtos: " + assetSearchDtos.toString());
-
-        return new PageImpl<>(
-                assetSearchDtos,
-                pageable,
-                assetSearchDtoPage.getTotalPages()
-        );
-
+        return assetSearchDtos;
     }
 
     //사용자가 해당 에셋을 보유하였는지 확인하고, dto에 표시

@@ -9,12 +9,14 @@ import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.novvel.asset.dto.AssetFilterDto;
 import com.ssafy.novvel.asset.dto.AssetSearchDto;
+import com.ssafy.novvel.asset.dto.AssetSearchReqKeywordTagDto;
 import com.ssafy.novvel.asset.dto.SearchType;
 import com.ssafy.novvel.asset.entity.AssetType;
 import com.ssafy.novvel.asset.entity.QAsset;
 import com.ssafy.novvel.member.entity.Member;
 import com.ssafy.novvel.memberasset.entity.QMemberAsset;
 import com.ssafy.novvel.util.QueryDslUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -25,6 +27,7 @@ import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
 import static com.ssafy.novvel.asset.entity.QAsset.asset;
 import static com.ssafy.novvel.member.entity.QMember.member;
 import static com.ssafy.novvel.asset.entity.QAssetTag.assetTag;
@@ -32,6 +35,7 @@ import static com.ssafy.novvel.memberasset.entity.QMemberAsset.memberAsset;
 import static com.ssafy.novvel.resource.entity.QResource.resource;
 import static org.springframework.util.ObjectUtils.isEmpty;
 
+@Slf4j
 public class AssetRepositoryImpl implements AssetReposiotryCustom {
     private final JPAQueryFactory queryFactory;
     private final EntityManager em;
@@ -45,6 +49,7 @@ public class AssetRepositoryImpl implements AssetReposiotryCustom {
     @Override
     @Transactional
     public Page<AssetSearchDto> searchAsset(AssetFilterDto assetFilterDto, Member searchMember, Pageable pageable) {
+        log.info("run searchAsset method");
         em.merge(searchMember);
         List<OrderSpecifier> ORDERS = getAllOrderSpecifiers(pageable);
         QAsset qAsset = asset;
@@ -63,8 +68,8 @@ public class AssetRepositoryImpl implements AssetReposiotryCustom {
                 .from(asset)
                 .where(
                         checkAssetType(assetFilterDto.getAssettype())
-                        ,searchType(assetFilterDto.getSearchtype(), searchMember, qAsset)
-                        ,searchByTag(assetFilterDto.getTags(), qAsset)
+                        , searchType(assetFilterDto.getSearchtype(), searchMember, qAsset)
+                        , searchByTag(assetFilterDto.getTags(), qAsset)
                 )
                 .leftJoin(asset.member, member)
                 .fetchJoin()
@@ -128,6 +133,59 @@ public class AssetRepositoryImpl implements AssetReposiotryCustom {
 //        return assetTag.asset.eq(asset).and(assetTag.tag.tagName.in(tags));
     }
 
+
+    @Override
+    @Transactional
+    public Page<AssetSearchDto> searchAssetByKeywordAndTags(AssetSearchReqKeywordTagDto reqKeywordTagDto, Member searchMember, Pageable pageable) {
+        log.info("run searchAssetByKeywordAndTags method");
+        em.merge(searchMember);
+        List<OrderSpecifier> ORDERS = getAllOrderSpecifiers(pageable);
+        QAsset qAsset = asset;
+        QMemberAsset qMemberAsset = memberAsset;
+        List<Tuple> tuples = queryFactory
+                .select(qAsset,
+                        ExpressionUtils.as(JPAExpressions
+                                        .select(qMemberAsset)
+                                        .from(memberAsset)
+                                        .where(
+                                                qMemberAsset.asset.eq(qAsset),
+                                                qMemberAsset.member.eq(searchMember)
+                                        ).exists()
+                                , "isAvailable")
+                )
+                .from(asset)
+                .where(
+                        checkAssetType(reqKeywordTagDto.getAssetType()),
+                        searchByKeword(reqKeywordTagDto.getKeyword()),
+                        searchByTag(reqKeywordTagDto.getTags(), qAsset)
+                )
+                .leftJoin(asset.member, member)
+                .fetchJoin()
+                .leftJoin(asset.resource, resource)
+                .fetchJoin()
+                .orderBy(ORDERS.stream().toArray(OrderSpecifier[]::new))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        Page<AssetSearchDto> result = new PageImpl<>(
+                tuples.stream()
+                        .map(tuple -> {
+                            AssetSearchDto assetSearchDto = new AssetSearchDto(tuple.get(qAsset));
+                            assetSearchDto.setIsAvailable(tuple.get(ExpressionUtils.path(Boolean.class, "isAvailable")));
+                            return assetSearchDto;
+                        })
+                        .collect(Collectors.toList())
+                , pageable,
+                tuples.size()
+        );
+        return result;
+    }
+
+
+    private BooleanExpression searchByKeword(String keyword) {
+        return (keyword == null) ? null : asset.title.contains(keyword);
+    }
 
 
     private List<OrderSpecifier> getAllOrderSpecifiers(Pageable pageable) {
