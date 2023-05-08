@@ -18,6 +18,8 @@ public interface AssetService {
 
     Asset addAsset(MultipartFile file, Member member, AssetRegistDto assetRegistDto) throws IOException;
 
+    Asset updateAsset(Long id, Member member, AssetRegistDto assetRegistDto);
+
     Slice<AssetSearchDto> searchAssetByTag(List<String> tags, Pageable pageable, Member member);
 
     Integer purchaseAsset(Long assetId, Member member);

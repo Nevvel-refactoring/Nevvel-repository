@@ -49,6 +49,17 @@ public class AssetController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    @PutMapping("/{assetId}")
+    public ResponseEntity<?> updateAsset(@PathVariable("assetId") Long id,
+                                         @RequestBody AssetRegistDto assetRegistDto,
+                                         @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+
+        Member member = customUserDetails.getMember();
+        assetService.updateAsset(id, member, assetRegistDto);
+
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
     @GetMapping("/uploader/{memberId}")
     public ResponseEntity<Page<AssetSearchDto>> searchByMemberId(@PathVariable("memberId") Long memberId,
                                                                  @AuthenticationPrincipal CustomUserDetails customUserDetails,
@@ -71,7 +82,7 @@ public class AssetController {
 
     @GetMapping("/purchased-on")
     public ResponseEntity<Page<AssetSearchDto>> myAssets(@AuthenticationPrincipal CustomUserDetails customUserDetails,
-                                      Pageable pageable){
+                                                         Pageable pageable) {
 
         Page<AssetSearchDto> result = assetService.searchMyAssets(customUserDetails.getMember(), pageable);
 

@@ -10,6 +10,7 @@ import com.ssafy.novvel.asset.repository.AssetRepository;
 import com.ssafy.novvel.asset.repository.AssetTagRepository;
 import com.ssafy.novvel.asset.repository.TagRepository;
 import com.ssafy.novvel.exception.NotFoundException;
+import com.ssafy.novvel.exception.NotYourAuthorizationException;
 import com.ssafy.novvel.member.repository.MemberRepository;
 import com.ssafy.novvel.memberasset.entity.MemberAsset;
 import com.ssafy.novvel.memberasset.repository.MemberAssetRepository;
@@ -67,6 +68,42 @@ public class AssetServiceImpl implements AssetService {
 
         //todo memberAssetRepository에 sell로 추가
 
+        return asset;
+    }
+
+    @Override
+    @Transactional
+    public Asset updateAsset(Long id, Member member, AssetRegistDto assetRegistDto) {
+        Asset asset = assetRepository.findById(id).orElseThrow(() -> new NotFoundException("해당 에셋이 없습니다"));
+        if (!asset.getMember().getId().equals(member.getId())) {
+            throw new NotYourAuthorizationException("당신의 에셋이 아닙니다");
+        }
+
+        //이전 태그목록 삭제
+        List<AssetTag> assetTags = assetTagRepository.findJoinTagByAsset(asset);
+        //사용횟수 수정
+        List<Tag> tags = assetTags.stream()
+                .map(assetTag -> assetTag.getTag())
+                .collect(Collectors.toList());
+        for (Tag tag : tags) {
+            tag.setUseCount(tag.getUseCount() - 1);
+        }
+        assetTagRepository.deleteAll(assetTags);
+
+        //새로운 태그 저장
+        List<AssetTag> newAssetTags = new ArrayList<>();
+        List<Tag> savedTags = savedTags(assetRegistDto.getTags());
+        for (Tag savedTag : savedTags) {
+            savedTag.setUseCount(savedTag.getUseCount() + 1);
+            newAssetTags.add(new AssetTag(asset, savedTag));
+        }
+        assetTagRepository.saveAll(newAssetTags);
+
+
+        asset.setTitle(assetRegistDto.getTitle());
+        asset.setType(assetRegistDto.getType());
+        asset.setDescription(assetRegistDto.getDescription());
+        asset.setPoint(assetRegistDto.getPoint());
         return asset;
     }
 
