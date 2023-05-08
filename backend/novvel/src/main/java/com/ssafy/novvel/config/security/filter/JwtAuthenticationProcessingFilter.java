@@ -61,6 +61,7 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
                 }
             } catch (RuntimeException e) {
                 response.setStatus(HttpStatus.UNAUTHORIZED.value());
+                removeAllCookie(response);
             }
         } else {
             if(refreshToken != null) {
