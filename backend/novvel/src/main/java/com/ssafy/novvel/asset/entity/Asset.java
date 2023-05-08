@@ -3,6 +3,7 @@ package com.ssafy.novvel.asset.entity;
 import com.ssafy.novvel.asset.dto.AssetRegistDto;
 import com.ssafy.novvel.resource.entity.Resource;
 import com.ssafy.novvel.member.entity.Member;
+import com.ssafy.novvel.util.BaseEntity;
 import lombok.*;
 
 import javax.persistence.*;
@@ -16,7 +17,7 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @Getter
 @Builder
-public class Asset {
+public class Asset extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -62,8 +63,11 @@ public class Asset {
 
     @Override
     public boolean equals(Object obj) {
-        Asset asset = (Asset) obj;
-        return this.id.equals(asset.getId());
+        if(obj instanceof Asset){
+            Asset asset = (Asset) obj;
+            return this.id.equals(asset.getId());
+        }
+        return false;
     }
 }
 

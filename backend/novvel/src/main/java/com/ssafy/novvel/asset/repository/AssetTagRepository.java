@@ -25,6 +25,9 @@ public interface AssetTagRepository extends JpaRepository<AssetTag, Long> {
     @Query("SELECT at FROM AssetTag at LEFT JOIN FETCH at.tag WHERE at.asset in (:assets)")
     List<AssetTag> findByAssetIn(@Param(value = "assets")List<Asset> assets);
 
+    @Query("SELECT at FROM AssetTag at LEFT JOIN FETCH at.tag WHERE at.asset.id in (:assetIds)")
+    List<AssetTag> findByAssetIdIn(@Param(value = "assetIds")List<Long> assetIds);
+
     @Query("SELECT DISTINCT at.asset FROM AssetTag at WHERE at.tag in (:tags)")
     List<Asset> findByTagIn(@Param(value = "tags") List<Tag> tags);
 //    @Query("SELECT DISTINCT at.asset FROM AssetTag at WHERE at.tag.id IN (:tags)")

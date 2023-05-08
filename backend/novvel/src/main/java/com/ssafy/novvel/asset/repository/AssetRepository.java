@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface AssetRepository extends JpaRepository<Asset, Long> {
+public interface AssetRepository extends JpaRepository<Asset, Long>, AssetReposiotryCustom {
     Page<Asset> findByMember(Member member, Pageable pageable);
 
     @Query("SELECT at FROM Asset at LEFT JOIN FETCH at.member WHERE at IN (:assets)")

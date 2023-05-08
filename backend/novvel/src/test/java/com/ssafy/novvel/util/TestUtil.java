@@ -31,7 +31,7 @@ public class TestUtil {
                 .email("user@naver.com")
                 .role("ROLE_USER")
                 .sub("Kakao_2755574745")
-                .nickname("user")
+                .nickname("testuser")
                 .refreshToken("testToken")
                 .point(0L)
                 .build();
@@ -140,7 +140,7 @@ public class TestUtil {
                     .title(i + "title")
                     .type(AssetType.IMAGE)
                     .description(String.valueOf(i))
-                    .point(100L)
+                    .point(10L)
                     .member(member)
                     .resource(resources.get(i))
                     .downloadCount(0L)
@@ -194,7 +194,7 @@ public class TestUtil {
 
     public static List<MemberAsset> getMemberAssets(Member member, List<Asset> assets) {
         List<MemberAsset> result = new ArrayList<>();
-        for (int i = 0; i < assets.size(); i++) {
+        for (int i = 0; i < assets.size(); i++ ) {
             result.add(new MemberAsset(Long.valueOf(i), member, assets.get(i), DealType.BUY));
         }
         return result;

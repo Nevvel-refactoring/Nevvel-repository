@@ -1,11 +1,13 @@
 package com.ssafy.novvel.asset.controller;
 
+import com.ssafy.novvel.asset.dto.AssetFilterDto;
 import com.ssafy.novvel.asset.dto.AssetRegistDto;
 import com.ssafy.novvel.asset.dto.AssetSearchDto;
 import com.ssafy.novvel.asset.service.AssetService;
 import com.ssafy.novvel.member.entity.Member;
 import com.ssafy.novvel.util.token.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -20,10 +22,21 @@ import java.io.IOException;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/assets")
+@Slf4j
 public class AssetController {
 
     private final AssetService assetService;
 
+    @GetMapping
+    public ResponseEntity<?> searhAsset(AssetFilterDto assetFilterDto,
+                                        @AuthenticationPrincipal CustomUserDetails customUserDetails,
+                                        Pageable pageable) {
+        log.info("AssetFilterDto: " + assetFilterDto.toString());
+        Page<AssetSearchDto> result = assetService.searchAsset(assetFilterDto, customUserDetails.getMember(), pageable);
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
+
+    }
 
     @PostMapping
     public ResponseEntity<?> registAsset(@RequestPart(value = "file") MultipartFile file,
@@ -46,6 +59,7 @@ public class AssetController {
 
         return new ResponseEntity<>(assetSearchDtoPage, HttpStatus.OK);
     }
+
     @PostMapping("/purchasing/{assetId}")
     public ResponseEntity<?> searchByMemberId(@PathVariable("assetId") Long assetId,
                                               @AuthenticationPrincipal CustomUserDetails customUserDetails) {
