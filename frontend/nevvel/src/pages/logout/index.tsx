@@ -4,7 +4,7 @@ import styled from "styled-components";
 function Logout() {
   const kakaoLogout = () => {
     axios
-      .put("http://k8d106.p.ssafy.io/users/signout")
+      .put("http://k8d106.p.ssafy.io/api/users/signout")
       .then((response) => console.log(response))
       .catch((error) => console.log(error));
   };
