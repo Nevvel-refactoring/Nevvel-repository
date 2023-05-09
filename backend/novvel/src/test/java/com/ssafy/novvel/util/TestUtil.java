@@ -102,7 +102,16 @@ public class TestUtil {
         return result;
     }
 
-    public static Asset getAsset(Member member){
+    public static List<Tag> getTagIntegList(int index) {
+        List<Tag> result = new ArrayList<>();
+        for (int i = 0; i < index; i++) {
+            Tag tag = new Tag(Long.valueOf(i).toString());
+            result.add(tag);
+        }
+        return result;
+    }
+
+    public static Asset getAsset(Member member) {
         return Asset.builder()
                 .id(1L)
                 .title("title")
@@ -167,7 +176,12 @@ public class TestUtil {
     }
 
     public static Resource getResource() {
-        return new Resource(1L, "test.gif", "path", true, "thumbnailpath");
+        return Resource.builder()
+                .url("path")
+                .originName("test.gif")
+                .isThumbnail(true)
+                .thumbnailUrl("thumbnailpath")
+                .build();
     }
 
     public static List<Resource> getResources(int index) {
@@ -194,7 +208,7 @@ public class TestUtil {
 
     public static List<MemberAsset> getMemberAssets(Member member, List<Asset> assets) {
         List<MemberAsset> result = new ArrayList<>();
-        for (int i = 0; i < assets.size(); i++ ) {
+        for (int i = 0; i < assets.size(); i++) {
             result.add(new MemberAsset(Long.valueOf(i), member, assets.get(i), DealType.BUY));
         }
         return result;

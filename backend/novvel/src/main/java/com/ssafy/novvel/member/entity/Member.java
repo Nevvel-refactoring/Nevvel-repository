@@ -22,6 +22,7 @@ public class Member extends BaseEntity {
     private Resource profile;
 
     @Size(min = 4, max = 20)
+    @Setter
     private String nickname;
 
     @Email

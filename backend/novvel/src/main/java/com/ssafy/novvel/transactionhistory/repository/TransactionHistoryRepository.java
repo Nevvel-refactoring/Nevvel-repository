@@ -17,7 +17,7 @@ public interface TransactionHistoryRepository extends JpaRepository<TransactionH
     Optional<TransactionHistory> findByMemberAndEpisode(Member member, Episode episode);
 
     @Query("SELECT new com.ssafy.novvel.episode.dto.EpisodePurchasedOnDto(th.episode.cover.id, th.episode.cover.title, " +
-            "th.episode.id, th.episode.title, th.point, th.createDateTime)" +
+            "th.episode.id, th.episode.title, th.point, th.createdDateTime)" +
             " FROM TransactionHistory th WHERE th.episode IS NOT NULL AND th.member = :member " +
             "AND th.pointChangeType = 'BUY_EPISODE'")
     Page<EpisodePurchasedOnDto> findByMemberAndEpisodeNotNull(@Param(value = "member") Member member, Pageable pageable);
