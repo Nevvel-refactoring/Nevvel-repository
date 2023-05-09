@@ -34,6 +34,9 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
         FilterChain filterChain) throws ServletException, IOException {
 
+        log.info(request.getRequestURI());
+        log.info(request.getMethod());
+
         String accessToken = null;
         String refreshToken = null;
         if(request.getCookies() != null) {
