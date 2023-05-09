@@ -60,6 +60,7 @@ function ImgUpload(props:assetstoreProps) {
     setPrice(isNaN(pricevalue) ? 0 : pricevalue);
   }
 
+
   // 태그 저장
   const [selectTag, setSelectTag] = useState<string[]>([])
 
@@ -100,6 +101,9 @@ function ImgUpload(props:assetstoreProps) {
       {/* 이미지 파일 업로딩 */}
       <RowDiv>
         <ColDiv>
+          <AssetInfoTextDiv>
+            <p>이미지 파일</p>
+          </AssetInfoTextDiv>
           <ImgUploadLabel>
             <ImgUploadInput
               type="file"
@@ -156,6 +160,7 @@ function ImgUpload(props:assetstoreProps) {
           <TagSearchBar
             selectTag={selectTag}
             AddTag={AddTag}
+            TagInputWidth={"15rem"}
           />
           <TagRowDiv>
             {
@@ -200,7 +205,8 @@ const ColDiv = styled.div`
 const ImgUploadLabel = styled.label`
   width: 15rem;
   height: 15rem;
-  margin: 1rem;
+  margin-right: 1rem;
+  margin-left: 0.5rem;
   /* border: 0.15rem solid #4D4D4D;
   border-radius: 1.5rem; */
   display: flex;
@@ -218,7 +224,6 @@ const ImgUploadInput = styled.input`
 const ImgUploadBtn = styled.img`
   width: 15rem;
   height: 15rem;
-  margin-top: 2rem;
   object-fit: contain;
   border: 0.15rem solid #4D4D4D;
   border-radius: 1.5rem;

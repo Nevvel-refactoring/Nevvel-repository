@@ -2,10 +2,14 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import DummyTagData from './DummyTagData.json'
 
+type TagInputWidthProps = {
+  TagInputWidth?: string;
+}
 
 type ImageUploadProps = {
   selectTag: string[];
   AddTag: (newSelectTag:string) => void;
+  TagInputWidth? : string;
 }
 
 function TagSearchBar(props:ImageUploadProps){
@@ -55,18 +59,25 @@ function TagSearchBar(props:ImageUploadProps){
 
 
   return(
-    <AssetInfoInputDiv>
+    <AssetInfoInputDiv
+      TagInputWidth={props.TagInputWidth}
+    >
       <AssetInfoInput1
+        TagInputWidth={props.TagInputWidth}
         placeholder="에셋 태그를 입력하고 선택해주세요."
         onChange={onChangeKeyword}
        />
        {
         keyword?
-        <ResultDiv>
+        <ResultDiv
+        TagInputWidth={props.TagInputWidth}
+        >
             <ResultUl>
               {
                 resultTagList.map((result, index) => (
-                  <ResultLi onClick={() => handleAdd(result)}>
+                  <ResultLi
+                    TagInputWidth={props.TagInputWidth}
+                    onClick={() => handleAdd(result)}>
                     <p>{result}</p>
                   </ResultLi>
                 ))
@@ -82,21 +93,21 @@ function TagSearchBar(props:ImageUploadProps){
 
 export default TagSearchBar
 
-const AssetInfoInputDiv = styled.div`
-  width: 15rem;
+const AssetInfoInputDiv = styled.div<TagInputWidthProps>`
+  width: ${props => `${props.TagInputWidth}`};
   height: 2.5rem;
   z-index: 999;
 `
 
-const AssetInfoInput1 = styled.input`
-  width: 15rem;
+const AssetInfoInput1 = styled.input<TagInputWidthProps>`
+  width: ${props => `${props.TagInputWidth}`};
   height: 2.5rem;
   border: 0.15rem solid #4D4D4D;
   border-radius: 0.6rem;
 `
 
-const ResultDiv = styled.div`
-  width: 15rem;
+const ResultDiv = styled.div<TagInputWidthProps>`
+  width: ${props => `${props.TagInputWidth}`};
   height: auto;
   border: 0.15rem solid #4D4D4D;
   border-radius: 0.6rem;
@@ -108,8 +119,8 @@ const ResultUl = styled.ul`
   padding: 0.25rem;
 `
 
-const ResultLi = styled.li`
-  width: 15rem;
+const ResultLi = styled.li<TagInputWidthProps>`
+  width: ${props => `${props.TagInputWidth}`};
   height: 2rem;
   font-size: 1.5rem;
   &:hover{
