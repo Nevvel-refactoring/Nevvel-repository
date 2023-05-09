@@ -40,4 +40,8 @@ public class EpisodeContextDto {
     private Long episodeId;
 
     private List<ContextTouchsDto> contents;
+
+    private Long prevEpisodeId;
+
+    private Long nextEpisodeId;
 }

@@ -18,5 +18,5 @@ public class EpisodePurchasingDto {
      */
     private Long coverId;
 
-    private List<EpisodeIdsDto> episodes;
+    private List<Long> episodes;
 }

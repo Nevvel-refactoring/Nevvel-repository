@@ -1,7 +1,9 @@
 package com.ssafy.novvel.asset.service;
 
+import com.ssafy.novvel.asset.dto.AssetFilterDto;
 import com.ssafy.novvel.asset.dto.AssetRegistDto;
 import com.ssafy.novvel.asset.dto.AssetSearchDto;
+import com.ssafy.novvel.asset.dto.AssetSearchReqKeywordTagDto;
 import com.ssafy.novvel.asset.entity.Asset;
 import com.ssafy.novvel.asset.entity.AssetTag;
 import com.ssafy.novvel.asset.entity.Tag;
@@ -9,7 +11,9 @@ import com.ssafy.novvel.asset.repository.AssetRepository;
 import com.ssafy.novvel.asset.repository.AssetTagRepository;
 import com.ssafy.novvel.asset.repository.TagRepository;
 import com.ssafy.novvel.exception.NotFoundException;
+import com.ssafy.novvel.exception.NotYourAuthorizationException;
 import com.ssafy.novvel.member.repository.MemberRepository;
+import com.ssafy.novvel.memberasset.entity.DealType;
 import com.ssafy.novvel.memberasset.entity.MemberAsset;
 import com.ssafy.novvel.memberasset.repository.MemberAssetRepository;
 import com.ssafy.novvel.resource.entity.Resource;
@@ -24,7 +28,6 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -64,6 +67,45 @@ public class AssetServiceImpl implements AssetService {
         }
         assetTags = assetTagRepository.saveAll(assetTags);
 
+        MemberAsset memberAsset = new MemberAsset(member, asset, DealType.SELL);
+        memberAssetRepository.save(memberAsset);
+
+        return asset;
+    }
+
+    @Override
+    @Transactional
+    public Asset updateAsset(Long id, Member member, AssetRegistDto assetRegistDto) {
+        Asset asset = assetRepository.findById(id).orElseThrow(() -> new NotFoundException("해당 에셋이 없습니다"));
+        if (!asset.getMember().getId().equals(member.getId())) {
+            throw new NotYourAuthorizationException("당신의 에셋이 아닙니다");
+        }
+
+        //이전 태그목록 삭제
+        List<AssetTag> assetTags = assetTagRepository.findJoinTagByAsset(asset);
+        //사용횟수 수정
+        List<Tag> tags = assetTags.stream()
+                .map(assetTag -> assetTag.getTag())
+                .collect(Collectors.toList());
+        for (Tag tag : tags) {
+            tag.setUseCount(tag.getUseCount() - 1);
+        }
+        assetTagRepository.deleteAll(assetTags);
+
+        //새로운 태그 저장
+        List<AssetTag> newAssetTags = new ArrayList<>();
+        List<Tag> savedTags = savedTags(assetRegistDto.getTags());
+        for (Tag savedTag : savedTags) {
+            savedTag.setUseCount(savedTag.getUseCount() + 1);
+            newAssetTags.add(new AssetTag(asset, savedTag));
+        }
+        assetTagRepository.saveAll(newAssetTags);
+
+
+        asset.setTitle(assetRegistDto.getTitle());
+        asset.setType(assetRegistDto.getType());
+        asset.setDescription(assetRegistDto.getDescription());
+        asset.setPoint(assetRegistDto.getPoint());
         return asset;
     }
 
@@ -96,6 +138,8 @@ public class AssetServiceImpl implements AssetService {
                 assetSlice.hasNext()
         );
     }
+
+
 
     @Override
     public Page<AssetSearchDto> searchAssetByUploader(Long uploaderId, Member member, Pageable pageable) {
@@ -158,24 +202,80 @@ public class AssetServiceImpl implements AssetService {
     @Transactional
     public Integer purchaseAsset(Long assetId, Member member) {
         Asset asset = assetRepository.findById(assetId).orElseThrow(() -> new NotFoundException("에셋을 찾을 수 없습니다"));
-        Optional<MemberAsset> memberAsset = memberAssetRepository.findByAssetAndMember(asset, member);
-        if (!memberAsset.isEmpty()) {
+        Optional<MemberAsset> memberAssetOptional = memberAssetRepository.findByAssetAndMember(asset, member);
+        if (!memberAssetOptional.isEmpty()) {
             return 204;
         }
 
         if (asset.getPoint() > member.getPoint()) {
             return 200;
         }
+        asset.setDownloadCount(asset.getDownloadCount() + 1);
 
         Member seller = asset.getMember();
         member.setPoint(member.getPoint() - asset.getPoint());
         seller.setPoint(seller.getPoint() + asset.getPoint());
+        member = memberRepository.save(member);
 
         TransactionHistory buyTransactionHistory = new TransactionHistory(member, asset, PointChangeType.BUY_ASSET, asset.getPoint());
         TransactionHistory sellTransactionHistory = new TransactionHistory(asset.getMember(), asset, PointChangeType.SELL_ASSET, asset.getPoint());
         historyRepository.saveAll(List.of(buyTransactionHistory, sellTransactionHistory));
 
+        MemberAsset memberAsset = new MemberAsset(member, asset, DealType.BUY);
+        memberAssetRepository.save(memberAsset);
+
         return 201;
+    }
+
+    @Override
+    public Page<AssetSearchDto> searchAsset(AssetFilterDto assetFilterDto, Member member, Pageable pageable) {
+        Page<AssetSearchDto> assetSearchDtoPage = assetRepository.searchAsset(assetFilterDto, member, pageable);
+        List<AssetSearchDto> assetSearchDtos = assetSearchDtoPage.getContent();
+
+        log.info("assetSearchDtos: " + assetSearchDtos.toString());
+
+        assetSearchDtos = getAssetSearchDtoTags(assetSearchDtos);
+
+        return new PageImpl<>(
+                assetSearchDtos,
+                pageable,
+                assetSearchDtoPage.getTotalPages()
+        );
+
+    }
+
+    @Override
+    public Page<AssetSearchDto> searchAssetByKeywordAndTags(AssetSearchReqKeywordTagDto reqKeywordTagDto, Member member, Pageable pageable) {
+        Page<AssetSearchDto> assetSearchDtoPage = assetRepository.searchAssetByKeywordAndTags(reqKeywordTagDto, member, pageable);
+        List<AssetSearchDto> assetSearchDtos = assetSearchDtoPage.getContent();
+
+        log.info("assetSearchDtos: " + assetSearchDtos.toString());
+        assetSearchDtos = getAssetSearchDtoTags(assetSearchDtos);
+
+
+        return new PageImpl<>(
+                assetSearchDtos,
+                pageable,
+                assetSearchDtoPage.getTotalPages()
+        );
+    }
+
+    private List<AssetSearchDto> getAssetSearchDtoTags(List<AssetSearchDto> assetSearchDtos) {
+        //각 에셋의 태그 조회
+        List<AssetTag> assetTags = assetTagRepository.findByAssetIdIn(
+                assetSearchDtos.stream()
+                        .map(AssetSearchDto::getId)
+                        .collect(Collectors.toList())
+        );
+        for (AssetTag assetTag : assetTags) {
+            for (AssetSearchDto assetSearchDto : assetSearchDtos) {
+                if (assetSearchDto.getId().equals(assetTag.getAsset().getId())) {
+                    assetSearchDto.addTags(assetTag.getTag());
+                }
+            }
+        }
+        log.info("assetSearchDtos: " + assetSearchDtos.toString());
+        return assetSearchDtos;
     }
 
     //사용자가 해당 에셋을 보유하였는지 확인하고, dto에 표시

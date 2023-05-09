@@ -114,7 +114,8 @@ public class EpisodeServiceImpl implements EpisodeService{
         // 읽은 소설 처리하기
         readEpisodeRepository.save(new ReadEpisode(episode, member));
 
-        return new EpisodeContextDto(cover.getId(), cover.getTitle(), episode.getTitle(), episode.getId(), context.getContents());
+        return new EpisodeContextDto(cover.getId(), cover.getTitle(), episode.getTitle(), episode.getId(), context.getContents(),
+                episodeRepository.findPrevEpisodeId(episodeId, cover), episodeRepository.findNextEpisodeId(episodeId, cover));
     }
 
     @Override
@@ -184,15 +185,15 @@ public class EpisodeServiceImpl implements EpisodeService{
         Member seller = cover.getMember();
         member = memberRepository.save(member);
 
-        List<EpisodeIdsDto> episodeIdsDtoList = episodePurchasingDto.getEpisodes();
+        List<Long> episodeIdsGet = episodePurchasingDto.getEpisodes();
         List<Long> episodeIds = new ArrayList<>();
 
         // 구매하려는 에피소드 목록의 id 리스트
-        for (EpisodeIdsDto episodeId : episodeIdsDtoList) {
-            if (episodeIds.contains(episodeId.getId())) {
+        for (Long episodeId : episodeIdsGet) {
+            if (episodeIds.contains(episodeId)) {
                 throw new NotFoundException("중복된 episode를 선택하였습니다.");
             }
-            episodeIds.add(episodeId.getId());
+            episodeIds.add(episodeId);
         }
 
         // id 리스트를 통해 episode 목록을 받아오기
@@ -241,16 +242,17 @@ public class EpisodeServiceImpl implements EpisodeService{
 
     @Override
     public Page<EpisodePurchasedOnDto> getPurchasedOnEp(Member member, Pageable pageable) {
-        Page<Episode> episodes = historyRepository.findByMemberAndEpisodeNotNull(member, pageable);
+        Page<EpisodePurchasedOnDto> episodes = historyRepository.findByMemberAndEpisodeNotNull(member, pageable);
         List<EpisodePurchasedOnDto> episodePurchasedOnDtoList = new ArrayList<>();
 
-        for (Episode episode : episodes) {
+        for (EpisodePurchasedOnDto episode : episodes) {
             EpisodePurchasedOnDto episodePurchasedOn = new EpisodePurchasedOnDto(
-                    episode.getCover().getId(),
-                    episode.getCover().getTitle(),
-                    episode.getId(),
-                    episode.getTitle(),
-                    episode.getPoint());
+                    episode.getCoverId(),
+                    episode.getCoverTitle(),
+                    episode.getEpisodeId(),
+                    episode.getEpisodeTitle(),
+                    episode.getEpisodePoint(),
+                    episode.getPurchaseDate());
             episodePurchasedOnDtoList.add(episodePurchasedOn);
         }
 

@@ -31,7 +31,7 @@ public class TestUtil {
                 .email("user@naver.com")
                 .role("ROLE_USER")
                 .sub("Kakao_2755574745")
-                .nickname("user")
+                .nickname("testuser")
                 .refreshToken("testToken")
                 .point(0L)
                 .build();
@@ -102,7 +102,16 @@ public class TestUtil {
         return result;
     }
 
-    public static Asset getAsset(Member member){
+    public static List<Tag> getTagIntegList(int index) {
+        List<Tag> result = new ArrayList<>();
+        for (int i = 0; i < index; i++) {
+            Tag tag = new Tag(Long.valueOf(i).toString());
+            result.add(tag);
+        }
+        return result;
+    }
+
+    public static Asset getAsset(Member member) {
         return Asset.builder()
                 .id(1L)
                 .title("title")
@@ -140,7 +149,7 @@ public class TestUtil {
                     .title(i + "title")
                     .type(AssetType.IMAGE)
                     .description(String.valueOf(i))
-                    .point(100L)
+                    .point(10L)
                     .member(member)
                     .resource(resources.get(i))
                     .downloadCount(0L)
@@ -167,7 +176,12 @@ public class TestUtil {
     }
 
     public static Resource getResource() {
-        return new Resource(1L, "test.gif", "path", true, "thumbnailpath");
+        return Resource.builder()
+                .url("path")
+                .originName("test.gif")
+                .isThumbnail(true)
+                .thumbnailUrl("thumbnailpath")
+                .build();
     }
 
     public static List<Resource> getResources(int index) {

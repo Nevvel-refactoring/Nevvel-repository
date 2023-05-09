@@ -1,11 +1,18 @@
 package com.ssafy.novvel.cover.controller;
 
+
+import com.ssafy.novvel.cover.dto.CoverInfoAndEpisodesDto;
 import com.ssafy.novvel.cover.dto.CoverModifyDto;
 import com.ssafy.novvel.cover.dto.CoverRegisterDto;
 import com.ssafy.novvel.cover.service.CoverService;
 import com.ssafy.novvel.resource.service.S3Service;
 import com.ssafy.novvel.util.token.CustomUserDetails;
 import java.io.IOException;
+import java.util.List;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
 import java.util.Optional;
 import javax.naming.AuthenticationException;
 import org.springframework.http.HttpStatus;
@@ -41,6 +48,14 @@ public class CoverController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    @GetMapping("/{cover-num}")
+    public ResponseEntity<CoverInfoAndEpisodesDto> getAllEpisodes(@PathVariable("cover-num") Long coverNum,
+        @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+
+        return new ResponseEntity<>(
+            coverService.getAllEpisodes(coverNum, customUserDetails.getId()), HttpStatus.OK);
+    }
+
     @PutMapping("/{cover-num}")
     public ResponseEntity<?> modifyCover(@PathVariable("cover-num") Long coverId,
         @RequestPart(value = "file") MultipartFile file,
@@ -56,6 +71,5 @@ public class CoverController {
                 }
             });
         return new ResponseEntity<>(HttpStatus.OK);
-
     }
 }

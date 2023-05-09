@@ -10,14 +10,9 @@ public interface ResourceService {
     Resource saveFile(MultipartFile multipartFile) throws IOException;
     Resource saveFile(File file) throws IOException;
 
-    String findOriginByFileName(String fileName);
-
-    String findThumbnailByFileName(String fileName);
-
-    File makeThumbnailFromGif(File file) throws IOException;
-
-    File convertToPng(File file) throws IOException;
-    File convertToJpg(File file) throws IOException;
-    File convertResolutionPng(File file, int width, int height) throws IOException;
+//    File makeThumbnailFromGif(File file) throws IOException;
+//    File convertToPng(File file) throws IOException;
+//    File convertToJpg(File file) throws IOException;
+//    File convertResolutionPng(File file, int width, int height) throws IOException;
 
 }

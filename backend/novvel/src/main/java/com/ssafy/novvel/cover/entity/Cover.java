@@ -2,10 +2,12 @@ package com.ssafy.novvel.cover.entity;
 
 import com.ssafy.novvel.cover.dto.CoverModifyDto;
 import com.ssafy.novvel.cover.dto.CoverRegisterDto;
+import com.ssafy.novvel.episode.entity.Episode;
 import com.ssafy.novvel.genre.entity.Genre;
 import com.ssafy.novvel.member.entity.Member;
 import com.ssafy.novvel.resource.entity.Resource;
 import com.ssafy.novvel.util.BaseEntity;
+import java.util.List;
 import javax.validation.constraints.Size;
 import lombok.*;
 
@@ -50,7 +52,7 @@ public class Cover extends BaseEntity {
 
     @NotNull
     private Long likes;
-
+    
     // 생성
     public Cover(Resource resource, CoverRegisterDto coverRegisterDto, Member member, Genre genre) {
 
