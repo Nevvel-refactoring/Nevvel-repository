@@ -210,10 +210,12 @@ public class AssetServiceImpl implements AssetService {
         if (asset.getPoint() > member.getPoint()) {
             return 200;
         }
+        asset.setDownloadCount(asset.getDownloadCount() + 1);
 
         Member seller = asset.getMember();
         member.setPoint(member.getPoint() - asset.getPoint());
         seller.setPoint(seller.getPoint() + asset.getPoint());
+        member = memberRepository.save(member);
 
         TransactionHistory buyTransactionHistory = new TransactionHistory(member, asset, PointChangeType.BUY_ASSET, asset.getPoint());
         TransactionHistory sellTransactionHistory = new TransactionHistory(asset.getMember(), asset, PointChangeType.SELL_ASSET, asset.getPoint());
@@ -232,7 +234,7 @@ public class AssetServiceImpl implements AssetService {
 
         log.info("assetSearchDtos: " + assetSearchDtos.toString());
 
-        assetSearchDtos =getAssetSearchDtoTags(assetSearchDtos);
+        assetSearchDtos = getAssetSearchDtoTags(assetSearchDtos);
 
         return new PageImpl<>(
                 assetSearchDtos,
@@ -241,13 +243,14 @@ public class AssetServiceImpl implements AssetService {
         );
 
     }
+
     @Override
     public Page<AssetSearchDto> searchAssetByKeywordAndTags(AssetSearchReqKeywordTagDto reqKeywordTagDto, Member member, Pageable pageable) {
         Page<AssetSearchDto> assetSearchDtoPage = assetRepository.searchAssetByKeywordAndTags(reqKeywordTagDto, member, pageable);
         List<AssetSearchDto> assetSearchDtos = assetSearchDtoPage.getContent();
 
         log.info("assetSearchDtos: " + assetSearchDtos.toString());
-        assetSearchDtos =getAssetSearchDtoTags(assetSearchDtos);
+        assetSearchDtos = getAssetSearchDtoTags(assetSearchDtos);
 
 
         return new PageImpl<>(
@@ -256,7 +259,8 @@ public class AssetServiceImpl implements AssetService {
                 assetSearchDtoPage.getTotalPages()
         );
     }
-    private List<AssetSearchDto> getAssetSearchDtoTags(List<AssetSearchDto> assetSearchDtos){
+
+    private List<AssetSearchDto> getAssetSearchDtoTags(List<AssetSearchDto> assetSearchDtos) {
         //각 에셋의 태그 조회
         List<AssetTag> assetTags = assetTagRepository.findByAssetIdIn(
                 assetSearchDtos.stream()
