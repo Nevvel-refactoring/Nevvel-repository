@@ -25,9 +25,9 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
         if (authentication.getAuthorities().stream()
             .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_GUEST"))) {
-            response.sendRedirect("http://k8d106.p.ssafy.io/profile");
+            response.sendRedirect("http://k8d1061.p.ssafy.io/profile");
         } else {
-            response.sendRedirect("http://k8d106.p.ssafy.io/");
+            response.sendRedirect("http://k8d1061.p.ssafy.io/");
         }
     }
 }
