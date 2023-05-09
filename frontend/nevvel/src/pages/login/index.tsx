@@ -1,8 +1,7 @@
 import styled from "styled-components";
 
 function Login() {
-  const kakaoLogin =
-    "http://k8d1061.p.ssafy.io:8080/oauth2/authorization/kakao";
+  const kakaoLogin = "http://k8d106.p.ssafy.io/oauth2/authorization/kakao";
 
   return (
     <Wrapper>
@@ -10,6 +9,8 @@ function Login() {
     </Wrapper>
   );
 }
+
+export default Login;
 
 const Wrapper = styled.div`
   padding: 0;
@@ -20,5 +21,3 @@ const Wrapper = styled.div`
 `;
 
 const LoginBtn = styled.a``;
-
-export default Login;
