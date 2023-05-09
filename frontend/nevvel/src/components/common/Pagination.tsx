@@ -7,7 +7,11 @@ interface Props {
 }
 
 function Pagination(props: Props) {
-  return <Wrapper>{props.pageNumber}</Wrapper>;
+  const pageNumHandler = () => {
+    props.onClickHandler(props.pageNumber);
+  };
+
+  return <Wrapper onClick={pageNumHandler}>{props.pageNumber}</Wrapper>;
 }
 
 export default Pagination;

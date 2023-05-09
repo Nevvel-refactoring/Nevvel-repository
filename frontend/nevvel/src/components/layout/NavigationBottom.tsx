@@ -18,7 +18,7 @@ function NavigationBottom() {
         pathname: "/novels/genres",
         query: { genre: 1, sort: "like" },
       },
-      `/novels/genres`
+      // `/novels/genres`
     );
   };
 
@@ -28,7 +28,7 @@ function NavigationBottom() {
         pathname: "/novels/completed",
         query: { genre: 1, sort: "like" },
       },
-      `/novels/completed`
+      // `/novels/completed`
     );
   };
 
@@ -38,7 +38,7 @@ function NavigationBottom() {
         pathname: "/novels/latest",
         query: { genre: 1, sort: "like" },
       },
-      `/novels/latest`
+      // `/novels/latest`
     );
   };
 

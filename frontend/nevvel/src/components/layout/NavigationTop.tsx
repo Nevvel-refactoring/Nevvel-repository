@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Link from "next/link";
 import { AiOutlineSearch } from "react-icons/ai";
 import styled from "styled-components";
@@ -5,11 +6,13 @@ import { tabletH } from "../../util/Mixin";
 import { mobile } from "../../util/Mixin";
 
 function NavigationTop() {
+  const [word, setWord] = useState<string>("");
+
   return (
     <Wrapper>
       <SearchBar>
         <SearchBarInput placeholder="작품명, 작가명을 입력하세요" />
-        <Link href="/novels/search">
+        <Link href={{ pathname: "/novels/search", query: { word: "단어" } }}>
           <AiOutlineSearch />
         </Link>
       </SearchBar>

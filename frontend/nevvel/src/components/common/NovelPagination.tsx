@@ -1,12 +1,22 @@
 import { useState } from "react";
 import Pagination from "./Pagination";
-import noveldata from "../../components/main/DummyNovelData.json";
+import { useRouter } from "next/dist/client/router";
 import Image from "next/image";
 import backward from "../../assets/img/backward.png";
 import forward from "../../assets/img/forward.png";
 import styled from "styled-components";
 
-function NovelPagination() {
+interface Novel {
+  nav: string;
+  name: string;
+  genre: number | string;
+  sort: string;
+  pageNum: number | string;
+}
+
+function NovelPagination({ nav, name, genre, sort, pageNum }: Novel) {
+  const router = useRouter();
+
   const [pagination, setPagination] = useState(1);
   const [divPagination, setDivPagiNation] = useState(1);
 
@@ -28,6 +38,11 @@ function NovelPagination() {
   // 페이지 버튼을 클릭 시 페이지네이션을 업데이트하는 함수
   const onClickHandler = (num: number) => {
     setPagination(num);
+    console.log(num)
+    router.push({
+      pathname: `/novels/${nav}`,
+      query: { genre: genre, sort: sort, name: name, pageNum: num },
+    });
   };
 
   // 페이지네이션 뒤로 가기

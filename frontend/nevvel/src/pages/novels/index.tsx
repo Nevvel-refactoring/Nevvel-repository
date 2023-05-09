@@ -7,9 +7,9 @@ function Novel() {
     router.push(
       {
         pathname: `/novels/genres`,
-        query: { genre: 1, sort: "like", name: "전체" },
+        query: { genre: 1, sort: "like", name: "전체", pageNum: 1 },
       },
-      `novels/genres`
+      // `novels/genres`
     );
   }, []);
 
