@@ -25,6 +25,7 @@ configurations {
 
 repositories {
     mavenCentral()
+    maven { url 'https://jitpack.io' } //결제 검증 때문에 추가 1
 }
 
 dependencies {
@@ -45,6 +46,7 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
 
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+    implementation 'com.github.iamport:iamport-rest-client-java:0.2.21' //결제 검증 때문에 추가 2
 
     implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2'
