@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 function Login() {
-  const kakaoLogin = "http://k8d106.p.ssafy.io/oauth2/authorization/kakao";
+  const kakaoLogin = "http://k8d1061.p.ssafy.io/api/oauth2/authorization/kakao";
 
   return (
     <Wrapper>
