@@ -4,9 +4,7 @@ import styled from "styled-components";
 
 // import Swiper core and required modules
 import { Navigation, Pagination, Scrollbar, A11y, Autoplay } from "swiper";
-
 import { Swiper, SwiperSlide } from "swiper/react";
-
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/navigation";
@@ -16,6 +14,11 @@ import "swiper/css/scrollbar";
 import AssetCard from "../common/AssetCard";
 import imgdata from "../assetstore/DummyAssetData_Image.json";
 import sounddata from "../assetstore/DummyAssetData_Audio.json";
+
+import { Modal } from "../common/Modal";
+import AssetDetailModal from "../assetstore/AssetDetailModal";
+
+
 
 interface AssetTag {
   id: number;
@@ -49,6 +52,29 @@ function AssetSwiper() {
     setAssetData(imgdata.content);
   }, []);
 
+  // 에셋 디테일 모달 오픈 트리거
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+
+  // 에셋 디테일로 열리는 에셋의 key값
+  const[openModalData, setOpenModalData] = useState<Asset>({
+    id: 0,
+    title: "",
+    type: "",
+    thumbnail : "",
+    url: "",
+    price : 0,
+    downloadCount : 0,
+    tags: [{
+      id : 0,
+      name : "",
+    }],
+    uploader : {
+      id : 0,
+      nickname : "",
+      profileImage : "",
+    }
+  })
+
   return (
     <Wrapper>
       <Swiper
@@ -79,8 +105,9 @@ function AssetSwiper() {
       >
         {AssetData.map((AssetData, index: number) => {
           return (
-            <SwiperSlide key={index}>
+            <SwiperSlide>
               <AssetCard
+                AssetData={AssetData}
                 key={index}
                 id={AssetData.id}
                 title={AssetData.title}
@@ -88,11 +115,31 @@ function AssetSwiper() {
                 thumbnail={AssetData.thumbnail}
                 url={AssetData.url}
                 tags={AssetData.tags}
+
+                setModalOpen={setModalOpen}
+                setOpenModalData={setOpenModalData}
+                // price={AssetData.price}
+                // uploader={AssetData.uploader}
               />
             </SwiperSlide>
           );
         })}
       </Swiper>
+      {/* 여기부터 모달 */}
+      {modalOpen ? (
+        <Modal
+          modal={modalOpen}
+          setModal={setModalOpen}
+          width="800"
+          height="710"
+          element={
+            <AssetDetailModal
+              openModalData={openModalData}
+              setModalOpen={setModalOpen}
+          />
+          }
+        />
+      ) : null}
     </Wrapper>
   );
 }

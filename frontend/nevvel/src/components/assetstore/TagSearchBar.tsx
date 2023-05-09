@@ -16,12 +16,12 @@ type ImageUploadProps = {
 function TagSearchBar(props:ImageUploadProps){
 
   // axios로 태그 데이터 받아오기
-  useEffect(() => {
-    const getTagList = async () => {
-      const res = await NewvelApi.tagsList;
-    }
-    getTagList()
-  },[])
+  // useEffect(() => {
+  //   const getTagList = async () => {
+  //     const res = await NewvelApi.tagsList;
+  //   }
+  //   getTagList()
+  // },[])
 
   // axios후 태그 리스트 만들기
   const [tagLIst, setTagLIst] = useState<string[]>(DummyTagData.content.map((tag) => tag.tagName))

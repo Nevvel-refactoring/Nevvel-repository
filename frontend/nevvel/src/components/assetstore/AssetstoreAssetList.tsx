@@ -4,6 +4,9 @@ import AssetCard from "../common/AssetCard";
 import imgdata from "./DummyAssetData_Image.json"
 import sounddata from "./DummyAssetData_Audio.json"
 
+import { Modal } from "../common/Modal";
+import AssetDetailModal from "./AssetDetailModal";
+
 
 interface AssetTag {
   id : number,
@@ -46,6 +49,28 @@ function AssetstoreAssetList() {
     setAssetData(sounddata.content)
   }
 
+  // 에셋 디테일 모달 오픈 트리거
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+
+  // 에셋 디테일로 열리는 에셋의 데이터
+  const[openModalData, setOpenModalData] = useState<Asset>({
+    id: 0,
+    title: "",
+    type: "",
+    thumbnail : "",
+    url: "",
+    price : 0,
+    downloadCount : 0,
+    tags: [{
+      id : 0,
+      name : "",
+    }],
+    uploader : {
+      id : 0,
+      nickname : "",
+      profileImage : "",
+    }
+  })
 
   return(
     <div>
@@ -59,6 +84,7 @@ function AssetstoreAssetList() {
           AssetData.map((AssetData, index:number) => {
             return (
               <AssetCard
+                AssetData={AssetData}
                 key={index}
                 id={AssetData.id}
                 title={AssetData.title}
@@ -66,11 +92,31 @@ function AssetstoreAssetList() {
                 thumbnail={AssetData.thumbnail}
                 url={AssetData.url}
                 tags={AssetData.tags}
+
+                setModalOpen={setModalOpen}
+                setOpenModalData={setOpenModalData}
+                // price={AssetData.price}
+                // uploader={AssetData.uploader}
               />
             )
           })
         }
       </Wrapper>
+      {/* 여기부터 모달 */}
+      {modalOpen ? (
+        <Modal
+          modal={modalOpen}
+          setModal={setModalOpen}
+          width="800"
+          height="710"
+          element={
+            <AssetDetailModal
+              openModalData={openModalData}
+              setModalOpen={setModalOpen}
+            />
+          }
+        />
+      ) : null}
     </div>
   )
 }
