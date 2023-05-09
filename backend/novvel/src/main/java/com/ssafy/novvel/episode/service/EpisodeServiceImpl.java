@@ -242,21 +242,10 @@ public class EpisodeServiceImpl implements EpisodeService{
 
     @Override
     public Page<EpisodePurchasedOnDto> getPurchasedOnEp(Member member, Pageable pageable) {
-        Page<EpisodePurchasedOnDto> episodes = historyRepository.findByMemberAndEpisodeNotNull(member, pageable);
-        List<EpisodePurchasedOnDto> episodePurchasedOnDtoList = new ArrayList<>();
+        Page<EpisodePurchasedOnDto> episodePurchasedPage = historyRepository.findByMemberAndEpisodeNotNull(member, pageable);
+        List<EpisodePurchasedOnDto> episodePurchasedOnDtoList = episodePurchasedPage.getContent();
 
-        for (EpisodePurchasedOnDto episode : episodes) {
-            EpisodePurchasedOnDto episodePurchasedOn = new EpisodePurchasedOnDto(
-                    episode.getCoverId(),
-                    episode.getCoverTitle(),
-                    episode.getEpisodeId(),
-                    episode.getEpisodeTitle(),
-                    episode.getEpisodePoint(),
-                    episode.getPurchaseDate());
-            episodePurchasedOnDtoList.add(episodePurchasedOn);
-        }
-
-        return new PageImpl<>(episodePurchasedOnDtoList, pageable, episodes.getTotalElements());
+        return new PageImpl<>(episodePurchasedOnDtoList, pageable, episodePurchasedPage.getTotalElements());
     }
 
     // episodeRegistDto(수정 or 새로 생성 시 사용) 넣으면 context 돌며 effect 돌며 모든 myAssetId 받아와

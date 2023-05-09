@@ -2,7 +2,6 @@ package com.ssafy.novvel.episode.repository;
 
 import com.ssafy.novvel.cover.entity.Cover;
 import com.ssafy.novvel.episode.entity.Episode;
-import com.ssafy.novvel.member.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
