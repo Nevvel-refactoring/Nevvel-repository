@@ -68,6 +68,7 @@ public class OidcMemberService implements OAuth2UserService<OidcUserRequest, Oid
                             .email(email)
                             .role("ROLE_GUEST")
                             .refreshToken(refreshToken)
+                            .point(0L)
                             .build()
                         ).getRole()
                     )
