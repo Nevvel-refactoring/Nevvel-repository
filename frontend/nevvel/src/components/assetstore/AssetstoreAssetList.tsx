@@ -81,11 +81,11 @@ function AssetstoreAssetList() {
       </div>
       <Wrapper>
         {
-          AssetData.map((AssetData, index:number) => {
+          AssetData.map((AssetData) => {
             return (
               <AssetCard
                 AssetData={AssetData}
-                key={index}
+                key={AssetData.id}
                 id={AssetData.id}
                 title={AssetData.title}
                 type={AssetData.type}

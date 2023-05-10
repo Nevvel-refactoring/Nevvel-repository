@@ -103,12 +103,11 @@ function AssetSwiper() {
         // onSwiper={(swiper) => console.log(swiper)}
         // onSlideChange={() => console.log("slide change")}
       >
-        {AssetData.map((AssetData, index: number) => {
+        {AssetData.map((AssetData) => {
           return (
-            <SwiperSlide>
+            <SwiperSlide key={AssetData.id}>
               <AssetCard
                 AssetData={AssetData}
-                key={index}
                 id={AssetData.id}
                 title={AssetData.title}
                 type={AssetData.type}

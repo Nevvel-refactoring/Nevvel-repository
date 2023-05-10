@@ -27,7 +27,7 @@ interface AssetData{
 }
 
 interface Asset {
-  key: number
+  // key: number
   id: number,
   title: string,
   type: string,
@@ -43,7 +43,7 @@ interface Asset {
 }
 
 function AssetCard({
-  key,
+  // key,
   id,
   title,
   type,
@@ -119,17 +119,19 @@ function AssetCard({
           }
         </CardImgDiv>
         <CardInfo1>{title}</CardInfo1>
-        <CardInfo2>
           {/* 태그 객체 리스트 1,2,3번째까지만 매핑 */}
-          {
-            tags.slice(0,3).map((tag, index:number) => {
-              return (
-                <CardInfo2Div>#{tag.name}</CardInfo2Div>
-              )
-            })
-          }
-          {/* {tags[0].name} */}
-        </CardInfo2>
+          <RowDiv>
+            {
+              tags.slice(0,3).map((tag) => {
+                return (
+                  <CardInfo2Div key={tag.id}>
+                    <CardInfo2>#{tag.name}</CardInfo2>
+                  </CardInfo2Div>
+                )
+              })
+            }
+            {/* {tags[0].name} */}
+          </RowDiv>
       </Wrapper>
       {/* 여기부터 모달 */}
       {/* {modalOpen ? (
@@ -221,4 +223,8 @@ const CardInfo2Div = styled.div`
   align-items: center;
   justify-content: center;
   margin-left: 0.5rem;
+`
+
+const RowDiv = styled.div`
+  display: flex;
 `
