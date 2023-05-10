@@ -85,12 +85,13 @@ const InputWrapper = styled.div`
 const BlockInput = styled.input`
   display: flex;
   justify-content: flex-end;
-  background-color: ${({ theme }) => theme.color.editor};
+  background-color: ${({ theme }) => theme.color.background};
   width: 90% ;
   height: 3rem;
   border: none;
   border-radius: 10px;
   padding-left: 1rem;
+  box-shadow: 0px 0px 2px gray;
   
 `;
 

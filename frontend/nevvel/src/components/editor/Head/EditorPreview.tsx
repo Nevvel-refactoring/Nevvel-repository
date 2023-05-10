@@ -53,11 +53,13 @@ function EditorPreview({ postEpisode }: EditorPreviewProps) {
     <PreviewWrapper onClick={countHandler}>
       <PreviewHeader>미리보기</PreviewHeader>
       <PreviewMain>
-        <ViewerTabMain
-          EpisodeData={postEpisode}
-          tabNumber={tabNumber}
-          setEventCatch={setEventCatch}
-        />
+        {postEpisode.contents.length !== 0 ? (
+          <ViewerTabMain
+            EpisodeData={postEpisode}
+            tabNumber={tabNumber}
+            setEventCatch={setEventCatch}
+          />
+        ) : (<>미리보기 할 내용이 존재하지 않습니다.</>)}
       </PreviewMain>
     </PreviewWrapper>
   );
@@ -69,7 +71,7 @@ const PreviewWrapper = styled.div`
 `;
 const PreviewHeader = styled.div`
   width: 100%;
-  border-bottom: 1px solid ${({ theme})=>theme.color.text1};
+  border-bottom: 1px solid ${({ theme }) => theme.color.text1};
 `;
 
 const PreviewMain = styled.div`
