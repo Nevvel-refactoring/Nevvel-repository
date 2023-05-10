@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 
 // import Swiper core and required modules
-import { Navigation, Pagination, Scrollbar, A11y } from "swiper";
+import { Navigation, Pagination, Scrollbar, A11y, Autoplay } from "swiper";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 
@@ -68,19 +68,26 @@ function NovelSwiper() {
     // console.log(novelData)
   }, [novelData]);
 
-  const clickHandler = ()=>{
+  const clickHandler = () => {
     router.push({
-      pathname:'series/[id]',
-      query:{id:1}
-      // 나중에 novel.id로 수정하시면 될 것 같습니다! 
-    })
-  }
+      pathname: "series/[id]",
+      query: { id: 1 },
+      // 나중에 novel.id로 수정하시면 될 것 같습니다!
+    });
+  };
+
+  // swiper height 설정
+  const swiperStyle = {
+    height: "25rem",
+  };
 
   return (
     <Wrapper>
       <Swiper
+        // style
+        style={swiperStyle}
         // install Swiper modules
-        modules={[Navigation, Pagination, Scrollbar, A11y]}
+        modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
         spaceBetween={0}
         slidesPerView={5}
         breakpoints={{
@@ -99,6 +106,7 @@ function NovelSwiper() {
         }}
         navigation
         pagination={{ clickable: true }}
+        autoplay={{ delay: 3000 }}
         // scrollbar={{ draggable: true }}
         // onSwiper={(swiper) => console.log(swiper)}
         // onSlideChange={() => console.log("slide change")}
@@ -107,7 +115,6 @@ function NovelSwiper() {
           return (
             <SwiperSlide key={index} onClick={clickHandler}>
               <NovelCard
-                key={index}
                 id={novel.id}
                 title={novel.title}
                 writer={novel.writer.nickname}
