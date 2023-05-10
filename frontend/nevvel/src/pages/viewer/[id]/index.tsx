@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import ViewHeader from "../../../components/viewer/ViewHeader";
 import ViewerTabMain from "../../../components/viewer/Main/ViewerTabMain";
 import ViewerPageMain from "@/src/components/viewer/Main/ViewerPageMain";
@@ -6,16 +6,19 @@ import styled from "styled-components";
 import EpisodeData from "../../../components/viewer/DummyEpisodeData.json";
 import { AiFillSetting } from "react-icons/ai";
 import Image from "next/image";
-import my_dog from "../../../assets/img/my_dog.png";
+import eyes from "../../../assets/img/eyes.png";
 import SettingBox from "@/src/components/viewer/SettingBox";
+import DummyAssetData_audio from "@/src/components/assetstore/DummyAssetData_Audio.json";
 
 function index() {
-  const [headerToggle, setHeaderToggle] = useState(true); // header on/off 
+  const [headerToggle, setHeaderToggle] = useState(true); // header on/off
   const [tabNumber, setTabNumber] = useState(0); // tab mode 일 때 사용
-  const [eventCatch, setEventCatch] = useState(false); // tab mode 일때 이벤트 있는 경우 사용  
-  const [settingBox, setSettingBox] = useState(false); // 설정 box 보여 줄 때 사용 
-  const [writeMode, setWriteMode] = useState(false); // tab or page 모드 설정 토글 
-
+  const [eventCatch, setEventCatch] = useState(false); // tab mode 일때 이벤트 있는 경우 사용
+  const [settingBox, setSettingBox] = useState(false); // 설정 box 보여 줄 때 사용
+  const [writeMode, setWriteMode] = useState(false); // tab or page 모드 설정 토글
+  const [audioEventCatch, setAudioEventCatch] = useState(false);
+  // 오디오 재생
+  const audioRef = useRef<any>(null);
   useEffect(() => {
     if (EpisodeData.contents[tabNumber].event.length !== 0) {
       const events = EpisodeData.contents[tabNumber].event;
@@ -23,8 +26,10 @@ function index() {
         if (event.type === "IMAGE") {
           console.log("이미지당");
           setEventCatch(true);
-        } else {
+        }
+        if (event.type === "AUDIO") {
           console.log("소리당");
+          setAudioEventCatch(true);
         }
       }
     }
@@ -32,15 +37,24 @@ function index() {
       if (eventCatch) {
         setEventCatch(false);
       }
+      if (audioEventCatch) {
+        setAudioEventCatch(false);
+      }
     };
   }, [tabNumber]);
 
-  useEffect(()=>{
-    const contents = EpisodeData.contents
-    for(const content of contents){
-      console.log(content)
+  useEffect(() => {
+    if (audioEventCatch) {
+      audioRef.current.play();
     }
-  },[])
+  }, [audioEventCatch]);
+
+  useEffect(() => {
+    const contents = EpisodeData.contents;
+    for (const content of contents) {
+      console.log(content);
+    }
+  }, [audioEventCatch]);
 
   const clickhandler = (e: string) => {
     console.log(e);
@@ -67,41 +81,42 @@ function index() {
       <HeaderContainer onClick={() => clickhandler("head")}>
         {headerToggle ? <ViewHeader EpisodeData={EpisodeData} /> : null}
       </HeaderContainer>
+
       <MainWrapper>
         {eventCatch ? (
           <ImageEvent>
-            <Image src={my_dog} alt="Logo" width={600} height={200} />
+            <Image src={eyes} alt="Logo" width={600} height={600} />
           </ImageEvent>
         ) : null}
         {writeMode ? (
-         <MainContainer>
-          <ViewerPageMain 
-          EpisodeData={EpisodeData}
-          />
-         </MainContainer>
-        ):(
-          <MainContainer onClick={countHandler}>
-          {tabNumber === 0 ? (
-            <div>{EpisodeData.title}</div>
-          ) : (
-            <ViewerTabMain
-              EpisodeData={EpisodeData}
-              tabNumber={tabNumber}
-              setEventCatch={setEventCatch}
-            />
-          )}
-        </MainContainer>
+          <MainContainer>
+            <ViewerPageMain EpisodeData={EpisodeData} />
+          </MainContainer>
+        ) : (
+          <MainContainer onKeyDown={countHandler} onClick={countHandler}>
+            {tabNumber === 0 ? (
+              <div>{EpisodeData.title}</div>
+            ) : (
+              <ViewerTabMain
+                EpisodeData={EpisodeData}
+                tabNumber={tabNumber}
+                setEventCatch={setEventCatch}
+              />
+            )}
+          </MainContainer>
         )}
-        
       </MainWrapper>
       <SettingBtn onClick={() => setSettingBox(!settingBox)}>
         <AiFillSetting size="28" />
       </SettingBtn>
       {settingBox ? (
         <>
-          <SettingBox setWriteMode={setWriteMode}/>
+          <SettingBox setWriteMode={setWriteMode} />
         </>
       ) : null}
+      {audioEventCatch && (
+        <audio ref={audioRef} src={`${DummyAssetData_audio.content[1].url}`} />
+      )}
     </ViewerWrapper>
   );
 }
@@ -140,8 +155,8 @@ const MainContainer = styled.div`
 const ImageEvent = styled.div`
   /* position: relative; */
   position: fixed;
-  left: 45%;
-  bottom: 50%;
+  opacity: 0.7;
+  left: 30%;
   z-index: 10;
 `;
 const SettingBtn = styled.button`

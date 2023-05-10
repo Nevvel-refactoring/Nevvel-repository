@@ -46,7 +46,12 @@
     {
       "idx": 11,
       "context": "사람없는게 확실한 객실은 노크하지 말 것.",
-      "event": []
+      "event": [
+        {
+          "assetId":1,
+          "type":"AUDIO"
+        }
+      ]
     },
     {
       "idx": 12,
