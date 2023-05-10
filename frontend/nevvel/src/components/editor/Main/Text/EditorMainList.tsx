@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useRef, useEffect } from "react";
 import styled from "styled-components";
 import EditorMainListItem from "./EditorMainListItem";
 import EditorMainAssetContainer from "../Asset/EditorMainAssetContainer";
@@ -9,10 +9,13 @@ type EditorMainListProps = {
 };
 
 function EditorMainList({ contents, setContents }: EditorMainListProps) {
-
+  const scrollRef = useRef<any>();
+  useEffect(()=>{
+    scrollRef.current.scrollTop = scrollRef.current?.scrollHeight 
+  },[contents])
   return (
     <MainContainer>
-      <ListWrapper>
+      <ListWrapper ref={scrollRef}>
         {contents.map((content, index) => (
           <EditorMainListItem
             key={index}

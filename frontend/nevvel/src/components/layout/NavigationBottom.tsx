@@ -8,9 +8,16 @@ import nevvel_m_dark from "../../assets/img/nevvel_m_dark.png";
 import styled from "styled-components";
 import { tabletH } from "../../util/Mixin";
 import { mobile } from "../../util/Mixin";
+import { themeAtom } from "@/src/store/Theme";
+import { useAtomValue } from "jotai";
+import {useEffect} from "react"
 
 function NavigationBottom() {
   const router = useRouter();
+  const value = useAtomValue(themeAtom);
+  useEffect(()=>{
+    console.log(value)
+  },[value])
 
   const genreSelectHandler = () => {
     router.push(
@@ -45,7 +52,7 @@ function NavigationBottom() {
   return (
     <Wrapper>
       <Link href="/">
-        <Image src={nevvel_light} alt="Logo" width={100} height={25} />
+        {value ==="light" ?<Image src={nevvel_light} alt="Logo" width={100} height={25} />:<Image src={nevvel_dark} alt="Logo" width={100} height={25} />}
       </Link>
       <Novel>
         <Genre onClick={genreSelectHandler}>장르별 소설</Genre>

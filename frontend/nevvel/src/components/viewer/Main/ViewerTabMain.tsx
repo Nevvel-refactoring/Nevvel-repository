@@ -31,6 +31,7 @@ function ViewerTabMain({ EpisodeData,tabNumber,setEventCatch }: viwerMainProps) 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
+  
 
   `
 const TextBlock = styled.div`

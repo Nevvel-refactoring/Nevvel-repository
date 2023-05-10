@@ -83,8 +83,3 @@ const Img = styled.img`
 `;
 
 export default EditorMainAssetImageList;
-
-// 헤헤
-// 밍쿤
-// 하이하이 ㅎㅎ
-// 이거 못보고 그대로 git에 올려버려랏

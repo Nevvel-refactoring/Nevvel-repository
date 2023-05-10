@@ -6,9 +6,10 @@ import styled from "styled-components";
 import EpisodeData from "../../../components/viewer/DummyEpisodeData.json";
 import { AiFillSetting } from "react-icons/ai";
 import Image from "next/image";
-import eyes from "../../../assets/img/eyes.png";
+import eyes from "@/src/assets/img/eyes.png";
 import SettingBox from "@/src/components/viewer/SettingBox";
 import DummyAssetData_audio from "@/src/components/assetstore/DummyAssetData_Audio.json";
+import { mobile, tabletH } from "@/src/util/Mixin";
 
 function index() {
   const [headerToggle, setHeaderToggle] = useState(true); // header on/off
@@ -19,6 +20,7 @@ function index() {
   const [audioEventCatch, setAudioEventCatch] = useState(false);
   // 오디오 재생
   const audioRef = useRef<any>(null);
+  const scrollRef = useRef<any>();
   useEffect(() => {
     if (EpisodeData.contents[tabNumber].event.length !== 0) {
       const events = EpisodeData.contents[tabNumber].event;
@@ -33,6 +35,7 @@ function index() {
         }
       }
     }
+    scrollRef.current.scrollTop = scrollRef.current?.scrollHeight 
     return () => {
       if (eventCatch) {
         setEventCatch(false);
@@ -59,7 +62,7 @@ function index() {
   const clickhandler = (e: string) => {
     console.log(e);
     if (e === "head") {
-      setHeaderToggle(!headerToggle);
+      setHeaderToggle(true);
     } else if (e === "block") {
       setHeaderToggle(false);
       // 비동기 처리 아직 못했음
@@ -82,10 +85,10 @@ function index() {
         {headerToggle ? <ViewHeader EpisodeData={EpisodeData} /> : null}
       </HeaderContainer>
 
-      <MainWrapper>
+      <MainWrapper onClick={() => setHeaderToggle(false)}>
         {eventCatch ? (
           <ImageEvent>
-            <Image src={eyes} alt="Logo" width={600} height={600} />
+            <Image src={eyes} alt="Logo" fill />
           </ImageEvent>
         ) : null}
         {writeMode ? (
@@ -93,7 +96,7 @@ function index() {
             <ViewerPageMain EpisodeData={EpisodeData} />
           </MainContainer>
         ) : (
-          <MainContainer onKeyDown={countHandler} onClick={countHandler}>
+          <MainContainer ref={scrollRef} onClick={countHandler}>
             {tabNumber === 0 ? (
               <div>{EpisodeData.title}</div>
             ) : (
@@ -129,6 +132,9 @@ const ViewerWrapper = styled.div`
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  ${mobile} {
+    font-size: 12px;
+  }
 `;
 
 const HeaderContainer = styled.div`
@@ -146,8 +152,17 @@ const MainContainer = styled.div`
   margin-left: 30%;
   margin-right: 30%;
   overflow-y: scroll;
+
   ::-webkit-scrollbar {
     display: none;
+  }
+  ${mobile} {
+    margin-left: 10%;
+  margin-right: 10%;  
+  }
+  ${tabletH}{
+    margin-left: 20%;
+  margin-right: 20%;  
   }
   /* border: 1px solid black; */
 `;
@@ -156,8 +171,20 @@ const ImageEvent = styled.div`
   /* position: relative; */
   position: fixed;
   opacity: 0.7;
-  left: 30%;
+  left: 15%;
   z-index: 10;
+  width: 70%;
+  height:70%;
+  ${tabletH}{
+  left: 15%;
+  width:80%;
+    height:80%;
+  }
+  ${mobile}{
+    left:18%;
+    width:60%;
+    height:60%;
+  }
 `;
 const SettingBtn = styled.button`
   position: fixed;
@@ -168,5 +195,10 @@ const SettingBtn = styled.button`
   top: 80%;
   left: 90%;
   color: ${({ theme }) => theme.color.text1};
+  ${mobile}{
+    left:80%;
+
+  }
 `;
+ 
 export default index;

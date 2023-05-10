@@ -1,3 +1,4 @@
+import { mobile, tabletH } from "@/src/util/Mixin";
 import React from "react";
 import styled from "styled-components";
 
@@ -31,15 +32,23 @@ function SettingBox({setWriteMode}:SettingBoxProps) {
 }
 
 const BoxContainer = styled.div`
-  position: fixed;
+  position: absolute;
   width: 15rem;
   height: 15rem;
-  top: 45%;
-  left: 75%;
+  top: 50%;
+  left: 77%;
   box-shadow: 0rem 0rem 1rem gray;
   border-radius: 1rem;
   z-index: 100000;
   padding: 1rem;
+  background-color: ${({ theme})=>theme.color.background};
+  ${tabletH}{
+    top: 60%;
+    left: 55%;
+  }
+  ${mobile}{
+    left: 15%;
+  }
 `;
 
 const BoxHeadContainer = styled.div`
