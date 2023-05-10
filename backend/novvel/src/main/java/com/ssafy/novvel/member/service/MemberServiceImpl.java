@@ -43,12 +43,4 @@ public class MemberServiceImpl implements MemberService {
 
         return memberRepository.save(fullInfoMember);
     }
-
-    @Override
-    @Transactional
-    public void signOut(Member member) {
-
-        member.removeToken();
-        memberRepository.save(member);
-    }
 }

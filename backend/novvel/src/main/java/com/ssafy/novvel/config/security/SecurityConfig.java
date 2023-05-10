@@ -15,6 +15,7 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -29,16 +30,19 @@ public class SecurityConfig {
     private final OAuth2UserService<OidcUserRequest, OidcUser> oidcUserService;
     private final JWTProvider jwtProvider;
     private final MemberRepository memberRepository;
+    private final LogoutSuccessHandler logoutSuccessHandler;
 
     public SecurityConfig(
         AuthenticationSuccessHandler OAuth2LoginSuccessHandler,
         OAuth2UserService<OidcUserRequest, OidcUser> oidcUserService,
         JWTProvider jwtProvider,
-        MemberRepository memberRepository) {
+        MemberRepository memberRepository,
+        LogoutSuccessHandler logoutSuccessHandler) {
         this.OAuth2LoginSuccessHandler = OAuth2LoginSuccessHandler;
         this.oidcUserService = oidcUserService;
         this.jwtProvider = jwtProvider;
         this.memberRepository = memberRepository;
+        this.logoutSuccessHandler = logoutSuccessHandler;
     }
 
     @Bean
@@ -71,6 +75,12 @@ public class SecurityConfig {
                     .oidcUserService(oidcUserService)
                 )
                 .successHandler(OAuth2LoginSuccessHandler)
+            )
+            .logout(logout -> logout
+                .logoutUrl("/users/signout")
+                .logoutSuccessUrl("http://k8d1061.p.ssafy.io/")
+                .deleteCookies(JWTProvider.getAccessToken(), JWTProvider.getRefreshToken())
+                .logoutSuccessHandler(logoutSuccessHandler)
             )
             .addFilterBefore(new JwtAuthenticationProcessingFilter(jwtProvider, memberRepository),
                 UsernamePasswordAuthenticationFilter.class);

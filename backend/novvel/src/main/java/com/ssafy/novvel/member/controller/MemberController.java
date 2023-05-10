@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,20 +35,12 @@ public class MemberController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> registMemberInfo(MultipartFile multipartFile,
+    public ResponseEntity<?> registryMemberInfo(MultipartFile multipartFile,
         MemberInfoRegistDto memberInfoRegistDto,
         @AuthenticationPrincipal CustomUserDetails customUserDetails) throws IOException {
 
         memberService.addMemberInfo(multipartFile, memberInfoRegistDto,
             customUserDetails.getMember());
         return new ResponseEntity<>(HttpStatus.CREATED);
-    }
-
-    @PutMapping("/signout")
-    public ResponseEntity<?> signOut(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
-
-        memberService.signOut(customUserDetails.getMember());
-
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

@@ -1,4 +1,4 @@
-package com.ssafy.novvel.oauth2;
+package com.ssafy.novvel.sign.oauth2login;
 
 
 import java.io.IOException;
