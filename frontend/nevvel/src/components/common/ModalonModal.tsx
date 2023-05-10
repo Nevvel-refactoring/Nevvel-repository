@@ -1,28 +1,27 @@
-import { Dispatch, SetStateAction, useState } from "react";
+import React from "react";
+import { Dispatch, SetStateAction } from "react";
 import styled from "styled-components";
 
-
-interface ModalProps {
+interface ModalonModalProps {
   modal: any;
   width: string;
   height: string;
   element: JSX.Element;
-  setModal: Dispatch<SetStateAction<boolean>>;
+  setModalonModalOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-export const Modal = ({ width, height, element, setModal }: ModalProps) => {
-  const disableModal = () => {
-    setModal(false);
+export const ModalonModal = ({ width, height, element, setModalonModalOpen }: ModalonModalProps) => {
+  const disableModalonModal = () => {
+    setModalonModalOpen(false);
   };
-
 
   return (
     <>
       <Container width={width} height={height}>
-        {/* <ExitWrapper onClick={disableModal}>Close</ExitWrapper> */}
+        {/* <ExitWrapper onClick={disableModalonModal}>Close</ExitWrapper> */}
         <Wrapper>{element}</Wrapper>
       </Container>
-      <Canvas onClick={disableModal} />
+      <Canvas onClick={disableModalonModal} />
     </>
   );
 };
@@ -45,7 +44,6 @@ const Container = styled.div<{ width: string; height: string }>`
   flex-direction: column;
   align-items: center;
   font-size: 24px;
-  overflow-y: scroll;
 `;
 
 const ExitWrapper = styled.button`

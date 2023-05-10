@@ -2,6 +2,9 @@ import React from "react";
 import { useState, useRef } from "react";
 import styled from "styled-components";
 
+import { ModalonModal } from "../common/ModalonModal";
+import AskBuyModalContent from "./AskBuyModalContent";
+
 interface AssetTag {
   id : number,
   name : string,
@@ -57,7 +60,13 @@ function AssetDetailModal({
     audioRef.current.pause()
   }
 
-  const [tagLIst, setTagLIst] = useState<string[]>(openModalData.tags.map((tags) => tags.name))
+  // 구매버튼으로 모달 위의 모달 열기
+  const [modalonModalOpen, setModalonModalOpen] = useState<boolean>(false)
+
+  const OpenModalonModal = () => {
+    setModalonModalOpen(true)
+  }
+
 
   // 모달창 닫기
   const CloseAssetDetail = () => {
@@ -105,30 +114,52 @@ function AssetDetailModal({
           <DetailInfoP>
             {openModalData.title}
           </DetailInfoP>
+
           <RowDiv>
-            <UploaderImg
-              src={openModalData.uploader.profileImage}
-              alt="profileimg"
-            />
-            <DetailInfoP>{openModalData.uploader.nickname}</DetailInfoP>
+
+            <ColDiv>
+              <TagRowDiv>
+                {/* <DetailInfoP>{tagLIst}</DetailInfoP> */}
+                {
+                  openModalData.tags.map((tag) => {
+                    return(
+                    <CardInfo2Div key={tag.id}>
+                      <p>{tag.name}</p>
+                    </CardInfo2Div>
+                    )
+                  })
+                }
+                {/* {
+                  tagLIst.map((tags) => {
+                    <CardInfo2Div>
+                    <p>{tags}</p>
+                    </CardInfo2Div>
+                  })
+                } */}
+              </TagRowDiv>
+              <RowDiv>
+                <UploaderImg
+                  src={openModalData.uploader.profileImage}
+                  alt="profileimg"
+                />
+                <DetailInfoP>&nbsp;&nbsp;{openModalData.uploader.nickname}</DetailInfoP>
+              </RowDiv>
+            </ColDiv>
+
+            <ColDiv>
+              <DetailInfoP>
+                가격 : {openModalData.price} Point
+              </DetailInfoP>
+              <DetailInfoP>
+                다운로드 수 : {openModalData.downloadCount}
+              </DetailInfoP>
+              <ModalBtn onClick={OpenModalonModal}>구매</ModalBtn>
+            </ColDiv>
+
           </RowDiv>
-          <TagRowDiv>
-            <DetailInfoP>{tagLIst}</DetailInfoP>
-            {/* {
-              tagLIst.map((tags) => {
-                <CardInfo2Div>
-                <p>{tags}</p>
-                </CardInfo2Div>
-              })
-            } */}
-          </TagRowDiv>
+
         </ColDiv>
-        <ColDiv>
-          <DetailInfoP>
-            가격 : {openModalData.price} Point
-          </DetailInfoP>
-          <ModalBtn>구매</ModalBtn>
-        </ColDiv>
+
       </RowDiv>
       <hr />
       <DetailInfoP>미리보기</DetailInfoP>
@@ -137,6 +168,20 @@ function AssetDetailModal({
 
       </MiriDiv>
       <ModalBtn onClick={CloseAssetDetail}>닫기</ModalBtn>
+      {/* 여기부터 모달온 모달 */}
+      {modalonModalOpen ? (
+        <ModalonModal
+          modal={modalonModalOpen}
+          width="500"
+          height="300"
+          element={
+            <AskBuyModalContent
+              setModalonModalOpen={setModalonModalOpen}
+            />
+          }
+          setModalonModalOpen={setModalonModalOpen}
+        />
+      ) : null}
     </div>
   )
 }
@@ -152,7 +197,8 @@ const ColDiv = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  margin-top: 2rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 `
 
 const TagRowDiv = styled.div`
@@ -161,19 +207,19 @@ const TagRowDiv = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: left;
-  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
 `
 
 const ThumbnailImg = styled.img`
-  width: 10rem;
-  height: 10rem;
+  width: 15rem;
+  height: 15rem;
   border-radius: 1rem;
   object-fit: contain;
 `
 
 const UploaderImg = styled.img`
-  width: 2rem;
-  height: 2rem;
+  width: 3rem;
+  height: 2.5rem;
   border-radius: 1rem;
 `
 const DetailInfoP = styled.p`
@@ -200,7 +246,7 @@ const CardInfo2Div = styled.div`
 
 const MiriDiv = styled.div`
   width: 45rem;
-  height: 20rem;
+  height: 45rem;
   border: 0.1rem solid #4D4D4D;
   border-radius: 1rem;
   margin-top: 1rem;
@@ -216,5 +262,6 @@ const ModalBtn = styled.button`
   border-radius: 0.5rem;
   font-size: 1.5rem;
   /* margin-left: 0.5rem; */
-  /* margin-top: 1rem; */
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 `
