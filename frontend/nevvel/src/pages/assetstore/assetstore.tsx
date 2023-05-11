@@ -16,6 +16,10 @@ import AudUpload from "@/src/components/assetstore/AudUpload";
 import TagData from "@/src/components/assetstore/DummyTagData.json";
 import { NewvelApi } from "@/src/api";
 
+import type { GetServerSideProps, GetServerSidePropsContext, NextPage } from "next"
+import { Props } from "next/dist/client/script";
+
+
 type TagData = {
   id: number;
   tagName: string;
@@ -128,9 +132,12 @@ function assetstore({ content }: any) {
   );
 }
 
-export async function getStaticProps() {
+export const getStaticProps: GetServerSideProps<Props> = async(context: GetServerSidePropsContext) => {
+   // 클라이언트의 쿠키 가져오기
+   const cookie = context.req ? context.req.headers.cookie : "";
+
   try {
-    const res = await axios.get("http://k8d1061.p.ssafy.io:8080/api/tags");
+    const res = await axios.get("http://k8d1061.p.ssafy.io:8080/api/tags",{ headers: { cookie } });
     return {
       props: { content: res.data },
     };

@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/dist/client/router";
 import styled from "styled-components";
 
+
 // 받아올 때 string으로 받아와지기 때문에
 // getServerSideProps에서 true인 경우 "true"
 // false인 경우 ""의 형태로 받아와 실제 적용할 때 Boolean 적용
