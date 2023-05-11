@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
+import axios from "axios";
 import styled from "styled-components";
 import AssetstoreBanner from "@/src/components/assetstore/AssetstoreBanner";
 import AssetstoreAssetList from "@/src/components/assetstore/AssetstoreAssetList";
@@ -15,14 +16,13 @@ import AudUpload from "@/src/components/assetstore/AudUpload";
 import TagData from "@/src/components/assetstore/DummyTagData.json";
 import { NewvelApi } from "@/src/api";
 
-
 type TagData = {
-  id : number,
-  tagName : string,
-  useCount : number,
-}
+  id: number;
+  tagName: string;
+  useCount: number;
+};
 
-function assetstore() {
+function assetstore({ content }: any) {
   // Modal Open trigger
   const [modalOpen, setModalOpen] = useState<boolean>(false);
 
@@ -32,35 +32,36 @@ function assetstore() {
   // 에셋 업로드 버튼 클릭
   const AssetUpload = () => {
     setModalOpen(true);
-    setModalChange(0)
+    setModalChange(0);
   };
 
   const CloseAssetUpload = () => {
-    setModalOpen(false)
-  }
+    setModalOpen(false);
+  };
 
   const UploadImg = () => {
-    setModalChange(1)
-  }
+    setModalChange(1);
+  };
   const UploadAud = () => {
-    setModalChange(2)
-  }
+    setModalChange(2);
+  };
 
-  const [tagData, setTagData] = useState<TagData[]>([])
+  const [tagData, setTagData] = useState<TagData[]>([]);
 
   useEffect(() => {
-    const getTagData = async() => {
-      const res = await NewvelApi.tagsList()
-      setTagData(res.data.content)
+    const getTagData = async () => {
+      const res = await NewvelApi.tagsList();
+      setTagData(res.data.content);
       // console.log(res)
-    }
-    getTagData()
-  },[])
+    };
+    getTagData();
+  }, []);
 
-  const TopTenTag = tagData.slice(0,9)
+  const TopTenTag = tagData.slice(0, 9);
 
   return (
     <Wrapper>
+      {content}
       <AssetstoreBanner />
       <SearchBtnDiv>
         <SearchBar>
@@ -76,23 +77,20 @@ function assetstore() {
         <CardInfo2Div>
           <TagP>전체</TagP>
         </CardInfo2Div>
-        {
-          TopTenTag.map((tags) => {
-            return(
-              <CardInfo2Div key={tags.id}>
-                <TagP>{tags.tagName}</TagP>
-              </CardInfo2Div>
-            )
-            })
-        }
+        {TopTenTag.map((tags) => {
+          return (
+            <CardInfo2Div key={tags.id}>
+              <TagP>{tags.tagName}</TagP>
+            </CardInfo2Div>
+          );
+        })}
         <CardInfo2Div>
           <TagP>+</TagP>
         </CardInfo2Div>
       </RowDiv>
 
-
       <AssetstoreAssetList />
-      
+
       {/* 여기부터 모달 */}
       {modalOpen ? (
         <Modal
@@ -101,27 +99,47 @@ function assetstore() {
           width="600"
           height="700"
           element={
-            (
-              modalChange === 0?
-            <ModalDiv1>
-              <p>에셋 업로드</p>
-              <ModalUploadBtnDiv>
-                <ModalUploadBtn onClick={UploadImg} src="/UploadImgBtn.png" alt="UploadImgBtn" />
-                <ModalUploadBtn onClick={UploadAud} src="/UploadAudBtn.png" alt="UploadAudBtn" />
-              </ModalUploadBtnDiv>
-              <ModalCloseBtn onClick={CloseAssetUpload}>닫기</ModalCloseBtn>
-            </ModalDiv1>:
-            (
-              modalChange === 1?
-              <ImgUpload modalOpen={modalOpen} setModalOpen={setModalOpen} />:
+            modalChange === 0 ? (
+              <ModalDiv1>
+                <p>에셋 업로드</p>
+                <ModalUploadBtnDiv>
+                  <ModalUploadBtn
+                    onClick={UploadImg}
+                    src="/UploadImgBtn.png"
+                    alt="UploadImgBtn"
+                  />
+                  <ModalUploadBtn
+                    onClick={UploadAud}
+                    src="/UploadAudBtn.png"
+                    alt="UploadAudBtn"
+                  />
+                </ModalUploadBtnDiv>
+                <ModalCloseBtn onClick={CloseAssetUpload}>닫기</ModalCloseBtn>
+              </ModalDiv1>
+            ) : modalChange === 1 ? (
+              <ImgUpload modalOpen={modalOpen} setModalOpen={setModalOpen} />
+            ) : (
               <AudUpload modalOpen={modalOpen} setModalOpen={setModalOpen} />
-            )
             )
           }
         />
       ) : null}
     </Wrapper>
   );
+}
+
+export async function getStaticProps() {
+  try {
+    const res = await axios.get("http://k8d1061.p.ssafy.io:8080/api/tags");
+    return {
+      props: { content: res.data },
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      props: { content: "에러남" },
+    };
+  }
 }
 
 export default assetstore;
@@ -188,36 +206,35 @@ const RowDiv = styled.div`
   margin-bottom: 1rem;
   height: 8rem;
   flex-wrap: wrap;
-`
+`;
 
 // 에셋카드 재활용
 const CardInfo2Div = styled.div`
   background-color: ${({ theme }) => theme.color.buttonText};
-  color: #8385FF;
+  color: #8385ff;
   width: auto;
   height: 3rem;
   border-radius: 0.5rem;
   box-shadow: 0.1rem 0.1rem;
-  border: 0.15rem solid #8385FF;
+  border: 0.15rem solid #8385ff;
   /* text-align: center; */
   display: flex;
   align-items: center;
   justify-content: center;
   margin-left: 1rem;
   margin-right: 1rem;
-  &:hover{
+  &:hover {
     cursor: pointer;
-    background-color: #8385FF;
+    background-color: #8385ff;
     color: white;
-  };
-`
+  }
+`;
 
 const TagP = styled.p`
   font-size: 1.8rem;
   margin-right: 1rem;
   margin-left: 1rem;
-`
-
+`;
 
 const ModalDiv1 = styled.div`
   /* display: flex;
@@ -252,4 +269,4 @@ const ModalCloseBtn = styled.button`
   border: 0.1rem solid black;
   border-radius: 0.5rem;
   font-size: 1.5rem;
-`
+`;
