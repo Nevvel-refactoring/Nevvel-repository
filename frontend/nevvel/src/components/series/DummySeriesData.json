@@ -20,7 +20,8 @@
         "views": 10,
         "isPurchased": true,
         "isRead": true,
-        "uploadedDateTime": "2023-05-05"
+        "point":0,
+        "uploadedDateTime": "2023-05-11T10:30:00"
       },
       {
         "id": 2,
@@ -28,7 +29,8 @@
         "views": 10,
         "isPurchased": false,
         "isRead": false,
-        "uploadedDateTime": "2023-05-05"
+        "point":100,
+        "uploadedDateTime": "2023-05-11T10:30:00"
       },
       {
         "id": 3,
@@ -36,7 +38,8 @@
         "views": 10,
         "isPurchased": false,
         "isRead": false,
-        "uploadedDateTime": "2023-05-05"
+        "point":100,
+        "uploadedDateTime": "2023-05-11T10:30:00"
       }
     ]
   }

@@ -26,6 +26,7 @@ declare module "series" {
         views:number;
         isPurchased:boolean;
         isRead:boolean;
+        point:number;
         uploadedDateTime: string;
     }
 }
