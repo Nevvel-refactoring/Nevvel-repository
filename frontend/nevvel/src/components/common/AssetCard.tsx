@@ -165,7 +165,10 @@ const Wrapper = styled.div`
   /* background-color: #C1C2FF; */
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
-`;
+  &:hover{
+    cursor: pointer;
+  };
+`
 
 const CardImgDiv = styled.div`
   display: flex;
@@ -211,7 +214,7 @@ const CardInfo2 = styled.p`
 `
 
 const CardInfo2Div = styled.div`
-  background-color: white;
+  background-color: ${({ theme }) => theme.color.buttonText};
   color: black;
   width: 4rem;
   height: 2rem;

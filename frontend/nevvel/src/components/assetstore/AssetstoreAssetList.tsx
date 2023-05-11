@@ -72,6 +72,9 @@ function AssetstoreAssetList() {
     }
   })
 
+  // 모달의 모달이 어떻게 나올지 결정해주는 인자
+  const [modalStarter, setModalStarter] = useState<boolean>(true)
+
   return(
     <div>
       <div>
@@ -113,6 +116,7 @@ function AssetstoreAssetList() {
             <AssetDetailModal
               openModalData={openModalData}
               setModalOpen={setModalOpen}
+              modalStarter={modalStarter}
             />
           }
         />

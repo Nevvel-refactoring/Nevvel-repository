@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState, useRef } from "react";
 import styled from "styled-components";
 
 import { ModalonModal } from "../common/ModalonModal";
 import AskBuyModalContent from "./AskBuyModalContent";
+import DoneBuyAsset from "./DoneBuyAsset";
+
+import DummyEpisode from "./DummyEpisodeforMiri.json"
 
 interface AssetTag {
   id : number,
@@ -27,36 +30,38 @@ type ModalDataProps = {
     downloadCount : number,
     tags: Array<AssetTag>,
     uploader : AssetUploader
-  },
+  };
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  modalStarter: boolean;
 }
 
 function AssetDetailModal({
   openModalData,
-  setModalOpen
+  setModalOpen,
+  modalStarter
   } : ModalDataProps) {
 
   // 오디오 재생
   const audioRef = useRef<any>(null)
 
   // hover 트리거
-  const [hoverTrigger, setHoverTrigger] = useState<number>(0)
+  const [onOffTrigger, setOnOffTrigger] = useState<number>(0)
 
   // 이미지 hover 기능
-  const hoverOn= () => {
-    setHoverTrigger(1)
-  }
-  const hoverOff= () => {
-    setHoverTrigger(0)
-  }
+  // const hoverOn= () => {
+  //   setHoverTrigger(1)
+  // }
+  // const hoverOff= () => {
+  //   setHoverTrigger(0)
+  // }
 
-  // 오디오 hover 기능
+  // 오디오 재생 기능
   const AudioOn= () => {
-    setHoverTrigger(1)
+    setOnOffTrigger(1)
     audioRef.current.play()
   }
   const AudioOff= () => {
-    setHoverTrigger(0)
+    setOnOffTrigger(0)
     audioRef.current.pause()
   }
 
@@ -67,53 +72,68 @@ function AssetDetailModal({
     setModalonModalOpen(true)
   }
 
+  // 모달 위의 모달 changer
+  const [modalChanger, setModalChanger] = useState<boolean>(false)
+
 
   // 모달창 닫기
   const CloseAssetDetail = () => {
     setModalOpen(false)
   }
 
+  // 미리보기 트리거
+  const [miriTrigger, setMiriTrigger] = useState<number>(0)
+
+  const MiriOperate = () => {
+    if (miriTrigger === 0) {
+      setMiriTrigger(1)
+    } else if (miriTrigger === 1) {
+      setMiriTrigger(2)
+    } else {
+      setMiriTrigger(0)
+    }
+  }
+
+  useEffect(() => {
+    if (miriTrigger > 0) {
+      audioRef.current.play()
+    } else {
+      audioRef.current.pause()
+    }
+  },[miriTrigger])
+
 
   return(
     <div>
       <RowDiv>
-        <audio ref={audioRef} src={`${openModalData.url}`} />
+        <audio ref={audioRef} src={`${openModalData.url}`} onEnded={AudioOn} />
         {
           openModalData.type === "AUDIO"?
           (
-            hoverTrigger === 0?
+            onOffTrigger === 0?
             <ThumbnailImg
-            onMouseOver={AudioOn}
-            src="https://cdn4.iconfinder.com/data/icons/proglyphs-multimedia/512/Volume_Off-512.png"
-            alt="thumbnail"
+              onClick={AudioOn}
+              src="https://cdn4.iconfinder.com/data/icons/proglyphs-multimedia/512/Volume_Off-512.png"
+              alt="thumbnail"
             />
             :
             <ThumbnailImg
-              onMouseLeave={AudioOff}
+              onClick={AudioOff}
               src={openModalData.thumbnail}
               alt="thumbnail"
             />
           )
           :
-          (
-            hoverTrigger === 0?
-            <ThumbnailImg
-              onMouseOver={hoverOn}
-              src={openModalData.thumbnail}
-              alt="thumbnail"
-            />
-            :
-            <ThumbnailImg
-              onMouseLeave={hoverOff}
-              src={openModalData.url}
-              alt="thumbnail"
-            />
-            )
+          <ThumbnailImg
+            src={openModalData.url}
+            alt="image"
+          />
         }
         <ColDiv>
           <DetailInfoP>
             {openModalData.title}
           </DetailInfoP>
+          <br />
 
           <RowDiv>
 
@@ -124,7 +144,7 @@ function AssetDetailModal({
                   openModalData.tags.map((tag) => {
                     return(
                     <CardInfo2Div key={tag.id}>
-                      <p>{tag.name}</p>
+                      <DetailInfoP>{tag.name}</DetailInfoP>
                     </CardInfo2Div>
                     )
                   })
@@ -137,6 +157,7 @@ function AssetDetailModal({
                   })
                 } */}
               </TagRowDiv>
+              <br />
               <RowDiv>
                 <UploaderImg
                   src={openModalData.uploader.profileImage}
@@ -150,9 +171,13 @@ function AssetDetailModal({
               <DetailInfoP>
                 가격 : {openModalData.price} Point
               </DetailInfoP>
+              <br />
+              <br />
               <DetailInfoP>
                 다운로드 수 : {openModalData.downloadCount}
               </DetailInfoP>
+              <br />
+              <br />
               <ModalBtn onClick={OpenModalonModal}>구매</ModalBtn>
             </ColDiv>
 
@@ -164,8 +189,55 @@ function AssetDetailModal({
       <hr />
       <DetailInfoP>미리보기</DetailInfoP>
       <hr />
-      <MiriDiv>
-
+      <MiriDiv onClick={MiriOperate}>
+        {
+          DummyEpisode.contents.slice(0,7).map((sentence) => {
+            return(
+              <MiriPDiv key={sentence.idx}>
+                <p>{sentence.context}</p>
+              </MiriPDiv>
+            )
+          })
+        }
+        {
+          miriTrigger > 0?
+          (
+            openModalData.type === "IMAGE"?
+              <MiriImgDiv>
+                <MiriImg
+                  src={openModalData.url}
+                  alt="image"
+                />
+              </MiriImgDiv>
+              :
+              null
+          )
+          :
+          null
+        }
+        {
+          miriTrigger === 1?
+          DummyEpisode.contents.slice(7,9).map((sentence) => {
+            return(
+              <MiriPDiv key={sentence.idx}>
+                <p>{sentence.context}</p>
+              </MiriPDiv>
+            )
+          })
+          :
+          (
+            miriTrigger === 2?
+            DummyEpisode.contents.slice(7,14).map((sentence) => {
+              return(
+                <MiriPDiv key={sentence.idx}>
+                  <p>{sentence.context}</p>
+                </MiriPDiv>
+              )
+            })
+            :
+            null
+          )
+        }
       </MiriDiv>
       <ModalBtn onClick={CloseAssetDetail}>닫기</ModalBtn>
       {/* 여기부터 모달온 모달 */}
@@ -175,9 +247,19 @@ function AssetDetailModal({
           width="500"
           height="300"
           element={
-            <AskBuyModalContent
-              setModalonModalOpen={setModalonModalOpen}
-            />
+            (
+              modalChanger?
+              <DoneBuyAsset
+                setModalonModalOpen={setModalonModalOpen}
+                setModalChanger={setModalChanger}
+                modalStarter={modalStarter}
+              />
+              :
+              <AskBuyModalContent
+                setModalonModalOpen={setModalonModalOpen}
+                setModalChanger={setModalChanger}
+              />
+            )
           }
           setModalonModalOpen={setModalonModalOpen}
         />
@@ -223,13 +305,14 @@ const UploaderImg = styled.img`
   border-radius: 1rem;
 `
 const DetailInfoP = styled.p`
-  margin-top: 0.5rem;
-  margin-bottom: 1rem;
+  /* margin-top: 0.5rem;
+  margin-bottom: 1rem; */
+  color: ${({ theme }) => theme.color.text1};
 `
 
 // 에셋카드 재활용
 const CardInfo2Div = styled.div`
-  background-color: white;
+  background-color: ${({ theme }) => theme.color.buttonText};
   color: black;
   width: 4rem;
   height: 2rem;
@@ -252,6 +335,34 @@ const MiriDiv = styled.div`
   margin-top: 1rem;
   margin-bottom: 1rem;
 `
+
+const MiriPDiv = styled.div`
+  padding: 1rem;
+  font-size: 1.4rem;
+  position: relative;
+  z-index: 999;
+`
+
+const MiriP = styled.p`
+  
+`
+const MiriImgDiv = styled.div`
+  width: 22rem;
+  height: 22rem;
+  /* border: 0.1rem solid black; */
+  margin-left: 21rem;
+  position: absolute;
+`
+
+const MiriImg = styled.img`
+  /* float: left; */
+  border-radius: 1rem;
+  opacity: 0.7;
+  width: 22rem;
+  height: 22rem;
+  object-fit: contain;
+`
+
 
 const ModalBtn = styled.button`
   background-color: ${({ theme }) => theme.color.button};

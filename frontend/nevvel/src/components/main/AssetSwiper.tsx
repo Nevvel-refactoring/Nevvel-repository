@@ -75,6 +75,9 @@ function AssetSwiper() {
     }
   })
 
+  // 모달의 모달이 어떻게 나올지 결정해주는 인자
+  const [modalStarter, setModalStarter] = useState<boolean>(true)
+
   return (
     <Wrapper>
       <Swiper
@@ -135,6 +138,7 @@ function AssetSwiper() {
             <AssetDetailModal
               openModalData={openModalData}
               setModalOpen={setModalOpen}
+              modalStarter={modalStarter}
           />
           }
         />

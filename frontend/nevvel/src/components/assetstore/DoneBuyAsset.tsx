@@ -5,37 +5,43 @@ import styled from "styled-components";
 type ModalonModalProps = {
   setModalonModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setModalChanger: React.Dispatch<React.SetStateAction<boolean>>;
+  modalStarter: boolean;
 }
 
-function AskBuyModalContent({setModalonModalOpen, setModalChanger} : ModalonModalProps) {
+function DoneBuyAsset({setModalonModalOpen, setModalChanger, modalStarter} : ModalonModalProps) {
 
-  const BuyAsset = () => {
-    // axios
-    setModalChanger(true)
-  }
 
   const CloseBuyModal = () => {
     setModalonModalOpen(false)
+    setModalChanger(false)
   }
 
   return(
     <div>
       <ColDiv>
         <AskP>
-          에셋을 구매하시겠습니까?
+          에셋 구매가 완료되었습니다
         </AskP>
-        <RowDiv>
-          {/* 제출버튼 */}
-            <BuyBtn onClick={BuyAsset}>구매</BuyBtn>
-          {/* 닫기버튼 */}
-          <ModalCloseBtn onClick={CloseBuyModal}>닫기</ModalCloseBtn>
-        </RowDiv>
+        {
+          modalStarter?
+          <RowDiv>
+            {/* 제출버튼 */}
+            <BuyBtn>글쓰러가기</BuyBtn>
+            {/* 닫기버튼 */}
+            <ModalCloseBtn onClick={CloseBuyModal}>에셋 계속보기</ModalCloseBtn>
+          </RowDiv>
+          :
+          <RowDiv>
+            {/* 닫기버튼 */}
+            <ModalCloseBtn onClick={CloseBuyModal}>확인</ModalCloseBtn>
+          </RowDiv>
+        }
       </ColDiv>
     </div>
   )
 }
 
-export default AskBuyModalContent
+export default DoneBuyAsset
 
 
 const ColDiv = styled.div`
