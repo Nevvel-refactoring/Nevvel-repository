@@ -16,6 +16,12 @@ import TagData from "@/src/components/assetstore/DummyTagData.json";
 import { NewvelApi } from "@/src/api";
 
 
+type TagData = {
+  id : number,
+  tagName : string,
+  useCount : number,
+}
+
 function assetstore() {
   // Modal Open trigger
   const [modalOpen, setModalOpen] = useState<boolean>(false);
@@ -40,7 +46,7 @@ function assetstore() {
     setModalChange(2)
   }
 
-  const [tagData, setTagData] = useState<Object[]>([])
+  const [tagData, setTagData] = useState<TagData[]>([])
 
   useEffect(() => {
     const getTagData = async() => {
