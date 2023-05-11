@@ -8,6 +8,7 @@ import com.ssafy.novvel.member.entity.Member;
 import com.ssafy.novvel.resource.entity.Resource;
 import com.ssafy.novvel.util.BaseEntity;
 import java.util.List;
+import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
 import lombok.*;
 
@@ -48,11 +49,16 @@ public class Cover extends BaseEntity {
     @Column(name = "status_type")
     private CoverStatusType coverStatusType;
 
-    private LocalDate publishDate;
+    private LocalDate firstPublishDate;
+
+    private LocalDate lastPublishDate;
 
     @NotNull
     private Long likes;
-    
+
+    @PositiveOrZero
+    private Long viewCount;
+
     // 생성
     public Cover(Resource resource, CoverRegisterDto coverRegisterDto, Member member, Genre genre) {
 
@@ -63,16 +69,20 @@ public class Cover extends BaseEntity {
         this.title = coverRegisterDto.getTitle();
         this.genre = genre;
         this.likes = 0L;
+        this.viewCount = 0L;
     }
 
     // 수정
-    public Cover(Resource resource, Long coverId, LocalDate publishDate, Long likes,
+    public Cover(Resource resource, Long coverId, LocalDate lastPublishDate,
+        LocalDate firstPublishDate, Long likes, Long viewCount,
         CoverModifyDto coverModifyDto,
         Member member, Genre genre) {
 
         this.resource = resource;
         this.likes = likes;
-        this.publishDate = publishDate;
+        this.lastPublishDate = lastPublishDate;
+        this.firstPublishDate = firstPublishDate;
+        this.viewCount = viewCount;
         this.id = coverId;
         this.member = member;
         this.coverStatusType = coverModifyDto.getCoverStatusType();

@@ -7,6 +7,7 @@ import java.util.Arrays;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
@@ -68,6 +69,7 @@ public class SecurityConfig {
             .cors()
             .and()
             .authorizeHttpRequests(authorize -> authorize
+                .antMatchers(HttpMethod.GET, "/covers").permitAll()
                 .anyRequest().authenticated()
             )
             .oauth2Login(oauth2 -> oauth2

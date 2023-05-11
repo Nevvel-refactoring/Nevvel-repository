@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface CoverRepository extends JpaRepository<Cover, Long> {
+public interface CoverRepository extends JpaRepository<Cover, Long>, CoverRepositoryCustom {
 
     @Query(
         "SELECT new com.ssafy.novvel.cover.dto.EpisodeInfoDto(e.id, e.point, e.viewCount, e.lastModifyedDateTime"

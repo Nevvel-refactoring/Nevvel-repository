@@ -1,10 +1,13 @@
 package com.ssafy.novvel.cover.service;
 
+import com.ssafy.novvel.cover.dto.CoverSearchConditions;
+import com.ssafy.novvel.cover.dto.CoverWithConditions;
 import com.ssafy.novvel.cover.dto.CoverInfoAndEpisodesDto;
 import com.ssafy.novvel.cover.dto.CoverModifyDto;
 import com.ssafy.novvel.cover.repository.CoverRepository;
 import com.ssafy.novvel.cover.dto.CoverRegisterDto;
 import com.ssafy.novvel.cover.entity.Cover;
+import com.ssafy.novvel.cover.repository.CoverRepositoryCustom;
 import com.ssafy.novvel.genre.repository.GenreRepository;
 import com.ssafy.novvel.member.entity.Member;
 import com.ssafy.novvel.resource.entity.Resource;
@@ -16,9 +19,14 @@ import java.util.Objects;
 import javax.naming.AuthenticationException;
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+@Slf4j
 @Service
 public class CoverServiceImpl implements CoverService {
 
@@ -54,7 +62,6 @@ public class CoverServiceImpl implements CoverService {
         coverInfoAndEpisodesDto.setDescription(cover.getDescription());
         coverInfoAndEpisodesDto.setGenreName(cover.getGenre().getName());
 
-
         coverInfoAndEpisodesDto.setEpisodes(coverRepository.findEpisodesInfoDto(coverId, memberId));
 
         return coverInfoAndEpisodesDto;
@@ -70,11 +77,13 @@ public class CoverServiceImpl implements CoverService {
         if (!Objects.equals(cover.getMember().getId(), userId)) {
             throw new AuthenticationException();
         } else {
-
+            // TODO
+            // 1) multipart가 null이면 장르별 default image
             Resource resource = resourceService.saveFile(multipartFile);
 
             Cover newCover = coverRepository.save(
-                new Cover(resource, coverId, cover.getPublishDate(), cover.getLikes(),
+                new Cover(resource, coverId, cover.getLastPublishDate(),
+                    cover.getFirstPublishDate(), cover.getLikes(), cover.getViewCount(),
                     coverModifyDto, cover.getMember(),
                     genreRepository.getReferenceById(coverModifyDto.getGenreId())));
 
@@ -82,10 +91,12 @@ public class CoverServiceImpl implements CoverService {
         }
 
     }
-    
+
     private List<String> findPreviousResourceInS3(Resource current, Resource previous) {
 
-        if(current == null || previous == null) return null;
+        if (current == null || previous == null) {
+            return null;
+        }
 
         List<String> urlAndThumbnail = new ArrayList<>();
         if (!current.getUrl().equals(previous.getUrl())) {
@@ -96,5 +107,16 @@ public class CoverServiceImpl implements CoverService {
         }
 
         return urlAndThumbnail.isEmpty() ? null : urlAndThumbnail;
+    }
+
+    @Override
+    public Page<CoverWithConditions> searchCoverWithCondition(
+        CoverSearchConditions coverSearchConditions) {
+
+        final int numberOfCoversPerPage = 20;
+        Pageable pageable = PageRequest.of(coverSearchConditions.getPageNum(),
+            numberOfCoversPerPage);
+
+        return coverRepository.searchCover(coverSearchConditions, pageable);
     }
 }
