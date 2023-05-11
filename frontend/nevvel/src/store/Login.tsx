@@ -1,5 +1,5 @@
-import { atom } from "jotai";
+import { atomWithStorage } from "jotai/utils";
 
-export const loginAtom = atom(false);
+export const loginAtom = atomWithStorage("loginStatus", false);
 
-export const isUserAtom = atom(false);
+export const isUserAtom = atomWithStorage("isUserStatus", false);
