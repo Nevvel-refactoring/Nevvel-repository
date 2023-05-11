@@ -58,6 +58,11 @@ public class Episode extends BaseEntity {
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime reservationTime;
 
+    @Setter
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    private LocalDateTime publishedDate;
+
     @Transient
     private Context context;
 

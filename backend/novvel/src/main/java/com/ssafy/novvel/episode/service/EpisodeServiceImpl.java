@@ -74,6 +74,11 @@ public class EpisodeServiceImpl implements EpisodeService{
         }
 
         Episode episode = episodeRepository.save(new Episode(cover, episodeRegistDto, contextId));
+        if (episode.getStatusType().equals(EpisodeStatusType.PUBLISHED)) {
+            LocalDateTime createDate = episode.getCreatedDateTime();
+            publishUpdate(episode, createDate);
+        }
+
         return episode.getId();
     }
 
@@ -118,13 +123,15 @@ public class EpisodeServiceImpl implements EpisodeService{
         // 현재 유저가 작성자가 아닐 때만 조회수 1 올리기
         if (!episode.getCover().getMember().getId().equals(member.getId())) {
             episode.setViewCount(episode.getViewCount() + 1);
+            cover.setViewCount(cover.getViewCount() + 1);
         }
 
         // 읽은 소설 처리하기
         readEpisodeRepository.save(new ReadEpisode(episode, member));
 
         return new EpisodeContextDto(cover.getId(), cover.getTitle(), episode.getTitle(), episode.getId(), context.getContents(),
-                episodeRepository.findPrevEpisodeId(episodeId, cover), episodeRepository.findNextEpisodeId(episodeId, cover));
+                episodeRepository.findPrevEpisodeId(episode.getPublishedDate(), cover, episodeId),
+                episodeRepository.findNextEpisodeId(episode.getPublishedDate(), cover, episodeId));
     }
 
     @Override
@@ -166,8 +173,15 @@ public class EpisodeServiceImpl implements EpisodeService{
         episode.setTitle(episodeRegistDto.getTitle());
         episode.setPoint(episodeRegistDto.getPoint());
         // 수정중인 글을 임시저장 할 경우 새로운 임시저장 글이 생길 뿐 기존 발행 or 삭제한 게시글이 임시저장 상태가 되어선 안됨
-        if (episode.getStatusType().equals(EpisodeStatusType.PUBLISHED) && episodeRegistDto.getStatusType().equals(EpisodeStatusType.TEMPORARY)) {
+        if (episode.getStatusType().equals(EpisodeStatusType.PUBLISHED)
+                && episodeRegistDto.getStatusType().equals(EpisodeStatusType.TEMPORARY)) {
             throw new NotYourAuthorizationException("이미 발행된 episode는 임시저장 상태로 전환할 수 없습니다.");
+        }
+
+        if (episode.getStatusType().equals(EpisodeStatusType.TEMPORARY)
+                && episodeRegistDto.getStatusType().equals(EpisodeStatusType.PUBLISHED)) {
+            LocalDateTime now = LocalDateTime.now();
+            publishUpdate(episode, now);
         }
 
         episode.setStatusType(episodeRegistDto.getStatusType());
@@ -270,10 +284,20 @@ public class EpisodeServiceImpl implements EpisodeService{
         List<Episode> episodes = episodeRepository.findByReservationTimeBefore(LocalDateTime.now());
         if (!episodes.isEmpty()) {
             for (Episode episode : episodes) {
+                LocalDateTime reservation = episode.getReservationTime();
                 episode.setStatusType(EpisodeStatusType.PUBLISHED);
+                publishUpdate(episode, reservation);
                 episode.setReservationTime(null);
             }
         }
+    }
+
+    private void publishUpdate(Episode episode, LocalDateTime localDateTime) {
+        episode.setPublishedDate(localDateTime);
+        if (episode.getCover().getFirstPublishDate() == null) {
+            episode.getCover().setFirstPublishDate(localDateTime.toLocalDate());
+        }
+        episode.getCover().setLastPublishDate(localDateTime.toLocalDate());
     }
 
     // episodeRegistDto(수정 or 새로 생성 시 사용) 넣으면 context 돌며 effect 돌며 모든 myAssetId 받아와

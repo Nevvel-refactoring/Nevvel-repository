@@ -14,13 +14,15 @@ public interface EpisodeRepository extends JpaRepository<Episode, Long> {
     @Query("SELECT ep FROM Episode ep LEFT JOIN fetch ep.cover WHERE ep.id in :ids")
     List<Episode> findByIdInIds(@Param("ids") List<Long> ids);
 
-    @Query("SELECT MAX(ep.id) FROM Episode ep WHERE ep.statusType = 'PUBLISHED'" +
-            "AND ep.cover = :cover AND ep.id < :id")
-    Long findPrevEpisodeId(@Param("id") Long id, @Param("cover") Cover cover);
+    @Query("SELECT MAX(ep.id) FROM Episode ep WHERE ep.publishedDate = " +
+            "(SELECT MAX(ep.publishedDate) FROM Episode ep WHERE ep.cover = :cover AND ep.publishedDate <= :time)" +
+            "AND ep.id < :id")
+    Long findPrevEpisodeId(@Param("time") LocalDateTime time, @Param("cover") Cover cover, @Param("id") Long id);
 
-    @Query("SELECT MIN(ep.id) FROM Episode ep WHERE ep.statusType = 'PUBLISHED' " +
-            "AND ep.cover = :cover AND ep.id > :id")
-    Long findNextEpisodeId(@Param("id") Long id, @Param("cover") Cover cover);
+    @Query("SELECT MIN(ep.id) FROM Episode ep WHERE ep.publishedDate = " +
+            "(SELECT MIN(ep.publishedDate) FROM Episode ep WHERE ep.cover = :cover AND ep.publishedDate >= :time)" +
+            "AND ep.id > :id")
+    Long findNextEpisodeId(@Param("time") LocalDateTime time, @Param("cover") Cover cover, @Param("id") Long id);
 
     List<Episode> findByReservationTimeBefore(LocalDateTime now);
 

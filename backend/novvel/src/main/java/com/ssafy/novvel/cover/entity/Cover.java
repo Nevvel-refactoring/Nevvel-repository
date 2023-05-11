@@ -49,13 +49,16 @@ public class Cover extends BaseEntity {
     @Column(name = "status_type")
     private CoverStatusType coverStatusType;
 
+    @Setter
     private LocalDate firstPublishDate;
 
+    @Setter
     private LocalDate lastPublishDate;
 
     @NotNull
     private Long likes;
 
+    @Setter
     @PositiveOrZero
     private Long viewCount;
 
