@@ -11,14 +11,20 @@ function Pagination(props: Props) {
     props.onClickHandler(props.pageNumber);
   };
 
-  return <Wrapper onClick={pageNumHandler}>{props.pageNumber}</Wrapper>;
+  return (
+    <Wrapper onClick={pageNumHandler} pageOn={props.pageOn}>
+      {props.pageNumber}
+    </Wrapper>
+  );
 }
 
 export default Pagination;
 
-const Wrapper = styled.span`
+const Wrapper = styled.span<{ pageOn: boolean }>`
+  margin-top: ${({ pageOn }) => (pageOn ? "1px" : "")};
   margin-left: 10px;
   margin-right: 10px;
-  font-size: 13.5px;
+  font-size: ${({ pageOn }) => (pageOn ? "15px" : "14px")};
   cursor: pointer;
+  font-weight: ${({ pageOn }) => (pageOn ? "800" : "")};
 `;

@@ -89,7 +89,7 @@ function NovelSwiper() {
         // install Swiper modules
         modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
         spaceBetween={0}
-        slidesPerView={5}
+        slidesPerView={1}
         breakpoints={{
           500: {
             slidesPerView: 2,

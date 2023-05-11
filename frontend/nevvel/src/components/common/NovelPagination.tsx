@@ -38,7 +38,7 @@ function NovelPagination({ nav, name, genre, sort, pageNum }: Novel) {
   // 페이지 버튼을 클릭 시 페이지네이션을 업데이트하는 함수
   const onClickHandler = (num: number) => {
     setPagination(num);
-    console.log(num)
+    // console.log(num)
     router.push({
       pathname: `/novels/${nav}`,
       query: { genre: genre, sort: sort, name: name, pageNum: num },

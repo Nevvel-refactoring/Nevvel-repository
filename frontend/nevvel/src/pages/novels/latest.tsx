@@ -12,7 +12,7 @@ interface Novel {
 }
 
 function LatestNovel(props: Novel) {
-  console.log(props);
+  // console.log(props);
   const { query } = useRouter();
 
   // url으로 입력해서 들어오는 경우
