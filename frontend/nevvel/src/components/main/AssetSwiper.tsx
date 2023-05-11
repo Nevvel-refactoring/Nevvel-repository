@@ -39,6 +39,7 @@ interface Asset {
   url: string;
   price: number;
   downloadCount: number;
+  isAvailable : boolean,
   tags: Array<AssetTag>;
   uploader: AssetUploader;
 }
@@ -64,6 +65,7 @@ function AssetSwiper() {
     url: "",
     price : 0,
     downloadCount : 0,
+    isAvailable : false,
     tags: [{
       id : 0,
       name : "",

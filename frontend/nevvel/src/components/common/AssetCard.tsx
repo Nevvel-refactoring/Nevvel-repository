@@ -22,6 +22,7 @@ interface AssetData{
   url: string,
   price : number,
   downloadCount : number,
+  isAvailable : boolean,
   tags: Array<AssetTag>,
   uploader : AssetUploader
 }
@@ -181,6 +182,9 @@ const CardImg1 = styled.img`
   width: 13rem;
   height: 13rem;
   border-radius: 5%;
+  /* &:hover{
+    cursor: none;
+  } */
 `
 // const CardImg2 = styled.img`
 //   width: auto;

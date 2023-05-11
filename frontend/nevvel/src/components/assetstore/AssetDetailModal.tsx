@@ -28,6 +28,7 @@ type ModalDataProps = {
     url: string,
     price : number,
     downloadCount : number,
+    isAvailable : boolean,
     tags: Array<AssetTag>,
     uploader : AssetUploader
   };
@@ -178,7 +179,12 @@ function AssetDetailModal({
               </DetailInfoP>
               <br />
               <br />
-              <ModalBtn onClick={OpenModalonModal}>구매</ModalBtn>
+              {
+                openModalData.isAvailable?
+                <ModalBtn onClick={OpenModalonModal}>구매</ModalBtn>
+                :
+                <UnModalBtn>구매완료</UnModalBtn>
+              }
             </ColDiv>
 
           </RowDiv>
@@ -189,16 +195,10 @@ function AssetDetailModal({
       <hr />
       <DetailInfoP>미리보기</DetailInfoP>
       <hr />
+      {/* 미리보기 영역 클릭하면 미리보기 트리거가 0->1->2->0으로 순회 */}
       <MiriDiv onClick={MiriOperate}>
-        {
-          DummyEpisode.contents.slice(0,7).map((sentence) => {
-            return(
-              <MiriPDiv key={sentence.idx}>
-                <p>{sentence.context}</p>
-              </MiriPDiv>
-            )
-          })
-        }
+        {/* 미리보기 트리거 1됐을때 나타나는 에셋 */}
+        {/* 데이터 타입이 이미지일 경우 이미지, 오디오일 경우 useRef 음원 재생 */}
         {
           miriTrigger > 0?
           (
@@ -215,6 +215,17 @@ function AssetDetailModal({
           :
           null
         }
+        {/* 처음에 기본으로 있는 미리보기 내용 */}
+        {
+          DummyEpisode.contents.slice(0,7).map((sentence) => {
+            return(
+              <MiriPDiv key={sentence.idx}>
+                <p>{sentence.context}</p>
+              </MiriPDiv>
+            )
+          })
+        }
+        {/* 미리보기 트리거 1됐을때 나타나는 내용 */}
         {
           miriTrigger === 1?
           DummyEpisode.contents.slice(7,9).map((sentence) => {
@@ -225,6 +236,7 @@ function AssetDetailModal({
             )
           })
           :
+          // 미리보기 트리거 2됐을때 나타나는 내용
           (
             miriTrigger === 2?
             DummyEpisode.contents.slice(7,14).map((sentence) => {
@@ -239,7 +251,9 @@ function AssetDetailModal({
           )
         }
       </MiriDiv>
+
       <ModalBtn onClick={CloseAssetDetail}>닫기</ModalBtn>
+
       {/* 여기부터 모달온 모달 */}
       {modalonModalOpen ? (
         <ModalonModal
@@ -247,6 +261,8 @@ function AssetDetailModal({
           width="500"
           height="300"
           element={
+            // 모달 체인저로 구매 전이면 구매할 것인지 묻고, 구매 후에는 구매완료 띄움
+            // 모달 스타터로 디테일 모달 시작한 페이지부터 쭉 props 함 -> 구매완료 창이 다른 경우를 컨트롤
             (
               modalChanger?
               <DoneBuyAsset
@@ -347,19 +363,20 @@ const MiriP = styled.p`
   
 `
 const MiriImgDiv = styled.div`
-  width: 22rem;
-  height: 22rem;
+  width: 35rem;
+  height: 35rem;
   /* border: 0.1rem solid black; */
-  margin-left: 21rem;
+  margin-left: 4.75rem;
   position: absolute;
+  margin-top: 5rem;
 `
 
 const MiriImg = styled.img`
   /* float: left; */
   border-radius: 1rem;
   opacity: 0.7;
-  width: 22rem;
-  height: 22rem;
+  width: 35rem;
+  height: 35rem;
   object-fit: contain;
 `
 
@@ -375,4 +392,20 @@ const ModalBtn = styled.button`
   /* margin-left: 0.5rem; */
   margin-top: 1rem;
   margin-bottom: 1rem;
+`
+
+const UnModalBtn = styled.button`
+  background-color: #B3B3B3;
+  color: white;
+  width: 12rem;
+  height: 3rem;
+  /* border: 0.1rem solid black; */
+  border-radius: 0.5rem;
+  font-size: 1.5rem;
+  /* margin-left: 0.5rem; */
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  &:hover{
+    cursor: default;
+  }
 `

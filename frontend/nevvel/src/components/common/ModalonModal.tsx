@@ -21,7 +21,7 @@ export const ModalonModal = ({ width, height, element, setModalonModalOpen }: Mo
         {/* <ExitWrapper onClick={disableModalonModal}>Close</ExitWrapper> */}
         <Wrapper>{element}</Wrapper>
       </Container>
-      <Canvas onClick={disableModalonModal} />
+      <Canvas />
     </>
   );
 };
