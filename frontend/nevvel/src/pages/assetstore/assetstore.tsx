@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import styled from "styled-components";
 import AssetstoreBanner from "@/src/components/assetstore/AssetstoreBanner";
@@ -13,6 +13,7 @@ import ImgUpload from "@/src/components/assetstore/ImgUpload";
 import AudUpload from "@/src/components/assetstore/AudUpload";
 
 import TagData from "@/src/components/assetstore/DummyTagData.json";
+import { NewvelApi } from "@/src/api";
 
 
 function assetstore() {
@@ -38,6 +39,17 @@ function assetstore() {
   const UploadAud = () => {
     setModalChange(2)
   }
+
+  const [tagData, setTagData] = useState<Object[]>([])
+
+  useEffect(() => {
+    const getTagData = async() => {
+      const res = await NewvelApi.tagsList()
+      // setTagData(res.content)
+      console.log('이거임',res)
+    }
+    getTagData()
+  },[])
 
   const TopTenTag = TagData.content.slice(0,9)
 
