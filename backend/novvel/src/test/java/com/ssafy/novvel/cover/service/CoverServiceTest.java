@@ -173,7 +173,8 @@ class CoverServiceTest {
                 .resource(TestUtil.getMemberProfile())
                 .title(coverModifyDto.getTitle())
                 .description(coverModifyDto.getDescription())
-                .publishDate(LocalDate.of(2023, 4, 17))
+                .firstPublishDate(LocalDate.of(2023, 4, 17))
+                .lastPublishDate(LocalDate.of(2023, 4, 17))
                 .build());
 
         // when
@@ -227,7 +228,8 @@ class CoverServiceTest {
                 .member(TestUtil.getMember())
                 .title("test")
                 .description("test")
-                .publishDate(LocalDate.of(2023, 4, 17))
+                .firstPublishDate(LocalDate.of(2023, 4, 17))
+                .lastPublishDate(LocalDate.of(2023, 4, 17))
                 .build());
 
         Cover newCover = Cover.builder()
@@ -239,7 +241,8 @@ class CoverServiceTest {
             .resource(newResource)
             .title(coverModifyDto.getTitle())
             .description(coverModifyDto.getDescription())
-            .publishDate(LocalDate.of(2023, 4, 17))
+            .firstPublishDate(LocalDate.of(2023, 4, 17))
+            .lastPublishDate(LocalDate.of(2023, 4, 17))
             .build();
 
         // when
@@ -284,7 +287,8 @@ class CoverServiceTest {
                 .member(TestUtil.getMember())
                 .title("test")
                 .description("test")
-                .publishDate(LocalDate.of(2023, 4, 17))
+                .firstPublishDate(LocalDate.of(2023, 4, 17))
+                .lastPublishDate(LocalDate.of(2023, 4, 17))
                 .build());
 
         Cover newCover = Cover.builder()
@@ -296,7 +300,8 @@ class CoverServiceTest {
             .resource(newResource)
             .title(coverModifyDto.getTitle())
             .description(coverModifyDto.getDescription())
-            .publishDate(LocalDate.of(2023, 4, 17))
+            .firstPublishDate(LocalDate.of(2023, 4, 17))
+            .lastPublishDate(LocalDate.of(2023, 4, 17))
             .build();
 
         // when
