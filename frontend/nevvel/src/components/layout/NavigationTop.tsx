@@ -3,6 +3,8 @@ import Link from "next/link";
 import { useRouter } from "next/dist/client/router";
 import { AiOutlineSearch } from "react-icons/ai";
 import styled from "styled-components";
+import { loginAtom } from "@/src/store/Login";
+import { useAtomValue } from "jotai";
 import { tabletH } from "../../util/Mixin";
 import { mobile } from "../../util/Mixin";
 
@@ -12,6 +14,9 @@ function NavigationTop() {
   const searchWordHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     setWord(event.target.value);
   };
+
+  const loginStatus = useAtomValue(loginAtom);
+  // console.log(loginStatus);
 
   const router = useRouter();
   // 검색창에 키보드 입력 시
@@ -62,15 +67,22 @@ function NavigationTop() {
           <AiOutlineSearch onClick={clickResultHandler} />
         </SearchIcon>
       </SearchBar>
-      <Profile>
-        <SignIn>
-          <Link href="/login">회원가입</Link>
-        </SignIn>
-        <LogIn>
-          <Link href="/login">로그인</Link>
-        </LogIn>
-        {/* <MyPage>마이페이지</MyPage> */}
-      </Profile>
+      {loginStatus ? (
+        <Profile loginStatus={loginStatus}>
+          <MyPage>
+            <Link href="/myPage">마이페이지</Link>
+          </MyPage>
+        </Profile>
+      ) : (
+        <Profile loginStatus={loginStatus}>
+          <SignIn>
+            <Link href="/login">회원가입</Link>
+          </SignIn>
+          <LogIn>
+            <Link href="/login">로그인</Link>
+          </LogIn>
+        </Profile>
+      )}
     </Wrapper>
   );
 }
@@ -115,10 +127,10 @@ const SearchIcon = styled.div`
   cursor: pointer;
 `;
 
-const Profile = styled.div`
+const Profile = styled.div<{ loginStatus: boolean }>`
   color: ${({ theme }) => theme.color.text1};
   display: flex;
-  margin-right: 5rem;
+  margin-right: ${({ loginStatus }) => (loginStatus ? "" : "5rem")};
   width: 10rem;
   justify-content: space-between;
 

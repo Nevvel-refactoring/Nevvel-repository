@@ -10,21 +10,17 @@ import { tabletH } from "../../util/Mixin";
 import { mobile } from "../../util/Mixin";
 import { themeAtom } from "@/src/store/Theme";
 import { useAtomValue } from "jotai";
-import {useEffect} from "react"
 
 function NavigationBottom() {
   const router = useRouter();
   const value = useAtomValue(themeAtom);
-  useEffect(()=>{
-    console.log(value)
-  },[value])
 
   const genreSelectHandler = () => {
     router.push(
       {
         pathname: "/novels/genres",
         query: { genre: 1, sort: "like" },
-      },
+      }
       // `/novels/genres`
     );
   };
@@ -34,7 +30,7 @@ function NavigationBottom() {
       {
         pathname: "/novels/completed",
         query: { genre: 1, sort: "like" },
-      },
+      }
       // `/novels/completed`
     );
   };
@@ -44,7 +40,7 @@ function NavigationBottom() {
       {
         pathname: "/novels/latest",
         query: { genre: 1, sort: "like" },
-      },
+      }
       // `/novels/latest`
     );
   };
@@ -52,7 +48,11 @@ function NavigationBottom() {
   return (
     <Wrapper>
       <Link href="/">
-        {value ==="light" ?<Image src={nevvel_light} alt="Logo" width={100} height={25} />:<Image src={nevvel_dark} alt="Logo" width={100} height={25} />}
+        {value === "light" ? (
+          <Image src={nevvel_light} alt="Logo" width={100} height={25} />
+        ) : (
+          <Image src={nevvel_dark} alt="Logo" width={100} height={25} />
+        )}
       </Link>
       <Novel>
         <Genre onClick={genreSelectHandler}>장르별 소설</Genre>
