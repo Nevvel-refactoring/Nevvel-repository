@@ -50,4 +50,10 @@ public class GlobalExceptionHandler {
         e.printStackTrace();
         return new ResponseEntity<>(new ExceptionDto("권한이 없습니다.", e.getMessage()), HttpStatus.FORBIDDEN);
     }
+
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<?> badRequestException(Exception e) {
+        e.printStackTrace();
+        return new ResponseEntity<>(new ExceptionDto("잘못된 요청입니다.", e.getMessage()), HttpStatus.BAD_REQUEST);
+    }
 }

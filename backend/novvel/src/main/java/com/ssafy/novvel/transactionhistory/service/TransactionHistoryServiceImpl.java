@@ -4,6 +4,7 @@ import com.siot.IamportRestClient.IamportClient;
 import com.siot.IamportRestClient.exception.IamportResponseException;
 import com.siot.IamportRestClient.response.IamportResponse;
 import com.siot.IamportRestClient.response.Payment;
+import com.ssafy.novvel.exception.BadRequestException;
 import com.ssafy.novvel.exception.NotFoundException;
 import com.ssafy.novvel.member.entity.Member;
 import com.ssafy.novvel.member.repository.MemberRepository;
@@ -31,7 +32,7 @@ public class TransactionHistoryServiceImpl implements TransactionHistoryService{
         member = memberRepository.save(member);
         IamportResponse<Payment> irsp = paymentLookup(pointChargeDto.getImpUid());
         if(irsp.getResponse().getAmount().intValue()!=pointChargeDto.getChargePoint().intValue())
-            throw new NotFoundException("값이 다릅니다.");
+            throw new BadRequestException("값이 다릅니다.");
         historyRepository.save(new TransactionHistory(member, PointChangeType.POINT_CHARGE, pointChargeDto.getChargePoint()));
         member.setPoint(member.getPoint() + pointChargeDto.getChargePoint());
     }

@@ -12,4 +12,5 @@ public interface EpisodeService {
     void updateEpisode(Long episodeId, EpisodeRegistDto episodeRegistDto, Member member);
     Integer purchaseEpisode(EpisodePurchasingDto episodePurchasingDto, Member member);
     Page<EpisodePurchasedOnDto> getPurchasedOnEp(Member member, Pageable pageable);
+    void reservationPublished();
 }

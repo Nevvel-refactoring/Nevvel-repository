@@ -16,7 +16,9 @@ import com.ssafy.novvel.episode.entity.EpisodeStatusType;
 import com.ssafy.novvel.episode.entity.ReadEpisode;
 import com.ssafy.novvel.episode.repository.EpisodeRepository;
 import com.ssafy.novvel.episode.repository.ReadEpisodeRepository;
+import com.ssafy.novvel.exception.BadRequestException;
 import com.ssafy.novvel.exception.NotFoundException;
+import com.ssafy.novvel.exception.NotYourAuthorizationException;
 import com.ssafy.novvel.member.entity.Member;
 import com.ssafy.novvel.member.repository.MemberRepository;
 import com.ssafy.novvel.memberasset.entity.MemberAsset;
@@ -32,6 +34,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
@@ -57,12 +61,17 @@ public class EpisodeServiceImpl implements EpisodeService{
         //현재 로그인 유저가 cover 작성자인지 확인
         if (!cover.getMember().getId().equals(member.getId())){
             // 본인이 작성한 소설의 에피소드만 작성할 수 있습니다.
-            throw new NotFoundException("현재 사용자가 시리즈(Cover) 작성자와 다른 사람입니다.");
+            throw new NotYourAuthorizationException("현재 사용자가 시리즈(Cover) 작성자와 다른 사람입니다.");
         }
 
         myAssetCheck(episodeRegistDto, member);
 
         ObjectId contextId = contextService.createContext(episodeRegistDto.getContents());
+
+        if (episodeRegistDto.isReservation()) {
+            Episode episode = episodeRepository.save(new Episode(cover, episodeRegistDto, episodeRegistDto.getReservationTime(), contextId));
+            return episode.getId();
+        }
 
         Episode episode = episodeRepository.save(new Episode(cover, episodeRegistDto, contextId));
         return episode.getId();
@@ -85,20 +94,20 @@ public class EpisodeServiceImpl implements EpisodeService{
                 if (transactionHistory.isEmpty()) {
                     // 삭제된 에피소드면 못봄
                     if (episode.getStatusType().equals(EpisodeStatusType.DELETED)) {
-                        throw new NotFoundException("삭제된 episode입니다.");
+                        throw new NotYourAuthorizationException("삭제된 episode입니다.");
                     }
                     // 유료 에피소드면 못봄
                     if (episode.getPoint() > 0) {
-                        throw new NotFoundException("구매하지 않은 episode입니다.");
+                        throw new NotYourAuthorizationException("구매하지 않은 episode입니다.");
                     }
                 }
             } else {
-                throw new NotFoundException("발행되지 않은 episode입니다.");
+                throw new NotYourAuthorizationException("발행되지 않은 episode입니다.");
             }
         } else {
             // 본인 거면 삭제했을 때만 접근 불가
             if (episode.getStatusType().equals(EpisodeStatusType.DELETED)) {
-                throw new NotFoundException("삭제된 episode입니다.");
+                throw new NotYourAuthorizationException("삭제된 episode입니다.");
             }
         }
 
@@ -126,7 +135,7 @@ public class EpisodeServiceImpl implements EpisodeService{
 
         // 현재 유저가 에피소드 작성자인지 확인하는 작업 필요
         if (!episode.getCover().getMember().getId().equals(memberId)) {
-            throw new NotFoundException("현재 사용자가 시리즈(Cover) 작성자와 다른 사람입니다.");
+            throw new NotYourAuthorizationException("현재 사용자가 시리즈(Cover) 작성자와 다른 사람입니다.");
         }
         Context context = contextRepository.findById(episode.getContextId()).orElseThrow(
                 () -> new NotFoundException("Context가 없습니다(MongoDB 로직 수정 필요)."));
@@ -145,11 +154,11 @@ public class EpisodeServiceImpl implements EpisodeService{
 
 //        커버 작성자와 현재 작성자 같은지 확인
         if (!cover.getMember().getId().equals(member.getId())) {
-            throw new NotFoundException("현재 사용자가 시리즈(Cover) 작성자와 다른 사람입니다.");
+            throw new NotYourAuthorizationException("현재 사용자가 시리즈(Cover) 작성자와 다른 사람입니다.");
         }
 
         if (episode.getStatusType().equals(EpisodeStatusType.DELETED)) {
-            throw new NotFoundException("삭제된 episode는 수정할 수 없습니다.");
+            throw new NotYourAuthorizationException("삭제된 episode는 수정할 수 없습니다.");
         }
 
         myAssetCheck(episodeRegistDto, member);
@@ -158,9 +167,16 @@ public class EpisodeServiceImpl implements EpisodeService{
         episode.setPoint(episodeRegistDto.getPoint());
         // 수정중인 글을 임시저장 할 경우 새로운 임시저장 글이 생길 뿐 기존 발행 or 삭제한 게시글이 임시저장 상태가 되어선 안됨
         if (episode.getStatusType().equals(EpisodeStatusType.PUBLISHED) && episodeRegistDto.getStatusType().equals(EpisodeStatusType.TEMPORARY)) {
-            throw new NotFoundException("이미 발행된 episode는 임시저장 상태로 전환할 수 없습니다.");
+            throw new NotYourAuthorizationException("이미 발행된 episode는 임시저장 상태로 전환할 수 없습니다.");
         }
+
         episode.setStatusType(episodeRegistDto.getStatusType());
+
+        if (!episodeRegistDto.isReservation()){
+            episode.setReservationTime(null);
+        } else {
+            episode.setReservationTime(episodeRegistDto.getReservationTime());
+        }
 
         // 에러 뜨면 MongoDB 연결 확인
         Context context = contextRepository.findById(contextId).orElseThrow(
@@ -191,7 +207,7 @@ public class EpisodeServiceImpl implements EpisodeService{
         // 구매하려는 에피소드 목록의 id 리스트
         for (Long episodeId : episodeIdsGet) {
             if (episodeIds.contains(episodeId)) {
-                throw new NotFoundException("중복된 episode를 선택하였습니다.");
+                throw new BadRequestException("중복된 episode를 선택하였습니다.");
             }
             episodeIds.add(episodeId);
         }
@@ -211,10 +227,10 @@ public class EpisodeServiceImpl implements EpisodeService{
         // 하나씩 돌며 cover에 속하지 않은 episode나 이미 구입한 episode가 포함되었는지 검사하며 겸사겸사 query 대신 point 직접 합산
         for (Episode episode : episodes) {
             if (!episode.getCover().getId().equals(cover.getId())){
-                throw new NotFoundException(episode.getTitle() + "은(는) 해당 시리즈의 episode가 아닙니다.");
+                throw new BadRequestException(episode.getTitle() + "은(는) 해당 시리즈의 episode가 아닙니다.");
             } else sumPoint += episode.getPoint();
             if (!episode.getStatusType().equals(EpisodeStatusType.PUBLISHED)) {
-                throw new NotFoundException("구매할 수 없는 episode가 포함되어 있습니다.");
+                throw new BadRequestException("구매할 수 없는 episode가 포함되어 있습니다.");
             }
             Optional<TransactionHistory> transactionHistory = historyRepository.findByMemberAndEpisode(member, episode);
             if (transactionHistory.isPresent()) {
@@ -248,6 +264,18 @@ public class EpisodeServiceImpl implements EpisodeService{
         return new PageImpl<>(episodePurchasedOnDtoList, pageable, episodePurchasedPage.getTotalElements());
     }
 
+    @Override
+    @Transactional
+    public void reservationPublished() {
+        List<Episode> episodes = episodeRepository.findByReservationTimeBefore(LocalDateTime.now());
+        if (!episodes.isEmpty()) {
+            for (Episode episode : episodes) {
+                episode.setStatusType(EpisodeStatusType.PUBLISHED);
+                episode.setReservationTime(null);
+            }
+        }
+    }
+
     // episodeRegistDto(수정 or 새로 생성 시 사용) 넣으면 context 돌며 effect 돌며 모든 myAssetId 받아와
     // 하나의 배열에 저장 후 해당 배열의 요소들이 memberAsset 테이블에서 내가 가진 에셋 목록에 있는 것과
     // 같은지 확인하는 로직
@@ -273,14 +301,14 @@ public class EpisodeServiceImpl implements EpisodeService{
                         image = true;
                         episodeAssetIdSet.add(contextAffect.getAssetId());
                     } else {
-                        throw new NotFoundException("이미 IMAGE를 1회 사용했습니다.");
+                        throw new BadRequestException("이미 IMAGE를 1회 사용했습니다.");
                     }
                 } else if (contextAffect.getType().equals(AssetType.AUDIO)) {
                     if (!audio) {
                         audio = true;
                         episodeAssetIdSet.add(contextAffect.getAssetId());
                     } else {
-                        throw new NotFoundException("이미 AUDIO를 1회 사용했습니다.");
+                        throw new BadRequestException("이미 AUDIO를 1회 사용했습니다.");
                     }
                 }
             }
@@ -293,7 +321,7 @@ public class EpisodeServiceImpl implements EpisodeService{
 
         for (Long episodeAsset : episodeAssetIdSet) {
             if (!memberAssetIdSet.contains(episodeAsset)) {
-                throw new NotFoundException("소지하지 않은 asset을 사용하였습니다.");
+                throw new NotYourAuthorizationException("소지하지 않은 asset을 사용하였습니다.");
             }
         }
     }
