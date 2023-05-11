@@ -45,13 +45,13 @@ function assetstore() {
   useEffect(() => {
     const getTagData = async() => {
       const res = await NewvelApi.tagsList()
-      // setTagData(res.content)
-      console.log('이거임',res)
+      setTagData(res.data.content)
+      // console.log(res)
     }
     getTagData()
   },[])
 
-  const TopTenTag = TagData.content.slice(0,9)
+  const TopTenTag = tagData.slice(0,9)
 
   return (
     <Wrapper>
