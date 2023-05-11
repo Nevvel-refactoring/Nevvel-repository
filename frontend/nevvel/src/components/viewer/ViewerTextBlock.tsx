@@ -8,21 +8,24 @@ type ViewerTextBlockProps = {
   content: content;
   tabNumber: number;
   setEventCatch: React.Dispatch<React.SetStateAction<boolean>>;
+  interval:number;
+  
 };
 
 function ViewerTextBlock({
   content,
   tabNumber,
   setEventCatch,
+  interval
 }: ViewerTextBlockProps) {
 
   return (
-    <>{content.idx <= tabNumber && <TextBlock>{content.context}</TextBlock>}</>
+    <>{content.idx <= tabNumber && <TextBlock interval={interval}>{content.context}</TextBlock>}</>
   );
 }
 
-const TextBlock = styled.div`
+const TextBlock = styled.div<{interval:number}>`
   z-index: 100;
-  padding: 0.5rem;
+  padding:${(props)=>(props.interval)*0.5}rem;
 `;
 export default ViewerTextBlock;

@@ -17,10 +17,14 @@ function index() {
   const [eventCatch, setEventCatch] = useState(false); // tab mode 일때 이벤트 있는 경우 사용
   const [settingBox, setSettingBox] = useState(false); // 설정 box 보여 줄 때 사용
   const [writeMode, setWriteMode] = useState(false); // tab or page 모드 설정 토글
-  const [audioEventCatch, setAudioEventCatch] = useState(false);
-  // 오디오 재생
+  const [audioEventCatch, setAudioEventCatch] = useState(false);// 오디오 재생
+  const [fontStyle, setFontStyle] = useState("") //font_style 변경 ""은 기본 pretendard
+  const [fontSize, setFontSize] = useState(3)
+  const [whiteSpace, setWhiteSpace] = useState(1)
+  const [interval, setInterval] =useState(1)
   const audioRef = useRef<any>(null);
   const scrollRef = useRef<any>();
+
   useEffect(() => {
     if (EpisodeData.contents[tabNumber].event.length !== 0) {
       const events = EpisodeData.contents[tabNumber].event;
@@ -35,7 +39,7 @@ function index() {
         }
       }
     }
-    scrollRef.current.scrollTop = scrollRef.current?.scrollHeight 
+    scrollRef.current.scrollTop = scrollRef.current?.scrollHeight
     return () => {
       if (eventCatch) {
         setEventCatch(false);
@@ -58,6 +62,17 @@ function index() {
       console.log(content);
     }
   }, [audioEventCatch]);
+
+  useEffect(() => {
+    // 읽는 모드 변경 했을 때 에셋 나와 있으면 안되니까 감지하는 로직
+
+    if (audioEventCatch) {
+      setAudioEventCatch(false)
+    }
+    if (eventCatch) {
+      setEventCatch(false)
+    }
+  }, [writeMode])
 
   const clickhandler = (e: string) => {
     console.log(e);
@@ -101,6 +116,10 @@ function index() {
               <div>{EpisodeData.title}</div>
             ) : (
               <ViewerTabMain
+              fontSize={fontSize}
+                fontStyle={fontStyle}
+                whiteSpace={whiteSpace}
+                interval={interval}
                 EpisodeData={EpisodeData}
                 tabNumber={tabNumber}
                 setEventCatch={setEventCatch}
@@ -114,7 +133,15 @@ function index() {
       </SettingBtn>
       {settingBox ? (
         <>
-          <SettingBox setWriteMode={setWriteMode} />
+          <SettingBox 
+          fontSize={fontSize}
+          whiteSpace={whiteSpace}
+          interval={interval}
+          setFontStyle={setFontStyle} 
+          setWriteMode={setWriteMode}
+          setInterval={setInterval} 
+          setWhiteSpace={setWhiteSpace}
+          setFontSize={setFontSize}/>
         </>
       ) : null}
       {audioEventCatch && (
@@ -135,6 +162,7 @@ const ViewerWrapper = styled.div`
   ${mobile} {
     font-size: 12px;
   }
+  /* font-family: "Malgun Gothic"; */
 `;
 
 const HeaderContainer = styled.div`
@@ -156,13 +184,13 @@ const MainContainer = styled.div`
   ::-webkit-scrollbar {
     display: none;
   }
-  ${mobile} {
-    margin-left: 10%;
-  margin-right: 10%;  
-  }
   ${tabletH}{
     margin-left: 20%;
-  margin-right: 20%;  
+    margin-right: 20%;  
+  }
+  ${mobile} {
+    margin-left: 10%;
+    margin-right:10%;  
   }
   /* border: 1px solid black; */
 `;
@@ -171,19 +199,19 @@ const ImageEvent = styled.div`
   /* position: relative; */
   position: fixed;
   opacity: 0.7;
-  left: 15%;
+  left: 25%;
   z-index: 10;
-  width: 70%;
-  height:70%;
+  width: 600px;
+  height: 600px;
   ${tabletH}{
-  left: 15%;
-  width:80%;
-    height:80%;
+    left: 20%;
+    width:500px;
+    height:500px;
   }
   ${mobile}{
-    left:18%;
-    width:60%;
-    height:60%;
+    left:10%;
+    width:300px;
+    height:300px;
   }
 `;
 const SettingBtn = styled.button`
@@ -200,5 +228,5 @@ const SettingBtn = styled.button`
 
   }
 `;
- 
+
 export default index;
