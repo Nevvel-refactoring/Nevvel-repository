@@ -48,8 +48,8 @@ public class AssetController {
     }
 
     @PostMapping
-    public ResponseEntity<?> registAsset(@RequestPart(value = "file") MultipartFile file,
-                                         @RequestPart("assetRegistDto") AssetRegistDto assetRegistDto,
+    public ResponseEntity<?> registAsset(@RequestPart(value = "file", required = true) MultipartFile file,
+                                         @RequestPart(value = "assetRegistDto", required = true) AssetRegistDto assetRegistDto,
                                          @AuthenticationPrincipal CustomUserDetails customUserDetails) throws IOException {
 
         Member member = customUserDetails.getMember();
@@ -82,7 +82,7 @@ public class AssetController {
 
     @PostMapping("/purchasing/{assetId}")
     public ResponseEntity<?> purchaseAsset(@PathVariable("assetId") Long assetId,
-                                              @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+                                           @AuthenticationPrincipal CustomUserDetails customUserDetails) {
 
         Integer statusCode = assetService.purchaseAsset(assetId, customUserDetails.getMember());
 
