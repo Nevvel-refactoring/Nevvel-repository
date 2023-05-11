@@ -10,6 +10,8 @@ import eyes from "@/src/assets/img/eyes.png";
 import SettingBox from "@/src/components/viewer/SettingBox";
 import DummyAssetData_audio from "@/src/components/assetstore/DummyAssetData_Audio.json";
 import { mobile, tabletH } from "@/src/util/Mixin";
+import { useAtomValue } from "jotai";
+import { numAtom } from "@/src/store/ViewerScroll";
 
 function index() {
   const [headerToggle, setHeaderToggle] = useState(true); // header on/off
@@ -17,13 +19,42 @@ function index() {
   const [eventCatch, setEventCatch] = useState(false); // tab mode 일때 이벤트 있는 경우 사용
   const [settingBox, setSettingBox] = useState(false); // 설정 box 보여 줄 때 사용
   const [writeMode, setWriteMode] = useState(false); // tab or page 모드 설정 토글
-  const [audioEventCatch, setAudioEventCatch] = useState(false);// 오디오 재생
-  const [fontStyle, setFontStyle] = useState("") //font_style 변경 ""은 기본 pretendard
-  const [fontSize, setFontSize] = useState(3)
-  const [whiteSpace, setWhiteSpace] = useState(1)
-  const [interval, setInterval] =useState(1)
+  const [audioEventCatch, setAudioEventCatch] = useState(false); // 오디오 재생
+  const [fontStyle, setFontStyle] = useState(""); //font_style 변경 ""은 기본 pretendard
+  const [fontSize, setFontSize] = useState(3);
+  const [whiteSpace, setWhiteSpace] = useState(1);
+  const [interval, setInterval] = useState(1);
   const audioRef = useRef<any>(null);
   const scrollRef = useRef<any>();
+  const nowTextBlock = useAtomValue(numAtom);
+
+  useEffect(() => {
+    // console 찍었을때 content 젤 마지막 index 값이 나오고 현재 스크롤 마지막 값이 나옴..
+    if (nowTextBlock !== EpisodeData.contents.length) {
+      if (EpisodeData.contents[nowTextBlock].event.length !== 0) {
+        const events = EpisodeData.contents[nowTextBlock].event;
+        for (const event of events) {
+          if (event.type === "IMAGE") {
+            console.log("이미지당");
+            setEventCatch(true);
+          }
+          if (event.type === "AUDIO") {
+            console.log("소리당");
+            setAudioEventCatch(true);
+          }
+        }
+      }
+    }
+    return () => {
+      if (eventCatch) {
+        setEventCatch(false);
+      }
+      if (audioEventCatch) {
+        setAudioEventCatch(false);
+      }
+    };
+    console.log(nowTextBlock);
+  }, [nowTextBlock]);
 
   useEffect(() => {
     if (EpisodeData.contents[tabNumber].event.length !== 0) {
@@ -39,7 +70,7 @@ function index() {
         }
       }
     }
-    scrollRef.current.scrollTop = scrollRef.current?.scrollHeight
+    scrollRef.current.scrollTop = scrollRef.current?.scrollHeight;
     return () => {
       if (eventCatch) {
         setEventCatch(false);
@@ -67,12 +98,12 @@ function index() {
     // 읽는 모드 변경 했을 때 에셋 나와 있으면 안되니까 감지하는 로직
 
     if (audioEventCatch) {
-      setAudioEventCatch(false)
+      setAudioEventCatch(false);
     }
     if (eventCatch) {
-      setEventCatch(false)
+      setEventCatch(false);
     }
-  }, [writeMode])
+  }, [writeMode]);
 
   const clickhandler = (e: string) => {
     console.log(e);
@@ -107,16 +138,26 @@ function index() {
           </ImageEvent>
         ) : null}
         {writeMode ? (
-          <MainContainer>
-            <ViewerPageMain EpisodeData={EpisodeData} />
+          <MainContainer writeMode={writeMode}>
+            <ViewerPageMain
+              EpisodeData={EpisodeData}
+              fontSize={fontSize}
+              fontStyle={fontStyle}
+              whiteSpace={whiteSpace}
+              interval={interval}
+            />
           </MainContainer>
         ) : (
-          <MainContainer ref={scrollRef} onClick={countHandler}>
+          <MainContainer
+            writeMode={writeMode}
+            ref={scrollRef}
+            onClick={countHandler}
+          >
             {tabNumber === 0 ? (
               <div>{EpisodeData.title}</div>
             ) : (
               <ViewerTabMain
-              fontSize={fontSize}
+                fontSize={fontSize}
                 fontStyle={fontStyle}
                 whiteSpace={whiteSpace}
                 interval={interval}
@@ -133,15 +174,16 @@ function index() {
       </SettingBtn>
       {settingBox ? (
         <>
-          <SettingBox 
-          fontSize={fontSize}
-          whiteSpace={whiteSpace}
-          interval={interval}
-          setFontStyle={setFontStyle} 
-          setWriteMode={setWriteMode}
-          setInterval={setInterval} 
-          setWhiteSpace={setWhiteSpace}
-          setFontSize={setFontSize}/>
+          <SettingBox
+            fontSize={fontSize}
+            whiteSpace={whiteSpace}
+            interval={interval}
+            setFontStyle={setFontStyle}
+            setWriteMode={setWriteMode}
+            setInterval={setInterval}
+            setWhiteSpace={setWhiteSpace}
+            setFontSize={setFontSize}
+          />
         </>
       ) : null}
       {audioEventCatch && (
@@ -175,8 +217,8 @@ const HeaderContainer = styled.div`
 `;
 const MainWrapper = styled.div``;
 
-const MainContainer = styled.div`
-  height: 70vh;
+const MainContainer = styled.div<{ writeMode: boolean }>`
+  height: ${(props) => (props.writeMode ? 50 : 70)}vh;
   margin-left: 30%;
   margin-right: 30%;
   overflow-y: scroll;
@@ -184,13 +226,13 @@ const MainContainer = styled.div`
   ::-webkit-scrollbar {
     display: none;
   }
-  ${tabletH}{
+  ${tabletH} {
     margin-left: 20%;
-    margin-right: 20%;  
+    margin-right: 20%;
   }
   ${mobile} {
     margin-left: 10%;
-    margin-right:10%;  
+    margin-right: 10%;
   }
   /* border: 1px solid black; */
 `;
@@ -203,15 +245,15 @@ const ImageEvent = styled.div`
   z-index: 10;
   width: 600px;
   height: 600px;
-  ${tabletH}{
+  ${tabletH} {
     left: 20%;
-    width:500px;
-    height:500px;
+    width: 500px;
+    height: 500px;
   }
-  ${mobile}{
-    left:10%;
-    width:300px;
-    height:300px;
+  ${mobile} {
+    left: 10%;
+    width: 300px;
+    height: 300px;
   }
 `;
 const SettingBtn = styled.button`
@@ -223,9 +265,8 @@ const SettingBtn = styled.button`
   top: 80%;
   left: 90%;
   color: ${({ theme }) => theme.color.text1};
-  ${mobile}{
-    left:80%;
-
+  ${mobile} {
+    left: 80%;
   }
 `;
 
