@@ -36,6 +36,17 @@ public class AssetSearchDto {
         this.downloadCount = asset.getDownloadCount();
 
     }
+    public AssetSearchDto(Asset asset, Boolean isAvailable) {
+        this.id = asset.getId();
+        this.title = asset.getTitle();
+        this.type = asset.getType();
+        this.uploader = new UploaderDto(asset.getMember());
+        this.thumbnail = (asset.getResource() != null && asset.getResource().getThumbnailUrl() != null) ? asset.getResource().getThumbnailUrl() : "";
+        this.url = (asset.getResource() != null && asset.getResource().getUrl() != null) ? asset.getResource().getUrl() : "";
+        this.price = asset.getPoint();
+        this.downloadCount = asset.getDownloadCount();
+        this.isAvailable = isAvailable;
+    }
 
     public void addTags(Tag tag) {
         tags.add(tag);

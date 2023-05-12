@@ -179,7 +179,7 @@ public class AssetServiceImpl implements AssetService {
 
         return new PageImpl<>(
                 assets.stream()
-                        .map(AssetSearchDto::new)
+                        .map(asset -> new AssetSearchDto(asset, true))
                         .collect(Collectors.toList()),
                 pageable,
                 assetPage.getTotalPages()
