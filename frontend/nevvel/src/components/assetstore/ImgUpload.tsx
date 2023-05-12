@@ -131,7 +131,7 @@ function ImgUpload(props:assetstoreProps) {
       // 제출버튼 누르면 formdata에 데이터 집어넣기
       if (image) {
         formData.append('file', image)
-        formData.append('assetRegistDto', new Blob([JSON.stringify(jsonDatas)], { type: "application/json" }))
+        formData.append('assetRegistDto', JSON.stringify(jsonDatas))
       }
       
       // 데이터 집어넣어진 다음 모달 열기
