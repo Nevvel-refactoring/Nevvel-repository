@@ -1,19 +1,29 @@
 import React, { useEffect, useState, useRef } from "react";
+import styled from "styled-components";
+import Image from "next/image";
+import { useAtomValue } from "jotai";
+import { numAtom } from "@/src/store/ViewerScroll";
+import { useRouter } from "next/dist/client/router";
+import { useParams } from "next/navigation";
+import { GetStaticPaths, GetStaticProps } from "next";
+
+import springApi from "@/src/api";
+import { AiFillSetting } from "react-icons/ai";
+import { mobile, tabletH } from "@/src/util/Mixin";
+import { EpisodeView } from "viewer";
+
 import ViewHeader from "../../../components/viewer/ViewHeader";
 import ViewerTabMain from "../../../components/viewer/Main/ViewerTabMain";
 import ViewerPageMain from "@/src/components/viewer/Main/ViewerPageMain";
-import styled from "styled-components";
-import EpisodeData from "../../../components/viewer/DummyEpisodeData.json";
-import { AiFillSetting } from "react-icons/ai";
-import Image from "next/image";
+import Dummy_Episode from "../../../components/viewer/DummyEpisodeData.json";
+
 import eyes from "@/src/assets/img/eyes.png";
 import SettingBox from "@/src/components/viewer/SettingBox";
 import DummyAssetData_audio from "@/src/components/assetstore/DummyAssetData_Audio.json";
-import { mobile, tabletH } from "@/src/util/Mixin";
-import { useAtomValue } from "jotai";
-import { numAtom } from "@/src/store/ViewerScroll";
 
-function index() {
+function viewer() {
+  const router = useRouter();
+  const id = router.query.id;
   const [headerToggle, setHeaderToggle] = useState(true); // header on/off
   const [tabNumber, setTabNumber] = useState(0); // tab mode 일 때 사용
   const [eventCatch, setEventCatch] = useState(false); // tab mode 일때 이벤트 있는 경우 사용
@@ -27,6 +37,30 @@ function index() {
   const audioRef = useRef<any>(null);
   const scrollRef = useRef<any>();
   const nowTextBlock = useAtomValue(numAtom);
+  const [EpisodeData, setEpisodeData] = useState<EpisodeView>(Dummy_Episode);
+
+  const getViewerData = async (Id: number) => {
+    const res = await springApi.get(`/episodes/${Id}`);
+    if (res) {
+      console.log(res);
+      setEpisodeData(res.data);
+    }
+  };
+
+  useEffect(() => {
+    console.log(id);
+    if (id) {
+      const Id = Number(id);
+      console.log("router", Id);
+      getViewerData(Id);
+    } else {
+      setEpisodeData(Dummy_Episode);
+    }
+  }, [id]);
+
+  useEffect(() => {
+    console.log(EpisodeData);
+  }, [EpisodeData]);
 
   useEffect(() => {
     // console 찍었을때 content 젤 마지막 index 값이 나오고 현재 스크롤 마지막 값이 나옴..
@@ -270,4 +304,4 @@ const SettingBtn = styled.button`
   }
 `;
 
-export default index;
+export default viewer;

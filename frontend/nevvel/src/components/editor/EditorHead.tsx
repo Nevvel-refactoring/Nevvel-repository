@@ -21,6 +21,8 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
   const [saveToast, setSaveToast] = useState(false);
   const [postModalOpen, setPostModalOpen] = useState(false);
   const assetOpen = useAtomValue(assetOpenAtom);
+  const [postedEpisodeId, setPostedEpisodeId] = useState<number>();
+  
   useEffect(() => {
     console.log(episode);
   }, [episode]);
@@ -30,6 +32,15 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
       setTimeout(() => setSaveToast(false), 2000);
     }
   }, [saveToast]);
+  useEffect(()=>{
+    if (postedEpisodeId){
+      router.push({
+        pathname:"/viewer/[id]",
+        query:{ id:postedEpisodeId }
+      })
+    }
+
+  },[postedEpisodeId])
 
   const Titlehandler = (e: any) => {
     setEpisode({
@@ -54,9 +65,17 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
     setSaveToast(true);
   };
 
-  const postHandler = async() => {
-    const res = await springApi.post("/episodes",postEpisode)
-    console.log(res)
+  const postHandler = async () => {
+    // try {
+    //   const res = await springApi.post("/episodes", postEpisode);
+    //   if (res.status === 201) {
+    //     console.log(res);
+    //     setPostedEpisodeId(res.data);
+    //   }
+    // } catch (error) {
+    //   console.log(error);
+    // }
+    setPostedEpisodeId(320);
   };
 
   return (
