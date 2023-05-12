@@ -23,10 +23,12 @@ public interface CoverService {
 
     CoverInfoAndEpisodesDto getAllEpisodes(Long coverId, Member member);
 
-    List<String> updateCover(MultipartFile multipartFile, Long coverId, CoverModifyDto coverModifyDto,
+    List<String> updateCover(MultipartFile multipartFile, Long coverId,
+        CoverModifyDto coverModifyDto,
         Long userId) throws AuthenticationException, IOException;
 
-    Page<CoverWithConditions> searchCoverWithCondition(CoverSearchConditions coverSearchConditions);
+    Page<CoverWithConditions> searchCoverWithCondition(CoverSearchConditions coverSearchConditions,
+        Pageable pageable);
 
     Page<CoverPurchasedDto> getPurchasedCover(Member member, Pageable pageable);
 }

@@ -111,11 +111,7 @@ public class CoverServiceImpl implements CoverService {
 
     @Override
     public Page<CoverWithConditions> searchCoverWithCondition(
-        CoverSearchConditions coverSearchConditions) {
-
-        final int numberOfCoversPerPage = 20;
-        Pageable pageable = PageRequest.of(coverSearchConditions.getPageNum(),
-            numberOfCoversPerPage);
+        CoverSearchConditions coverSearchConditions, Pageable pageable) {
 
         return coverRepository.searchCover(coverSearchConditions, pageable);
     }

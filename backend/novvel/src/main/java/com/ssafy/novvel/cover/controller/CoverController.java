@@ -82,9 +82,9 @@ public class CoverController {
     @GetMapping()
     @Operation(summary = "소설(표지) 목록", description = "<strong>소설(표지)들을 상태와 함께 반환</strong> 합니다.")
     public ResponseEntity<Page<CoverWithConditions>> searchCover(
-        CoverSearchConditions coverSearchCriteria) {
+        CoverSearchConditions coverSearchCriteria, Pageable pageable) {
 
-        return new ResponseEntity<>(coverService.searchCoverWithCondition(coverSearchCriteria),
+        return new ResponseEntity<>(coverService.searchCoverWithCondition(coverSearchCriteria, pageable),
             HttpStatus.OK);
 
     }
