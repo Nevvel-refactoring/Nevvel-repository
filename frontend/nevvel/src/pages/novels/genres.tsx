@@ -4,6 +4,7 @@ import { useRouter } from "next/dist/client/router";
 import { useEffect } from "react";
 import styled from "styled-components";
 import axios from "axios";
+import NovelCard from "@/src/components/common/NovelCard";
 
 interface Novel {
   genre: number | string;
@@ -82,9 +83,11 @@ function GenreNovel(props: any) {
         {query.sort}
         {query.pageNum}
         <hr />
-        aa
-        {props.content.content[0].id}
-        aa
+        {/* {props.content.content[0].id}
+        {props.content.content[0].title}
+        {props.content.content[0].genre}
+        <img src={props.content.content[0].thumbnail} alt="안돼" /> */}
+
         {/* {props.name}
         {props.genre}
         {props.sort}
@@ -115,6 +118,14 @@ function GenreNovel(props: any) {
           </SortContent>
         </SortWrapper>
       </NovelTop>
+      <NovelCard
+        id={props.content.content[0].id}
+        title={props.content.content[0].title}
+        writer={props.content.content[0].writer.nickname}
+        writerId={props.content.content[0].writer.id}
+        genre={props.content.content[0].genre}
+        thumbnail={props.content.content[0].thumbnail}
+      />
       {/* <NovelLists /> */}
       {/* <NovelPagination
         nav="genres"

@@ -17,7 +17,7 @@ function NovelCard(props: Novel) {
   return (
     <Wrapper>
       {/* <Image src={props.thumbnail} alt="thumbnail" width={25} height={25} /> */}
-      <Image src={unupload} alt="thumbnail" width={148} height={222} />
+      <Image src={props.thumbnail} alt="thumbnail" width={148} height={222} />
       <NovelDesc>
         <NovelTitleDiv>
           <NovelTitle>{props.title}</NovelTitle>

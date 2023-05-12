@@ -132,22 +132,22 @@ function assetstore({ content }: any) {
   );
 }
 
-export const getStaticProps: GetServerSideProps<Props> = async(context: GetServerSidePropsContext) => {
-   // 클라이언트의 쿠키 가져오기
-   const cookie = context.req ? context.req.headers.cookie : "";
+// export const getStaticProps: GetServerSideProps<Props> = async(context: GetServerSidePropsContext) => {
+//    // 클라이언트의 쿠키 가져오기
+//    const cookie = context.req ? context.req.headers.cookie : "";
 
-  try {
-    const res = await axios.get("http://k8d1061.p.ssafy.io:8080/api/tags",{ headers: { cookie } });
-    return {
-      props: { content: res.data },
-    };
-  } catch (error) {
-    console.log(error);
-    return {
-      props: { content: "에러남" },
-    };
-  }
-}
+//   try {
+//     const res = await axios.get("http://k8d1061.p.ssafy.io:8080/api/tags",{ headers: { cookie } });
+//     return {
+//       props: { content: res.data },
+//     };
+//   } catch (error) {
+//     console.log(error);
+//     return {
+//       props: { content: "에러남" },
+//     };
+//   }
+// }
 
 export default assetstore;
 

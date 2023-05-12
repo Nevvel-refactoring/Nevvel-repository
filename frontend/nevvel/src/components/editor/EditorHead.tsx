@@ -55,7 +55,7 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
   };
 
   const postHandler = async() => {
-    const res = await springApi.post("/episode",postEpisode)
+    const res = await springApi.post("/episodes",postEpisode)
     console.log(res)
   };
 
