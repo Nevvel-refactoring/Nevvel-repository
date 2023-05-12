@@ -3,6 +3,7 @@ package com.ssafy.novvel.cover.controller;
 
 import com.ssafy.novvel.cover.dto.CoverInfoAndEpisodesDto;
 import com.ssafy.novvel.cover.dto.CoverModifyDto;
+import com.ssafy.novvel.cover.dto.CoverPurchasedDto;
 import com.ssafy.novvel.cover.dto.CoverRegisterDto;
 import com.ssafy.novvel.cover.dto.CoverSearchConditions;
 import com.ssafy.novvel.cover.dto.CoverWithConditions;
@@ -11,6 +12,7 @@ import com.ssafy.novvel.resource.service.S3Service;
 import com.ssafy.novvel.util.token.CustomUserDetails;
 import java.io.IOException;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -47,7 +49,8 @@ public class CoverController {
     }
 
     @GetMapping("/{cover-num}")
-    public ResponseEntity<CoverInfoAndEpisodesDto> getAllEpisodes(@PathVariable("cover-num") Long coverNum,
+    public ResponseEntity<CoverInfoAndEpisodesDto> getAllEpisodes(
+        @PathVariable("cover-num") Long coverNum,
         @AuthenticationPrincipal CustomUserDetails customUserDetails) {
 
         return new ResponseEntity<>(
@@ -78,5 +81,13 @@ public class CoverController {
         return new ResponseEntity<>(coverService.searchCoverWithCondition(coverSearchCriteria),
             HttpStatus.OK);
 
+    }
+
+    @GetMapping("/purchased-on")
+    public ResponseEntity<Page<CoverPurchasedDto>> getPurchasedCover(
+        @AuthenticationPrincipal CustomUserDetails customUserDetails, Pageable pageable) {
+
+        return new ResponseEntity<>(
+            coverService.getPurchasedCover(customUserDetails.getMember(), pageable), HttpStatus.OK);
     }
 }

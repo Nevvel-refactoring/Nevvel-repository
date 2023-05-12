@@ -1,18 +1,14 @@
 package com.ssafy.novvel.cover.repository;
 
-import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Predicate;
-import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.ssafy.novvel.cover.dto.CoverSearchConditions;
 import com.ssafy.novvel.cover.dto.CoverSortType;
 import com.ssafy.novvel.cover.dto.CoverWithConditions;
 import com.ssafy.novvel.cover.dto.QCoverWithConditions;
 import com.ssafy.novvel.cover.entity.CoverStatusType;
-import com.ssafy.novvel.episode.entity.EpisodeStatusType;
-import java.time.LocalDateTime;
 import java.util.List;
 import javax.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +17,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 import static com.ssafy.novvel.cover.entity.QCover.cover;
-import static com.ssafy.novvel.episode.entity.QEpisode.episode;
 
 
 @Slf4j

@@ -4,10 +4,10 @@ import com.ssafy.novvel.cover.dto.CoverSearchConditions;
 import com.ssafy.novvel.cover.dto.CoverWithConditions;
 import com.ssafy.novvel.cover.dto.CoverInfoAndEpisodesDto;
 import com.ssafy.novvel.cover.dto.CoverModifyDto;
+import com.ssafy.novvel.cover.dto.CoverPurchasedDto;
 import com.ssafy.novvel.cover.repository.CoverRepository;
 import com.ssafy.novvel.cover.dto.CoverRegisterDto;
 import com.ssafy.novvel.cover.entity.Cover;
-import com.ssafy.novvel.cover.repository.CoverRepositoryCustom;
 import com.ssafy.novvel.genre.repository.GenreRepository;
 import com.ssafy.novvel.member.entity.Member;
 import com.ssafy.novvel.resource.entity.Resource;
@@ -118,5 +118,11 @@ public class CoverServiceImpl implements CoverService {
             numberOfCoversPerPage);
 
         return coverRepository.searchCover(coverSearchConditions, pageable);
+    }
+
+    @Override
+    public Page<CoverPurchasedDto> getPurchasedCover(Member member, Pageable pageable) {
+
+        return coverRepository.findPurchasedCoverByMember(member.getId(), pageable);
     }
 }
