@@ -75,6 +75,7 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.GET,
                         "/covers",
                         "/covers/*",
+                        "/genres",
                         "/assets",
                         "/assets/search",
                         "/assets/uploader/**",
