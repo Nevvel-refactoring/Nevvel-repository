@@ -113,7 +113,7 @@ function AssetstoreAssetList() {
           modal={modalOpen}
           setModal={setModalOpen}
           width="800"
-          height="710"
+          height="700"
           element={
             <AssetDetailModal
               openModalData={openModalData}

@@ -105,7 +105,7 @@ function AssetDetailModal({
 
 
   return(
-    <div>
+    <AllDiv>
       <RowDiv>
         <audio ref={audioRef} src={`${openModalData.url}`} onEnded={AudioOn} />
         {
@@ -193,7 +193,7 @@ function AssetDetailModal({
 
       </RowDiv>
       <hr />
-      <DetailInfoP>미리보기</DetailInfoP>
+      <DetailInfoP>&nbsp;&nbsp;미리보기</DetailInfoP>
       <hr />
       {/* 미리보기 영역 클릭하면 미리보기 트리거가 0->1->2->0으로 순회 */}
       <MiriDiv onClick={MiriOperate}>
@@ -280,11 +280,18 @@ function AssetDetailModal({
           setModalonModalOpen={setModalonModalOpen}
         />
       ) : null}
-    </div>
+    </AllDiv>
   )
 }
 
 export default AssetDetailModal
+
+const AllDiv = styled.div`
+  width: 50rem;
+  height: 41rem;
+  overflow-y: scroll;
+  padding-left: 1rem;
+`
 
 const RowDiv = styled.div`
   display: flex;
@@ -350,25 +357,34 @@ const MiriDiv = styled.div`
   border-radius: 1rem;
   margin-top: 1rem;
   margin-bottom: 1rem;
+  margin-left: 1.5rem;
+  position: relative;
+`
+
+const MiriClickDiv = styled.div`
+  
 `
 
 const MiriPDiv = styled.div`
   padding: 1rem;
   font-size: 1.4rem;
   position: relative;
-  z-index: 999;
+  /* z-index: 999; */
 `
 
 const MiriP = styled.p`
   
 `
 const MiriImgDiv = styled.div`
-  width: 35rem;
-  height: 35rem;
+  width: 45rem;
+  height: 45rem;
   /* border: 0.1rem solid black; */
-  margin-left: 4.75rem;
+  /* margin-left: 4.75rem; */
   position: absolute;
-  margin-top: 5rem;
+  /* margin-top: 5rem; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `
 
 const MiriImg = styled.img`

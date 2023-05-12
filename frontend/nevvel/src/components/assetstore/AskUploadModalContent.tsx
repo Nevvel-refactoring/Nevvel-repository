@@ -4,44 +4,40 @@ import styled from "styled-components";
 
 type ModalonModalProps = {
   setModalonModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setModalChanger: React.Dispatch<React.SetStateAction<boolean>>;
-  modalStarter: boolean;
+  setAxiosTrigger: React.Dispatch<React.SetStateAction<boolean|null>>;
+  setFormDataClear: React.Dispatch<React.SetStateAction<boolean|null>>;
 }
 
-function DoneBuyAsset({setModalonModalOpen, setModalChanger, modalStarter} : ModalonModalProps) {
+function AskUploadModalContent({setModalonModalOpen, setAxiosTrigger, setFormDataClear} : ModalonModalProps) {
 
+  const UploadAsset = () => {
+    setAxiosTrigger(true)
+  }
 
   const CloseBuyModal = () => {
+    setFormDataClear(true)
     setModalonModalOpen(false)
-    setModalChanger(false)
+    // formdata 초기화 시그널 주기
   }
 
   return(
     <div>
       <ColDiv>
         <AskP>
-          에셋 구매가 완료되었습니다
+          에셋을 업로드하시겠습니까?
         </AskP>
-        {
-          modalStarter?
-          <RowDiv>
-            {/* 제출버튼 */}
-            <BuyBtn>구매한 에셋 보기</BuyBtn>
-            {/* 닫기버튼 */}
-            <ModalCloseBtn onClick={CloseBuyModal}>에셋 계속 보기</ModalCloseBtn>
-          </RowDiv>
-          :
-          <RowDiv>
-            {/* 닫기버튼 */}
-            <ModalCloseBtn onClick={CloseBuyModal}>확인</ModalCloseBtn>
-          </RowDiv>
-        }
+        <RowDiv>
+          {/* 제출버튼 */}
+            <BuyBtn onClick={UploadAsset}>업로드</BuyBtn>
+          {/* 닫기버튼 */}
+          <ModalCloseBtn onClick={CloseBuyModal}>취소</ModalCloseBtn>
+        </RowDiv>
       </ColDiv>
     </div>
   )
 }
 
-export default DoneBuyAsset
+export default AskUploadModalContent
 
 
 const ColDiv = styled.div`

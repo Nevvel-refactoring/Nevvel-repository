@@ -3,11 +3,29 @@ import { useState, useRef } from "react";
 import styled from "styled-components";
 import TagSearchBar from "./TagSearchBar";
 
+import { ModalonModal } from "../common/ModalonModal";
+import AskUploadModalContent from "./AskUploadModalContent";
+
+import springApi from "@/src/api";
+
 
 type assetstoreProps = {
   modalOpen: boolean;
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
+
+// type TagType = {
+//   tagName: string,
+// }
+
+type ImgType = {
+  type: string,
+  title: string,
+  description: string,
+  price: number,
+  tags: string[],
+}
+
 
 function ImgUpload(props:assetstoreProps) {
 
@@ -23,11 +41,12 @@ function ImgUpload(props:assetstoreProps) {
     // console.log(image)
   };
 
+  // 이미지 들어오는지 테스트
+  // useEffect(() => {
+  //   console.log('이미지 들어옴', image)
+  //   // console.log('ref',fileInputRef)
+  // },[image])
 
-  useEffect(() => {
-    console.log('이미지 들어옴', image)
-    // console.log('ref',fileInputRef)
-  },[image])
 
   // 이미지 파일 삭제
   const DeleteImg = () => {
@@ -74,27 +93,101 @@ function ImgUpload(props:assetstoreProps) {
   }
 
 
-  // 제출버튼 트리거
-  const [submitBtnTrigger, setSubmitBtnTrigger] = useState(0)
+  // 전체 JsonData
+  const [jsonDatas, setJasonDatas] = useState<ImgType>({
+    type: "",
+    title: "",
+    description: "",
+    price: 0,
+    tags: [""],
+  })
 
-  // 닫기 버튼
-  const CloseAssetUpload = () => {
-    props.setModalOpen(false)
-  }
-
+  
   // 제출버튼
-  const SubmitAsset = () => {
-    // axios통신하기
-    console.log(image, title, description, price, selectTag)
+  
+  // // 제출버튼으로 모달 위의 모달 열기
+  const [modalonModalOpen, setModalonModalOpen] = useState<boolean>(false)
+
+  // formData 정의
+  const [formData, setFormData] = useState(new FormData());
+  
+  const SubmitAsset = async () => {
+    try{
+      // 들어오는지 테스트
+      console.log(image, title, description, price, selectTag)
+
+      // 태그 리스트 객체화
+      // const tagOjectList = selectTag.map((tag) => ({ tagName : tag }))
+      
+      // jsonDatas에 json 집어넣기
+      setJasonDatas({
+        type: "IMAGE",
+        title: title,
+        description: description,
+        price: price,
+        tags: selectTag,
+      })
+      
+      // 제출버튼 누르면 formdata에 데이터 집어넣기
+      if (image) {
+        formData.append('file', image)
+        formData.append('assetRegistDto',JSON.stringify(jsonDatas))
+      }
+      
+      // 데이터 집어넣어진 다음 모달 열기
+      setModalonModalOpen(true)
+      console.log(formData)
+      
+    }
+    catch (error) {
+      alert('업로드 과정에서 문제가 발생하였습니다.')
+    }
   }
+
+  // 모달에서 제출 버튼 누르면 시그널 받아서 axios
+  const [axiosTrigger, setAxiosTrigger] = useState<boolean|null>(null)
+
+  useEffect(() => {
+    springApi.post("/assets", formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    }).then(res => {
+      console.log(res.data)
+    }).catch(err => {
+      console.log("error")
+    })
+    setAxiosTrigger(null)
+  },[axiosTrigger])
+
+  // 모달에서 취소버튼 누르면 모달 닫으면서 formdata 초기화
+  const [formDataClear, setFormDataClear] = useState<boolean|null>(null)
+
+  useEffect(() => {
+    setFormData(new FormData())
+    setFormDataClear(null)
+  },[formDataClear])
 
   // 제출버튼 비활성화
   const UnsubmitAsset = () => {
-    alert("에셋을 등록해주세요.")
-    // setSubmitBtnTrigger(1)
+    alert("에셋 정보를 모두 입력해주세요.")
+    
+    // 테스트 끝나면 이거 지우기
+    console.log(formData)
+    setModalonModalOpen(true)
   }
-
-
+  
+  
+    // 닫기 버튼
+    const CloseAssetUpload = () => {
+      props.setModalOpen(false)
+    }
+  
+  // const OpenModalonModal = () => {
+    //   setModalonModalOpen(true)
+    // }
+    
+    
   return(
     <ColDiv>
       <p>이미지 에셋 업로드</p>
@@ -107,6 +200,7 @@ function ImgUpload(props:assetstoreProps) {
           <ImgUploadLabel>
             <ImgUploadInput
               type="file"
+              accept=".jpg, .jpeg, .png, .gif"
               onChange={handleImageChange}
               ref={fileInputRef}
             />
@@ -184,6 +278,23 @@ function ImgUpload(props:assetstoreProps) {
         {/* 닫기버튼 */}
         <ModalCloseBtn onClick={CloseAssetUpload}>닫기</ModalCloseBtn>
       </RowDiv>
+
+      {/* 여기부터 모달온 모달 */}
+      {modalonModalOpen ? (
+        <ModalonModal
+          modal={modalonModalOpen}
+          width="500"
+          height="300"
+          element={
+            <AskUploadModalContent
+              setModalonModalOpen={setModalonModalOpen}
+              setAxiosTrigger={setAxiosTrigger}
+              setFormDataClear={setFormDataClear}
+            />
+          }
+          setModalonModalOpen={setModalonModalOpen}
+        />
+      ) : null}
     </ColDiv>
   )
 }
