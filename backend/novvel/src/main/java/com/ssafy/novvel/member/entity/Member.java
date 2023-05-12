@@ -2,11 +2,7 @@ package com.ssafy.novvel.member.entity;
 
 import com.ssafy.novvel.resource.entity.Resource;
 import com.ssafy.novvel.util.BaseEntity;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -26,6 +22,7 @@ public class Member extends BaseEntity {
     private Resource profile;
 
     @Size(min = 4, max = 20)
+    @Setter
     private String nickname;
 
     @Email
@@ -41,6 +38,7 @@ public class Member extends BaseEntity {
     private String refreshToken;
 
     @PositiveOrZero
+    @Setter
     private Long point;
 
 

@@ -1,7 +1,16 @@
+
+buildscript {
+    ext {
+        queryDslVersion = "5.0.0"
+    }
+}
 plugins {
     id 'java'
     id 'org.springframework.boot' version '2.7.10'
     id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+    //querydsl 추가
+    id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
+    id 'jacoco'
 }
 
 group = 'com.ssafy'
@@ -16,6 +25,7 @@ configurations {
 
 repositories {
     mavenCentral()
+    maven { url 'https://jitpack.io' } //결제 검증 때문에 추가 1
 }
 
 dependencies {
@@ -36,6 +46,7 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
 
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+    implementation 'com.github.iamport:iamport-rest-client-java:0.2.21' //결제 검증 때문에 추가 2
 
     implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2'
@@ -49,7 +60,15 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
     // https://mvnrepository.com/artifact/org.springframework.security/spring-security-test
     testImplementation 'org.springframework.security:spring-security-test'
+    // https://mvnrepository.com/artifact/com.h2database/h2
+    testImplementation 'com.h2database:h2:2.1.214'
 
+    //querydsl
+    implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
+    implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
+
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
 
 }
 
@@ -68,4 +87,24 @@ task copyPrivate(type: Copy) {
         include "*.yml"
         into "src/test/resources"
     }
+}
+
+//querydsl 추가 시작
+def querydslDir = "$buildDir/generated/querydsl"
+
+querydsl {
+    jpa = true
+    querydslSourcesDir = querydslDir
+}
+sourceSets {
+    main.java.srcDir querydslDir
+}
+compileQuerydsl{
+    options.annotationProcessorPath = configurations.querydsl
+}
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+    querydsl.extendsFrom compileClasspath
 }
