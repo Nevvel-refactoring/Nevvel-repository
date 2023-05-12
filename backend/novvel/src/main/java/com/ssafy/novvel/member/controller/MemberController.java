@@ -6,6 +6,8 @@ import com.ssafy.novvel.member.dto.response.MemberInfoDto;
 import com.ssafy.novvel.member.service.MemberService;
 import com.ssafy.novvel.util.token.CustomUserDetails;
 import java.io.IOException;
+
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -27,6 +29,7 @@ public class MemberController {
     }
 
     @GetMapping()
+    @Operation(summary = "멤버 정보", description = "<strong>사용자의 정보를 조회</strong> 합니다.")
     public ResponseEntity<MemberInfoDto> getMemberInfo(
         @AuthenticationPrincipal CustomUserDetails customUserDetails) {
 
@@ -35,6 +38,7 @@ public class MemberController {
     }
 
     @PutMapping("/signup")
+    @Operation(summary = "멤버 등록", description = "<strong>사용자의 정보 입력</strong> 합니다.")
     public ResponseEntity<?> registryMemberInfo(MultipartFile multipartFile,
         MemberInfoRegistDto memberInfoRegistDto,
         @AuthenticationPrincipal CustomUserDetails customUserDetails) throws IOException {

@@ -8,6 +8,7 @@ import com.ssafy.novvel.asset.service.AssetService;
 import com.ssafy.novvel.member.entity.Member;
 import com.ssafy.novvel.util.ControllerUtils;
 import com.ssafy.novvel.util.token.CustomUserDetails;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -30,6 +31,7 @@ public class AssetController {
     private final AssetService assetService;
 
     @GetMapping
+    @Operation(summary = "에셋 검색", description = "에셋을 <strong>검색</strong> 합니다.")
     public ResponseEntity<?> searhAsset(AssetFilterDto assetFilterDto,
                                         @AuthenticationPrincipal Object principal,
                                         Pageable pageable) {
@@ -42,6 +44,7 @@ public class AssetController {
     }
 
     @GetMapping("/search")
+    @Operation(summary = "에셋 키워드 검색", description = "에셋을 <strong>키워드로 검색</strong> 합니다.")
     public ResponseEntity<Page> searchAssetByKeywordAndTags(AssetSearchReqKeywordTagDto assetSearchReqKeywordTagDto,
                                                             @AuthenticationPrincipal Object principal,
                                                             Pageable pageable) {
@@ -51,6 +54,7 @@ public class AssetController {
     }
 
     @PostMapping
+    @Operation(summary = "에셋 등록", description = "에셋을 <strong>파일과 함께 등록</strong> 합니다.")
     public ResponseEntity<?> registAsset(@RequestPart(value = "file", required = true) MultipartFile file,
                                          @RequestPart(value = "assetRegistDto", required = true) AssetRegistDto assetRegistDto,
                                          @AuthenticationPrincipal CustomUserDetails customUserDetails) throws IOException {
@@ -62,6 +66,7 @@ public class AssetController {
     }
 
     @PutMapping("/{assetId}")
+    @Operation(summary = "에셋 수정", description = "등록된 에셋을 <strong>수정</strong> 합니다.")
     public ResponseEntity<?> updateAsset(@PathVariable("assetId") Long id,
                                          @RequestBody AssetRegistDto assetRegistDto,
                                          @AuthenticationPrincipal CustomUserDetails customUserDetails) {
@@ -73,6 +78,7 @@ public class AssetController {
     }
 
     @GetMapping("/uploader/{memberId}")
+    @Operation(summary = "member_id가 등록한 에셋을 반환")
     public ResponseEntity<Page<AssetSearchDto>> searchByMemberId(@PathVariable("memberId") Long memberId,
                                                                  @AuthenticationPrincipal Object principal,
                                                                  Pageable pageable) {
@@ -84,6 +90,7 @@ public class AssetController {
     }
 
     @PostMapping("/purchasing/{assetId}")
+    @Operation(summary = "에셋 구매", description = "등록된 에셋을 <strong>asset Id를 통해 구매</strong> 합니다.")
     public ResponseEntity<?> purchaseAsset(@PathVariable("assetId") Long assetId,
                                            @AuthenticationPrincipal CustomUserDetails customUserDetails) {
 
@@ -93,6 +100,7 @@ public class AssetController {
     }
 
     @GetMapping("/purchased-on")
+    @Operation(summary = "구매한 에셋 보기", description = "<strong>내가 구매한 에셋</strong>을 반환 합니다.")
     public ResponseEntity<Page<AssetSearchDto>> myAssets(@AuthenticationPrincipal CustomUserDetails customUserDetails,
                                                          Pageable pageable) {
 
