@@ -1,6 +1,5 @@
 package com.ssafy.novvel.cover.repository;
 
-import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Predicate;
@@ -24,7 +23,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.parameters.P;
 
 import static com.ssafy.novvel.cover.entity.QCover.cover;
 import static com.ssafy.novvel.episode.entity.QEpisode.episode;
@@ -65,22 +63,14 @@ public class CoverRepositoryCustomImpl implements CoverRepositoryCustom {
             .limit(pageable.getPageSize())
             .fetch();
 
-        Long count = countQuery.select(cover.id.count())
+        Long count = countQuery.select(cover.count())
             .from(cover)
-            .leftJoin(cover.resource)
-            .fetchJoin()
-            .leftJoin(cover.member)
-            .fetchJoin()
-            .leftJoin(cover.genre)
-            .fetchJoin()
             .where(
                 checkStatus(coverSearchConditions.getStatus()),
                 checkGenre(coverSearchConditions.getGenre()),
                 cover.firstPublishDate.isNotNull()
             )
             .orderBy(order(coverSearchConditions.getSorttype()))
-            .offset(pageable.getOffset())
-            .limit(pageable.getPageSize())
             .fetchOne();
 
         return new PageImpl<>(
