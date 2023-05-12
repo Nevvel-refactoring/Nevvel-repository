@@ -108,8 +108,8 @@ class CoverServiceTest {
 
         // when
         Mockito.doReturn(given).when(coverRepository).findById(1L);
-        Mockito.doReturn(list).when(coverRepository).findEpisodesInfoDto(1L, member.getId());
-        CoverInfoAndEpisodesDto result = coverService.getAllEpisodes(1L, member.getId());
+        Mockito.doReturn(list).when(coverRepository).findEpisodesInfoDto(given.get(), member);
+        CoverInfoAndEpisodesDto result = coverService.getAllEpisodes(1L, member);
 
         // then
         Assertions.assertThat(result.getTitle()).isEqualTo(expect.getTitle());
@@ -195,7 +195,7 @@ class CoverServiceTest {
 
         // when
         Mockito.doReturn(given).when(coverRepository).findById(1L);
-        Assertions.assertThatThrownBy(() -> coverService.getAllEpisodes(1L, member.getId()))
+        Assertions.assertThatThrownBy(() -> coverService.getAllEpisodes(1L, member))
             .isInstanceOf(NullPointerException.class);
 
     }

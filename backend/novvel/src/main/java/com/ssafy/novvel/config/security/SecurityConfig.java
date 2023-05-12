@@ -74,6 +74,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(authorize -> authorize
                 .antMatchers(HttpMethod.GET,
                         "/covers",
+                        "/covers/*"
                         "/assets",
                         "/assets/search",
                         "/assets/uploader/**",

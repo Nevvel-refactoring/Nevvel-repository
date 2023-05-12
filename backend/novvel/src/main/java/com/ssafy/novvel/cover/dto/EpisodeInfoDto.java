@@ -1,5 +1,6 @@
 package com.ssafy.novvel.cover.dto;
 
+import com.querydsl.core.annotations.QueryProjection;
 import com.ssafy.novvel.transactionhistory.entity.PointChangeType;
 import java.time.LocalDateTime;
 import javax.validation.constraints.NotNull;
@@ -15,19 +16,20 @@ import lombok.NoArgsConstructor;
 public class EpisodeInfoDto {
 
     @NotNull
-    private final Long id;
+    private Long id;
 
     @PositiveOrZero
-    private final Long point;
+    private Long point;
 
     @PositiveOrZero
     private Long viewCount;
 
-    private final LocalDateTime uploadedDateTime;
+    private LocalDateTime uploadedDateTime;
 
-    private final Boolean isPurchased;
-    private final Boolean isRead;
+    private Boolean isPurchased;
+    private Boolean isRead;
 
+    @QueryProjection
     public EpisodeInfoDto(Long id, Long point, Long viewCount, LocalDateTime localDateTime,
         PointChangeType pointChangeType, Boolean isRead) {
         this.id = id;
@@ -36,5 +38,13 @@ public class EpisodeInfoDto {
         this.uploadedDateTime = localDateTime;
         this.isPurchased = PointChangeType.BUY_EPISODE.equals(pointChangeType);
         this.isRead = isRead;
+    }
+
+    @QueryProjection
+    public EpisodeInfoDto(Long id, Long point, Long viewCount, LocalDateTime localDateTime) {
+        this.id = id;
+        this.point = point;
+        this.viewCount = viewCount;
+        this.uploadedDateTime = localDateTime;
     }
 }

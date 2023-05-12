@@ -4,9 +4,10 @@ package com.ssafy.novvel.cover.controller;
 import com.ssafy.novvel.cover.dto.*;
 import com.ssafy.novvel.cover.service.CoverService;
 import com.ssafy.novvel.resource.service.S3Service;
+import com.ssafy.novvel.util.ControllerUtils;
 import com.ssafy.novvel.util.token.CustomUserDetails;
 import java.io.IOException;
-
+import lombok.extern.slf4j.Slf4j;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+@Slf4j
 @RestController
 @RequestMapping("/covers")
 public class CoverController {
@@ -50,10 +52,13 @@ public class CoverController {
     @Operation(summary = "소설(표지)의 에피소드 반환", description = "소설(표지)의 <strong>에피소드를 반환</strong> 합니다.")
     public ResponseEntity<CoverInfoAndEpisodesDto> getAllEpisodes(
         @PathVariable("cover-num") Long coverNum,
-        @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        @AuthenticationPrincipal Object principal) {
+
+        log.info(String.valueOf(principal.getClass()));
 
         return new ResponseEntity<>(
-            coverService.getAllEpisodes(coverNum, customUserDetails.getId()), HttpStatus.OK);
+            coverService.getAllEpisodes(coverNum, ControllerUtils.isCustomUserDetails(principal)),
+            HttpStatus.OK);
     }
 
     @PutMapping("/{cover-num}")

@@ -12,6 +12,7 @@ import com.ssafy.novvel.genre.repository.GenreRepository;
 import com.ssafy.novvel.member.entity.Member;
 import com.ssafy.novvel.resource.entity.Resource;
 import com.ssafy.novvel.resource.service.ResourceService;
+import com.ssafy.novvel.util.token.CustomUserDetails;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +55,7 @@ public class CoverServiceImpl implements CoverService {
     }
 
     @Override
-    public CoverInfoAndEpisodesDto getAllEpisodes(Long coverId, Long memberId) {
+    public CoverInfoAndEpisodesDto getAllEpisodes(Long coverId, Member member) {
 
         Cover cover = coverRepository.findById(coverId).orElseThrow(NullPointerException::new);
         CoverInfoAndEpisodesDto coverInfoAndEpisodesDto = new CoverInfoAndEpisodesDto();
@@ -62,8 +63,7 @@ public class CoverServiceImpl implements CoverService {
         coverInfoAndEpisodesDto.setDescription(cover.getDescription());
         coverInfoAndEpisodesDto.setGenreName(cover.getGenre().getName());
 
-        coverInfoAndEpisodesDto.setEpisodes(coverRepository.findEpisodesInfoDto(coverId, memberId));
-
+        coverInfoAndEpisodesDto.setEpisodes(coverRepository.findEpisodesInfoDto(cover, member));
         return coverInfoAndEpisodesDto;
     }
 

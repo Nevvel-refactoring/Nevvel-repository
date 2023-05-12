@@ -1,23 +1,35 @@
 package com.ssafy.novvel.cover.repository;
 
+import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.ssafy.novvel.cover.dto.CoverSearchConditions;
 import com.ssafy.novvel.cover.dto.CoverSortType;
 import com.ssafy.novvel.cover.dto.CoverWithConditions;
+import com.ssafy.novvel.cover.dto.EpisodeInfoDto;
 import com.ssafy.novvel.cover.dto.QCoverWithConditions;
+import com.ssafy.novvel.cover.dto.QEpisodeInfoDto;
+import com.ssafy.novvel.cover.entity.Cover;
 import com.ssafy.novvel.cover.entity.CoverStatusType;
+import com.ssafy.novvel.episode.entity.EpisodeStatusType;
+import com.ssafy.novvel.member.entity.Member;
+import com.ssafy.novvel.transactionhistory.entity.PointChangeType;
 import java.util.List;
 import javax.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.parameters.P;
 
 import static com.ssafy.novvel.cover.entity.QCover.cover;
-
+import static com.ssafy.novvel.episode.entity.QEpisode.episode;
+import static com.ssafy.novvel.episode.entity.QReadEpisode.readEpisode;
+import static com.ssafy.novvel.transactionhistory.entity.QTransactionHistory.transactionHistory;
 
 @Slf4j
 public class CoverRepositoryCustomImpl implements CoverRepositoryCustom {
@@ -57,6 +69,21 @@ public class CoverRepositoryCustomImpl implements CoverRepositoryCustom {
             pageable, content.size());
     }
 
+    @Override
+    public List<EpisodeInfoDto> findEpisodesInfoDto(Cover cover, Member member) {
+
+        JPAQuery<EpisodeInfoDto> query = new JPAQuery<>(entityManager);
+        checkMemberForSelect(query, member);
+        query.from(episode);
+        checkMemberForJoin(query, member);
+        query.where(
+            episode.cover.id.eq(cover.getId()),
+            checkMemberForWhere(cover.getMember(), member)
+        );
+
+        return query.fetch();
+    }
+
     private Predicate checkStatus(CoverStatusType coverStatusType) {
         switch (coverStatusType) {
             case FINISHED:
@@ -88,4 +115,53 @@ public class CoverRepositoryCustomImpl implements CoverRepositoryCustom {
                 return new OrderSpecifier<>(Order.DESC, cover.viewCount.coalesce(0L));
         }
     }
+
+    private void checkMemberForSelect(JPAQuery<EpisodeInfoDto> query, Member member) {
+        if (member == null) {
+            query.select(new QEpisodeInfoDto(episode.id, episode.point, episode.viewCount,
+                episode.publishedDate));
+        } else {
+            query.select(new QEpisodeInfoDto(episode.id, episode.point, episode.viewCount,
+                episode.publishedDate, transactionHistory.pointChangeType,
+                readEpisode.member.id.isNotNull()));
+        }
+    }
+
+    private void checkMemberForJoin(JPAQuery<EpisodeInfoDto> query, Member member) {
+        if (member != null) {
+            query
+                .leftJoin(readEpisode)
+                .on(
+                    readEpisode.episode.eq(episode)
+                        .and(readEpisode.member.id.eq(member.getId()))
+                )
+                .leftJoin(transactionHistory)
+                .on(
+                    transactionHistory.episode.eq(episode)
+                        .and(transactionHistory.member.id.eq(member.getId()))
+                );
+        }
+    }
+
+    private Predicate checkMemberForWhere(Member writer, Member member) {
+        if (member == null) {
+            return episode.statusType.ne(EpisodeStatusType.TEMPORARY);
+        }
+
+        BooleanExpression booleanExpression = new CaseBuilder().when(
+            (transactionHistory.id.isNull()
+                .or(transactionHistory.pointChangeType.ne(PointChangeType.BUY_EPISODE)))
+                .and(episode.statusType.eq(EpisodeStatusType.DELETED)))
+            .then(true)
+            .otherwise(false)
+            .eq(false);
+
+        if(!writer.getId().equals(member.getId())) {
+            booleanExpression.and(episode.statusType.ne(EpisodeStatusType.TEMPORARY));
+        }
+
+        return booleanExpression;
+
+    }
+
 }
