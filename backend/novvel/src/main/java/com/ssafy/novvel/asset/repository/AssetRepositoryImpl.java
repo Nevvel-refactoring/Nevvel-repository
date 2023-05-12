@@ -5,6 +5,7 @@ import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.novvel.asset.dto.AssetFilterDto;
@@ -50,19 +51,15 @@ public class AssetRepositoryImpl implements AssetReposiotryCustom {
     @Transactional
     public Page<AssetSearchDto> searchAsset(AssetFilterDto assetFilterDto, Member searchMember, Pageable pageable) {
         log.info("run searchAsset method");
-        em.merge(searchMember);
+        if (searchMember != null) {
+            em.merge(searchMember);
+        }
         List<OrderSpecifier> ORDERS = getAllOrderSpecifiers(pageable);
         QAsset qAsset = asset;
         QMemberAsset qMemberAsset = memberAsset;
         List<Tuple> tuples = queryFactory
                 .select(qAsset,
-                        ExpressionUtils.as(JPAExpressions
-                                        .select(qMemberAsset)
-                                        .from(memberAsset)
-                                        .where(
-                                                qMemberAsset.asset.eq(qAsset),
-                                                qMemberAsset.member.eq(searchMember)
-                                        ).exists()
+                        ExpressionUtils.as(isAvailable(qMemberAsset,qAsset,searchMember)
                                 , "isAvailable")
                 )
                 .from(asset)
@@ -94,6 +91,26 @@ public class AssetRepositoryImpl implements AssetReposiotryCustom {
         return result;
     }
 
+    private BooleanExpression isAvailable(QMemberAsset qMemberAsset,QAsset qAsset, Member searchMember){
+        if(searchMember ==null){
+            return Expressions.asBoolean(false);
+        }
+        return JPAExpressions
+                .select(qMemberAsset)
+                .from(qMemberAsset)
+                .where(
+                        qMemberAsset.asset.eq(qAsset),
+                        findMemberAssetByMember(qMemberAsset, searchMember)
+                ).exists();
+    }
+
+    private BooleanExpression findMemberAssetByMember(QMemberAsset qMemberAsset, Member searchMember) {
+        if (searchMember == null) {
+            return null;
+        }
+        return qMemberAsset.member.eq(searchMember);
+    }
+
     private BooleanExpression checkAssetType(AssetType assetType) {
         if (assetType == null) {
             return null;
@@ -102,7 +119,7 @@ public class AssetRepositoryImpl implements AssetReposiotryCustom {
     }
 
     private BooleanExpression searchType(SearchType searchType, Member member, QAsset qAsset) {
-        if (searchType == null || searchType == SearchType.ALL) {
+        if (searchType == null || searchType == SearchType.ALL || member == null) {
             return null;
         }
 
@@ -138,19 +155,16 @@ public class AssetRepositoryImpl implements AssetReposiotryCustom {
     @Transactional
     public Page<AssetSearchDto> searchAssetByKeywordAndTags(AssetSearchReqKeywordTagDto reqKeywordTagDto, Member searchMember, Pageable pageable) {
         log.info("run searchAssetByKeywordAndTags method");
-        em.merge(searchMember);
+        if (searchMember != null) {
+            em.merge(searchMember);
+        }
         List<OrderSpecifier> ORDERS = getAllOrderSpecifiers(pageable);
         QAsset qAsset = asset;
         QMemberAsset qMemberAsset = memberAsset;
         List<Tuple> tuples = queryFactory
                 .select(qAsset,
-                        ExpressionUtils.as(JPAExpressions
-                                        .select(qMemberAsset)
-                                        .from(memberAsset)
-                                        .where(
-                                                qMemberAsset.asset.eq(qAsset),
-                                                qMemberAsset.member.eq(searchMember)
-                                        ).exists()
+                        ExpressionUtils.as(
+                                isAvailable(qMemberAsset,qAsset,searchMember)
                                 , "isAvailable")
                 )
                 .from(asset)
