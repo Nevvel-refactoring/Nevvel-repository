@@ -65,7 +65,7 @@ export const NewvelApi = {
 
   // DB에 있는 전체 장르 목록 조회
   allGenres: () =>
-    springApi.get("/genre"),
+    springApi.get("/genres"),
 
 
   // tags

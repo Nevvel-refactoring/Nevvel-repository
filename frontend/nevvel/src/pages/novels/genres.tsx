@@ -4,17 +4,55 @@ import { useRouter } from "next/dist/client/router";
 import { useEffect } from "react";
 import styled from "styled-components";
 import axios from "axios";
+import Image from "next/image";
+import nevvel_m_dark from "../../assets/img/nevvel_m_dark.png";
 import NovelCard from "@/src/components/common/NovelCard";
 
 interface Novel {
-  genre: number | string;
-  sort: string;
-  name: string;
-  pageNum: number | string;
+  content: {
+    id: number;
+    title: string;
+    status: string;
+    thumbnail: string;
+    genre: string;
+    writer: {
+      id: number;
+      nickname: string;
+    };
+    isUploaded: boolean;
+    isNew: boolean;
+  }[];
+  pageable: {
+    sort: {
+      sorted: boolean;
+      unsorted: boolean;
+      empty: boolean;
+    };
+    pageSize: number;
+    pageNumber: number;
+    offset: number;
+    paged: boolean;
+    unpaged: boolean;
+  };
+  totalPages: number;
+  totalElements: number;
+  last: boolean;
+  number: number;
+  sort: {
+    sorted: boolean;
+    unsorted: boolean;
+    empty: boolean;
+  };
+  size: number;
+  numberOfElements: number;
+  first: boolean;
+  empty: boolean;
 }
 
-// function GenreNovel(props: Novel) {
-function GenreNovel(props: any) {
+function GenreNovel(props: {
+  content: Novel;
+  url: { genre: number; sort: string; name: string; pageNum: number };
+}) {
   // console.log(props);
   const { query } = useRouter();
 
@@ -22,7 +60,6 @@ function GenreNovel(props: any) {
   const router = useRouter();
   useEffect(() => {
     if (query.genre == undefined || query.genre == "") {
-      // console.log(1);
       router.push(
         {
           pathname: `/novels/genres`,
@@ -37,7 +74,6 @@ function GenreNovel(props: any) {
   // 세부 장르를 전체로 하는 router 다시 보내기
   useEffect(() => {
     if (query.name == undefined || query.name == "") {
-      // console.log(2);
       router.push(
         {
           pathname: `/novels/genres`,
@@ -55,7 +91,6 @@ function GenreNovel(props: any) {
 
   // 정렬 기준 선택 시 반영
   const sortHandler = (params: string) => {
-    // console.log(3);
     router.push(
       {
         pathname: `/novels/genres`,
@@ -72,26 +107,13 @@ function GenreNovel(props: any) {
 
   return (
     <Wrapper>
-      {/* {typeof props.pageNum == "number" ? (
-        <NovelNav nav="genres" pageNum={props.pageNum} />
-      ) : (
-        ""
-      )} */}
+      <NovelNav nav="genres" pageNum={props.url.pageNum} />
       <NovelTop>
         {query.name}
         {query.genre}
         {query.sort}
         {query.pageNum}
         <hr />
-        {/* {props.content.content[0].id}
-        {props.content.content[0].title}
-        {props.content.content[0].genre}
-        <img src={props.content.content[0].thumbnail} alt="안돼" /> */}
-
-        {/* {props.name}
-        {props.genre}
-        {props.sort}
-        {props.pageNum} */}
         <SortWrapper>
           <SortContent
             onClick={() => {
@@ -118,22 +140,47 @@ function GenreNovel(props: any) {
           </SortContent>
         </SortWrapper>
       </NovelTop>
-      <NovelCard
-        id={props.content.content[0].id}
-        title={props.content.content[0].title}
-        writer={props.content.content[0].writer.nickname}
-        writerId={props.content.content[0].writer.id}
-        genre={props.content.content[0].genre}
-        thumbnail={props.content.content[0].thumbnail}
-      />
-      {/* <NovelLists /> */}
-      {/* <NovelPagination
-        nav="genres"
-        name={props.name}
-        genre={props.genre}
-        sort={props.sort}
-        pageNum={props.pageNum}
-      /> */}
+      {props?.content?.empty ? (
+        <NovelEmptyWrapper>
+          <ImageWrapper>
+            <Image
+              src={nevvel_m_dark}
+              alt="일치하는 검색결과가 없습니다."
+              width={300}
+              height={300}
+            />
+          </ImageWrapper>
+          <NovelEmpty>일치하는 검색결과가 없습니다.</NovelEmpty>
+        </NovelEmptyWrapper>
+      ) : (
+        <NovelExists>
+          {props?.content?.content?.map((novel, index: number) => {
+            return (
+              <NovelCard
+                key={index}
+                id={novel.id}
+                title={novel.title}
+                writer={novel.writer.nickname}
+                writerId={novel.writer.id}
+                genre={novel.genre}
+                thumbnail={novel.thumbnail}
+              />
+            );
+          })}
+        </NovelExists>
+      )}
+      {props?.content?.empty ? (
+        ""
+      ) : (
+        <NovelPagination
+          nav="genres"
+          name={props.url.name}
+          genre={props.url.genre}
+          sort={props.url.sort}
+          pageNum={props.url.pageNum}
+          totalPage={props?.content?.totalPages}
+        />
+      )}
     </Wrapper>
   );
 }
@@ -175,9 +222,19 @@ export async function getServerSideProps(context: {
     pageNum = Number(context.query.pageNum);
   }
   try {
-    const res = await axios.get("http://k8d1061.p.ssafy.io/api/covers");
+    const res = await axios.get("http://k8d1061.p.ssafy.io/api/covers", {
+      params: {
+        sorttype: sort,
+        page: pageNum,
+        status: "ALL",
+        genre: genre,
+      },
+    });
     return {
-      props: { content: res.data },
+      props: {
+        content: res.data,
+        url: { genre: genre, sort: sort, name: name, pageNum: pageNum },
+      },
     };
   } catch (error) {
     console.log(error);
@@ -185,7 +242,6 @@ export async function getServerSideProps(context: {
       props: { content: "에러남" },
     };
   }
-  // return { props: { genre: genre, sort: sort, name: name, pageNum: pageNum } };
 }
 
 export default GenreNovel;
@@ -199,6 +255,33 @@ const NovelTop = styled.div`
   margin-left: 10%;
   margin-right: 10%;
   margin-top: 1rem;
+`;
+
+const NovelExists = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: 10%;
+  margin-right: 10%;
+  margin-top: 3rem;
+`;
+
+const NovelEmptyWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
+
+const NovelEmpty = styled.div`
+  position: absolute;
+  margin-top: 5rem;
+  font-size: 20px;
+  font-weight: 800;
+`;
+
+const ImageWrapper = styled.div`
+  margin-top: 5rem;
+  opacity: 0.3;
 `;
 
 const SortWrapper = styled.div``;

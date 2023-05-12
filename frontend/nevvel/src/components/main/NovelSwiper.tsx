@@ -13,9 +13,9 @@ import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 
 import NovelCard from "../common/NovelCard";
-import noveldata from "./DummyNovelData.json";
 
 import { useRouter } from "next/router";
+import springApi from "@/src/api";
 
 interface Novel {
   content: {
@@ -62,11 +62,17 @@ function NovelSwiper() {
   const router = useRouter();
   const [novelData, setNovelData] = useState<Novel | undefined>(undefined);
 
-  // axios로 데이터 get받아오기, 현재는 더미데이터
+  // 소설 목록 받아오기
   useEffect(() => {
-    setNovelData(noveldata);
-    // console.log(novelData)
+    const getNovelData = async () => {
+      const res = await springApi.get("/covers");
+      setNovelData(res.data);
+    };
+    getNovelData();
   }, [novelData]);
+
+  // 그 중 10개 받아오기
+  const novelSwiperData = novelData?.content.slice(0, 10);
 
   const clickHandler = () => {
     router.push({
@@ -111,7 +117,7 @@ function NovelSwiper() {
         // onSwiper={(swiper) => console.log(swiper)}
         // onSlideChange={() => console.log("slide change")}
       >
-        {novelData?.content.map((novel, index: number) => {
+        {novelSwiperData?.map((novel, index: number) => {
           return (
             <SwiperSlide key={index} onClick={clickHandler}>
               <NovelCard

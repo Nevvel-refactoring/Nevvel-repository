@@ -1,9 +1,16 @@
 import GenreList from "./GenreList";
 import styled from "styled-components";
+import { useState, useEffect } from "react";
+import { NewvelApi } from "@/src/api";
 
 interface Nav {
   nav: string;
   pageNum: number;
+}
+
+interface Genre {
+  id: number;
+  name: string;
 }
 
 function NovelNav({ nav, pageNum }: Nav) {
@@ -20,10 +27,27 @@ function NovelNav({ nav, pageNum }: Nav) {
     { id: 10, name: "자유" },
   ];
 
+  const [genres, setGenres] = useState<Genre[] | undefined>(undefined);
+  useEffect(() => {
+    const getGenres = async () => {
+      const res = await NewvelApi.allGenres();
+      setGenres(res.data.genres);
+      // console.log(res.data.genres);
+    };
+    getGenres();
+  }, []);
+
   return (
     <Wrapper>
-      {dummy_genres.map((genre) => (
-        <GenreList key={genre.id} id={genre.id} name={genre.name} nav={nav} pageNum={pageNum} />
+      {/* {genres} */}
+      {genres?.map((genre) => (
+        <GenreList
+          key={genre.id}
+          id={genre.id}
+          name={genre.name}
+          nav={nav}
+          pageNum={pageNum}
+        />
       ))}
     </Wrapper>
   );

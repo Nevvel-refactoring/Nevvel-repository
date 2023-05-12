@@ -12,9 +12,17 @@ interface Novel {
   genre: number | string;
   sort: string;
   pageNum: number | string;
+  totalPage: number;
 }
 
-function NovelPagination({ nav, name, genre, sort, pageNum }: Novel) {
+function NovelPagination({
+  nav,
+  name,
+  genre,
+  sort,
+  pageNum,
+  totalPage,
+}: Novel) {
   const router = useRouter();
 
   const [pagination, setPagination] = useState(1);
@@ -22,7 +30,7 @@ function NovelPagination({ nav, name, genre, sort, pageNum }: Novel) {
 
   // 페이지 마지막번호
   // const lastPageNumber = noveldata.totalPages;
-  const lastPageNumber = 18;
+  const lastPageNumber = totalPage;
   // console.log(lastPageNumber);
 
   // 페이지 번호를 담은 배열
@@ -108,9 +116,10 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 10%;
+  margin-top: 7%;
   margin-left: 10%;
   margin-right: 10%;
+  padding-bottom: 5%;
 `;
 
 const SpanPagination = styled.span`
