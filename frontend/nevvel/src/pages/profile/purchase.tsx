@@ -1,4 +1,6 @@
+import springApi from "@/src/api";
 import RadioInput from "@/src/components/common/RadioInput";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
 import styled from "styled-components";
 
@@ -66,6 +68,11 @@ export interface RequestPayResponse extends RequestPayAdditionalResponse {
 
 export type RequestPayResponseCallback = (response: RequestPayResponse) => void;
 
+interface PurchaseData {
+  impUid: string | null;
+  midUid: string;
+}
+
 export interface Iamport {
   init: (accountID: string) => void;
   request_pay: (
@@ -82,6 +89,7 @@ declare global {
 
 function Purchase() {
   const [amount, setAmount] = useState<number>(1000);
+  const router = useRouter();
 
   const money = [
     {
@@ -106,6 +114,11 @@ function Purchase() {
     },
   ];
 
+  const postHandler = async (purchasData: PurchaseData) => {
+    const res = await springApi.post("/purchasing", purchasData);
+    console.log(res);
+  };
+
   const onClickPayment = () => {
     if (!window.IMP) return;
 
@@ -120,20 +133,25 @@ function Purchase() {
       name: "NEVVEL 포인트 충전", // 주문명
       //   buyer_name: "홍길동", // 구매자 이름
       //   buyer_tel: "01012341234", // 구매자 전화번호
-      buyer_email: "example@example", // 구매자 이메일
+      // buyer_email: "example@example", // 구매자 이메일(사용자 정보 저장 가능해지면 수정)
       //   buyer_addr: "신사동 661-16", // 구매자 주소
       //   buyer_postcode: "06018", // 구매자 우편번호
-      m_redirect_url: "http://k8d106.p.ssafy.io:3000/profile/purchased", // 예: https://www.my-service.com/payments/complete
+      m_redirect_url: "http://k8d1061.p.ssafy.io/profile/purchased", // 예: https://www.my-service.com/payments/complete
     };
     IMP.request_pay(data, callback);
   };
 
   const callback = (response: RequestPayResponse) => {
-    const { success, paid_amount, buyer_email, error_msg, merchant_uid } =
-      response;
+    const { success, error_msg, merchant_uid, imp_uid } = response;
 
     if (success) {
-      console.log(success, paid_amount, buyer_email, merchant_uid);
+      console.log(success, merchant_uid, imp_uid);
+      const data = {
+        impUid: imp_uid,
+        midUid: merchant_uid,
+      };
+      postHandler(data);
+      router.push("/profile");
       //   axios.post(우리링크, amout, user 정보 넣어서 보내기)
       alert("결제 성공");
     } else {
