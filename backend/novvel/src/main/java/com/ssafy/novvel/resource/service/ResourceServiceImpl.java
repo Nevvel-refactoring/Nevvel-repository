@@ -98,18 +98,7 @@ public class ResourceServiceImpl implements ResourceService {
         return resourceEntity;
     }
 
-    @Override
-    public String findOriginByFileName(String fileName) {
-        return null;
-    }
-
-    @Override
-    public String findThumbnailByFileName(String fileName) {
-        return null;
-    }
-
-
-    public File makeThumbnailFromGif(File file) throws IOException {
+    private File makeThumbnailFromGif(File file) throws IOException {
 
         log.info("makeThumbnailFromGif: {}", file.getName());
 
@@ -130,8 +119,7 @@ public class ResourceServiceImpl implements ResourceService {
 
     }
 
-    @Override
-    public File convertToPng(File file) throws IOException {
+    private File convertToPng(File file) throws IOException {
         File inputFile = file;
         String fileName = getFineName(file);
         log.info("convertToPng: {}", fileName);
@@ -141,8 +129,7 @@ public class ResourceServiceImpl implements ResourceService {
         return outputFile;
     }
 
-    @Override
-    public File convertToJpg(File file) throws IOException {
+    private File convertToJpg(File file) throws IOException {
         File inputFile = file;
         String fileName = getFineName(file);
         log.info("convertToPng: {}", fileName);
@@ -153,8 +140,7 @@ public class ResourceServiceImpl implements ResourceService {
     }
 
 
-    @Override
-    public File convertResolutionPng(File file, int newWidth, int newHeight) throws IOException {
+    private File convertResolutionPng(File file, Integer newWidth, Integer newHeight) throws IOException {
         File inputFile = file;
         String fileName = getFineName(file);
         File outputFile = new File(fileName + "_resolution.png");

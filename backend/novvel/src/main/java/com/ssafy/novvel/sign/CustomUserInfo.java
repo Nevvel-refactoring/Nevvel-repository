@@ -1,4 +1,4 @@
-package com.ssafy.novvel.oauth2;
+package com.ssafy.novvel.sign;
 
 public enum CustomUserInfo {
     CLIENT_SUB("clientSub");

@@ -1,7 +1,8 @@
-package com.ssafy.novvel.oauth2;
+package com.ssafy.novvel.sign.oauth2login;
 
 import com.ssafy.novvel.member.entity.Member;
 import com.ssafy.novvel.member.repository.MemberRepository;
+import com.ssafy.novvel.sign.CustomUserInfo;
 import com.ssafy.novvel.util.token.jwt.JWTProvider;
 import java.util.HashSet;
 import java.util.Set;
@@ -68,6 +69,7 @@ public class OidcMemberService implements OAuth2UserService<OidcUserRequest, Oid
                             .email(email)
                             .role("ROLE_GUEST")
                             .refreshToken(refreshToken)
+                            .point(0L)
                             .build()
                         ).getRole()
                     )
