@@ -77,11 +77,24 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
     }
     // setPostedEpisodeId(320);
   };
+  
+  const exHandler =async() =>{
+    try {
+      const res = await springApi.post("/episodes", postEpisode);
+      if (res.status === 201) {
+        console.log(res);
+        setPostedEpisodeId(res.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <Wrapper>
       <ButtonWrapper>
         <WriteButtonContainer>
+          <WriteButton onClick={exHandler}>예시</WriteButton>
           <WriteButton onClick={() => setModalOpen(true)}>미리보기</WriteButton>
           <WriteButton onClick={saveHandler}>임시저장</WriteButton>
           <WriteButton onClick={PublishHandler}>발행하기</WriteButton>
