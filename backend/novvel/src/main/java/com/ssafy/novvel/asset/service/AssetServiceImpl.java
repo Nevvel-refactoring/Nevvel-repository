@@ -111,6 +111,7 @@ public class AssetServiceImpl implements AssetService {
 
     @Override
     public Slice<AssetSearchDto> searchAssetByTag(List<String> tags, Pageable pageable, Member member) {
+        member = (member == null) ? null : member;
 
         Slice<Asset> assetSlice = assetTagRepository.findByTagIn(
                 tagRepository.findByTagNameIn(tags), pageable);
@@ -140,9 +141,9 @@ public class AssetServiceImpl implements AssetService {
     }
 
 
-
     @Override
     public Page<AssetSearchDto> searchAssetByUploader(Long uploaderId, Member member, Pageable pageable) {
+        member = (member == null) ? null : member;
         Member uploader = memberRepository.findById(uploaderId).orElseThrow(() -> new NotFoundException("uploader not found"));
 
         Page<Asset> assetPage = assetRepository.findByMember(uploader, pageable);
@@ -151,7 +152,9 @@ public class AssetServiceImpl implements AssetService {
                 .collect(Collectors.toList());
 
         assetSearchDtos = findTags(assetPage.getContent(), assetSearchDtos);
-        assetSearchDtos = isAvailable(assetPage.getContent(), assetSearchDtos, member);
+        if (member != null) {
+            assetSearchDtos = isAvailable(assetPage.getContent(), assetSearchDtos, member);
+        }
 
         return new PageImpl<>(
                 assetSearchDtos,
@@ -229,6 +232,7 @@ public class AssetServiceImpl implements AssetService {
 
     @Override
     public Page<AssetSearchDto> searchAsset(AssetFilterDto assetFilterDto, Member member, Pageable pageable) {
+        member = (member == null) ? null : member;
         Page<AssetSearchDto> assetSearchDtoPage = assetRepository.searchAsset(assetFilterDto, member, pageable);
         List<AssetSearchDto> assetSearchDtos = assetSearchDtoPage.getContent();
 
@@ -245,7 +249,13 @@ public class AssetServiceImpl implements AssetService {
     }
 
     @Override
-    public Page<AssetSearchDto> searchAssetByKeywordAndTags(AssetSearchReqKeywordTagDto reqKeywordTagDto, Member member, Pageable pageable) {
+    public Page<AssetSearchDto> searchAssetByKeywordAndTags(
+            AssetSearchReqKeywordTagDto reqKeywordTagDto,
+            Member member,
+            Pageable pageable) {
+
+        member = (member == null) ? null : member;
+
         Page<AssetSearchDto> assetSearchDtoPage = assetRepository.searchAssetByKeywordAndTags(reqKeywordTagDto, member, pageable);
         List<AssetSearchDto> assetSearchDtos = assetSearchDtoPage.getContent();
 
@@ -280,6 +290,9 @@ public class AssetServiceImpl implements AssetService {
 
     //사용자가 해당 에셋을 보유하였는지 확인하고, dto에 표시
     private List<AssetSearchDto> isAvailable(List<Asset> assets, List<AssetSearchDto> assetSearchDtos, Member member) {
+        if (member == null) {
+            return assetSearchDtos;
+        }
         List<MemberAsset> memberAssets =
                 memberAssetRepository.findByMemberAndAssetIn(member, assets);
         for (AssetSearchDto assetSearchDto : assetSearchDtos) {
