@@ -68,9 +68,9 @@ export interface RequestPayResponse extends RequestPayAdditionalResponse {
 
 export type RequestPayResponseCallback = (response: RequestPayResponse) => void;
 
-interface PurchaseData {
-  impUid: string | null;
-  midUid: string;
+export interface PurchaseData {
+  impUid: string | string[] | undefined | null;
+  midUid: string | string[] | undefined;
 }
 
 export interface Iamport {
