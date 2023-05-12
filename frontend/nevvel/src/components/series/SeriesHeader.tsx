@@ -59,7 +59,7 @@ function SeriesHeader({ SeriesData }: SeriesHeaderProps) {
                     modal={modalOpen}
                     setModal={setModalOpen}
                     width="300"
-                    height="600"
+                    height="400"
                     element={<SeriesSelected
                         Info={Info} />}
                 />}
@@ -95,7 +95,7 @@ const SeriesInfo = styled.div`
         flex-direction: column;
         align-items: center;
     }
-    height: 30vh;
+    height: auto;
 `
 const SeriesEx = styled.div`
     display: flex;

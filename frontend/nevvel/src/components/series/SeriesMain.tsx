@@ -20,7 +20,7 @@ function SeriesMain({SeriesData}:SeriesMainProps) {
             최신부터
           </SortBtn>
         </BtnContainer>
-        <div>14개의 스토리</div>
+        <div>{Info.episodes.length}개의 스토리</div>
       </MainHeader>
       <SeriesMainList Info={Info} />
     </MainContainer>

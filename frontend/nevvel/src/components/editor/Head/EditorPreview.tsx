@@ -57,7 +57,7 @@ function EditorPreview({ postEpisode }: EditorPreviewProps) {
           <ViewerTabMain
             EpisodeData={postEpisode}
             tabNumber={tabNumber}
-            setEventCatch={setEventCatch} fontSize={0} whiteSpace={0} interval={0} fontStyle={""}          />
+            setEventCatch={setEventCatch} fontSize={4} whiteSpace={1} interval={3} fontStyle={""}          />
         ) : (<>미리보기 할 내용이 존재하지 않습니다.</>)}
       </PreviewMain>
     </PreviewWrapper>
@@ -74,7 +74,9 @@ const PreviewHeader = styled.div`
 `;
 
 const PreviewMain = styled.div`
-  width: 100%;
+  margin-top: 10%;
+  width: 60vh;
   height: 70vh;
+  overflow: scroll;
 `;
 export default EditorPreview;

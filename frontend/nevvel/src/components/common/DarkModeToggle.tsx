@@ -34,6 +34,7 @@ function DarkModeToggle({setTheme,theme}:DarkModeToggleProps) {
   )
 }
 const DarkModeBtn = styled.button`
+background-color: ${({ theme})=> theme.color.background};
   position: fixed;
   left: 90%;
   top: 89%;

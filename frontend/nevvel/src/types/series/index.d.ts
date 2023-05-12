@@ -28,5 +28,11 @@ declare module "series" {
         isRead:boolean;
         point:number;
         uploadedDateTime: string;
+    };
+    export interface shoppingList {
+
+            coverId:number,
+            episodes: number[]
+
     }
 }

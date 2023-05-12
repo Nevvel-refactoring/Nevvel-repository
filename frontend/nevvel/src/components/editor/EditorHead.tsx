@@ -66,16 +66,16 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
   };
 
   const postHandler = async () => {
-    // try {
-    //   const res = await springApi.post("/episodes", postEpisode);
-    //   if (res.status === 201) {
-    //     console.log(res);
-    //     setPostedEpisodeId(res.data);
-    //   }
-    // } catch (error) {
-    //   console.log(error);
-    // }
-    setPostedEpisodeId(320);
+    try {
+      const res = await springApi.post("/episodes", postEpisode);
+      if (res.status === 201) {
+        console.log(res);
+        setPostedEpisodeId(res.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    // setPostedEpisodeId(320);
   };
 
   return (
@@ -100,8 +100,8 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
         <Modal
           modal={modalOpen}
           setModal={setModalOpen}
-          width="1200"
-          height="600"
+          width="600"
+          height="800"
           element={
             <div>
               <EditorPreview postEpisode={episode} />

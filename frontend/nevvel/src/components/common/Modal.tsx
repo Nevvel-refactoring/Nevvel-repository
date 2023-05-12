@@ -45,7 +45,7 @@ const Container = styled.div<{ width: string; height: string }>`
   flex-direction: column;
   align-items: center;
   font-size: 24px;
-  overflow-y: scroll;
+  /* overflow-y: scroll; */
 `;
 
 const ExitWrapper = styled.button`
