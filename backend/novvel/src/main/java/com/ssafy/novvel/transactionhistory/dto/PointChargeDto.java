@@ -14,8 +14,8 @@ import javax.validation.constraints.NotNull;
 public class PointChargeDto {
 
     @NotNull
-    private Long chargePoint;
+    private String impNum;
 
     @NotNull
-    private String impUid;
+    private String midNum;
 }

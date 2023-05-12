@@ -30,11 +30,15 @@ public class TransactionHistoryServiceImpl implements TransactionHistoryService{
     @Transactional
     public void verifyIamportService(Member member, PointChargeDto pointChargeDto) throws IamportResponseException, IOException{
         member = memberRepository.save(member);
-        IamportResponse<Payment> irsp = paymentLookup(pointChargeDto.getImpUid());
-        if(irsp.getResponse().getAmount().intValue()!=pointChargeDto.getChargePoint().intValue())
-            throw new BadRequestException("값이 다릅니다.");
-        historyRepository.save(new TransactionHistory(member, PointChangeType.POINT_CHARGE, pointChargeDto.getChargePoint()));
-        member.setPoint(member.getPoint() + pointChargeDto.getChargePoint());
+        IamportResponse<Payment> irsp = paymentLookup(pointChargeDto.getImpNum());
+        if (irsp.getResponse().getStatus().equals("fail")) {
+            throw new BadRequestException("실패한 결제로 충전을 요청하였습니다.");
+        }
+        if (!irsp.getResponse().getMerchantUid().equals(pointChargeDto.getMidNum())) {
+            throw new BadRequestException("잘못된 충전 요청입니다.");
+        }
+        historyRepository.save(new TransactionHistory(member, PointChangeType.POINT_CHARGE, irsp.getResponse().getAmount().longValue()));
+        member.setPoint(member.getPoint() + irsp.getResponse().getAmount().longValue());
     }
 
     @Value("${portone.imp_key}")
