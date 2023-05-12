@@ -131,7 +131,7 @@ function ImgUpload(props:assetstoreProps) {
       // 제출버튼 누르면 formdata에 데이터 집어넣기
       if (image) {
         formData.append('file', image)
-        formData.append('assetRegistDto',JSON.stringify(jsonDatas))
+        formData.append('assetRegistDto', new Blob([JSON.stringify(jsonDatas)], { type: "application/json" }))
       }
       
       // 데이터 집어넣어진 다음 모달 열기
@@ -150,7 +150,7 @@ function ImgUpload(props:assetstoreProps) {
   useEffect(() => {
     springApi.post("/assets", formData, {
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'multipart/form-data'
       }
     }).then(res => {
       console.log(res.data)
