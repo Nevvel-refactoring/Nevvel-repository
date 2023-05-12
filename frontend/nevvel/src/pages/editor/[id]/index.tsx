@@ -9,10 +9,10 @@ import { mobile } from "@/src/util/Mixin";
 
 function index() {
   const [episode, setEpisode] =useState<episode>({
-    coverId:1,
+    coverId:296,
+    title:"",
     statusType:"PUBLISHED",
     point:0,
-    title:"",
     contents:[]
   })
 

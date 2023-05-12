@@ -1,4 +1,8 @@
 declare module "editor" {
+  export interface episodeRegistDto {
+    episodeRegistDto:episode
+  }
+
     export interface episode {
         coverId: number;
         statusType: string;

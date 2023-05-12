@@ -7,6 +7,7 @@ import EditorPreview from "./Head/EditorPreview";
 import { AiFillCheckCircle } from "react-icons/ai";
 import { useAtomValue } from "jotai";
 import { assetOpenAtom } from "@/src/store/EditorAssetStore";
+import springApi from "@/src/api";
 
 type EditorHeadProps = {
   setEpisode: React.Dispatch<React.SetStateAction<episode>>;
@@ -18,7 +19,8 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
   const [postEpisode, setPostEpisode] = useState<episode>();
   const [modalOpen, setModalOpen] = useState(false);
   const [saveToast, setSaveToast] = useState(false);
-  const assetOpen = useAtomValue(assetOpenAtom)  
+  const [postModalOpen, setPostModalOpen] = useState(false);
+  const assetOpen = useAtomValue(assetOpenAtom);
   useEffect(() => {
     console.log(episode);
   }, [episode]);
@@ -38,17 +40,23 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
 
   const PublishHandler = () => {
     setPostEpisode(episode);
-    if (postEpisode) {
-      router.push({
-        pathname: "/viewer/[id]",
-        query: { id: 1 },
-      });
-    }
+    setPostModalOpen(true);
+    // if (postEpisode) {
+    //   router.push({
+    //     pathname: "/viewer/[id]",
+    //     query: { id: 1 },
+    //   });
+    // }
   };
 
   const saveHandler = () => {
     // 임시저장 axios 연결하면 제대로 해보기..
     setSaveToast(true);
+  };
+
+  const postHandler = async() => {
+    const res = await springApi.post("/episode",postEpisode)
+    console.log(res)
   };
 
   return (
@@ -67,7 +75,7 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
           name="title"
           placeholder="에피소드 명을 입력하세요"
         />
-      <BackGroundAssetContainer>전체 에셋</BackGroundAssetContainer>
+        <BackGroundAssetContainer>전체 에셋</BackGroundAssetContainer>
       </InputWrapper>
       {modalOpen && (
         <Modal
@@ -88,6 +96,20 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
           임시저장 되었습니다.
         </ToastContainer>
       )}
+      {postModalOpen && (
+        <Modal
+          modal={postModalOpen}
+          setModal={setPostModalOpen}
+          width="1200"
+          height="600"
+          element={
+            <div>
+              발행하시겠습니까?
+              <button onClick={postHandler}>네</button>
+            </div>
+          }
+        />
+      )}
     </Wrapper>
   );
 }
@@ -95,7 +117,6 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-
 `;
 const ButtonWrapper = styled.div`
   display: flex;
@@ -113,15 +134,15 @@ const WriteButton = styled.button`
   width: 5rem;
   font-weight: 700;
 `;
-const InputWrapper = styled.div<{assetOpen:number}>`
+const InputWrapper = styled.div<{ assetOpen: number }>`
   display: flex;
   flex-direction: row;
   width: 100%;
   justify-content: center;
   text-align: center;
   align-items: center;
-  padding-left:${(props)=>(props.assetOpen ?(30):(20))}%;
-  padding-right: ${(props)=>(props.assetOpen ?(15):(20))}%;
+  padding-left: ${(props) => (props.assetOpen ? 30 : 20)}%;
+  padding-right: ${(props) => (props.assetOpen ? 15 : 20)}%;
 `;
 
 const TitleInput = styled.input`
@@ -135,22 +156,22 @@ const TitleInput = styled.input`
   border: none;
   border-radius: 10px;
   font-size: 16px;
-    /* box-shadow: 0px 0px 3px gray; */
+  /* box-shadow: 0px 0px 3px gray; */
   width: 70%;
   ::placeholder {
     font-size: 1.5rem;
   }
 `;
 const BackGroundAssetContainer = styled.div`
- /* box-shadow: 0px 0px 3px gray; */
- padding: 1rem;
- margin-bottom: 1rem;
- border-radius: 10px;
- width: 30%;
- height: 2rem;
-`
+  /* box-shadow: 0px 0px 3px gray; */
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 10px;
+  width: 30%;
+  height: 2rem;
+`;
 
-const ToastContainer = styled.div<{assetOpen:number}>`
+const ToastContainer = styled.div<{ assetOpen: number }>`
   margin-top: 1rem;
   position: fixed;
   background-color: ${({ theme }) => theme.color.point};
@@ -164,7 +185,7 @@ const ToastContainer = styled.div<{assetOpen:number}>`
   border-radius: 0.5rem;
   transition: 0.1s ease-in;
   animation: slidein--bottom 0.5s;
-  left: ${(props)=>(props.assetOpen ?(30):(20))}vw;
+  left: ${(props) => (props.assetOpen ? 30 : 20)}vw;
 
   @keyframes slidein--bottom {
     0% {
