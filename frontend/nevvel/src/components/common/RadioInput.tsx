@@ -31,6 +31,7 @@ function RadioInput({
             id={labelText}
             name={name}
             checked={current === value ? true : false}
+            readOnly
           />
           <span>{labelText}</span>
         </label>

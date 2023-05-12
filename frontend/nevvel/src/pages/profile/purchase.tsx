@@ -81,7 +81,7 @@ declare global {
 }
 
 function Purchase() {
-  const [amount, setAmount] = useState<number>(0);
+  const [amount, setAmount] = useState<number>(1000);
 
   const money = [
     {
@@ -123,15 +123,17 @@ function Purchase() {
       buyer_email: "example@example", // 구매자 이메일
       //   buyer_addr: "신사동 661-16", // 구매자 주소
       //   buyer_postcode: "06018", // 구매자 우편번호
+      m_redirect_url: "http://k8d106.p.ssafy.io:3000/profile/purchased", // 예: https://www.my-service.com/payments/complete
     };
     IMP.request_pay(data, callback);
   };
 
   const callback = (response: RequestPayResponse) => {
-    const { success, paid_amount, buyer_email, error_msg } = response;
+    const { success, paid_amount, buyer_email, error_msg, merchant_uid } =
+      response;
 
     if (success) {
-      console.log(success, paid_amount, buyer_email);
+      console.log(success, paid_amount, buyer_email, merchant_uid);
       //   axios.post(우리링크, amout, user 정보 넣어서 보내기)
       alert("결제 성공");
     } else {
