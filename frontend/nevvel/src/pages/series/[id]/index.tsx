@@ -1,27 +1,30 @@
-import React from 'react'
-import styled from 'styled-components'
+import React from "react";
+import styled from "styled-components";
+import SeriesHeader from "@/src/components/series/SeriesHeader";
+import SeriesMain from "@/src/components/series/SeriesMain";
+import SeriesData from "@/src/components/series/DummySeriesData.json";
 
 function index() {
   return (
-    <SeriesWrapper>
-      <HeadContainer>
-      <SeriesTitle>시리즈</SeriesTitle>
-      </HeadContainer>
-      <MainContainer></MainContainer>
-    </SeriesWrapper>
-  )
+    <Wrapper>
+      <SeriesWrapper>
+        <SeriesHeader SeriesData={SeriesData} />
+        <SeriesMain SeriesData={SeriesData} />
+      </SeriesWrapper>
+    </Wrapper>
+  );
 }
+
+const Wrapper = styled.div`
+  background-color: ${({ theme }) => theme.color.background};
+  padding: 0;
+  margin: 0;
+`;
 const SeriesWrapper = styled.div`
-  width: 100;
-  height: 100vh;
-`
-const HeadContainer = styled.div`
-  
-`
-const SeriesTitle = styled.div``
+  margin-left: 20%;
+  margin-right: 20%;
+  position: relative;
 
-const MainContainer = styled.div`
-  
-`
+`;
 
-export default index
+export default index;

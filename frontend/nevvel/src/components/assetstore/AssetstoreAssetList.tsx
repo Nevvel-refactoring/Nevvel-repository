@@ -4,6 +4,9 @@ import AssetCard from "../common/AssetCard";
 import imgdata from "./DummyAssetData_Image.json"
 import sounddata from "./DummyAssetData_Audio.json"
 
+import { Modal } from "../common/Modal";
+import AssetDetailModal from "./AssetDetailModal";
+
 
 interface AssetTag {
   id : number,
@@ -24,6 +27,7 @@ interface Asset {
   url: string,
   price : number,
   downloadCount : number,
+  isAvailable : boolean,
   tags: Array<AssetTag>,
   uploader : AssetUploader
 }
@@ -46,6 +50,32 @@ function AssetstoreAssetList() {
     setAssetData(sounddata.content)
   }
 
+  // 에셋 디테일 모달 오픈 트리거
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+
+  // 에셋 디테일로 열리는 에셋의 데이터
+  const[openModalData, setOpenModalData] = useState<Asset>({
+    id: 0,
+    title: "",
+    type: "",
+    thumbnail : "",
+    url: "",
+    price : 0,
+    downloadCount : 0,
+    isAvailable : false,
+    tags: [{
+      id : 0,
+      name : "",
+    }],
+    uploader : {
+      id : 0,
+      nickname : "",
+      profileImage : "",
+    }
+  })
+
+  // 모달의 모달이 어떻게 나올지 결정해주는 인자
+  const [modalStarter, setModalStarter] = useState<boolean>(true)
 
   return(
     <div>
@@ -56,21 +86,43 @@ function AssetstoreAssetList() {
       </div>
       <Wrapper>
         {
-          AssetData.map((AssetData, index:number) => {
+          AssetData.map((AssetData) => {
             return (
               <AssetCard
-                key={index}
+                AssetData={AssetData}
+                key={AssetData.id}
                 id={AssetData.id}
                 title={AssetData.title}
                 type={AssetData.type}
                 thumbnail={AssetData.thumbnail}
                 url={AssetData.url}
                 tags={AssetData.tags}
+
+                setModalOpen={setModalOpen}
+                setOpenModalData={setOpenModalData}
+                // price={AssetData.price}
+                // uploader={AssetData.uploader}
               />
             )
           })
         }
       </Wrapper>
+      {/* 여기부터 모달 */}
+      {modalOpen ? (
+        <Modal
+          modal={modalOpen}
+          setModal={setModalOpen}
+          width="800"
+          height="700"
+          element={
+            <AssetDetailModal
+              openModalData={openModalData}
+              setModalOpen={setModalOpen}
+              modalStarter={modalStarter}
+            />
+          }
+        />
+      ) : null}
     </div>
   )
 }

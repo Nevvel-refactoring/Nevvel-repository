@@ -4,9 +4,7 @@ import styled from "styled-components";
 
 // import Swiper core and required modules
 import { Navigation, Pagination, Scrollbar, A11y, Autoplay } from "swiper";
-
 import { Swiper, SwiperSlide } from "swiper/react";
-
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/navigation";
@@ -16,6 +14,11 @@ import "swiper/css/scrollbar";
 import AssetCard from "../common/AssetCard";
 import imgdata from "../assetstore/DummyAssetData_Image.json";
 import sounddata from "../assetstore/DummyAssetData_Audio.json";
+
+import { Modal } from "../common/Modal";
+import AssetDetailModal from "../assetstore/AssetDetailModal";
+
+
 
 interface AssetTag {
   id: number;
@@ -36,6 +39,7 @@ interface Asset {
   url: string;
   price: number;
   downloadCount: number;
+  isAvailable : boolean,
   tags: Array<AssetTag>;
   uploader: AssetUploader;
 }
@@ -48,6 +52,33 @@ function AssetSwiper() {
     // setAssetData(imgdata.content);
     setAssetData(imgdata.content);
   }, []);
+
+  // 에셋 디테일 모달 오픈 트리거
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+
+  // 에셋 디테일로 열리는 에셋의 key값
+  const[openModalData, setOpenModalData] = useState<Asset>({
+    id: 0,
+    title: "",
+    type: "",
+    thumbnail : "",
+    url: "",
+    price : 0,
+    downloadCount : 0,
+    isAvailable : false,
+    tags: [{
+      id : 0,
+      name : "",
+    }],
+    uploader : {
+      id : 0,
+      nickname : "",
+      profileImage : "",
+    }
+  })
+
+  // 모달의 모달이 어떻게 나올지 결정해주는 인자
+  const [modalStarter, setModalStarter] = useState<boolean>(true)
 
   return (
     <Wrapper>
@@ -77,22 +108,43 @@ function AssetSwiper() {
         // onSwiper={(swiper) => console.log(swiper)}
         // onSlideChange={() => console.log("slide change")}
       >
-        {AssetData.map((AssetData, index: number) => {
+        {AssetData.map((AssetData) => {
           return (
-            <SwiperSlide key={index}>
+            <SwiperSlide key={AssetData.id}>
               <AssetCard
-                key={index}
+                AssetData={AssetData}
                 id={AssetData.id}
                 title={AssetData.title}
                 type={AssetData.type}
                 thumbnail={AssetData.thumbnail}
                 url={AssetData.url}
                 tags={AssetData.tags}
+
+                setModalOpen={setModalOpen}
+                setOpenModalData={setOpenModalData}
+                // price={AssetData.price}
+                // uploader={AssetData.uploader}
               />
             </SwiperSlide>
           );
         })}
       </Swiper>
+      {/* 여기부터 모달 */}
+      {modalOpen ? (
+        <Modal
+          modal={modalOpen}
+          setModal={setModalOpen}
+          width="800"
+          height="710"
+          element={
+            <AssetDetailModal
+              openModalData={openModalData}
+              setModalOpen={setModalOpen}
+              modalStarter={modalStarter}
+          />
+          }
+        />
+      ) : null}
     </Wrapper>
   );
 }
@@ -109,6 +161,6 @@ const Wrapper = styled.div`
   height: 45%;
   padding-top: 1%;
   padding-bottom: 1%;
-  padding-left: 7%;
-  padding-right: 7%;
+  padding-left: 10%;
+  padding-right: 12%;
 `;

@@ -3,9 +3,10 @@ import styled from "styled-components";
 
 interface Nav {
   nav: string;
+  pageNum: number;
 }
 
-function NovelNav({ nav }: Nav) {
+function NovelNav({ nav, pageNum }: Nav) {
   const dummy_genres = [
     { id: 1, name: "전체" },
     { id: 2, name: "로맨스" },
@@ -22,7 +23,7 @@ function NovelNav({ nav }: Nav) {
   return (
     <Wrapper>
       {dummy_genres.map((genre) => (
-        <GenreList key={genre.id} id={genre.id} name={genre.name} nav={nav} />
+        <GenreList key={genre.id} id={genre.id} name={genre.name} nav={nav} pageNum={pageNum} />
       ))}
     </Wrapper>
   );

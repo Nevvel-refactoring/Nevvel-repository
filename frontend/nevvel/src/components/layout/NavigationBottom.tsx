@@ -8,17 +8,20 @@ import nevvel_m_dark from "../../assets/img/nevvel_m_dark.png";
 import styled from "styled-components";
 import { tabletH } from "../../util/Mixin";
 import { mobile } from "../../util/Mixin";
+import { themeAtom } from "@/src/store/Theme";
+import { useAtomValue } from "jotai";
 
 function NavigationBottom() {
   const router = useRouter();
+  const value = useAtomValue(themeAtom);
 
   const genreSelectHandler = () => {
     router.push(
       {
         pathname: "/novels/genres",
         query: { genre: 1, sort: "like" },
-      },
-      `/novels/genres`
+      }
+      // `/novels/genres`
     );
   };
 
@@ -27,8 +30,8 @@ function NavigationBottom() {
       {
         pathname: "/novels/completed",
         query: { genre: 1, sort: "like" },
-      },
-      `/novels/completed`
+      }
+      // `/novels/completed`
     );
   };
 
@@ -37,15 +40,19 @@ function NavigationBottom() {
       {
         pathname: "/novels/latest",
         query: { genre: 1, sort: "like" },
-      },
-      `/novels/latest`
+      }
+      // `/novels/latest`
     );
   };
 
   return (
     <Wrapper>
       <Link href="/">
-        <Image src={nevvel_light} alt="Logo" width={100} height={25} />
+        {value === "light" ? (
+          <Image src={nevvel_light} alt="Logo" width={100} height={25} />
+        ) : (
+          <Image src={nevvel_dark} alt="Logo" width={100} height={25} />
+        )}
       </Link>
       <Novel>
         <Genre onClick={genreSelectHandler}>장르별 소설</Genre>

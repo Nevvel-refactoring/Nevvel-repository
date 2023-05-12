@@ -1,4 +1,4 @@
-const breakpoints = [360, 992, 1440];
+const breakpoints = [400, 992, 1440];
 
 
 export const mobile = `

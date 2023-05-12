@@ -1,8 +1,16 @@
 import styled from "styled-components";
 
 function Login() {
-  return <Wrapper>Login</Wrapper>;
+  const kakaoLogin = "http://k8d1061.p.ssafy.io/api/oauth2/authorization/kakao";
+
+  return (
+    <Wrapper>
+      <LoginBtn href={kakaoLogin}>카카오 로그인</LoginBtn>
+    </Wrapper>
+  );
 }
+
+export default Login;
 
 const Wrapper = styled.div`
   padding: 0;
@@ -12,4 +20,4 @@ const Wrapper = styled.div`
   color: ${({ theme }) => theme.color.text1};
 `;
 
-export default Login;
+const LoginBtn = styled.a``;

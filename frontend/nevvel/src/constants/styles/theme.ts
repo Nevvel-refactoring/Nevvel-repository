@@ -4,6 +4,7 @@ export const lightTheme: DefaultTheme = {
   color: {
     text1: "#000000",
     text2: "#ffffff",
+    text3: "#666666",
     buttonText:"#ffffff",
     pointText:"5c5db3",
     navbar: "#ffffff",
@@ -23,6 +24,7 @@ export const darkTheme: DefaultTheme = {
   color: {
     text1: "#e6e6e6",
     text2: "#000000",
+    text3: "#999999",
     buttonText:"#000000",
     pointText:"5c5db3",
     navbar: "#000000",

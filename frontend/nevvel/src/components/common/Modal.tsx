@@ -1,5 +1,6 @@
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import styled from "styled-components";
+
 
 interface ModalProps {
   modal: any;
@@ -13,6 +14,7 @@ export const Modal = ({ width, height, element, setModal }: ModalProps) => {
   const disableModal = () => {
     setModal(false);
   };
+
 
   return (
     <>
@@ -43,7 +45,7 @@ const Container = styled.div<{ width: string; height: string }>`
   flex-direction: column;
   align-items: center;
   font-size: 24px;
-
+  /* overflow-y: scroll; */
 `;
 
 const ExitWrapper = styled.button`
@@ -78,4 +80,5 @@ const Canvas = styled.div`
 const Wrapper = styled.div`
   background-color: transparent;
   transition: all 0.5s;
+  height: 85vh;
 `;

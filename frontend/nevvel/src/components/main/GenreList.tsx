@@ -5,18 +5,19 @@ interface Props {
   id: number;
   name: string;
   nav: string;
+  pageNum: number;
 }
 
-function GenreList({ id, name, nav }: Props) {
+function GenreList({ id, name, nav, pageNum }: Props) {
   const router = useRouter();
 
   const genreSelectHandler = () => {
     router.push(
       {
         pathname: `/novels/${nav}`,
-        query: { genre: id, sort: "like", name: name },
-      },
-      `/novels/${nav}`
+        query: { genre: id, sort: "like", name: name, pageNum: pageNum },
+      }
+      // `/novels/${nav}`
     );
   };
 

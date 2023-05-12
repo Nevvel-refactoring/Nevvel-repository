@@ -1,12 +1,20 @@
+import NovelSwiper from "../components/main/NovelSwiper";
+import BestDetails from "../components/main/BestDetails";
 import AssetSwiper from "../components/main/AssetSwiper";
 import styled from "styled-components";
-import NovelSwiper from "../components/main/NovelSwiper";
 
 export default function Home() {
   return (
     <HomeWrapper>
-      <NovelSwiper />
-      <AssetSwiper />
+      <DetailWrapper>
+        <BestDetails title="베스트 콘텐츠" more="/novels" />
+        <NovelSwiper />
+      </DetailWrapper>
+      <Line />
+      <DetailWrapper>
+        <BestDetails title="베스트 에셋" more="/assetstore/assetstore" />
+        <AssetSwiper />
+      </DetailWrapper>
     </HomeWrapper>
   );
 }
@@ -14,7 +22,12 @@ export default function Home() {
 const HomeWrapper = styled.div`
   padding: 0;
   margin: 0;
-  height: 100vh;
-  /* background-color: ${({ theme }) => theme.color.background};
-  color: ${({ theme }) => theme.color.text1}; */
+  background-color: ${({ theme }) => theme.color.background};
+  color: ${({ theme }) => theme.color.text1};
+`;
+
+const DetailWrapper = styled.div``;
+
+const Line = styled.hr`
+  width: 82%;
 `;

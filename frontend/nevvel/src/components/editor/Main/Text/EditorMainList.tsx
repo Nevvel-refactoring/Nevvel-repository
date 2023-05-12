@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useRef, useEffect } from "react";
 import styled from "styled-components";
 import EditorMainListItem from "./EditorMainListItem";
 import EditorMainAssetContainer from "../Asset/EditorMainAssetContainer";
@@ -9,15 +9,15 @@ type EditorMainListProps = {
 };
 
 function EditorMainList({ contents, setContents }: EditorMainListProps) {
-  const [assetOpen, setAssetOpen] = useState<number>(0);
-  
-
+  const scrollRef = useRef<any>();
+  useEffect(()=>{
+    scrollRef.current.scrollTop = scrollRef.current?.scrollHeight 
+  },[contents])
   return (
     <MainContainer>
-      <ListWrapper>
+      <ListWrapper ref={scrollRef}>
         {contents.map((content, index) => (
           <EditorMainListItem
-            setAssetOpen={setAssetOpen}
             key={index}
             content={content}
             contents={contents}
@@ -25,9 +25,6 @@ function EditorMainList({ contents, setContents }: EditorMainListProps) {
           />
         ))}
       </ListWrapper>
-      {assetOpen ? <EditorMainAssetContainer
-      assetOpen={assetOpen}
-      /> : <></>}
     </MainContainer>
   );
 }
@@ -35,24 +32,24 @@ const MainContainer = styled.div`
   display: flex;
   flex-direction: row;
   width: 100%;
-  background-color: ${({ theme })=> theme.color.background};
-`
+  background-color: ${({ theme }) => theme.color.background};
+  border-radius: 10px;
+  /* box-shadow: 0px 0px 3px gray; */
+`;
 
 const ListWrapper = styled.div`
   /* border: 2px solid ${({ theme }) => theme.color.hover}; */
-  height: 55vh;
+  height: 60vh;
   display: flex;
   flex-direction: column;
   overflow: scroll;
   width: 100%;
   ::-webkit-scrollbar {
-  display: none;
-}
+    display: none;
+  }
 `;
 
 const AssetWrapper = styled.div``;
 
-const ItemContainer = styled.div`
-  
-`
+const ItemContainer = styled.div``;
 export default EditorMainList;

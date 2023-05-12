@@ -1,22 +1,25 @@
-import React,{useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Navigation from "./Navigation";
-import { useRouter } from 'next/router';
+import { useRouter } from "next/router";
 
 function Layout(props: { children: React.ReactNode }) {
   const router = useRouter();
-  const [hidden, setHidden] =useState(true);
+  const [hidden, setHidden] = useState(true);
 
-  useEffect(()=>{
-    if(router.pathname ==='/viewer/[id]'||router.pathname ==='/editor/[id]'){
-      setHidden(false)
+  useEffect(() => {
+    if (
+      router.pathname === "/viewer/[id]" ||
+      router.pathname === "/editor/[id]"
+    ) {
+      setHidden(false);
+    } else {
+      setHidden(true);
     }
-  },[router])
+  }, [router]);
   return (
     <Wrapper>
-      {hidden ? (
-        <Navigation />
-      ):(null)}
+      {hidden ? <Navigation /> : null}
       <div>{props.children}</div>
     </Wrapper>
   );

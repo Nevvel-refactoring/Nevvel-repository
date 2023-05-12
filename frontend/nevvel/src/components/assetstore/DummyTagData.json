@@ -19,6 +19,40 @@
     "id": 4,
     "tagName": "쥰모닝",
     "useCount": 100
+  },
+  {
+    "id": 5,
+    "tagName": "쥰쥰모닝",
+    "useCount": 400
+  },
+  {
+    "id": 6,
+    "tagName": "무협",
+    "useCount": 200
+  },  {
+    "id": 7,
+    "tagName": "로맨스",
+    "useCount": 100
+  },
+  {
+    "id": 8,
+    "tagName": "판타지",
+    "useCount": 50
+  },
+  {
+    "id": 9,
+    "tagName": "장르",
+    "useCount": 150
+  },
+  {
+    "id": 10,
+    "tagName": "장르장르",
+    "useCount": 250
+  },
+  {
+    "id": 11,
+    "tagName": "영웅물",
+    "useCount": 350
   }
   ]
 }
