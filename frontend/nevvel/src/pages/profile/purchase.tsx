@@ -115,7 +115,7 @@ function Purchase() {
   ];
 
   const postHandler = async (purchasData: PurchaseData) => {
-    const res = await springApi.post("/purchasing", purchasData);
+    const res = await springApi.post("/point-charge", purchasData);
     console.log(res);
   };
 

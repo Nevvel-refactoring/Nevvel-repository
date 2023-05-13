@@ -10,7 +10,7 @@ function purchased() {
   const router = useRouter();
 
   const postHandler = async (purchasData: PurchaseData) => {
-    const res = await springApi.post("/purchasing", purchasData);
+    const res = await springApi.post("/point-charge", purchasData);
     console.log(res);
   };
 
@@ -24,6 +24,7 @@ function purchased() {
       };
       postHandler(data);
       // console.log(impNum, midNum);
+      router.push("/profile");
     } else if (query.imp_success === "false") {
       router.push("/profile/purchase");
     }
