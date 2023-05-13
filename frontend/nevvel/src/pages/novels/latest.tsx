@@ -109,8 +109,8 @@ function LatestNovel(props: {
     <Wrapper>
       <NovelNav nav="genres" pageNum={props.url.pageNum} />
       <NovelTop>
-        {/* {query.name}
-        {query.genre}
+        {query.name}
+        {/* {query.genre}
         {query.sort}
         {query.pageNum}
         <hr /> */}
@@ -250,7 +250,7 @@ const Wrapper = styled.div``;
 
 const NovelTop = styled.div`
   display: flex;
-  justify-content: end;
+  justify-content: space-between;
   align-items: center;
   margin-left: 10%;
   margin-right: 10%;
