@@ -62,6 +62,7 @@ const NovelTitle = styled.div`
   text-align: center;
   height: 3.25rem;
   overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const NovelWriter = styled.div`

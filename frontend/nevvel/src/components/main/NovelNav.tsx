@@ -62,4 +62,18 @@ const Wrapper = styled.div`
   padding-left: 3%;
   padding-right: 3%;
   height: 3.125rem;
+  overflow: hidden;
+  white-space: nowrap;
+  overflow-x: auto;
+  /* 앱에서 스와이프 */
+  -webkit-overflow-scrolling: touch;
+
+  /* IE, Edge 및 Firefox에서 스크롤바 숨김 */
+  -ms-overflow-style: none; /* IE, Edge */
+  scrollbar-width: none; /* Firefox */
+
+  /* Chrome, Safari 및 Opera에서 스크롤바 숨김 */
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;

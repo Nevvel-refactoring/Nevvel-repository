@@ -109,11 +109,11 @@ function LatestNovel(props: {
     <Wrapper>
       <NovelNav nav="genres" pageNum={props.url.pageNum} />
       <NovelTop>
-        {query.name}
+        {/* {query.name}
         {query.genre}
         {query.sort}
         {query.pageNum}
-        <hr />
+        <hr /> */}
         <SortWrapper>
           <SortContent
             onClick={() => {
@@ -250,7 +250,7 @@ const Wrapper = styled.div``;
 
 const NovelTop = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: end;
   align-items: center;
   margin-left: 10%;
   margin-right: 10%;
@@ -260,9 +260,10 @@ const NovelTop = styled.div`
 const NovelExists = styled.div`
   display: flex;
   flex-wrap: wrap;
+  justify-content: space-between;
   margin-left: 10%;
   margin-right: 10%;
-  margin-top: 3rem;
+  margin-top: 1rem;
 `;
 
 const NovelEmptyWrapper = styled.div`
@@ -284,7 +285,9 @@ const ImageWrapper = styled.div`
   opacity: 0.3;
 `;
 
-const SortWrapper = styled.div``;
+const SortWrapper = styled.div`
+  margin-top: 1rem;
+`;
 
 const SortContent = styled.span`
   font-size: 13.5px;

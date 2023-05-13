@@ -69,7 +69,7 @@ function NovelSwiper() {
       setNovelData(res.data);
     };
     getNovelData();
-  }, [novelData]);
+  }, []);
 
   // 그 중 10개 받아오기
   const novelSwiperData = novelData?.content.slice(0, 10);
