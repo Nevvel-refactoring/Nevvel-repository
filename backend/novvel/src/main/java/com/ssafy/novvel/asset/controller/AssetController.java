@@ -4,6 +4,7 @@ import com.ssafy.novvel.asset.dto.AssetFilterDto;
 import com.ssafy.novvel.asset.dto.AssetRegistDto;
 import com.ssafy.novvel.asset.dto.AssetSearchDto;
 import com.ssafy.novvel.asset.dto.AssetSearchReqKeywordTagDto;
+import com.ssafy.novvel.asset.entity.AssetType;
 import com.ssafy.novvel.asset.service.AssetService;
 import com.ssafy.novvel.member.entity.Member;
 import com.ssafy.novvel.util.ControllerUtils;
@@ -101,10 +102,11 @@ public class AssetController {
 
     @GetMapping("/purchased-on")
     @Operation(summary = "구매한 에셋 보기", description = "<strong>내가 구매한 에셋</strong>을 반환 합니다.")
-    public ResponseEntity<Page<AssetSearchDto>> myAssets(@AuthenticationPrincipal CustomUserDetails customUserDetails,
+    public ResponseEntity<Page<AssetSearchDto>> myAssets(@RequestParam("assettype") AssetType assetType,
+                                                         @AuthenticationPrincipal CustomUserDetails customUserDetails,
                                                          Pageable pageable) {
 
-        Page<AssetSearchDto> result = assetService.searchMyAssets(customUserDetails.getMember(), pageable);
+        Page<AssetSearchDto> result = assetService.searchMyAssets(assetType, customUserDetails.getMember(), pageable);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }

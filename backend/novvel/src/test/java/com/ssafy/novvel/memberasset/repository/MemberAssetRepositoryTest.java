@@ -1,6 +1,7 @@
 package com.ssafy.novvel.memberasset.repository;
 
 import com.ssafy.novvel.asset.entity.Asset;
+import com.ssafy.novvel.asset.entity.AssetType;
 import com.ssafy.novvel.asset.repository.AssetRepository;
 import com.ssafy.novvel.member.entity.Member;
 import com.ssafy.novvel.member.repository.MemberRepository;
@@ -49,7 +50,7 @@ public class MemberAssetRepositoryTest {
         memberAssets = memberAssetRepository.saveAll(memberAssets);
         Pageable pageable = PageRequest.of(0, 5);
 
-        Page<MemberAsset> pageByMember = memberAssetRepository.findPageByMember(owner, pageable);
+        Page<MemberAsset> pageByMember = memberAssetRepository.findPageByMember(AssetType.IMAGE, owner, pageable);
 
         Assertions.assertThat(pageByMember.getContent().size()).isEqualTo(4);
 

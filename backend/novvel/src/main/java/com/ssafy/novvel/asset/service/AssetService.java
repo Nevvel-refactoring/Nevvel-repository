@@ -5,6 +5,7 @@ import com.ssafy.novvel.asset.dto.AssetRegistDto;
 import com.ssafy.novvel.asset.dto.AssetSearchDto;
 import com.ssafy.novvel.asset.dto.AssetSearchReqKeywordTagDto;
 import com.ssafy.novvel.asset.entity.Asset;
+import com.ssafy.novvel.asset.entity.AssetType;
 import com.ssafy.novvel.asset.entity.Tag;
 import com.ssafy.novvel.member.entity.Member;
 import org.springframework.data.domain.Page;
@@ -32,7 +33,7 @@ public interface AssetService {
 
     Page<Tag> findPageTags(Pageable pageable);
 
-    Page<AssetSearchDto> searchMyAssets(Member member, Pageable pageable);
+    Page<AssetSearchDto> searchMyAssets(AssetType assetType, Member member, Pageable pageable);
 
 
 }

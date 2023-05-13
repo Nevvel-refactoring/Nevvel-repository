@@ -6,6 +6,7 @@ import com.ssafy.novvel.asset.dto.AssetSearchDto;
 import com.ssafy.novvel.asset.dto.AssetSearchReqKeywordTagDto;
 import com.ssafy.novvel.asset.entity.Asset;
 import com.ssafy.novvel.asset.entity.AssetTag;
+import com.ssafy.novvel.asset.entity.AssetType;
 import com.ssafy.novvel.asset.entity.Tag;
 import com.ssafy.novvel.asset.repository.AssetRepository;
 import com.ssafy.novvel.asset.repository.AssetTagRepository;
@@ -170,8 +171,8 @@ public class AssetServiceImpl implements AssetService {
     }
 
     @Override
-    public Page<AssetSearchDto> searchMyAssets(Member member, Pageable pageable) {
-        Page<MemberAsset> assetPage = memberAssetRepository.findPageByMember(member, pageable);
+    public Page<AssetSearchDto> searchMyAssets(AssetType assetType, Member member, Pageable pageable) {
+        Page<MemberAsset> assetPage = memberAssetRepository.findPageByMember(assetType, member, pageable);
         List<Asset> assets = assetPage.getContent().stream()
                 .map(MemberAsset::getAsset)
                 .collect(Collectors.toList());

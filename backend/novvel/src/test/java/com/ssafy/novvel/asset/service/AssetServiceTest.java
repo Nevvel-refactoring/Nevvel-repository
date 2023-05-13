@@ -291,10 +291,10 @@ public class AssetServiceTest {
         Pageable pageable = PageRequest.of(0, 5);
 
         Mockito.doReturn(new PageImpl<>(memberAssets, pageable, pageable.getPageNumber()))
-                .when(memberAssetRepository).findPageByMember(owner, pageable);
+                .when(memberAssetRepository).findPageByMember(AssetType.IMAGE,owner, pageable);
         Mockito.doReturn(assets).when(assetRepository).findJoinMemberByAssets(Mockito.any(List.class));
 
-        Page<AssetSearchDto> assetSearchDtos = assetService.searchMyAssets(owner, pageable);
+        Page<AssetSearchDto> assetSearchDtos = assetService.searchMyAssets(AssetType.IMAGE, owner, pageable);
 
         Assertions.assertThat(assetSearchDtos.getContent().size()).isEqualTo(4);
 
