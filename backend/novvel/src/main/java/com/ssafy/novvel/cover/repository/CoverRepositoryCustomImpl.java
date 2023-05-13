@@ -17,6 +17,7 @@ import com.ssafy.novvel.cover.entity.CoverStatusType;
 import com.ssafy.novvel.episode.entity.EpisodeStatusType;
 import com.ssafy.novvel.member.entity.Member;
 import com.ssafy.novvel.transactionhistory.entity.PointChangeType;
+import java.time.LocalDate;
 import java.util.List;
 import javax.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
@@ -101,6 +102,9 @@ public class CoverRepositoryCustomImpl implements CoverRepositoryCustom {
                 return cover.coverStatusType.eq(CoverStatusType.FINISHED);
             case SERIALIZED:
                 return cover.coverStatusType.eq(CoverStatusType.SERIALIZED);
+            case LATEST:
+                return cover.coverStatusType.eq(CoverStatusType.SERIALIZED)
+                    .and(cover.firstPublishDate.goe(LocalDate.now().minusDays(7L)));
             case ALL:
             default:
                 return cover.coverStatusType.ne(CoverStatusType.DELETED);
