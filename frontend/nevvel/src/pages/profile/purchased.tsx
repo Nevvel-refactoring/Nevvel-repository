@@ -30,7 +30,7 @@ function purchased() {
         midNum: midNum,
       });
       // console.log(impNum, midNum);
-      router.push("/profile");
+      // router.push("/profile");
     } else if (query.imp_success === "false") {
       router.push("/profile/purchase");
     }

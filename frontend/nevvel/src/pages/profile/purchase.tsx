@@ -152,7 +152,7 @@ function Purchase() {
     const { success, error_msg, merchant_uid, imp_uid } = response;
 
     if (success) {
-      console.log(success, merchant_uid, imp_uid);
+      // console.log(success, merchant_uid, imp_uid);
       postHandler({
         impNum: imp_uid,
         midNum: merchant_uid,
