@@ -6,32 +6,28 @@ import { PurchaseData } from "./purchase";
 
 function purchased() {
   const { query } = useRouter();
-  const [pointChargeDto, setPointChargeDto] = useState<PurchaseData>();
 
   const router = useRouter();
 
-  const postHandler = async () => {
-    const res = await springApi.post("/point-charge", pointChargeDto);
-    console.log(
-      res,
-      pointChargeDto,
-      typeof pointChargeDto?.impUid,
-      typeof pointChargeDto?.midUid
-    );
-    router.push("/profile");
+  const postHandler = async (pointChargeDto: PurchaseData) => {
+    try {
+      const res = await springApi.post("/point-charge", pointChargeDto);
+      if (res.status === 200) {
+        console.log(res);
+        router.push("/profile");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
-
-  useEffect(() => {
-    postHandler();
-  }, [pointChargeDto]);
 
   useEffect(() => {
     if (query.imp_success === "true") {
       const impNum = query.imp_uid;
       const midNum = query.merchant_uid;
-      setPointChargeDto({
-        impUid: impNum,
-        midUid: midNum,
+      postHandler({
+        impNum: impNum,
+        midNum: midNum,
       });
       // console.log(impNum, midNum);
       router.push("/profile");

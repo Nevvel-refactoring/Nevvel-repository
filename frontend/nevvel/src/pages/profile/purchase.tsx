@@ -69,8 +69,8 @@ export interface RequestPayResponse extends RequestPayAdditionalResponse {
 export type RequestPayResponseCallback = (response: RequestPayResponse) => void;
 
 export interface PurchaseData {
-  impUid: string | string[] | undefined | null;
-  midUid: string | string[] | undefined;
+  impNum: string | string[] | undefined | null;
+  midNum: string | string[] | undefined;
 }
 
 export interface Iamport {
@@ -89,7 +89,6 @@ declare global {
 
 function Purchase() {
   const [amount, setAmount] = useState<number>(1000);
-  const [pointChargeDto, setPointChargeDto] = useState<PurchaseData>();
   const router = useRouter();
 
   const money = [
@@ -115,26 +114,17 @@ function Purchase() {
     },
   ];
 
-  const postHandler = async () => {
-    console.log(
-      "before",
-      pointChargeDto,
-      typeof pointChargeDto?.impUid,
-      typeof pointChargeDto?.midUid
-    );
-    const res = await springApi.post("/point-charge", pointChargeDto);
-    console.log(
-      res,
-      pointChargeDto,
-      typeof pointChargeDto?.impUid,
-      typeof pointChargeDto?.midUid
-    );
-    router.push("/profile");
+  const postHandler = async (pointChargeDto: PurchaseData) => {
+    try {
+      const res = await springApi.post("/point-charge", pointChargeDto);
+      if (res.status === 200) {
+        console.log(res);
+        router.push("/profile");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
-
-  useEffect(() => {
-    postHandler();
-  }, [pointChargeDto]);
 
   const onClickPayment = () => {
     if (!window.IMP) return;
@@ -163,9 +153,9 @@ function Purchase() {
 
     if (success) {
       console.log(success, merchant_uid, imp_uid);
-      setPointChargeDto({
-        impUid: imp_uid,
-        midUid: merchant_uid,
+      postHandler({
+        impNum: imp_uid,
+        midNum: merchant_uid,
       });
       //   axios.post(우리링크, amout, user 정보 넣어서 보내기)
       alert("결제 성공");
