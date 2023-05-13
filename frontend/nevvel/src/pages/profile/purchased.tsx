@@ -9,20 +9,24 @@ function purchased() {
 
   const router = useRouter();
 
-  const postHandler = async (purchasData: PurchaseData) => {
-    const res = await springApi.post("/point-charge", purchasData);
-    console.log(res);
+  const postHandler = async (pointChargeDto: PurchaseData) => {
+    const res = await springApi.post("/point-charge", pointChargeDto);
+    console.log(
+      res,
+      pointChargeDto,
+      typeof pointChargeDto.impUid,
+      typeof pointChargeDto.midUid
+    );
   };
 
   useEffect(() => {
     if (query.imp_success === "true") {
       const impNum = query.imp_uid;
       const midNum = query.merchant_uid;
-      const data = {
+      postHandler({
         impUid: impNum,
         midUid: midNum,
-      };
-      postHandler(data);
+      });
       // console.log(impNum, midNum);
       router.push("/profile");
     } else if (query.imp_success === "false") {

@@ -114,9 +114,14 @@ function Purchase() {
     },
   ];
 
-  const postHandler = async (purchasData: PurchaseData) => {
-    const res = await springApi.post("/point-charge", purchasData);
-    console.log(res);
+  const postHandler = async (pointChargeDto: PurchaseData) => {
+    const res = await springApi.post("/point-charge", pointChargeDto);
+    console.log(
+      res,
+      pointChargeDto,
+      typeof pointChargeDto.impUid,
+      typeof pointChargeDto.midUid
+    );
   };
 
   const onClickPayment = () => {
@@ -146,11 +151,10 @@ function Purchase() {
 
     if (success) {
       console.log(success, merchant_uid, imp_uid);
-      const data = {
+      postHandler({
         impUid: imp_uid,
         midUid: merchant_uid,
-      };
-      postHandler(data);
+      });
       router.push("/profile");
       //   axios.post(우리링크, amout, user 정보 넣어서 보내기)
       alert("결제 성공");
