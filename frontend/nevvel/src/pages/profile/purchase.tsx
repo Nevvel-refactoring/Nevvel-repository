@@ -1,7 +1,7 @@
 import springApi from "@/src/api";
 import RadioInput from "@/src/components/common/RadioInput";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 export interface RequestPayAdditionalParams {
@@ -89,6 +89,7 @@ declare global {
 
 function Purchase() {
   const [amount, setAmount] = useState<number>(1000);
+  const [pointChargeDto, setPointChargeDto] = useState<PurchaseData>();
   const router = useRouter();
 
   const money = [
@@ -114,15 +115,26 @@ function Purchase() {
     },
   ];
 
-  const postHandler = async (pointChargeDto: PurchaseData) => {
+  const postHandler = async () => {
+    console.log(
+      "before",
+      pointChargeDto,
+      typeof pointChargeDto?.impUid,
+      typeof pointChargeDto?.midUid
+    );
     const res = await springApi.post("/point-charge", pointChargeDto);
     console.log(
       res,
       pointChargeDto,
-      typeof pointChargeDto.impUid,
-      typeof pointChargeDto.midUid
+      typeof pointChargeDto?.impUid,
+      typeof pointChargeDto?.midUid
     );
+    router.push("/profile");
   };
+
+  useEffect(() => {
+    postHandler();
+  }, [pointChargeDto]);
 
   const onClickPayment = () => {
     if (!window.IMP) return;
@@ -151,11 +163,10 @@ function Purchase() {
 
     if (success) {
       console.log(success, merchant_uid, imp_uid);
-      postHandler({
+      setPointChargeDto({
         impUid: imp_uid,
         midUid: merchant_uid,
       });
-      router.push("/profile");
       //   axios.post(우리링크, amout, user 정보 넣어서 보내기)
       alert("결제 성공");
     } else {

@@ -1,29 +1,35 @@
 import springApi from "@/src/api";
 import { useRouter } from "next/router";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { PurchaseData } from "./purchase";
 
 function purchased() {
   const { query } = useRouter();
+  const [pointChargeDto, setPointChargeDto] = useState<PurchaseData>();
 
   const router = useRouter();
 
-  const postHandler = async (pointChargeDto: PurchaseData) => {
+  const postHandler = async () => {
     const res = await springApi.post("/point-charge", pointChargeDto);
     console.log(
       res,
       pointChargeDto,
-      typeof pointChargeDto.impUid,
-      typeof pointChargeDto.midUid
+      typeof pointChargeDto?.impUid,
+      typeof pointChargeDto?.midUid
     );
+    router.push("/profile");
   };
+
+  useEffect(() => {
+    postHandler();
+  }, [pointChargeDto]);
 
   useEffect(() => {
     if (query.imp_success === "true") {
       const impNum = query.imp_uid;
       const midNum = query.merchant_uid;
-      postHandler({
+      setPointChargeDto({
         impUid: impNum,
         midUid: midNum,
       });
