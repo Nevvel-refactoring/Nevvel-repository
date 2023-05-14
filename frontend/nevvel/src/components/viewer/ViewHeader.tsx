@@ -23,16 +23,28 @@ function ViewHeader({ EpisodeData,id }: ViewHeaderProps) {
     title: EpisodeData.title,
     contents: EpisodeData.contents
   }
+  console.log(putEpisodeData)
   const putViewerData = async (Id: number) => {
-    try {
-      const res = await springApi.put(`/episodes/${Id}`,putEpisodeData);
-      if (res) {
-        console.log(res);
-    }
-  }
-  catch(error){
-    console.log(error)
-  }
+    // console.log(putEpisodeData)
+    // // try {
+    // //   const res = await springApi.put(`/episodes/${Id}`, {
+    // //     coverId:Id,
+    // //     statusType: EpisodeData.statusType,
+    // //     title: EpisodeData.title,
+    // //     point:0,
+    // //     contents: EpisodeData.contents
+    // //   });
+    //   if (res) {
+    //     console.log(res);
+        router.push({
+          pathname:'/editor/[id]/[eid]',
+          query:{id:EpisodeData.coverId, eid:426}
+        })
+  //   }
+  // }
+  // catch(error){
+  //   console.log(error)
+  // }
   };
 
   const clickHandler = () => {
@@ -146,3 +158,4 @@ const EpisodeHome = styled.button`
 `;
 
 export default ViewHeader;
+

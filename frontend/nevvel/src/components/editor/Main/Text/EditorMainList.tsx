@@ -8,10 +8,11 @@ import React, {
 import styled from "styled-components";
 import EditorMainListItem from "./EditorMainListItem";
 import EditorMainAssetContainer from "../Asset/EditorMainAssetContainer";
-import { content } from "editor";
+import { content,episode } from "editor";
 import EditorMainInput from "./EditorMainInput";
 
 type EditorMainListProps = {
+  episode:episode;
   contents: content[];
   setContents: React.Dispatch<React.SetStateAction<content[]>>;
   currentText: string;
@@ -19,6 +20,7 @@ type EditorMainListProps = {
 };
 
 function EditorMainList({
+  episode,
   contents,
   setContents,
   currentText,
@@ -46,6 +48,7 @@ function EditorMainList({
         <ContentWrapper>
           <InputWrapper>
             <EditorMainInput
+            episode={episode}
               currentText={currentText}
               setCurrentText={setCurrentText}
               contents={contents}

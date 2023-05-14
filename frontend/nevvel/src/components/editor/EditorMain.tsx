@@ -18,13 +18,19 @@ function EditorMain({setEpisode,episode}:EditorMainProps) {
   useEffect(()=>{
     setEpisode({...episode,contents:contents})
     console.log("episode",episode)
-
   },[contents])
+
+  useEffect(()=>{
+    if (episode.contents.length !== 0){
+      setContents(episode.contents)
+    }
+  },[])
   
 
 	return (<>
     <Wrapper assetOpen={assetOpen}>
       <EditorMainList
+      episode={episode}
 			contents={contents}
 			setContents={setContents}
       currentText={currentText}

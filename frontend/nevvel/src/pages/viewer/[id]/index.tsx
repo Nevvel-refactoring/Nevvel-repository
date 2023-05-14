@@ -54,8 +54,8 @@ function viewer() {
       const Id = Number(id);
       console.log("router", Id);
       getViewerData(Id);
-    } else {
-      setEpisodeData(Dummy_Episode);
+    // } else {
+    //   setEpisodeData(Dummy_Episode);
     }
     // setEpisodeData(Dummy_Episode); // merge 하기 전에 주석처리! 위에꺼는 해제
   }, [id]);

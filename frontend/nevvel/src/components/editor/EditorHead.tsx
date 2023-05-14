@@ -16,6 +16,7 @@ type EditorHeadProps = {
 
 function EditorHead({ episode, setEpisode }: EditorHeadProps) {
   const router = useRouter();
+  const eid = router.query.eid;
   const [postEpisode, setPostEpisode] = useState<episode>();
   const [modalOpen, setModalOpen] = useState(false);
   const [saveToast, setSaveToast] = useState(false);
@@ -107,15 +108,34 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
     // setPostedEpisodeId(320);
   };
 
+  const puthandler = async () => {
+   console.log(postEpisode)
+     try {
+    const res = await springApi.put(`/episodes/${eid}`, postEpisode);
+      if (res) {
+        console.log(res);
+        router.push({
+          pathname:'/viewer/[id]',
+          query:{id:eid}
+        })
+     }
+  }
+   catch(error){
+     console.log(error)
+   }
+  };
+
   return (
     <Wrapper>
       <ButtonWrapper>
         <WriteButtonContainer>
           <WriteButton onClick={() => setModalOpen(true)}>미리보기</WriteButton>
-          <WriteButton onClick={() => saveHandler("save")}>
-            임시저장
-          </WriteButton>
-          <WriteButton onClick={PublishHandler}>발행하기</WriteButton>
+          {!eid && (
+            <WriteButton onClick={() => saveHandler("save")}>
+              임시저장
+            </WriteButton>
+          )}
+         <WriteButton onClick={PublishHandler}>발행하기</WriteButton>
         </WriteButtonContainer>
       </ButtonWrapper>
       <InputWrapper assetOpen={assetOpen}>
@@ -155,9 +175,15 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
           height="600"
           element={
             <div>
-              발행하시겠습니까?
+              {!eid && <>발행하시겠습니까?
               <button onClick={postHandler}>네</button>
               <button onClick={() => saveHandler("cancel")}>아니요</button>
+              </>}
+              {eid && <>현재 수정한 상태로 발행하시겠습니까
+              ?
+              <button onClick={puthandler}>네</button>
+              <button onClick={() => saveHandler("cancel")}>아니요</button>
+              </>}
             </div>
           }
         />

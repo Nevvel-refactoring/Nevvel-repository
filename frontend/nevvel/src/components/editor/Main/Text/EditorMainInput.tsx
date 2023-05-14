@@ -1,19 +1,13 @@
 import { tabletH } from "@/src/util/Mixin";
-import React, { Dispatch, SetStateAction, useRef } from "react";
+import React, { useState,Dispatch, SetStateAction, useEffect, useRef } from "react";
+import { useRouter } from "next/dist/client/router";
 import styled from "styled-components";
+import { episode,content,event } from "editor";
 
-interface content {
-  idx: number;
-  context: string;
-  event: event[];
-}
 
-interface event {
-  assetId: number;
-  type: string;
-}
 
 type EditorMainInputProps = {
+  episode:episode;
   currentText: string;
   setCurrentText: Dispatch<SetStateAction<string>>;
   contents: content[];
@@ -21,14 +15,24 @@ type EditorMainInputProps = {
 };
 
 function EditorMainInput({
+  episode,
   currentText,
   setCurrentText,
   contents,
   setContents,
 }: EditorMainInputProps) {
-  const nextId = useRef(1);
+  const router = useRouter();
+  const eid = router.query.eid
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-
+  const [nextId, setNextId] =useState(1)
+  useEffect(()=>{
+    console.log("인풋 렌더링 안하냐?")
+    console.log(eid,"eid")
+    if(eid){    
+      console.log("들옴")
+      setNextId(episode.contents.length+1)
+    }
+  },[])
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (event.key == "Enter") {
@@ -36,26 +40,15 @@ function EditorMainInput({
         event.preventDefault();
 
         const newBlock: content = {
-          idx: nextId.current,
+          idx: nextId,
           context: currentText,
           event: [],
         };
         setContents([...contents, newBlock]);
-        nextId.current++;
+        setNextId(nextId+1)
         setCurrentText("");
       }
     }
-  };
-
-  const handleClick = () => {
-    const newBlock: content = {
-      idx: nextId.current,
-      context: currentText,
-      event: [],
-    };
-    setContents([...contents, newBlock]);
-    nextId.current++;
-    setCurrentText("");
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
