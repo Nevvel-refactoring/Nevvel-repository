@@ -109,7 +109,8 @@ function ImgUpload(props:assetstoreProps) {
   const [modalonModalOpen, setModalonModalOpen] = useState<boolean>(false)
 
   // formData 정의
-  const [formData, setFormData] = useState(new FormData());
+  // const [formData, setFormData] = useState(new FormData());
+  const formData = new FormData()
   
   const SubmitAsset = async () => {
     try{
@@ -137,6 +138,7 @@ function ImgUpload(props:assetstoreProps) {
       // 데이터 집어넣어진 다음 모달 열기
       setModalonModalOpen(true)
       console.log(formData)
+      console.log('엑시오스 아직 비활성화', axiosTrigger)
       
     }
     catch (error) {
@@ -148,6 +150,7 @@ function ImgUpload(props:assetstoreProps) {
   const [axiosTrigger, setAxiosTrigger] = useState<boolean|null>(null)
 
   useEffect(() => {
+    console.log('엑시오스 활성화',axiosTrigger)
     springApi.post("/assets", formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
@@ -164,7 +167,13 @@ function ImgUpload(props:assetstoreProps) {
   const [formDataClear, setFormDataClear] = useState<boolean|null>(null)
 
   useEffect(() => {
-    setFormData(new FormData())
+    setJasonDatas({
+      type: "",
+      title: "",
+      description: "",
+      price: 0,
+      tags: [""],
+    })
     setFormDataClear(null)
   },[formDataClear])
 
