@@ -16,10 +16,16 @@ function ViewHeader({ EpisodeData,id }: ViewHeaderProps) {
   const [deleteModalOpen , setDeleteModalOpen] =useState(false)
   const [deleteData, setDeleteData] = useState<episode>()
   const router = useRouter();
-
+  const putEpisodeData = {
+    coverId:EpisodeData.coverId,
+    statusType: EpisodeData.statusType,
+    point:0,
+    title: EpisodeData.title,
+    contents: EpisodeData.contents
+  }
   const putViewerData = async (Id: number) => {
     try {
-      const res = await springApi.put(`/episodes/${Id}`,EpisodeData);
+      const res = await springApi.put(`/episodes/${Id}`,putEpisodeData);
       if (res) {
         console.log(res);
     }
@@ -44,9 +50,10 @@ function ViewHeader({ EpisodeData,id }: ViewHeaderProps) {
   }
   const deleteModalHandler = () => {
     setDeleteModalOpen(true)
-    setDeleteData({coverId:EpisodeData.coverId,
+    setDeleteData({
+      coverId:EpisodeData.coverId,
       statusType: "DELETED",
-      point: EpisodeData.point,
+      point: 0,
       title: EpisodeData.title,
       contents: EpisodeData.contents
     })
@@ -54,6 +61,7 @@ function ViewHeader({ EpisodeData,id }: ViewHeaderProps) {
 
 
   const postHandler = async () => {
+    console.log(deleteData)
     try {
       const res = await springApi.post("/episodes", deleteData);
       if (res.status === 201) {
