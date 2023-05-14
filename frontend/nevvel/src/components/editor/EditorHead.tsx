@@ -111,7 +111,18 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
   const puthandler = async () => {
    console.log(postEpisode)
      try {
-    const res = await springApi.put(`/episodes/${eid}`, postEpisode);
+    const res = await springApi.put(`/episodes/${eid}`,{coverId: 296,
+    statusType: "PUBLISHED",
+    title: "쥰하자",
+    point: 0,
+    contents: [
+        {
+            idx: 1,
+            context: "하이준",
+            event: []
+        },   
+    ]
+});
       if (res) {
         console.log(res);
         router.push({
