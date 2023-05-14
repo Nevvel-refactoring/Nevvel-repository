@@ -6,28 +6,42 @@ import { episode } from "editor";
 import Dummy_Episode from "../../../../components/viewer/DummyEpisodeData.json";
 import { useRouter } from "next/dist/client/router";
 import { mobile } from "@/src/util/Mixin";
+import springApi from "@/src/api";
 
 function index() {
   const router = useRouter();
   const eid = router.query.eid;
   const id =router.query.id
   const [episode, setEpisode] = useState<episode>(Dummy_Episode);
-  const [putId, setPutId] = useState<number|undefined>();
   const scrollRef = useRef<any>();
+
+  const getViewerData = async (Id: number) => {
+    const res = await springApi.get(`/episodes/${Id}`);
+    if (res) {
+      console.log(res);
+      setEpisode(res.data);
+    }
+  };
+
+  useEffect(() => {
+    console.log(id);
+    if (id) {
+      const Id = Number(id);
+      console.log("router", Id);
+      getViewerData(Id);
+    // } else {
+    //   setEpisodeData(Dummy_Episode);
+    }
+    // setEpisodeData(Dummy_Episode); // merge 하기 전에 주석처리! 위에꺼는 해제
+  }, []);
+
+
+
+
+
   useEffect(() => {
     scrollRef.current.scrollTop = scrollRef.current?.scrollHeight;
   }, [episode]);
-  useEffect(() => {
-    console.log(id,"id")
-    console.log(eid,"eid")
-    if (eid) {
-        console.log("여기 안들어옴?"
-        )
-      const EID = Number(eid);
-      setPutId(EID);
-    }
-  }, []);
-
   return (
     <Wrapper>
       <EditorWrapper ref={scrollRef}>

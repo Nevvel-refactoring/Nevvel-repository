@@ -111,7 +111,7 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
   const puthandler = async () => {
    console.log(postEpisode)
      try {
-    const res = await springApi.put(`/episodes/${eid}`,{coverId: 296,
+    const res = await springApi.put(`/episodes/${eid}`,{coverId: postEpisode?.coverId,
     statusType: "PUBLISHED",
     title: "쥰하자",
     point: 0,
@@ -193,7 +193,7 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
               {eid && <>현재 수정한 상태로 발행하시겠습니까
               ?
               <button onClick={puthandler}>네</button>
-              <button onClick={() => saveHandler("cancel")}>아니요</button>
+              <button onClick={() => setPostModalOpen(false)}>아니요</button>
               </>}
             </div>
           }

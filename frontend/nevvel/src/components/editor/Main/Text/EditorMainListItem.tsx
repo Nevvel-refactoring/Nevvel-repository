@@ -38,7 +38,7 @@ function EditorMainListItem({
   const IMAGE = DummyAssetData_image;
   const AUDIO = DummyAssetData_audio;
   useEffect(() => {
-    console.log(text);
+    // console.log(text);
     // 텍스트에 style 적용한 경우
   }, [style]);
 

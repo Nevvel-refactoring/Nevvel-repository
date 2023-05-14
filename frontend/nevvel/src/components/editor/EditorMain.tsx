@@ -17,7 +17,7 @@ function EditorMain({setEpisode,episode}:EditorMainProps) {
   const assetOpen = useAtomValue(assetOpenAtom)  
   useEffect(()=>{
     setEpisode({...episode,contents:contents})
-    console.log("episode",episode)
+    // console.log("episode",episode)
   },[contents])
 
   useEffect(()=>{
@@ -27,15 +27,15 @@ function EditorMain({setEpisode,episode}:EditorMainProps) {
   },[])
   
 
-	return (<>
+    return (<>
     <Wrapper assetOpen={assetOpen}>
       <EditorMainList
       episode={episode}
-			contents={contents}
-			setContents={setContents}
+            contents={contents}
+            setContents={setContents}
       currentText={currentText}
-			setCurrentText={setCurrentText}
-			/>
+            setCurrentText={setCurrentText}
+            />
     </Wrapper>
     <NumColor>
         {assetOpen && <EditorMainAssetContainer 
