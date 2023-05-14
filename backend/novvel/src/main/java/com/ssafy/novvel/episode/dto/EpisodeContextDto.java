@@ -39,6 +39,8 @@ public class EpisodeContextDto {
 
     private Long episodeId;
 
+    private Long point;
+
     private List<ContextTouchsDto> contents;
 
     private Long prevEpisodeId;
