@@ -23,7 +23,7 @@ function SeriesHeader({ SeriesData, coverId }: SeriesHeaderProps) {
   // cover 좋아요하기
   const postSeriesLike = async (Id: number) => {
     // 비로그인 유저는 로그인 하라고 alert 뛰우기
-    const res = await springApi.get(`/covers/likes/${Id}`);
+    const res = await springApi.post(`/covers/likes/${Id}`);
     if (res) {
       console.log(res);
     }
