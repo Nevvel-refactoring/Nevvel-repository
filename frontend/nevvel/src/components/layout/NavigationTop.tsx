@@ -9,14 +9,14 @@ import { tabletH } from "../../util/Mixin";
 import { mobile } from "../../util/Mixin";
 
 function NavigationTop() {
+  const loginStatus = useAtomValue(loginAtom);
+  // console.log(loginStatus);
+
   const [word, setWord] = useState<string>("");
 
   const searchWordHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     setWord(event.target.value);
   };
-
-  const loginStatus = useAtomValue(loginAtom);
-  // console.log(loginStatus);
 
   const router = useRouter();
   // 검색창에 키보드 입력 시
@@ -75,9 +75,9 @@ function NavigationTop() {
         </Profile>
       ) : (
         <Profile loginStatus={loginStatus}>
-          <SignIn>
+          {/* <SignIn>
             <Link href="/login">회원가입</Link>
-          </SignIn>
+          </SignIn> */}
           <LogIn>
             <Link href="/login">로그인</Link>
           </LogIn>
@@ -86,6 +86,8 @@ function NavigationTop() {
     </Wrapper>
   );
 }
+
+export default NavigationTop;
 
 const Wrapper = styled.div`
   display: flex;
@@ -130,9 +132,9 @@ const SearchIcon = styled.div`
 const Profile = styled.div<{ loginStatus: boolean }>`
   color: ${({ theme }) => theme.color.text1};
   display: flex;
-  margin-right: ${({ loginStatus }) => (loginStatus ? "" : "5rem")};
+  margin-right: 5rem;
   width: 10rem;
-  justify-content: space-between;
+  justify-content: center;
 
   ${tabletH} {
     font-size: 14px;
@@ -148,6 +150,6 @@ const LogIn = styled.div`
   font-size: 13.5px;
 `;
 
-const MyPage = styled.div``;
-
-export default NavigationTop;
+const MyPage = styled.div`
+  font-size: 13.5px;
+`;

@@ -1,5 +1,4 @@
-import { atomWithStorage } from "jotai/utils";
+import { atom } from "jotai";
+import { getCookie } from "../util/cookies";
 
-export const loginAtom = atomWithStorage("loginStatus", false);
-
-export const isUserAtom = atomWithStorage("isUserStatus", false);
+export const loginAtom = atom(!!getCookie("accessToken"));
