@@ -1,11 +1,11 @@
 import React, { useEffect, useRef } from "react";
-import { EpisodeView } from "viewer";
+import { episode } from "viewer";
 import styled from "styled-components";
 import { mobile } from "@/src/util/Mixin";
 import ViewerPageTextBlock from "../ViewerPageTextBlock";
 
 type viewerPageMainProps = {
-  EpisodeData: EpisodeView;
+  EpisodeData: episode;
   fontSize: number;
   whiteSpace: number;
   interval: number;

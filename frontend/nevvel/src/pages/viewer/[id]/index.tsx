@@ -10,7 +10,7 @@ import { GetStaticPaths, GetStaticProps } from "next";
 import springApi from "@/src/api";
 import { AiFillSetting } from "react-icons/ai";
 import { mobile, tabletH } from "@/src/util/Mixin";
-import { EpisodeView } from "viewer";
+import { episode } from "viewer";
 
 import ViewHeader from "../../../components/viewer/ViewHeader";
 import ViewerTabMain from "../../../components/viewer/Main/ViewerTabMain";
@@ -37,8 +37,9 @@ function viewer() {
   const audioRef = useRef<any>(null);
   const scrollRef = useRef<any>();
   const nowTextBlock = useAtomValue(numAtom);
-  const [EpisodeData, setEpisodeData] = useState<EpisodeView>(Dummy_Episode);
-
+  const [EpisodeData, setEpisodeData] = useState<episode>(Dummy_Episode);
+  
+  // 소설 받아오기 페이지 
   const getViewerData = async (Id: number) => {
     const res = await springApi.get(`/episodes/${Id}`);
     if (res) {
@@ -48,14 +49,15 @@ function viewer() {
   };
 
   useEffect(() => {
-    // console.log(id);
-    // if (id) {
-    //   const Id = Number(id);
-    //   console.log("router", Id);
-    //   getViewerData(Id);
-    // } else {
+    console.log(id);
+    if (id) {
+      const Id = Number(id);
+      console.log("router", Id);
+      getViewerData(Id);
+    } else {
       setEpisodeData(Dummy_Episode);
-    // }
+    }
+    // setEpisodeData(Dummy_Episode); // merge 하기 전에 주석처리! 위에꺼는 해제
   }, [id]);
 
   useEffect(() => {
@@ -162,7 +164,7 @@ function viewer() {
   return (
     <ViewerWrapper>
       <HeaderContainer onClick={() => clickhandler("head")}>
-        {headerToggle ? <ViewHeader EpisodeData={EpisodeData} /> : null}
+        {headerToggle ? <ViewHeader id={id} EpisodeData={EpisodeData} /> : null}
       </HeaderContainer>
 
       <MainWrapper onClick={() => setHeaderToggle(false)}>

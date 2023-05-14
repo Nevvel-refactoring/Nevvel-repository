@@ -1,16 +1,33 @@
-import React from "react";
-import { EpisodeView } from "viewer";
+import React, { useEffect, useState } from "react";
+import { episode } from "viewer";
 import { AiFillCaretLeft, AiFillCaretRight, AiOutlineHome } from "react-icons/ai";
 import styled from "styled-components";
 import { useRouter } from "next/dist/client/router";
 import { mobile, tabletH } from "@/src/util/Mixin";
+import springApi from "@/src/api";
+import { Modal } from "../common/Modal";
 
 type ViewHeaderProps = {
-  EpisodeData: EpisodeView;
+  id: string | string[] | undefined
+  EpisodeData:episode
 };
 
-function ViewHeader({ EpisodeData }: ViewHeaderProps) {
+function ViewHeader({ EpisodeData,id }: ViewHeaderProps) {
+  const [deleteModalOpen , setDeleteModalOpen] =useState(false)
+  const [deleteData, setDeleteData] = useState<episode>()
   const router = useRouter();
+
+  const putViewerData = async (Id: number) => {
+    try {
+      const res = await springApi.put(`/episodes/${Id}`,EpisodeData);
+      if (res) {
+        console.log(res);
+    }
+  }
+  catch(error){
+    console.log(error)
+  }
+  };
 
   const clickHandler = () => {
     router.push({
@@ -18,6 +35,38 @@ function ViewHeader({ EpisodeData }: ViewHeaderProps) {
       query:{id:1}
     })
   }
+
+  const editHandler = () => {
+    if(id){
+      const Id = Number(id)
+      putViewerData(Id)
+    }
+  }
+  const deleteModalHandler = () => {
+    setDeleteModalOpen(true)
+    setDeleteData({coverId:EpisodeData.coverId,
+      statusType: "DELETED",
+      point: EpisodeData.point,
+      title: EpisodeData.title,
+      contents: EpisodeData.contents
+    })
+  }
+
+
+  const postHandler = async () => {
+    try {
+      const res = await springApi.post("/episodes", deleteData);
+      if (res.status === 201) {
+        console.log(res);
+        alert(`${EpisodeData.title}가 삭제되었습니다`)
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    // setPostedEpisodeId(320);
+  };
+
+
   return (
     <>
       <HeaderTopContainer>
@@ -27,10 +76,27 @@ function ViewHeader({ EpisodeData }: ViewHeaderProps) {
               <AiOutlineHome onClick={clickHandler} size={24} />
             </EpisodeHome>
             <EpisodeTitle>{EpisodeData.title}</EpisodeTitle>
+            <button onClick={editHandler}>수정</button>
+            <button onClick={deleteModalHandler}>삭제</button>
           </EpisodeTitleContainer>
         <AiFillCaretRight size={24} />
       </HeaderTopContainer>
       <ProgressBar />
+      {deleteModalOpen && (
+        <Modal
+          modal={deleteModalOpen}
+          setModal={setDeleteModalOpen}
+          width="300"
+          height="300"
+          element={
+            <div>
+              글을 정말 삭제하시겠습니까?
+              <button onClick={postHandler}>네</button>
+              <button onClick={() =>setDeleteModalOpen(false)}>아니요</button>
+            </div>
+          }
+        />
+      )}
     </>
   );
 }

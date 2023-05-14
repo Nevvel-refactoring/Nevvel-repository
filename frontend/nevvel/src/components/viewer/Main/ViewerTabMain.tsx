@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { EpisodeView } from "viewer";
+import { episode } from "viewer";
 import styled from "styled-components";
 import ViewerTextBlock from "../ViewerTextBlock";
 import { event } from "viewer";
@@ -11,7 +11,7 @@ type viwerMainProps = {
   whiteSpace: number;
   interval: number;
   fontStyle: string;
-  EpisodeData: EpisodeView;
+  EpisodeData: episode;
   setEventCatch: React.Dispatch<React.SetStateAction<boolean>>;
 };
 function ViewerTabMain({

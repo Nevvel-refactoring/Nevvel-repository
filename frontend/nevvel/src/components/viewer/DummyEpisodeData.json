@@ -1,4 +1,7 @@
 {
+  "coverId" : 1,
+  "statusType":"PUBLISHED",
+  "point":0,
   "title": "호텔 스타라이트에서 머물기 위한 규칙 (axios 안됐을때)",
   "contents": [
     {
