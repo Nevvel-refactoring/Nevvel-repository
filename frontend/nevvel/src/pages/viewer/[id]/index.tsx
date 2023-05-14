@@ -48,14 +48,14 @@ function viewer() {
   };
 
   useEffect(() => {
-    console.log(id);
-    if (id) {
-      const Id = Number(id);
-      console.log("router", Id);
-      getViewerData(Id);
-    } else {
+    // console.log(id);
+    // if (id) {
+    //   const Id = Number(id);
+    //   console.log("router", Id);
+    //   getViewerData(Id);
+    // } else {
       setEpisodeData(Dummy_Episode);
-    }
+    // }
   }, [id]);
 
   useEffect(() => {
@@ -236,7 +236,7 @@ const ViewerWrapper = styled.div`
   -ms-user-select: none;
   user-select: none;
   ${mobile} {
-    font-size: 12px;
+    font-size: 16px;
   }
   /* font-family: "Malgun Gothic"; */
 `;
@@ -265,8 +265,8 @@ const MainContainer = styled.div<{ writeMode: boolean }>`
     margin-right: 20%;
   }
   ${mobile} {
-    margin-left: 10%;
-    margin-right: 10%;
+    margin-left: 5%;
+    margin-right: 5%;
   }
   /* border: 1px solid black; */
 `;

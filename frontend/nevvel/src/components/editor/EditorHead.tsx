@@ -22,7 +22,7 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
   const [postModalOpen, setPostModalOpen] = useState(false);
   const assetOpen = useAtomValue(assetOpenAtom);
   const [postedEpisodeId, setPostedEpisodeId] = useState<number>();
-  
+
   useEffect(() => {
     console.log(episode);
   }, [episode]);
@@ -32,15 +32,28 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
       setTimeout(() => setSaveToast(false), 2000);
     }
   }, [saveToast]);
-  useEffect(()=>{
-    if (postedEpisodeId){
+  useEffect(() => {
+    if (postedEpisodeId) {
       router.push({
-        pathname:"/viewer/[id]",
-        query:{ id:postedEpisodeId }
-      })
+        pathname: "/viewer/[id]",
+        query: { id: postedEpisodeId },
+      });
     }
+  }, [postedEpisodeId]);
 
-  },[postedEpisodeId])
+  useEffect(() => {
+    if (saveToast) {
+      setPostEpisode(episode);
+      console.log(saveToast);
+    }
+  }, [saveToast]);
+
+  useEffect(() => {
+    console.log(postEpisode);
+    if (postEpisode?.statusType == "TEMPORARY") {
+      postHandler();
+    }
+  }, [postEpisode]);
 
   const Titlehandler = (e: any) => {
     setEpisode({
@@ -50,19 +63,35 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
   };
 
   const PublishHandler = () => {
-    setPostEpisode(episode);
-    setPostModalOpen(true);
-    // if (postEpisode) {
-    //   router.push({
-    //     pathname: "/viewer/[id]",
-    //     query: { id: 1 },
-    //   });
-    // }
+    if (episode.title == "") {
+      alert("제목을 입력해주세요");
+    } else if (episode.contents.length == 0) {
+      alert("내용을 입력해주세요");
+    } else {
+      if (episode.statusType == "TEMPORARY") {
+        setEpisode({ ...episode, statusType: "PUBLISHED" });
+      }
+      setPostEpisode(episode);
+      setPostModalOpen(true);
+    }
   };
 
-  const saveHandler = () => {
+  const saveHandler = (e: string) => {
     // 임시저장 axios 연결하면 제대로 해보기..
-    setSaveToast(true);
+    if (episode.title == "") {
+      alert("제목을 입력해주세요");
+    } else if (episode.contents.length == 0) {
+      alert("내용을 입력해주세요");
+    } else {
+      if (e == "save") {
+        // 임시 저장을 클릭 했다면
+        setSaveToast(true);
+      } else if (e == "cancel") {
+        setPostModalOpen(false);
+        setSaveToast(true);
+      }
+      setEpisode({ ...episode, statusType: "TEMPORARY" });
+    }
   };
 
   const postHandler = async () => {
@@ -77,37 +106,27 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
     }
     // setPostedEpisodeId(320);
   };
-  
-  const exHandler =async() =>{
-    try {
-      const res = await springApi.post("/episodes", postEpisode);
-      if (res.status === 201) {
-        console.log(res);
-        setPostedEpisodeId(res.data);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }
 
   return (
     <Wrapper>
       <ButtonWrapper>
         <WriteButtonContainer>
-          <WriteButton onClick={exHandler}>예시</WriteButton>
           <WriteButton onClick={() => setModalOpen(true)}>미리보기</WriteButton>
-          <WriteButton onClick={saveHandler}>임시저장</WriteButton>
+          <WriteButton onClick={() => saveHandler("save")}>
+            임시저장
+          </WriteButton>
           <WriteButton onClick={PublishHandler}>발행하기</WriteButton>
         </WriteButtonContainer>
       </ButtonWrapper>
       <InputWrapper assetOpen={assetOpen}>
+        <SeriesTitle>여기다 시리즈 제목 넣으면 됩니다.</SeriesTitle>
         <TitleInput
           value={episode.title}
           onChange={Titlehandler}
           name="title"
           placeholder="에피소드 명을 입력하세요"
         />
-        <BackGroundAssetContainer>전체 에셋</BackGroundAssetContainer>
+        {/* <BackGroundAssetContainer>전체 에셋</BackGroundAssetContainer> */}
       </InputWrapper>
       {modalOpen && (
         <Modal
@@ -138,6 +157,7 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
             <div>
               발행하시겠습니까?
               <button onClick={postHandler}>네</button>
+              <button onClick={() => saveHandler("cancel")}>아니요</button>
             </div>
           }
         />
@@ -168,26 +188,31 @@ const WriteButton = styled.button`
 `;
 const InputWrapper = styled.div<{ assetOpen: number }>`
   display: flex;
-  flex-direction: row;
-  width: 100%;
+  flex-direction: column;
+  width: 90%;
   justify-content: center;
   text-align: center;
-  align-items: center;
+  align-items: flex-start;
+  margin-left: 1.5rem;
   padding-left: ${(props) => (props.assetOpen ? 30 : 20)}%;
   padding-right: ${(props) => (props.assetOpen ? 15 : 20)}%;
+`;
+const SeriesTitle = styled.div`
+  color: ${({ theme }) => theme.color.point};
+  padding-left: 1.5rem;
+  font-size: 12px;
 `;
 
 const TitleInput = styled.input`
   height: 2rem;
   font-size: 1.5rem;
-  margin-top: 2rem;
-  margin-bottom: 1rem;
   padding-left: 1rem;
-  /* background-color: ${({ theme }) => theme.color.hover}; */
+  background-color: ${({ theme }) => theme.color.background};
+  color: ${({ theme }) => theme.color.text1};
   padding: 1.5rem;
   border: none;
   border-radius: 10px;
-  font-size: 16px;
+  font-size: 1.5rem;
   /* box-shadow: 0px 0px 3px gray; */
   width: 70%;
   ::placeholder {

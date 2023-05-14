@@ -36,6 +36,7 @@ const Text = styled.div`
   &.animation {
     animation-name: opacity;
     animation-duration: 1000ms;
+    line-height: 1.6;
 
     @keyframes opacity {
       from {

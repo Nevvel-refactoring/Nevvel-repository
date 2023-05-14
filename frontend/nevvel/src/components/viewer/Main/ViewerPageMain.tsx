@@ -54,7 +54,7 @@ const Container = styled.div<{
   font-size: ${(props) => props.fontSize * 4}px;
   ${mobile} {
     font-size: ${(props) =>
-      props.fontSize == 3 ? 12 : props.fontSize * 3.5}px;
+      props.fontSize == 3 ? 16 : props.fontSize * 5.5}px;
   }
 `;
 const TextBlock = styled.div<{ interval: number }>`

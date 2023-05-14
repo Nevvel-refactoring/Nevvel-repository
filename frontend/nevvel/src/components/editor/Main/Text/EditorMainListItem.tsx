@@ -255,10 +255,12 @@ const TextBlock = styled.div`
   width: 100%;
   border-radius: 10px;
   background-color: ${({ theme }) => theme.color.editor};
-  height: 3rem;
-  padding-left: 1rem;
+  padding: 1rem;
+  height: auto;
+
   display: flex;
   align-items: center;
+  white-space: normal;
 `;
 
 const RemoveButton = styled.button`
