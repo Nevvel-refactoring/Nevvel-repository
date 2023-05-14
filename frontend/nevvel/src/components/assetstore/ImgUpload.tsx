@@ -22,7 +22,7 @@ type ImgType = {
   type: string,
   title: string,
   description: string,
-  price: number,
+  point: number,
   tags: string[],
 }
 
@@ -98,7 +98,7 @@ function ImgUpload(props:assetstoreProps) {
     type: "",
     title: "",
     description: "",
-    price: 0,
+    point: 0,
     tags: [""],
   })
 
@@ -125,7 +125,7 @@ function ImgUpload(props:assetstoreProps) {
         type: "IMAGE",
         title: title,
         description: description,
-        price: price,
+        point: price,
         tags: selectTag,
       })
       
@@ -174,7 +174,7 @@ function ImgUpload(props:assetstoreProps) {
       type: "",
       title: "",
       description: "",
-      price: 0,
+      point: 0,
       tags: [""],
     })
     setFormDataClear(null)
