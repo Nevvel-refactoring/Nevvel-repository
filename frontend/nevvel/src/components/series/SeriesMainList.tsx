@@ -1,29 +1,37 @@
-import React from 'react'
-import SeriesMainListItem from './SeriesMainListItem'
-import { cover } from 'series'
-import styled from 'styled-components'
+import React, { useEffect, useState } from "react";
+import SeriesMainListItem from "./SeriesMainListItem";
+import { cover } from "series";
+import styled from "styled-components";
 
 type SeriesMainListProps = {
-    Info:cover
-}
+  Info: cover;
+  isLatest: boolean;
+};
 
-function SeriesMainList({Info}:SeriesMainListProps) {
+function SeriesMainList({ Info, isLatest }: SeriesMainListProps) {
+  const firstEpisodes = Info.episodes;
+  const lastEpisodes = [...firstEpisodes].reverse();
+  const [episodes, setEpisodes] = useState(lastEpisodes);
+  // console.log(firstEpisodes);
+  // console.log(lastEpisodes);
+  useEffect(() => {
+    if (isLatest) {
+      setEpisodes(lastEpisodes);
+    } else {
+      setEpisodes(firstEpisodes);
+    }
+  }, [isLatest]);
   return (
     <ListContainer>
-        {Info.episodes.map((episode,index)=>(
-
-      <SeriesMainListItem 
-      key={index}
-      episode={episode}
-      />
-        ))}
+      {episodes.map((episode) => (
+        <SeriesMainListItem key={episode.id} episode={episode} />
+      ))}
     </ListContainer>
-  )
+  );
 }
 
 const ListContainer = styled.div`
-    height: 100%;
-`
+  height: 100%;
+`;
 
-
-export default SeriesMainList
+export default SeriesMainList;
