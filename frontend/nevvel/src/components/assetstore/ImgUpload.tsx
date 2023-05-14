@@ -150,17 +150,19 @@ function ImgUpload(props:assetstoreProps) {
   const [axiosTrigger, setAxiosTrigger] = useState<boolean|null>(null)
 
   useEffect(() => {
-    console.log('엑시오스 활성화',axiosTrigger)
-    springApi.post("/assets", formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      }
-    }).then(res => {
-      console.log(res)
-    }).catch(err => {
-      console.log("에러남 error")
-    })
-    setAxiosTrigger(null)
+    if (axiosTrigger) {
+      console.log('엑시오스 활성화',axiosTrigger)
+      springApi.post("/assets", formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then(res => {
+        console.log(res)
+      }).catch(err => {
+        console.log("에러남 error")
+      })
+      setAxiosTrigger(null)
+    }
   },[axiosTrigger])
 
   // 모달에서 취소버튼 누르면 모달 닫으면서 formdata 초기화
