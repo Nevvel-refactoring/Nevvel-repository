@@ -115,13 +115,13 @@ function ImgUpload(props:assetstoreProps) {
   const SubmitAsset = async () => {
     try{
       // 들어오는지 테스트
-      console.log(image, title, description, price, selectTag)
+      await console.log(image, title, description, price, selectTag)
 
       // 태그 리스트 객체화
       // const tagOjectList = selectTag.map((tag) => ({ tagName : tag }))
       
       // jsonDatas에 json 집어넣기
-      setJasonDatas({
+      await setJasonDatas({
         type: "IMAGE",
         title: title,
         description: description,
@@ -131,13 +131,13 @@ function ImgUpload(props:assetstoreProps) {
       
       // 제출버튼 누르면 formdata에 데이터 집어넣기
       if (image) {
-        formData.append('file', image)
+        await formData.append('file', image)
         // formData.append('assetRegistDto', JSON.stringify(jsonDatas))
       }
-      formData.append('assetRegistDto', new Blob([JSON.stringify(jsonDatas)], {type: "application/json"}))
+      await formData.append('assetRegistDto', new Blob([JSON.stringify(jsonDatas)], {type: "application/json"}))
       
       // 데이터 집어넣어진 다음 모달 열기
-      setModalonModalOpen(true)
+      await setModalonModalOpen(true)
       console.log(formData)
       console.log('엑시오스 아직 비활성화', axiosTrigger)
       
@@ -151,18 +151,31 @@ function ImgUpload(props:assetstoreProps) {
   const [axiosTrigger, setAxiosTrigger] = useState<boolean|null>(null)
 
   useEffect(() => {
-    if (axiosTrigger) {
-      console.log('엑시오스 활성화',axiosTrigger)
-      springApi.post("/assets", formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
+    const DoAxios = async () => {
+      try{
+        if (axiosTrigger) {
+          const res = await springApi.post("/assets", formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          })
+          setAxiosTrigger(null)
         }
-      }).then(res => {
-        console.log(res)
-      }).catch(err => {
+      } catch(error) {
         console.log("에러남 error")
-      })
-      setAxiosTrigger(null)
+      }
+    // if (axiosTrigger) {
+    //   console.log('엑시오스 활성화',axiosTrigger)
+    //   springApi.post("/assets", formData, {
+    //     headers: {
+    //       'Content-Type': 'multipart/form-data'
+    //     }
+    //   }).then(res => {
+    //     console.log(res)
+    //   }).catch(err => {
+    //     console.log("에러남 error")
+    //   })
+    // }
     }
   },[axiosTrigger])
 
