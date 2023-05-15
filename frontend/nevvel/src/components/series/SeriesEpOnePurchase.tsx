@@ -14,7 +14,7 @@ function SeriesEpOnePurchase({ Info }: SeriesEpOnePurchaseProps) {
   const episodePurchase = async () => {
     try {
       const res = await springApi.post("/purchasing", {
-        coverId: router.query.id,
+        coverId: Number(router.query.id),
         episodes: [Info.id],
       });
       if (res.status === 201) {

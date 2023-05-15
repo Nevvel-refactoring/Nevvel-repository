@@ -104,10 +104,13 @@ function EditorMainListItem({
   };
 
   const ImageEvent = content.event.map((asset, index) => {
+    const assetImageFindIndex = IMAGE.findIndex((el)=>el.id == asset.assetId)
+    const assetAudioFindIndex = AUDIO.findIndex((el)=>el.id == asset.assetId)
     if (content.event.length == 1 && index == 0 && asset.type === "IMAGE") {
+
       return (
         <AssetContainer key={index}>
-          <Img src={IMAGE[asset.assetId].thumbnail} alt="썸네일" />
+          <Img src={IMAGE[assetImageFindIndex].thumbnail} alt="썸네일" />
           <AssetButton onClick={() => AssetHandler(2)}>
             <AiOutlineSound className="sound" size="24" />
           </AssetButton>
@@ -123,7 +126,7 @@ function EditorMainListItem({
           <AssetButton onClick={() => AssetHandler(1)}>
             <BiImageAdd className="image" size="24" />
           </AssetButton>
-          <Img src={AUDIO[asset.assetId].thumbnail} alt="썸네일" />
+          <Img src={AUDIO[assetAudioFindIndex].thumbnail} alt="썸네일" />
         </AssetContainer>
       );
     } else {
@@ -132,14 +135,14 @@ function EditorMainListItem({
           {asset.type === "IMAGE" && (
             <Img
               className="check"
-              src={IMAGE[asset.assetId].thumbnail}
+              src={IMAGE[assetImageFindIndex].thumbnail}
               alt="썸네일"
             />
           )}
           {asset.type === "AUDIO" && (
             <Img
               className="check"
-              src={AUDIO[asset.assetId].thumbnail}
+              src={AUDIO[assetAudioFindIndex].thumbnail}
               alt="썸네일"
             />
           )}

@@ -33,7 +33,7 @@ function EditorMain({setEpisode,episode}:EditorMainProps) {
         setAssetImageData(res.data.content);
     }}catch(error){
       console.log(error)
-      // setAssetImageData(DummyAssetData_image.content)
+      setAssetImageData(DummyAssetData_image.content)
     }
   };
   // 오디오 get 요청 
@@ -48,7 +48,7 @@ function EditorMain({setEpisode,episode}:EditorMainProps) {
       }
     }catch(error){
       console.log(error)
-      // setAssetAudioData(DummyAssetData_audio.content)
+      setAssetAudioData(DummyAssetData_audio.content)
     }
   };
 
