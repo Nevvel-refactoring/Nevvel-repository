@@ -1,31 +1,53 @@
+import springApi from "@/src/api";
 import { mobile } from "@/src/util/Mixin";
-import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { cover, shoppingList } from "series";
 import styled from "styled-components";
 
 type SeriesSelectedProps = {
   Info: cover;
+  isPurchased: number;
+  setIsPurchase: Dispatch<SetStateAction<number>>;
 };
 
-function SeriesSelected({ Info }: SeriesSelectedProps) {
+function SeriesSelected({
+  Info,
+  setIsPurchase,
+  isPurchased,
+}: SeriesSelectedProps) {
   const episodes = Info.episodes;
   const [checkAllEp, setCheckAllEp] = useState<boolean>(false);
   const [point, setPoint] = useState<number>(0);
-  const [shoppingList, SetShoppingList] = useState<shoppingList>({
-    coverId: Info.coverId,
-    episodes: [],
-  });
   const [episodeList, setEpisodeList] = useState<number[]>([]);
+  const router = useRouter();
 
   const checkHandler = (e: number) => {
     if (episodeList.some((el) => el == e)) {
-      console.log();
       setEpisodeList(episodeList.filter((el) => el !== e));
     } else {
       setEpisodeList([...episodeList, e]);
     }
   };
 
+  const episodePurchase = async () => {
+    try {
+      const res = await springApi.post("episodes/purchasing", {
+        coverId: Number(router.query.id),
+        episodes: episodeList,
+      });
+      if (res.status === 201) {
+        console.log(res);
+        setIsPurchase(isPurchased + 1);
+      } else if (res.status === 200) {
+        if (confirm("포인트가 부족합니다. 충전하러 가시겠습니까?")) {
+          router.push("/profile/purchase");
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
     if (checkAllEp) {
       const newEpList: number[] = [];
@@ -40,13 +62,6 @@ function SeriesSelected({ Info }: SeriesSelectedProps) {
       setEpisodeList([]);
     }
   }, [checkAllEp]);
-
-  useEffect(() => {
-    console.log(shoppingList);
-  }, [shoppingList]);
-  const buyHandler = async () => {
-    SetShoppingList({ ...shoppingList, episodes: episodeList });
-  };
 
   useEffect(() => {
     let pointCount = 0;
@@ -110,7 +125,8 @@ function SeriesSelected({ Info }: SeriesSelectedProps) {
           </div>
         ))}
       </ListWrapper>
-      <SeriesBtn onClick={buyHandler}>구매하기</SeriesBtn>
+      <SeriesBtn onClick={episodePurchase}>구매하기</SeriesBtn>
+      <p>잔여 포인트 00p</p>
     </Wrapper>
   );
 }

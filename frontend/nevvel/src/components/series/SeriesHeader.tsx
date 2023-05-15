@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import styled from "styled-components";
 import { cover } from "series";
 import Image from "next/image";
@@ -14,9 +14,16 @@ import springApi from "@/src/api";
 type SeriesHeaderProps = {
   SeriesData: cover;
   coverId: string | string[] | undefined;
+  isPurchased: number;
+  setIsPurchase: Dispatch<SetStateAction<number>>;
 };
 
-function SeriesHeader({ SeriesData, coverId }: SeriesHeaderProps) {
+function SeriesHeader({
+  SeriesData,
+  coverId,
+  setIsPurchase,
+  isPurchased,
+}: SeriesHeaderProps) {
   const router = useRouter();
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -89,7 +96,13 @@ function SeriesHeader({ SeriesData, coverId }: SeriesHeaderProps) {
           setModal={setModalOpen}
           width="300"
           height="400"
-          element={<SeriesSelected Info={SeriesData} />}
+          element={
+            <SeriesSelected
+              Info={SeriesData}
+              setIsPurchase={setIsPurchase}
+              isPurchased={isPurchased}
+            />
+          }
         />
       )}
     </HeaderContainer>

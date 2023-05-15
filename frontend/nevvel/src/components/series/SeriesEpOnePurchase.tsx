@@ -13,7 +13,7 @@ function SeriesEpOnePurchase({ Info }: SeriesEpOnePurchaseProps) {
   const router = useRouter();
   const episodePurchase = async () => {
     try {
-      const res = await springApi.post("/purchasing", {
+      const res = await springApi.post("episodes/purchasing", {
         coverId: Number(router.query.id),
         episodes: [Info.id],
       });

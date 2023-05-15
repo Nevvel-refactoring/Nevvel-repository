@@ -9,6 +9,7 @@ import { useRouter } from "next/dist/client/router";
 
 function index() {
   const [seriesData, setSeriesData] = useState<cover>();
+  const [isPurchased, setIsPurchase] = useState<number>(0);
   const router = useRouter();
   const id = router.query.id;
 
@@ -29,13 +30,18 @@ function index() {
     } else {
       // setEpisodeData(Dummy_Episode); // merge 하기 전에 주석처리! 위에꺼는 해제
     }
-  }, [id]);
+  }, [id, isPurchased]);
 
   return (
     <Wrapper>
       {seriesData && (
         <SeriesWrapper>
-          <SeriesHeader SeriesData={seriesData} coverId={id} />
+          <SeriesHeader
+            SeriesData={seriesData}
+            coverId={id}
+            setIsPurchase={setIsPurchase}
+            isPurchased={isPurchased}
+          />
           <SeriesMain SeriesData={seriesData} />
         </SeriesWrapper>
       )}
