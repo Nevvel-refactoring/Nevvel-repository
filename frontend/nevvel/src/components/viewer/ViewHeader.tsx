@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { episode } from "viewer";
+import { episode } from "editor";
 import { AiFillCaretLeft, AiFillCaretRight, AiOutlineHome } from "react-icons/ai";
 import styled from "styled-components";
 import { useRouter } from "next/dist/client/router";

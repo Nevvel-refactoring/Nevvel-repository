@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { content } from "viewer";
+import { content } from "editor";
 import { event } from "viewer";
 import { useAtom, atom } from "jotai";
 
@@ -12,7 +12,7 @@ type ViewerTextBlockProps = {
   
 };
 
-function ViewerTextBlock({
+function EditorPreviewTextBlock({
   content,
   tabNumber,
   setEventCatch,
@@ -28,4 +28,4 @@ const TextBlock = styled.div<{interval:number}>`
   z-index: 100;
   padding:${(props)=>(props.interval)*0.5}rem;
 `;
-export default ViewerTextBlock;
+export default EditorPreviewTextBlock;

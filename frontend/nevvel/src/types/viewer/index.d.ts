@@ -1,7 +1,9 @@
 declare module "viewer" {
-    export interface episode {
+    export interface episodeViewer {
         coverId: number;
+        coverTitle:string;
         statusType: string;
+        episodeId:number;
         point: number;
         title: string;
         contents: content[];
@@ -13,6 +15,7 @@ declare module "viewer" {
       }
     export interface event {
         assetId: number;
-        type: string
+        type: string;
+        assetUrl:string;
     }
 }

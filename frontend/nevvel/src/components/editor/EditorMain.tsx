@@ -51,6 +51,7 @@ function EditorMain({setEpisode,episode}:EditorMainProps) {
       setAssetAudioData(DummyAssetData_audio.content)
     }
   };
+  
 
 
   useEffect(() => {
@@ -95,8 +96,8 @@ const Wrapper = styled.div<{assetOpen:number}>`
 background-color: ${({ theme })=> theme.color.background};
   /* border: 2px solid ${({ theme }) => theme.color.hover}; */
   border-radius: 10px;
-  padding-left:${(props)=>(props.assetOpen ?(30):(20))}%;
-  padding-right: ${(props)=>(props.assetOpen ?(15):(20))}%;
+  padding-left:${(props)=>(props.assetOpen ?(20):(10))}%;
+  padding-right: ${(props)=>(props.assetOpen ?(10):(20))}%;
 `;
 const NumColor = styled.div`
 position: fixed;

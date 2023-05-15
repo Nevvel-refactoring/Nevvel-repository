@@ -10,7 +10,8 @@ function Layout(props: { children: React.ReactNode }) {
   useEffect(() => {
     if (
       router.pathname === "/viewer/[id]" ||
-      router.pathname === "/editor/[id]"
+      router.pathname === "/editor/[id]" ||
+      router.pathname === "/editor/[id]/[eid]"
     ) {
       setHidden(false);
     } else {

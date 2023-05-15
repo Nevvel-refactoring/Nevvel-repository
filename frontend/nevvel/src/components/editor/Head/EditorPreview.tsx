@@ -1,15 +1,21 @@
 import React, { useState, useEffect } from "react";
 import ViewerTabMain from "../../viewer/Main/ViewerTabMain";
+import { episodeViewer } from "viewer";
 import { episode } from "editor";
 import styled from "styled-components";
+import {useRouter} from 'next/router'
+import EditorPreviewTab from "../EditorPreviewTab";
 
 type EditorPreviewProps = {
   postEpisode: episode;
 };
 
 function EditorPreview({ postEpisode }: EditorPreviewProps) {
+  const router = useRouter();
+  const id = router.query.id
   const [tabNumber, setTabNumber] = useState(0); // tab mode 일 때 사용
   const [eventCatch, setEventCatch] = useState(false); // tab mode 일때 이벤트 있는 경우 사용
+
   console.log("여기");
   console.log(postEpisode, "postEpisode");
 
@@ -54,10 +60,10 @@ function EditorPreview({ postEpisode }: EditorPreviewProps) {
       <PreviewHeader>미리보기</PreviewHeader>
       <PreviewMain>
         {postEpisode.contents.length !== 0 ? (
-          <ViewerTabMain
+          <EditorPreviewTab
             EpisodeData={postEpisode}
             tabNumber={tabNumber}
-            setEventCatch={setEventCatch} fontSize={4} whiteSpace={1} interval={3} fontStyle={""}          />
+            setEventCatch={setEventCatch} fontSize={4} whiteSpace={1} interval={3} fontStyle={""}/>
         ) : (<>미리보기 할 내용이 존재하지 않습니다.</>)}
       </PreviewMain>
     </PreviewWrapper>

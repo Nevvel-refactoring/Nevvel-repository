@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import { episode } from "editor";
+
 import { useRouter } from "next/router";
 import { Modal } from "../common/Modal";
 import EditorPreview from "./Head/EditorPreview";
@@ -130,6 +131,7 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
       console.log(error);
     }
   };
+
 
   return (
     <Wrapper>

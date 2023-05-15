@@ -63,12 +63,15 @@ function EditorMainInput({
   // < ;quot 파싱하기
   return (
     <InputWrapper>
+    <LeftSpace />
+    <RightSpace />
       <BlockInput
         ref={textareaRef}
         value={currentText}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
       />
+      <RightSpace />
       {/* <SubmitButton onClick={handleClick}>제출</SubmitButton> */}
     </InputWrapper>
   );
@@ -83,27 +86,31 @@ const InputWrapper = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  padding: 1rem;
+  padding-left: 2rem;
 `;
+
+const LeftSpace = styled.div`
+   width: 10rem;
+`
+const RightSpace =styled.div`
+width: 2rem;
+`
 
 const BlockInput = styled.textarea`
   display: flex;
   justify-content: flex-end;
   background-color: ${({ theme }) => theme.color.editor};
-  width: 92%;
+  width: 100%;
   padding: 1rem;
   border: none;
   border-radius: 10px;
   padding-bottom: 0;
-
   height: auto;
   min-height: 3rem;
   resize: none;
-  margin-left: 2%;
+  align-items: center;
 
-  ${tabletH} {
-    width: 84%;
-    margin-left: 3%;
-  }
 `;
 
 const SubmitButton = styled.button`

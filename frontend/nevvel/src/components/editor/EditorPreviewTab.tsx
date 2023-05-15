@@ -1,20 +1,20 @@
 import React, { useEffect } from "react";
-import { episodeViewer, content } from "viewer";
+import { episode } from "editor";
 import styled from "styled-components";
-import ViewerTextBlock from "../ViewerTextBlock";
+import EditorPreviewTextBlock from "./EditorPreviewTextBlock";
 import { event } from "viewer";
 import { mobile } from "@/src/util/Mixin";
 
-type viwerMainProps = {
+type EditorPreviewTabProps = {
   tabNumber: number;
-  fontSize: number;
+  fontSize:number;
   whiteSpace: number;
   interval: number;
   fontStyle: string;
-  EpisodeData: episodeViewer;
+  EpisodeData: episode;
   setEventCatch: React.Dispatch<React.SetStateAction<boolean>>;
 };
-function ViewerTabMain({
+function EditorPreviewTab({
   EpisodeData,
   tabNumber,
   fontSize,
@@ -22,20 +22,24 @@ function ViewerTabMain({
   whiteSpace,
   interval,
   setEventCatch,
-}: viwerMainProps) {
+}: EditorPreviewTabProps) {
+  const contents = EpisodeData.contents;
   useEffect(() => {
     console.log(fontStyle);
   }, [fontStyle]);
+ 
+
 
   return (
     <>
       <Container
-        fontSize={fontSize}
+      fontSize={fontSize}
         fontStyle={fontStyle}
         whiteSpace={whiteSpace}
+
       >
-        {EpisodeData.contents.map((content, index) => (
-          <ViewerTextBlock
+        {contents.map((content, index) => (
+          <EditorPreviewTextBlock
             interval={interval}
             key={index}
             content={content}
@@ -54,17 +58,19 @@ function ViewerTabMain({
 const Container = styled.div<{
   fontStyle: string;
   whiteSpace: number;
-  fontSize: number;
+  fontSize:number;
 }>`
   display: flex;
   flex-direction: column;
   font-family: ${(props) => `${props.fontStyle}`};
-  padding: ${(props) => props.whiteSpace * 3}%;
-  font-size: ${(props) => props.fontSize * 4}px;
-  ${mobile} {
-    font-size: ${(props) =>
-      props.fontSize == 3 ? 12 : props.fontSize * 3.5}px;
+  padding:${(props)=>(props.whiteSpace)*3}%;
+  font-size:${(props)=>(props.fontSize)*4}px;
+  ${mobile}{
+    font-size:${(props)=>props.fontSize == 3 ? (12):(props.fontSize*3.5)}px;
   }
+
 `;
 
-export default ViewerTabMain;
+
+
+export default EditorPreviewTab;

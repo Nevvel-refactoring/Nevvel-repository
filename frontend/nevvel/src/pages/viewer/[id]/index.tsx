@@ -10,7 +10,7 @@ import { GetStaticPaths, GetStaticProps } from "next";
 import springApi from "@/src/api";
 import { AiFillSetting } from "react-icons/ai";
 import { mobile, tabletH } from "@/src/util/Mixin";
-import { episode } from "viewer";
+import { episodeViewer } from "viewer";
 
 import ViewHeader from "../../../components/viewer/ViewHeader";
 import ViewerTabMain from "../../../components/viewer/Main/ViewerTabMain";
@@ -25,7 +25,7 @@ function viewer() {
   const router = useRouter();
   const id = router.query.id;
   const [headerToggle, setHeaderToggle] = useState(true); // header on/off
-  const [tabNumber, setTabNumber] = useState(0); // tab mode 일 때 사용
+  const [tabNumber, setTabNumber] = useState(1); // tab mode 일 때 사용
   const [eventCatch, setEventCatch] = useState(false); // tab mode 일때 이벤트 있는 경우 사용
   const [settingBox, setSettingBox] = useState(false); // 설정 box 보여 줄 때 사용
   const [writeMode, setWriteMode] = useState(false); // tab or page 모드 설정 토글
@@ -37,14 +37,20 @@ function viewer() {
   const audioRef = useRef<any>(null);
   const scrollRef = useRef<any>();
   const nowTextBlock = useAtomValue(numAtom);
-  const [EpisodeData, setEpisodeData] = useState<episode>(Dummy_Episode);
-  
-  // 소설 받아오기 페이지 
+  const [EpisodeData, setEpisodeData] = useState<episodeViewer>();
+  const [imageEvent, setImageEvent] = useState<string>("");
+  const [audioEvent, setAudioEvent] = useState<string>("");
+
+  // 소설 받아오기 페이지
   const getViewerData = async (Id: number) => {
-    const res = await springApi.get(`/episodes/${Id}`);
-    if (res) {
-      console.log(res);
-      setEpisodeData(res.data);
+    try{
+      const res = await springApi.get(`/episodes/${Id}`);
+      if (res) {
+        console.log(res);
+        setEpisodeData(res.data);
+      }
+    }catch(error){
+      console.log(error)
     }
   };
 
@@ -54,8 +60,8 @@ function viewer() {
       const Id = Number(id);
       console.log("router", Id);
       getViewerData(Id);
-    // } else {
-    //   setEpisodeData(Dummy_Episode);
+      // } else {
+      //   setEpisodeData(Dummy_Episode);
     }
     // setEpisodeData(Dummy_Episode); // merge 하기 전에 주석처리! 위에꺼는 해제
   }, [id]);
@@ -66,9 +72,42 @@ function viewer() {
 
   useEffect(() => {
     // console 찍었을때 content 젤 마지막 index 값이 나오고 현재 스크롤 마지막 값이 나옴..
-    if (nowTextBlock !== EpisodeData.contents.length) {
-      if (EpisodeData.contents[nowTextBlock].event.length !== 0) {
-        const events = EpisodeData.contents[nowTextBlock].event;
+    if (EpisodeData) {
+      if (nowTextBlock !== EpisodeData.contents.length) {
+        if (EpisodeData.contents[nowTextBlock].event.length !== 0) {
+          const events = EpisodeData.contents[nowTextBlock].event;
+          for (const event of events) {
+            if (event.type === "IMAGE") {
+              // console.log("이미지당");
+              setEventCatch(true);
+              setImageEvent(event.assetUrl);
+            }
+            if (event.type === "AUDIO") {
+              // console.log("소리당");
+              setAudioEventCatch(true);
+              setAudioEvent(event.assetUrl);
+            }
+          }
+        }
+      }
+    }
+    return () => {
+      if (eventCatch) {
+        setEventCatch(false);
+        setImageEvent("")
+      }
+      if (audioEventCatch) {
+        setAudioEventCatch(false);
+        setAudioEvent("");
+      }
+    };
+    console.log(nowTextBlock);
+  }, [nowTextBlock]);
+
+  useEffect(() => {
+    if (EpisodeData) {
+      if (EpisodeData.contents[tabNumber - 1].event.length !== 0) {
+        const events = EpisodeData.contents[tabNumber - 1].event;
         for (const event of events) {
           if (event.type === "IMAGE") {
             console.log("이미지당");
@@ -78,31 +117,6 @@ function viewer() {
             console.log("소리당");
             setAudioEventCatch(true);
           }
-        }
-      }
-    }
-    return () => {
-      if (eventCatch) {
-        setEventCatch(false);
-      }
-      if (audioEventCatch) {
-        setAudioEventCatch(false);
-      }
-    };
-    console.log(nowTextBlock);
-  }, [nowTextBlock]);
-
-  useEffect(() => {
-    if (EpisodeData.contents[tabNumber].event.length !== 0) {
-      const events = EpisodeData.contents[tabNumber].event;
-      for (const event of events) {
-        if (event.type === "IMAGE") {
-          console.log("이미지당");
-          setEventCatch(true);
-        }
-        if (event.type === "AUDIO") {
-          console.log("소리당");
-          setAudioEventCatch(true);
         }
       }
     }
@@ -124,9 +138,11 @@ function viewer() {
   }, [audioEventCatch]);
 
   useEffect(() => {
-    const contents = EpisodeData.contents;
-    for (const content of contents) {
-      console.log(content);
+    if (EpisodeData) {
+      const contents = EpisodeData.contents;
+      for (const content of contents) {
+        console.log(content);
+      }
     }
   }, [audioEventCatch]);
 
@@ -152,80 +168,92 @@ function viewer() {
   };
 
   const countHandler = () => {
-    const contentLength = EpisodeData.contents.length;
-    if (tabNumber < contentLength - 1) {
-      setTabNumber(tabNumber + 1);
-    } else if (tabNumber === contentLength - 1) {
-      console.log("마지막 입니다. ");
+    if (EpisodeData) {
+      const contentLength = EpisodeData.contents.length;
+      console.log(contentLength, "contentLength");
+      if (tabNumber <= contentLength - 1) {
+        setTabNumber(tabNumber + 1);
+      } else if (tabNumber === contentLength) {
+        console.log("마지막 입니다. ");
+      }
+      console.log(tabNumber);
     }
-    console.log(tabNumber);
   };
 
   return (
-    <ViewerWrapper>
-      <HeaderContainer onClick={() => clickhandler("head")}>
-        {headerToggle ? <ViewHeader id={id} EpisodeData={EpisodeData} /> : null}
-      </HeaderContainer>
+    <>
+      {EpisodeData && (
+        <ViewerWrapper>
+          <HeaderContainer onClick={() => clickhandler("head")}>
+            {headerToggle && EpisodeData ? (
+              <ViewHeader id={id} EpisodeData={EpisodeData} />
+            ) : null}
+          </HeaderContainer>
 
-      <MainWrapper onClick={() => setHeaderToggle(false)}>
-        {eventCatch ? (
-          <ImageEvent>
-            <Image src={eyes} alt="Logo" fill />
-          </ImageEvent>
-        ) : null}
-        {writeMode ? (
-          <MainContainer writeMode={writeMode}>
-            <ViewerPageMain
-              EpisodeData={EpisodeData}
-              fontSize={fontSize}
-              fontStyle={fontStyle}
-              whiteSpace={whiteSpace}
-              interval={interval}
-            />
-          </MainContainer>
-        ) : (
-          <MainContainer
-            writeMode={writeMode}
-            ref={scrollRef}
-            onClick={countHandler}
-          >
-            {tabNumber === 0 ? (
-              <div>{EpisodeData.title}</div>
+          <MainWrapper onClick={() => setHeaderToggle(false)}>
+            {eventCatch ? (
+              <ImageEvent>
+                <Image src={imageEvent} alt="Logo" fill />
+              </ImageEvent>
+            ) : null}
+            {writeMode ? (
+              <MainContainer writeMode={writeMode}>
+                <ViewerPageMain
+                  EpisodeData={EpisodeData}
+                  fontSize={fontSize}
+                  fontStyle={fontStyle}
+                  whiteSpace={whiteSpace}
+                  interval={interval}
+                />
+              </MainContainer>
             ) : (
-              <ViewerTabMain
+              <MainContainer
+                writeMode={writeMode}
+                ref={scrollRef}
+                onClick={countHandler}
+              >
+                {tabNumber === 0 ? (
+                  <div>{EpisodeData.title}</div>
+                ) : (
+                  <ViewerTabMain
+                    fontSize={fontSize}
+                    fontStyle={fontStyle}
+                    whiteSpace={whiteSpace}
+                    interval={interval}
+                    EpisodeData={EpisodeData}
+                    tabNumber={tabNumber}
+                    setEventCatch={setEventCatch}
+                  />
+                )}
+              </MainContainer>
+            )}
+          </MainWrapper>
+          <SettingBtn onClick={() => setSettingBox(!settingBox)}>
+            <AiFillSetting size="28" />
+          </SettingBtn>
+          {settingBox ? (
+            <>
+              <SettingBox
                 fontSize={fontSize}
-                fontStyle={fontStyle}
                 whiteSpace={whiteSpace}
                 interval={interval}
-                EpisodeData={EpisodeData}
-                tabNumber={tabNumber}
-                setEventCatch={setEventCatch}
+                setFontStyle={setFontStyle}
+                setWriteMode={setWriteMode}
+                setInterval={setInterval}
+                setWhiteSpace={setWhiteSpace}
+                setFontSize={setFontSize}
               />
-            )}
-          </MainContainer>
-        )}
-      </MainWrapper>
-      <SettingBtn onClick={() => setSettingBox(!settingBox)}>
-        <AiFillSetting size="28" />
-      </SettingBtn>
-      {settingBox ? (
-        <>
-          <SettingBox
-            fontSize={fontSize}
-            whiteSpace={whiteSpace}
-            interval={interval}
-            setFontStyle={setFontStyle}
-            setWriteMode={setWriteMode}
-            setInterval={setInterval}
-            setWhiteSpace={setWhiteSpace}
-            setFontSize={setFontSize}
-          />
-        </>
-      ) : null}
-      {audioEventCatch && (
-        <audio ref={audioRef} src={`${DummyAssetData_audio.content[1].url}`} />
+            </>
+          ) : null}
+          {audioEventCatch && (
+            <audio
+              ref={audioRef}
+              src={`${audioEvent}`}
+            />
+          )}
+        </ViewerWrapper>
       )}
-    </ViewerWrapper>
+    </>
   );
 }
 

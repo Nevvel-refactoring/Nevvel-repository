@@ -42,18 +42,17 @@ function EditorMainListItem({
     // 텍스트에 style 적용한 경우
   }, [style]);
 
-  useEffect(()=>{
-    console.log(IMAGE,"최초값")
-    console.log(AUDIO,"최초값")
-    
-  },[])
+  useEffect(() => {
+    console.log(IMAGE, "최초값");
+    console.log(AUDIO, "최초값");
+  }, []);
 
-  useEffect(()=>{
-    console.log(IMAGE,"에셋 버튼 클릭 후")
-    console.log(AUDIO,"에셋 버튼 클릭 후")
-  },[IMAGE,AUDIO])
+  useEffect(() => {
+    console.log(IMAGE, "에셋 버튼 클릭 후");
+    console.log(AUDIO, "에셋 버튼 클릭 후");
+  }, [IMAGE, AUDIO]);
 
-  // block삭제 
+  // block삭제
   const RemoveHandler = (content: content) => {
     setContents(contents.filter((el) => el.idx !== idx));
   };
@@ -104,10 +103,10 @@ function EditorMainListItem({
   };
 
   const ImageEvent = content.event.map((asset, index) => {
-    const assetImageFindIndex = IMAGE.findIndex((el)=>el.id == asset.assetId)
-    const assetAudioFindIndex = AUDIO.findIndex((el)=>el.id == asset.assetId)
     if (content.event.length == 1 && index == 0 && asset.type === "IMAGE") {
-
+      const assetImageFindIndex = IMAGE.findIndex(
+        (el) => el.id == asset.assetId
+      );
       return (
         <AssetContainer key={index}>
           <Img src={IMAGE[assetImageFindIndex].thumbnail} alt="썸네일" />
@@ -121,6 +120,9 @@ function EditorMainListItem({
       index == 0 &&
       asset.type === "AUDIO"
     ) {
+      const assetAudioFindIndex = AUDIO.findIndex(
+        (el) => el.id == asset.assetId
+      );
       return (
         <AssetContainer key={index}>
           <AssetButton onClick={() => AssetHandler(1)}>
@@ -130,6 +132,12 @@ function EditorMainListItem({
         </AssetContainer>
       );
     } else {
+      const assetImageFindIndex = IMAGE.findIndex(
+        (el) => el.id == asset.assetId
+      );
+      const assetAudioFindIndex = AUDIO.findIndex(
+        (el) => el.id == asset.assetId
+      );
       return (
         <div key={index}>
           {asset.type === "IMAGE" && (
@@ -173,7 +181,6 @@ function EditorMainListItem({
       <BlockContainer>
         {plus ? (
           <>
-            <PlusButton onClick={() => setPlus(!plus)}>-</PlusButton>
             <AssetButtonContainer>
               {content.event.length == 0 ? (
                 <>
@@ -183,14 +190,20 @@ function EditorMainListItem({
                   <AssetButton onClick={() => AssetHandler(2)}>
                     <AiOutlineSound className="sound" size="24" />
                   </AssetButton>
+                  <PlusButton onClick={() => setPlus(!plus)}>-</PlusButton>
                 </>
               ) : (
                 ImageEvent
               )}
             </AssetButtonContainer>
           </>
-        ) : (
-          <PlusButton onClick={() => setPlus(!plus)}>+</PlusButton>
+        ) : (<>
+          <AssetButtonContainer>
+            <Space>&nbsp;</Space>
+            <Space>&nbsp;</Space>
+            <PlusButton onClick={() => setPlus(!plus)}>+</PlusButton>
+          </AssetButtonContainer>
+        </>
         )}
         <TextBlock
           key={content.idx}
@@ -255,6 +268,10 @@ const AssetButton = styled.button`
     border: 2px solid ${({ theme }) => theme.color.point};
   }
 `;
+const Space = styled.div`
+    width: 3.5rem;
+  height: 2.5rem;
+`
 
 const PlusButton = styled.button`
   width: 2rem;
