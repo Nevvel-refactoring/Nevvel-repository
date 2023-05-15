@@ -107,6 +107,8 @@ const AssetInfoInputDiv = styled.div<TagInputWidthProps>`
 `
 
 const AssetInfoInput1 = styled.input<TagInputWidthProps>`
+  background-color: ${({ theme }) => theme.color.background};
+  color: ${({ theme }) => theme.color.button};
   width: ${props => `${props.TagInputWidth}`};
   height: 2.5rem;
   border: 0.15rem solid #4D4D4D;
@@ -115,18 +117,24 @@ const AssetInfoInput1 = styled.input<TagInputWidthProps>`
 
 const ResultDiv = styled.div<TagInputWidthProps>`
   width: ${props => `${props.TagInputWidth}`};
+  background-color: ${({ theme }) => theme.color.background};
   height: auto;
   border: 0.15rem solid #4D4D4D;
   border-radius: 0.6rem;
   background-color: white;
 `
 
-const ResultUl = styled.ul`
+const ResultUl = styled.ul<TagInputWidthProps>`
+  background-color: ${({ theme }) => theme.color.background};
+  border: none;
+  border-radius: 0.4rem;
   margin: 0rem;
   padding: 0.25rem;
 `
 
 const ResultLi = styled.li<TagInputWidthProps>`
+  background-color: ${({ theme }) => theme.color.background};
+  color: ${({ theme }) => theme.color.button};
   width: ${props => `${props.TagInputWidth}`};
   height: 2rem;
   font-size: 1.5rem;

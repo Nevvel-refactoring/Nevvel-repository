@@ -26,10 +26,24 @@ function AudUpload(props:assetstoreProps) {
   const [audio, setAudio] = useState<File | null>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
 
+  const allowedExtensions = ['wav', 'wma', 'mp3',];
+
   const handleAudioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files && files.length > 0) {
-      setAudio(files[0]);
+      const fileName = files[0].name;
+      if (fileName) {
+        const extension = fileName.split('.').pop()?.toLowerCase();
+        if (extension && allowedExtensions.includes(extension)){
+          setAudio(files[0]);
+        } else {
+          alert("지원되지 않는 파일 확장자입니다.")
+        }
+      } else {
+        alert("오류가 발생하였습니다")
+      }
+    } else {
+      alert("오류가 발생하였습니다")
     }
   };
 
@@ -188,7 +202,7 @@ function AudUpload(props:assetstoreProps) {
           <AudUploadLabel>
           <AudUploadInput
             type="file"
-            accept="audio/*"
+            accept=".wav, .wma, .mp3"
             onChange={handleAudioChange}
           />
           {
@@ -197,7 +211,8 @@ function AudUpload(props:assetstoreProps) {
             // <p>Selected audio: {audio.name}</p>
             :
             <AudUnloadDiv>
-              <p>이곳을 클릭해서 음원파일을 업로드 해주세요 (20MB 이하)</p>
+              <p>이곳을 클릭해서 음원파일을 업로드 해주세요</p>
+              <p>(40MB 이하의 .wav / .wma / .mp3 파일)</p>
             </AudUnloadDiv>
           }
           </AudUploadLabel>
@@ -339,8 +354,9 @@ const AudUnloadDiv = styled.div`
   height: 3rem;
   /* border: 0.2rem dotted #4D4D4D; */
   border-radius: 0.5rem;
-  font-size: 1rem;
+  font-size: 1.2rem;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 `
@@ -385,6 +401,8 @@ const AssetInfoTextDiv2 = styled.div`
 `
 
 const AssetInfoInput1 = styled.input`
+  background-color: ${({ theme }) => theme.color.background};
+  color: ${({ theme }) => theme.color.button};
   width: 30rem;
   height: 2.5rem;
   border: 0.15rem solid #4D4D4D;
@@ -392,6 +410,8 @@ const AssetInfoInput1 = styled.input`
 `
 
 const AssetInfoInput2 = styled.input`
+  background-color: ${({ theme }) => theme.color.background};
+  color: ${({ theme }) => theme.color.button};
   width: 30rem;
   height: 5rem;
   border: 0.15rem solid #4D4D4D;
@@ -399,6 +419,8 @@ const AssetInfoInput2 = styled.input`
 `
 
 const AssetInfoInput3 = styled.input`
+  background-color: ${({ theme }) => theme.color.background};
+  color: ${({ theme }) => theme.color.button};
   width: 14rem;
   height: 2.5rem;
   border: 0.15rem solid #4D4D4D;
