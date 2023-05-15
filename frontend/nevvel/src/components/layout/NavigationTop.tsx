@@ -16,7 +16,6 @@ function NavigationTop() {
   };
 
   const loginStatus = useAtomValue(loginAtom);
-  // console.log(loginStatus);
 
   const router = useRouter();
   // 검색창에 키보드 입력 시
@@ -75,9 +74,6 @@ function NavigationTop() {
         </Profile>
       ) : (
         <Profile loginStatus={loginStatus}>
-          <SignIn>
-            <Link href="/login">회원가입</Link>
-          </SignIn>
           <LogIn>
             <Link href="/login">로그인</Link>
           </LogIn>
@@ -86,6 +82,8 @@ function NavigationTop() {
     </Wrapper>
   );
 }
+
+export default NavigationTop;
 
 const Wrapper = styled.div`
   display: flex;
@@ -130,7 +128,7 @@ const SearchIcon = styled.div`
 const Profile = styled.div<{ loginStatus: boolean }>`
   color: ${({ theme }) => theme.color.text1};
   display: flex;
-  margin-right: ${({ loginStatus }) => (loginStatus ? "" : "5rem")};
+  margin-right: 5rem;
   width: 10rem;
   justify-content: space-between;
 
@@ -149,5 +147,3 @@ const LogIn = styled.div`
 `;
 
 const MyPage = styled.div``;
-
-export default NavigationTop;
