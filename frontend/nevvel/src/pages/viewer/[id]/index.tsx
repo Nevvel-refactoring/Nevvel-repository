@@ -105,6 +105,7 @@ function viewer() {
   }, [nowTextBlock]);
 
   useEffect(() => {
+    scrollRef.current.scrollTop = scrollRef.current?.scrollHeight;
     if (EpisodeData) {
       if (EpisodeData.contents[tabNumber - 1].event.length !== 0) {
         const events = EpisodeData.contents[tabNumber - 1].event;
@@ -120,7 +121,6 @@ function viewer() {
         }
       }
     }
-    scrollRef.current.scrollTop = scrollRef.current?.scrollHeight;
     return () => {
       if (eventCatch) {
         setEventCatch(false);
