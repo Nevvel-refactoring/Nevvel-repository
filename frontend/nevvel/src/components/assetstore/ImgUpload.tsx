@@ -106,13 +106,26 @@ function ImgUpload(props:assetstoreProps) {
   // 제출버튼
   
   // // 제출버튼으로 모달 위의 모달 열기
-  const [modalonModalOpen, setModalonModalOpen] = useState<boolean>(false)
+  // const [modalonModalOpen, setModalonModalOpen] = useState<boolean>(false)
 
   // formData 정의
   // const [formData, setFormData] = useState(new FormData());
+
+  useEffect(() => {
+    // jsonDatas에 json 집어넣기
+    setJasonDatas({
+      type: "IMAGE",
+      title: title,
+      description: description,
+      point: price,
+      tags: selectTag,
+    })
+  },[image, title, description, price, selectTag])
   
   const SubmitAsset = async () => {
+
     const formData = new FormData()
+
     try{
       // 들어오는지 테스트
       console.log(image, title, description, price, selectTag)
@@ -120,14 +133,6 @@ function ImgUpload(props:assetstoreProps) {
       // 태그 리스트 객체화
       // const tagOjectList = selectTag.map((tag) => ({ tagName : tag }))
       
-      // jsonDatas에 json 집어넣기
-      setJasonDatas({
-        type: "IMAGE",
-        title: title,
-        description: description,
-        point: price,
-        tags: selectTag,
-      })
       
       // 제출버튼 누르면 formdata에 데이터 집어넣기
       if (image) {
@@ -143,7 +148,7 @@ function ImgUpload(props:assetstoreProps) {
 
       // console.log('엑시오스 아직 비활성화', axiosTrigger)
 
-      springApi.post("/assets", formData, {
+      await springApi.post("/assets", formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -159,14 +164,14 @@ function ImgUpload(props:assetstoreProps) {
     }
   }
 
-  useEffect(()=>{
-    console.log(jsonDatas)
+  // useEffect(()=>{
+  //   console.log(jsonDatas)
   
-  },[jsonDatas])
+  // },[jsonDatas])
 
   
   // 모달에서 제출 버튼 누르면 시그널 받아서 axios
-  const [axiosTrigger, setAxiosTrigger] = useState<boolean|null>(null)
+  // const [axiosTrigger, setAxiosTrigger] = useState<boolean|null>(null)
 
   // useEffect(() => {
   //   if (axiosTrigger) {
@@ -185,18 +190,18 @@ function ImgUpload(props:assetstoreProps) {
   // },[axiosTrigger])
 
   // 모달에서 취소버튼 누르면 모달 닫으면서 formdata 초기화
-  const [formDataClear, setFormDataClear] = useState<boolean|null>(null)
+  // const [formDataClear, setFormDataClear] = useState<boolean|null>(null)
 
-  useEffect(() => {
-    setJasonDatas({
-      type: "",
-      title: "",
-      description: "",
-      point: 0,
-      tags: [""],
-    })
-    setFormDataClear(null)
-  },[formDataClear])
+  // useEffect(() => {
+  //   setJasonDatas({
+  //     type: "",
+  //     title: "",
+  //     description: "",
+  //     point: 0,
+  //     tags: [""],
+  //   })
+  //   setFormDataClear(null)
+  // },[formDataClear])
 
   // 제출버튼 비활성화
   const UnsubmitAsset = () => {
@@ -204,7 +209,7 @@ function ImgUpload(props:assetstoreProps) {
     
     // 테스트 끝나면 이거 지우기
     // console.log(formData)
-    setModalonModalOpen(true)
+    // setModalonModalOpen(true)
   }
   
   
@@ -310,7 +315,7 @@ function ImgUpload(props:assetstoreProps) {
       </RowDiv>
 
       {/* 여기부터 모달온 모달 */}
-      {modalonModalOpen ? (
+      {/* {modalonModalOpen ? (
         <ModalonModal
           modal={modalonModalOpen}
           width="500"
@@ -324,7 +329,7 @@ function ImgUpload(props:assetstoreProps) {
           }
           setModalonModalOpen={setModalonModalOpen}
         />
-      ) : null}
+      ) : null} */}
     </ColDiv>
   )
 }
