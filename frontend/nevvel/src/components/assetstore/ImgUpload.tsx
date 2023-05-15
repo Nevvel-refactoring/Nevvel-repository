@@ -110,9 +110,9 @@ function ImgUpload(props:assetstoreProps) {
 
   // formData 정의
   // const [formData, setFormData] = useState(new FormData());
-  const formData = new FormData()
   
   const SubmitAsset = async () => {
+    const formData = new FormData()
     try{
       // 들어오는지 테스트
       console.log(image, title, description, price, selectTag)
@@ -138,8 +138,20 @@ function ImgUpload(props:assetstoreProps) {
       
       // 데이터 집어넣어진 다음 모달 열기
       setModalonModalOpen(true)
-      console.log(formData)
-      console.log('엑시오스 아직 비활성화', axiosTrigger)
+
+      // console.log(formData)
+
+      // console.log('엑시오스 아직 비활성화', axiosTrigger)
+
+      springApi.post("/assets", formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then(res => {
+        console.log(res)
+      }).catch(err => {
+        console.log("에러남 error")
+      })
       
     }
     catch (error) {
@@ -156,21 +168,21 @@ function ImgUpload(props:assetstoreProps) {
   // 모달에서 제출 버튼 누르면 시그널 받아서 axios
   const [axiosTrigger, setAxiosTrigger] = useState<boolean|null>(null)
 
-  useEffect(() => {
-    if (axiosTrigger) {
-      console.log('엑시오스 활성화',axiosTrigger)
-      springApi.post("/assets", formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      }).then(res => {
-        console.log(res)
-      }).catch(err => {
-        console.log("에러남 error")
-      })
-      setAxiosTrigger(null)
-    }
-  },[axiosTrigger])
+  // useEffect(() => {
+  //   if (axiosTrigger) {
+  //     console.log('엑시오스 활성화',axiosTrigger)
+  //     springApi.post("/assets", formData, {
+  //       headers: {
+  //         'Content-Type': 'multipart/form-data'
+  //       }
+  //     }).then(res => {
+  //       console.log(res)
+  //     }).catch(err => {
+  //       console.log("에러남 error")
+  //     })
+  //     setAxiosTrigger(null)
+  //   }
+  // },[axiosTrigger])
 
   // 모달에서 취소버튼 누르면 모달 닫으면서 formdata 초기화
   const [formDataClear, setFormDataClear] = useState<boolean|null>(null)
