@@ -179,6 +179,7 @@ public class TestUtil {
         return Resource.builder()
                 .url("path")
                 .originName("test.gif")
+                .changedName("changed.gif")
                 .isThumbnail(true)
                 .thumbnailUrl("thumbnailpath")
                 .build();

@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import javax.naming.AuthenticationException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -183,7 +182,7 @@ class CoverServiceTest {
 
         Assertions.assertThatThrownBy(
                 () -> coverService.updateCover(multipartFile, 1L, coverModifyDto, memberId))
-            .isInstanceOf(AuthenticationException.class);
+            .isInstanceOf(NotYourAuthorizationException.class);
     }
 
     @Test
@@ -267,8 +266,8 @@ class CoverServiceTest {
             Files.probeContentType(file.toPath()), Files.readAllBytes(file.toPath()));
 
         Resource oldResource = TestUtil.getMemberProfile();
-        Resource newResource = new Resource(1L, "test.jpg",
-            "newUrl",  "test", "test", true, "newThumbnailUrl");
+        Resource newResource = new Resource(2L, "test.jpg",
+            "newUrl",  "test", "newUrl", true, "newThumbnailUrl");
 
         CoverModifyDto coverModifyDto = CoverModifyDto.builder()
             .coverStatusType(CoverStatusType.FINISHED)
