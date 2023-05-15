@@ -145,7 +145,7 @@ function ImgUpload(props:assetstoreProps) {
 
       springApi.post("/assets", formData, {
         headers: {
-          'Content-Type': 'multipart/form-data'
+          'Content-Type': 'application/json'
         }
       }).then(res => {
         console.log(res)
