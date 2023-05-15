@@ -37,7 +37,7 @@ function viewer() {
   const audioRef = useRef<any>(null);
   const scrollRef = useRef<any>();
   const nowTextBlock = useAtomValue(numAtom);
-  const [EpisodeData, setEpisodeData] = useState<episodeViewer>();
+  const [EpisodeData, setEpisodeData] = useState<episodeViewer>(Dummy_Episode);
   const [imageEvent, setImageEvent] = useState<string>("");
   const [audioEvent, setAudioEvent] = useState<string>("");
 
@@ -103,9 +103,12 @@ function viewer() {
     };
     console.log(nowTextBlock);
   }, [nowTextBlock]);
+  // useEffect(()=>{
+  //   scrollRef.current.scrollTop = scrollRef.current?.scrollHeight;
+  // },[tabNumber])
 
   useEffect(() => {
-    scrollRef.current.scrollTop = scrollRef.current?.scrollHeight;
+
     if (EpisodeData) {
       if (EpisodeData.contents[tabNumber - 1].event.length !== 0) {
         const events = EpisodeData.contents[tabNumber - 1].event;
