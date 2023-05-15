@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public interface AssetRepository extends JpaRepository<Asset, Long>, AssetReposiotryCustom {
@@ -17,5 +18,8 @@ public interface AssetRepository extends JpaRepository<Asset, Long>, AssetReposi
 
     @Query("SELECT at FROM Asset at LEFT JOIN FETCH at.member WHERE at IN (:assets)")
     List<Asset> findJoinMemberByAssets(@Param("assets") List<Asset> assets);
+
+    @Query("SELECT at FROM Asset at JOIN FETCH at.resource WHERE at IN (:assets)")
+    Set<Asset> findJoinResourceByAssets(@Param("assets")List<Asset> Assets);
 }
 

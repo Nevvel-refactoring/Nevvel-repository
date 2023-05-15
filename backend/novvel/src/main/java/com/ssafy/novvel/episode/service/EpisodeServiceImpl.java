@@ -1,6 +1,8 @@
 package com.ssafy.novvel.episode.service;
 
+import com.ssafy.novvel.asset.entity.Asset;
 import com.ssafy.novvel.asset.entity.AssetType;
+import com.ssafy.novvel.asset.repository.AssetRepository;
 import com.ssafy.novvel.context.dto.ContextAffectInfoDto;
 import com.ssafy.novvel.context.dto.ContextTouchsDto;
 import com.ssafy.novvel.context.service.ContextService;
@@ -27,20 +29,21 @@ import com.ssafy.novvel.transactionhistory.entity.PointChangeType;
 import com.ssafy.novvel.transactionhistory.entity.TransactionHistory;
 import com.ssafy.novvel.transactionhistory.repository.TransactionHistoryRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class EpisodeServiceImpl implements EpisodeService{
+@Slf4j
+public class EpisodeServiceImpl implements EpisodeService {
 
     private final EpisodeRepository episodeRepository;
     private final ContextRepository contextRepository;
@@ -51,6 +54,7 @@ public class EpisodeServiceImpl implements EpisodeService{
     private final TransactionHistoryRepository historyRepository;
     private final ReadEpisodeRepository readEpisodeRepository;
     private final PurchasedCoverRepository purchasedCoverRepository;
+    private final AssetRepository assetRepository;
 
     @Override
     @Transactional
@@ -59,12 +63,20 @@ public class EpisodeServiceImpl implements EpisodeService{
                 () -> new NotFoundException("시리즈가 없습니다."));
 
         //현재 로그인 유저가 cover 작성자인지 확인
-        if (!cover.getMember().getId().equals(member.getId())){
+        if (!cover.getMember().getId().equals(member.getId())) {
             // 본인이 작성한 소설의 에피소드만 작성할 수 있습니다.
             throw new NotYourAuthorizationException("현재 사용자가 시리즈(Cover) 작성자와 다른 사람입니다.");
         }
 
-        myAssetCheck(episodeRegistDto, member);
+        //사용된 에섯의 id Map
+        Map<Long, Asset> assetMap = myAssetCheck(episodeRegistDto, member);
+        //
+        for (ContextTouchsDto contextTouchsDto : episodeRegistDto.getContents()) {
+            for (ContextAffectInfoDto contextAffectInfoDto : contextTouchsDto.getEvent()) {
+                Asset asset = assetMap.get(contextAffectInfoDto.getAssetId());
+                contextAffectInfoDto.setAssetUrl(asset.getResource().getUrl());
+            }
+        }
 
         ObjectId contextId = contextService.createContext(episodeRegistDto.getContents());
 
@@ -187,7 +199,7 @@ public class EpisodeServiceImpl implements EpisodeService{
 
         episode.setStatusType(episodeRegistDto.getStatusType());
 
-        if (!episodeRegistDto.isReservation()){
+        if (!episodeRegistDto.isReservation()) {
             episode.setReservationTime(null);
         } else {
             episode.setReservationTime(episodeRegistDto.getReservationTime());
@@ -241,7 +253,7 @@ public class EpisodeServiceImpl implements EpisodeService{
 
         // 하나씩 돌며 cover에 속하지 않은 episode나 이미 구입한 episode가 포함되었는지 검사하며 겸사겸사 query 대신 point 직접 합산
         for (Episode episode : episodes) {
-            if (!episode.getCover().getId().equals(cover.getId())){
+            if (!episode.getCover().getId().equals(cover.getId())) {
                 throw new BadRequestException(episode.getTitle() + "은(는) 해당 시리즈의 episode가 아닙니다.");
             } else sumPoint += episode.getPoint();
             if (!episode.getStatusType().equals(EpisodeStatusType.PUBLISHED)) {
@@ -304,11 +316,12 @@ public class EpisodeServiceImpl implements EpisodeService{
     // episodeRegistDto(수정 or 새로 생성 시 사용) 넣으면 context 돌며 effect 돌며 모든 myAssetId 받아와
     // 하나의 배열에 저장 후 해당 배열의 요소들이 memberAsset 테이블에서 내가 가진 에셋 목록에 있는 것과
     // 같은지 확인하는 로직
-    private void myAssetCheck(EpisodeRegistDto episodeRegistDto, Member member) {
+    private Map<Long, Asset> myAssetCheck(EpisodeRegistDto episodeRegistDto, Member member) {
         // 이 에피소드에 쓰인 asset Id Set
         Set<Long> episodeAssetIdSet = new HashSet<>();
         // 유저가 가진 asset Id Set
-        Set<Long> memberAssetIdSet = new HashSet<>();
+        Map<Long, Asset> assetMap = new HashMap<>();
+        Map<Long, Asset> result = new HashMap<>();
 
         // 에피소드의 터치 단위 싹 다 가져온 List
         List<ContextTouchsDto> contextList = episodeRegistDto.getContents();
@@ -339,16 +352,23 @@ public class EpisodeServiceImpl implements EpisodeService{
             }
         }
 
-        // 멤버가 가진 에셋 목록에서 asset id만 꺼내와서 memberAssetIdSet에 담기
-        for (MemberAsset memberAsset : memberAssets) {
-            memberAssetIdSet.add(memberAsset.getAsset().getId());
-        }
+        Set<Asset> assetSet = assetRepository.findJoinResourceByAssets(memberAssets.stream().
+                map(MemberAsset::getAsset)
+                .collect(Collectors.toList()));
 
-        for (Long episodeAsset : episodeAssetIdSet) {
-            if (!memberAssetIdSet.contains(episodeAsset)) {
+        // 멤버가 가진 에셋 목록을 맵으로 변환
+        assetMap = assetSet.stream()
+                .collect(Collectors.toMap(asset -> asset.getId(), asset -> asset));
+
+        for (Long episodeAssetId : episodeAssetIdSet) {
+            if (!assetMap.keySet().contains(episodeAssetId)) {
                 throw new NotYourAuthorizationException("소지하지 않은 asset을 사용하였습니다.");
+            } else {
+                result.put(episodeAssetId, assetMap.get(episodeAssetId));
             }
         }
+
+        return result;
     }
 }
 
