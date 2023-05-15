@@ -41,9 +41,14 @@ function SeriesMainListItem({ episode }: SeriesMainListItemProps) {
       <ItemContainer onClick={clickHandler} IsRead={IsRead}>
         <div>{episode.title}</div>
         <ItemBottom>
-          {episode.point > 0 && (
+          {episode.point > 0 && !episode.isPurchased && (
             <Box>
               <BoxText>{episode.point}p</BoxText>
+            </Box>
+          )}
+          {episode.point > 0 && episode.isPurchased && (
+            <Box>
+              <BoxText>구매 완료</BoxText>
             </Box>
           )}
           <Box>
