@@ -42,6 +42,17 @@ function EditorMainListItem({
     // 텍스트에 style 적용한 경우
   }, [style]);
 
+  useEffect(()=>{
+    console.log(IMAGE,"최초값")
+    console.log(AUDIO,"최초값")
+    
+  },[])
+
+  useEffect(()=>{
+    console.log(IMAGE,"에셋 버튼 클릭 후")
+    console.log(AUDIO,"에셋 버튼 클릭 후")
+  },[IMAGE,AUDIO])
+
   // block삭제 
   const RemoveHandler = (content: content) => {
     setContents(contents.filter((el) => el.idx !== idx));

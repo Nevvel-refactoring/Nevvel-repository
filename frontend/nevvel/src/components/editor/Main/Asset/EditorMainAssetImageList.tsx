@@ -8,9 +8,7 @@ import { Asset } from "editor";
 import { content } from "editor";
 import { event } from "editor";
 import { eventNames } from "process";
-import springApi from "@/src/api";
 import { ImageAssetAtom } from "@/src/store/EditorAssetStore";
-
 
 type EditorMainAssetImageListProps = {
   setContents: React.Dispatch<React.SetStateAction<content[]>>;
@@ -21,26 +19,12 @@ function EditorMainAssetImageList({
   setContents,
   contents,
 }: EditorMainAssetImageListProps) {
-  const [assetData, setAssetData] = useAtom(ImageAssetAtom);
+  const assetData = useAtomValue(ImageAssetAtom);
   const nowTextBlock = useAtomValue(nowTextBlockAtom);
 
-  const getAssetData = async () => {
-    const res = await springApi.get(
-      "assets/purchased-on?assettype=IMAGE&page=1&size=10&sort=createdDateTime"
-    );
-    if (res) {
-      console.log(res);
-      setAssetData(res.data.content);
-    }
-  };
   useEffect(() => {
-    getAssetData();
-    // setAssetData(DummyAssetData_image.content)
-  }, []);
-
-  useEffect(()=>{
-    console.log(assetData)
-  },[assetData])
+    console.log(assetData);
+  }, [assetData]);
 
   useEffect(() => {
     console.log(contents);
@@ -54,12 +38,15 @@ function EditorMainAssetImageList({
     } else {
       if (newBlocks[index].event.length !== 0) {
         // 에셋 이벤트가 이미 있는 경우
-        const queue = newBlocks[index].event[0];
-        newBlocks[index].event[0] = {
-          assetId: asset.id,
-          type: asset.type,
-        };
-        newBlocks[index].event.push(queue);
+        if (newBlocks[index].event[0].type == "IMAGE") {
+        } else {
+          const queue = newBlocks[index].event[0];
+          newBlocks[index].event[0] = {
+            assetId: asset.id,
+            type: asset.type,
+          };
+          newBlocks[index].event.push(queue);
+        }
       } else {
         // 에셋 이벤트가 없는 경우
         newBlocks[index].event.push({

@@ -18,22 +18,8 @@ function EditorMainAssetSoundList({
   setContents,
   contents,
 }: EditorMainAssetAudioListProps) {
-  const [assetData, setAssetData] = useAtom(AudioAssetAtom);
   const nowTextBlock = useAtomValue(nowTextBlockAtom);
-
-  const getAssetData = async () => {
-    const res = await springApi.get(
-      "assets/purchased-on?assettype=AUDIO&page=1&size=10&sort=createdDateTime"
-    );
-    if (res) {
-      console.log(res);
-      setAssetData(res.data.content);
-    }
-  };
-
-  useEffect(() => {
-    getAssetData();
-  }, []);
+  const assetData = useAtomValue(AudioAssetAtom);
 
   useEffect(() => {
     console.log(contents);
@@ -45,10 +31,13 @@ function EditorMainAssetSoundList({
     if (newBlocks[index].event.length >= 2) {
     } else {
       if (newBlocks[index].event.length !== 0) {
-        newBlocks[index].event.push({
-          assetId: asset.id,
-          type: asset.type,
-        });
+        if (newBlocks[index].event[0].type == "AUDIO") {
+        } else {
+          newBlocks[index].event.push({
+            assetId: asset.id,
+            type: asset.type,
+          });
+        }
       } else {
         newBlocks[index].event.push({
           assetId: asset.id,
