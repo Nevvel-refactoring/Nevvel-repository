@@ -22,7 +22,8 @@ declare module "editor" {
   }
   export interface AssetTag {
     id: number;
-    name: string;
+    tagName: string;
+    useCount : number;
   }
 
   export interface AssetUploader {

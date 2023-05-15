@@ -22,7 +22,8 @@ import AssetDetailModal from "../assetstore/AssetDetailModal";
 
 interface AssetTag {
   id: number;
-  name: string;
+  tagName: string;
+  useCount : number
 }
 
 interface AssetUploader {
@@ -68,7 +69,8 @@ function AssetSwiper() {
     isAvailable : false,
     tags: [{
       id : 0,
-      name : "",
+      tagName : "",
+      useCount : 0
     }],
     uploader : {
       id : 0,

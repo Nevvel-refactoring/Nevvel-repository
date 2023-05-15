@@ -28,7 +28,8 @@ function EditorMainAssetTotalList({
     isAvailable : false,
     tags: [{
       id : 0,
-      name : "",
+      tagName : "",
+      useCount : 0
     }],
     uploader : {
       id : 0,
