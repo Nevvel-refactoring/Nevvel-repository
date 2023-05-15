@@ -133,11 +133,11 @@ function ImgUpload(props:assetstoreProps) {
       if (image) {
         formData.append('file', image)
       }
-      formData.append('assetRegistDto', JSON.stringify(jsonDatas))
-      // formData.append('assetRegistDto', new Blob([JSON.stringify(jsonDatas)], {type: "application/json"}))
+      // formData.append('assetRegistDto', JSON.stringify(jsonDatas))
+      formData.append('assetRegistDto', new Blob([JSON.stringify(jsonDatas)], {type: "application/json"}))
       
       // 데이터 집어넣어진 다음 모달 열기
-      setModalonModalOpen(true)
+      // setModalonModalOpen(true)
 
       // console.log(formData)
 
@@ -145,7 +145,7 @@ function ImgUpload(props:assetstoreProps) {
 
       springApi.post("/assets", formData, {
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'multipart/form-data'
         }
       }).then(res => {
         console.log(res)
