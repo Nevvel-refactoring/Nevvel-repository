@@ -2,12 +2,22 @@ import React, { useEffect } from "react";
 import { useState, useRef } from "react";
 import styled from "styled-components";
 import TagSearchBar from "./TagSearchBar";
+import springApi from "@/src/api";
 
 
 type assetstoreProps = {
   modalOpen: boolean;
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
+
+type AudType = {
+  type: string,
+  title: string,
+  description: string,
+  point: number,
+  tags: string[],
+}
+
 
 function AudUpload(props:assetstoreProps) {
 
@@ -75,27 +85,71 @@ function AudUpload(props:assetstoreProps) {
   }
 
 
-  // 제출버튼 트리거
-  const [submitBtnTrigger, setSubmitBtnTrigger] = useState(0)
+  // 전체 JsonData
+  const [jsonDatas, setJasonDatas] = useState<AudType>({
+    type: "",
+    title: "",
+    description: "",
+    point: 0,
+    tags: [""],
+  })
 
+  useEffect(() => {
+    // jsonDatas에 json 집어넣기
+    setJasonDatas({
+      type: "AUDIO",
+      title: title,
+      description: description,
+      point: price,
+      tags: selectTag,
+    })
+  },[Audio, title, description, price, selectTag])
+
+  
+  // 제출버튼
+  const SubmitAsset = async () => {
+    // axios통신하기
+    const formData = new FormData()
+
+    try{
+      // 들어오는지 테스트
+      console.log(audio, title, description, price, selectTag) 
+      
+      // 제출버튼 누르면 formdata에 데이터 집어넣기
+      if (audio) {
+        formData.append('file', audio)
+      }
+      // formData.append('assetRegistDto', JSON.stringify(jsonDatas))
+      formData.append('assetRegistDto', new Blob([JSON.stringify(jsonDatas)], {type: "application/json"}))
+      
+
+      await springApi.post("/assets", formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then(res => {
+        console.log(res)
+      }).catch(err => {
+        console.log("에러남 error")
+      })
+      
+    }
+    catch (error) {
+      alert('업로드 과정에서 문제가 발생하였습니다.')
+    }
+
+    props.setModalOpen(false)  }
+  
+  // 제출버튼 비활성화
+  const UnsubmitAsset = () => {
+    alert("에셋을 등록해주세요.")
+  }
+  
   // 닫기 버튼
   const CloseAssetUpload = () => {
     props.setModalOpen(false)
   }
-
-  // 제출버튼
-  const SubmitAsset = () => {
-    // axios통신하기
-    console.log(audio, title, description, price, selectTag)
-  }
-
-  // 제출버튼 비활성화
-  const UnsubmitAsset = () => {
-    alert("에셋을 등록해주세요.")
-    // setSubmitBtnTrigger(1)
-  }
-
-
+  
   return(
     <ColDiv>
       <p>사운드 에셋 업로드</p>
