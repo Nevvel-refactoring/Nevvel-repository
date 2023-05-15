@@ -17,7 +17,7 @@ function SeriesMainListItem({ episode }: SeriesMainListItemProps) {
   const [IsRead, setIsRead] = useState(episode.isRead);
 
   const clickHandler = () => {
-    if (episode.isPurchased === null && episode.point !== 0) {
+    if (!episode.isPurchased && episode.point !== 0) {
       setModalOpen(true);
     } else {
       router.push({

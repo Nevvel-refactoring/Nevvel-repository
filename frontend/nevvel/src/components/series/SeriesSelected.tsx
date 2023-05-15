@@ -30,7 +30,7 @@ function SeriesSelected({ Info }: SeriesSelectedProps) {
     if (checkAllEp) {
       const newEpList: number[] = [];
       episodes.map((episode) => {
-        if (episode.isPurchased == null && episode.point !== 0) {
+        if (!episode.isPurchased && episode.point !== 0) {
           newEpList.push(episode.id);
         }
       });
@@ -101,7 +101,7 @@ function SeriesSelected({ Info }: SeriesSelectedProps) {
                   {episode.isPurchased && (
                     <PurchasePoint>구매 완료</PurchasePoint>
                   )}
-                  {episode.isPurchased === null && (
+                  {!episode.isPurchased && (
                     <PurchasePoint>{episode.point}p</PurchasePoint>
                   )}
                 </Item>
