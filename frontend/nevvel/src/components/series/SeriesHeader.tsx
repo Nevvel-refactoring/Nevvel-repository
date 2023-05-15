@@ -1,15 +1,18 @@
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import styled from "styled-components";
 import { cover } from "series";
 import Image from "next/image";
 import unupload from "../../../public/UnUploadImgBtn.png";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { AiOutlineEye } from "react-icons/ai";
+import { TbEdit } from "react-icons/tb";
 import { mobile } from "@/src/util/Mixin";
 import { useRouter } from "next/router";
 import { Modal } from "../common/Modal";
 import SeriesSelected from "./SeriesSelected";
 import springApi from "@/src/api";
+import { userInfoAtom } from "@/src/store/Login";
+import { useAtomValue } from "jotai";
 
 type SeriesHeaderProps = {
   SeriesData: cover;
@@ -26,6 +29,21 @@ function SeriesHeader({
 }: SeriesHeaderProps) {
   const router = useRouter();
   const [modalOpen, setModalOpen] = useState(false);
+  const [readId, setReadId] = useState<number>();
+  const userInfo = useAtomValue(userInfoAtom);
+
+  useEffect(() => {
+    let latestRead = "0000-00-00T00:00:00.000000";
+    let latestId;
+    SeriesData.episodes.map((episode) => {
+      if (episode.isRead && episode.uploadedDateTime > latestRead) {
+        latestRead = episode.uploadedDateTime;
+        latestId = episode.id;
+      }
+    });
+    setReadId(latestId);
+    console.log(latestId, latestRead);
+  }, []);
 
   // cover 좋아요하기
   const postSeriesLike = async (Id: number) => {
@@ -41,6 +59,11 @@ function SeriesHeader({
       router.push({
         pathname: "/viewer/[id]",
         query: { id: SeriesData.episodes[0].id },
+      });
+    } else if (e === "continue") {
+      router.push({
+        pathname: "/viewer/[id]",
+        query: { id: readId },
       });
     }
   };
@@ -63,18 +86,42 @@ function SeriesHeader({
           </SeriesInfoContainer>
         </SeriesCover>
         <SeriesEx>
-          <SeriesText className="title">{SeriesData.title}</SeriesText>
+          <SeriesText className="title">
+            <span>{SeriesData.title}</span>
+            {SeriesData.writter?.id === userInfo?.id && (
+              <span>
+                <TbEdit
+                  onClick={() => {
+                    router.push({
+                      pathname: `/editor/${coverId}`,
+                      query: {
+                        title: SeriesData.title,
+                      },
+                    });
+                  }}
+                />
+              </span>
+            )}
+          </SeriesText>
           <SeriesText className="writter">
-            {/* {SeriesData.writter.nickname} */}
-            작가 정보가 아직 없습니다
+            {SeriesData.writter?.nickname}
           </SeriesText>
           <SeriesText className="description">
             {SeriesData.description}
           </SeriesText>
           <SeriesText className="genre">{SeriesData.genreName}</SeriesText>
           <SeriesBtnContainer>
-            <SeriesBtn className="first" onClick={() => clickHandler("first")}>
-              첫화보기
+            <SeriesBtn
+              className="first"
+              onClick={() => {
+                if (readId) {
+                  clickHandler("continue");
+                } else {
+                  clickHandler("first");
+                }
+              }}
+            >
+              {readId ? "이어보기" : "첫화보기"}
             </SeriesBtn>
             <SeriesBtn className="choice" onClick={() => setModalOpen(true)}>
               선택구매
@@ -121,7 +168,7 @@ const HeaderTitle = styled.div`
   justify-content: center;
   text-align: center;
   align-items: center;
-  border-bottom: 1px solid ${({ theme }) => theme.color.text3};
+  border-bottom: 1px solid ${({ theme }) => theme.color.opacityText3};
   padding-bottom: 2rem;
   padding-top: 2rem;
   font-weight: 700;
@@ -132,7 +179,7 @@ const SeriesInfo = styled.div`
   flex-direction: row;
   margin-top: 1rem;
   padding-bottom: 2rem;
-  border-bottom: 1px solid ${({ theme }) => theme.color.text3};
+  border-bottom: 1px solid ${({ theme }) => theme.color.opacityText3};
   ${mobile} {
     flex-direction: column;
     align-items: center;
@@ -189,6 +236,7 @@ const SeriesText = styled.div`
     font-weight: 600;
     font-size: 22px;
     color: ${({ theme }) => theme.color.text1};
+    justify-content: space-between;
   }
 
   &.writter {
@@ -216,9 +264,19 @@ const SeriesText = styled.div`
     font-size: 10px;
     height: 1.5rem;
   }
+  > span > svg {
+    cursor: pointer;
+  }
 `;
+
 const SeriesInfoContainer = styled.div`
   display: flex;
+  font-weight: 200;
+  opacity: 50%;
+  margin-top: 3px;
+  svg {
+    opacity: 50%;
+  }
 `;
 
 const LikeBtn = styled.button`

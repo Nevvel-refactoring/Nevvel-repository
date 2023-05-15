@@ -6,6 +6,7 @@ import SeriesData from "@/src/components/series/DummySeriesData.json";
 import springApi from "@/src/api";
 import { cover } from "series";
 import { useRouter } from "next/dist/client/router";
+import Footer from "@/src/components/common/Footer";
 
 function index() {
   const [seriesData, setSeriesData] = useState<cover>();
@@ -45,6 +46,7 @@ function index() {
           <SeriesMain SeriesData={seriesData} />
         </SeriesWrapper>
       )}
+      <Footer />
     </Wrapper>
   );
 }

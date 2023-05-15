@@ -41,12 +41,12 @@ function SeriesMainListItem({ episode }: SeriesMainListItemProps) {
       <ItemContainer onClick={clickHandler} IsRead={IsRead}>
         <div>{episode.title}</div>
         <ItemBottom>
-          {episode.point > 0 && !episode.isPurchased && (
+          {episode.point > 0 && !purchased && (
             <Box>
               <BoxText>{episode.point}p</BoxText>
             </Box>
           )}
-          {episode.point > 0 && episode.isPurchased && (
+          {episode.point > 0 && purchased && (
             <Box>
               <BoxText>구매 완료</BoxText>
             </Box>
@@ -56,11 +56,13 @@ function SeriesMainListItem({ episode }: SeriesMainListItemProps) {
             <BoxText>{episode.viewCount}</BoxText>
           </Box>
           <Box>
-            {new Date(episode.uploadedDateTime)
-              .toISOString()
-              .replace("T", " ")
-              .replaceAll("-", ".")
-              .slice(2, -8)}
+            {episode.uploadedDateTime &&
+              new Date(episode.uploadedDateTime)
+                .toISOString()
+                .replace("T", " ")
+                .replaceAll("-", ".")
+                .slice(2, -8)}
+            {!episode.uploadedDateTime && <span>임시저장 글</span>}
           </Box>
         </ItemBottom>
       </ItemContainer>
@@ -79,7 +81,7 @@ const ItemContainer = styled.div<{ IsRead: boolean }>`
   justify-content: space-around;
   padding-top: 1rem;
   /* padding-bottom: 0.5rem; */
-  border-bottom: 1px solid ${({ theme }) => theme.color.text3};
+  border-bottom: 1px solid ${({ theme }) => theme.color.opacityText3};
 `;
 const ItemBottom = styled.div`
   display: flex;

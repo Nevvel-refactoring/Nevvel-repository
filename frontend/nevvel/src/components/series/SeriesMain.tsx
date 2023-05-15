@@ -51,7 +51,7 @@ const MainHeader = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  border-bottom: 1px solid ${({ theme }) => theme.color.text1};
+  border-bottom: 1px solid ${({ theme }) => theme.color.opacityText3};
   padding-top: 1rem;
   padding-bottom: 1rem;
   font-size: 14px;

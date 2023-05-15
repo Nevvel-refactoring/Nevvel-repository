@@ -14,7 +14,7 @@ function purchased() {
       const res = await springApi.post("/point-charge", pointChargeDto);
       if (res.status === 200) {
         console.log(res);
-        router.push("/profile");
+        router.push("/myPage");
       }
     } catch (error) {
       console.log(error);
@@ -32,7 +32,7 @@ function purchased() {
       // console.log(impNum, midNum);
       // router.push("/profile");
     } else if (query.imp_success === "false") {
-      router.push("/profile/purchase");
+      router.push("/myPage/purchase");
     }
   }, [query]);
   return (
