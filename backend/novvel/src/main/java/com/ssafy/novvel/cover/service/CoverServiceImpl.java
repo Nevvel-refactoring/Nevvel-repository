@@ -8,6 +8,7 @@ import com.ssafy.novvel.cover.dto.CoverPurchasedDto;
 import com.ssafy.novvel.cover.repository.CoverRepository;
 import com.ssafy.novvel.cover.dto.CoverRegisterDto;
 import com.ssafy.novvel.cover.entity.Cover;
+import com.ssafy.novvel.exception.NotYourAuthorizationException;
 import com.ssafy.novvel.genre.repository.GenreRepository;
 import com.ssafy.novvel.member.entity.Member;
 import com.ssafy.novvel.resource.entity.Resource;
@@ -67,15 +68,16 @@ public class CoverServiceImpl implements CoverService {
         return coverInfoAndEpisodesDto;
     }
 
+    @Override
     @Transactional
-    public List<String> updateCover(MultipartFile multipartFile, Long coverId,
+    public Resource updateCover(MultipartFile multipartFile, Long coverId,
         CoverModifyDto coverModifyDto,
-        Long userId) throws AuthenticationException, IOException {
+        Long userId) throws NotYourAuthorizationException, IOException {
 
         Cover cover = coverRepository.findById(coverId).orElseThrow(NullPointerException::new);
 
         if (!Objects.equals(cover.getMember().getId(), userId)) {
-            throw new AuthenticationException();
+            throw new NotYourAuthorizationException();
         } else {
             // TODO
             // 1) multipart가 null이면 장르별 default image
@@ -92,21 +94,18 @@ public class CoverServiceImpl implements CoverService {
 
     }
 
-    private List<String> findPreviousResourceInS3(Resource current, Resource previous) {
+    private Resource findPreviousResourceInS3(Resource current, Resource previous) {
 
         if (current == null || previous == null) {
             return null;
         }
 
-        List<String> urlAndThumbnail = new ArrayList<>();
+
         if (!current.getUrl().equals(previous.getUrl())) {
-            urlAndThumbnail.add(previous.getUrl());
-        }
-        if (!current.getThumbnailUrl().equals(previous.getThumbnailUrl())) {
-            urlAndThumbnail.add(previous.getThumbnailUrl());
+            return previous;
         }
 
-        return urlAndThumbnail.isEmpty() ? null : urlAndThumbnail;
+        return null;
     }
 
     @Override

@@ -7,6 +7,7 @@ import com.ssafy.novvel.cover.dto.EpisodeInfoDto;
 import com.ssafy.novvel.cover.entity.Cover;
 import com.ssafy.novvel.cover.entity.CoverStatusType;
 import com.ssafy.novvel.cover.repository.CoverRepository;
+import com.ssafy.novvel.exception.NotYourAuthorizationException;
 import com.ssafy.novvel.genre.entity.Genre;
 import com.ssafy.novvel.genre.repository.GenreRepository;
 import com.ssafy.novvel.member.entity.Member;
@@ -201,14 +202,14 @@ class CoverServiceTest {
     }
 
     @Test
-    void updateCoverPreviousResourceNull() throws IOException, AuthenticationException {
+    void updateCoverPreviousResourceNull() throws IOException, NotYourAuthorizationException {
         // given
         File file = new File("src/test/resources/cat.jpeg");
         MultipartFile multipartFile = new MockMultipartFile(file.getName(), file.getName(),
             Files.probeContentType(file.toPath()), Files.readAllBytes(file.toPath()));
 
         Resource newResource = new Resource(1L, "test.jpg",
-            "newUrl", true, "newThumbnailUrl");
+            "newUrl", "test", "newThumbnailUrl", true, "test");
 
         CoverModifyDto coverModifyDto = CoverModifyDto.builder()
             .coverStatusType(CoverStatusType.FINISHED)
@@ -250,7 +251,7 @@ class CoverServiceTest {
         Mockito.doReturn(newResource).when(resourceService).saveFile(multipartFile);
         Mockito.doReturn(genre).when(genreRepository).getReferenceById(Mockito.any());
         Mockito.doReturn(newCover).when(coverRepository).save(Mockito.any());
-        List<String> result = coverService.updateCover(multipartFile, 1L, coverModifyDto,
+        Resource result = coverService.updateCover(multipartFile, 1L, coverModifyDto,
             TestUtil.getMember().getId());
 
         // then
@@ -259,7 +260,7 @@ class CoverServiceTest {
     }
 
     @Test
-    void updateCover() throws IOException, AuthenticationException {
+    void updateCover() throws IOException, NotYourAuthorizationException {
         // given
         File file = new File("src/test/resources/cat.jpeg");
         MultipartFile multipartFile = new MockMultipartFile(file.getName(), file.getName(),
@@ -267,7 +268,7 @@ class CoverServiceTest {
 
         Resource oldResource = TestUtil.getMemberProfile();
         Resource newResource = new Resource(1L, "test.jpg",
-            "newUrl", true, "newThumbnailUrl");
+            "newUrl",  "test", "test", true, "newThumbnailUrl");
 
         CoverModifyDto coverModifyDto = CoverModifyDto.builder()
             .coverStatusType(CoverStatusType.FINISHED)
@@ -309,12 +310,11 @@ class CoverServiceTest {
         Mockito.doReturn(newResource).when(resourceService).saveFile(multipartFile);
         Mockito.doReturn(genre).when(genreRepository).getReferenceById(Mockito.any());
         Mockito.doReturn(newCover).when(coverRepository).save(Mockito.any());
-        List<String> result = coverService.updateCover(multipartFile, 1L, coverModifyDto,
+        Resource result = coverService.updateCover(multipartFile, 1L, coverModifyDto,
             TestUtil.getMember().getId());
 
         // then
-        Assertions.assertThat(result.contains("path")).isEqualTo(true);
-        Assertions.assertThat(result.contains("thumbnailpath")).isEqualTo(true);
+        Assertions.assertThat(result.getId()).isEqualTo(oldResource.getId());
 
     }
 

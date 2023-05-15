@@ -3,6 +3,7 @@ package com.ssafy.novvel.cover.controller;
 
 import com.ssafy.novvel.cover.dto.*;
 import com.ssafy.novvel.cover.service.CoverService;
+import com.ssafy.novvel.resource.entity.Resource;
 import com.ssafy.novvel.resource.service.S3Service;
 import com.ssafy.novvel.util.ControllerUtils;
 import com.ssafy.novvel.util.token.CustomUserDetails;
@@ -69,13 +70,12 @@ public class CoverController {
         @AuthenticationPrincipal CustomUserDetails customUserDetails)
         throws AuthenticationException, IOException {
 
-        Optional.ofNullable(
-                coverService.updateCover(file, coverId, coverModifyDto, customUserDetails.getId()))
-            .ifPresent(strings -> {
-                for (String s : strings) {
-                    S3Service.deleteFile(s);
-                }
-            });
+
+        Resource resource = coverService.updateCover(file, coverId, coverModifyDto, customUserDetails.getId());
+        if(resource != null) {
+            S3Service.deleteFile(resource);
+        }
+
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

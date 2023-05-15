@@ -8,6 +8,7 @@ import com.ssafy.novvel.cover.dto.CoverSearchConditions;
 import com.ssafy.novvel.cover.dto.CoverWithConditions;
 import com.ssafy.novvel.cover.entity.Cover;
 import com.ssafy.novvel.member.entity.Member;
+import com.ssafy.novvel.resource.entity.Resource;
 import com.ssafy.novvel.util.token.CustomUserDetails;
 import java.io.IOException;
 import java.util.List;
@@ -23,7 +24,7 @@ public interface CoverService {
 
     CoverInfoAndEpisodesDto getAllEpisodes(Long coverId, Member member);
 
-    List<String> updateCover(MultipartFile multipartFile, Long coverId,
+    Resource updateCover(MultipartFile multipartFile, Long coverId,
         CoverModifyDto coverModifyDto,
         Long userId) throws AuthenticationException, IOException;
 
