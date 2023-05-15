@@ -1,6 +1,6 @@
 import Image from "next/image";
+import { useRouter } from "next/dist/client/router";
 import styled from "styled-components";
-import unupload from "../../../public/UnUploadImgBtn.png";
 
 interface Novel {
   id: number;
@@ -14,8 +14,13 @@ interface Novel {
 function NovelCard(props: Novel) {
   // console.log(props);
 
+  const router = useRouter();
+  const novelDetailHandler = () => {
+    router.push({ pathname: `/series/${props.id}` });
+  };
+
   return (
-    <Wrapper>
+    <Wrapper onClick={novelDetailHandler}>
       {/* <Image src={props.thumbnail} alt="thumbnail" width={25} height={25} /> */}
       <Image src={props.thumbnail} alt="thumbnail" width={148} height={222} />
       <NovelDesc>
