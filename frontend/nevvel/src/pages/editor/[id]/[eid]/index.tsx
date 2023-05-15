@@ -15,8 +15,8 @@ function index() {
   const [episode, setEpisode] = useState<episode>(Dummy_Episode);
   const scrollRef = useRef<any>();
 
-  const getViewerData = async (Id: number) => {
-    const res = await springApi.get(`/episodes/${Id}`);
+  const getViewerData = async (EID: number) => {
+    const res = await springApi.get(`/episodes/${EID}`);
     if (res) {
       console.log(res);
       setEpisode(res.data);
@@ -24,11 +24,11 @@ function index() {
   };
 
   useEffect(() => {
-    console.log(id);
-    if (id) {
-      const Id = Number(id);
-      console.log("router", Id);
-      getViewerData(Id);
+    console.log(eid);
+    if (eid) {
+      const EID = Number(eid);
+      console.log("router", EID);
+      getViewerData(EID);
     // } else {
     //   setEpisodeData(Dummy_Episode);
     }

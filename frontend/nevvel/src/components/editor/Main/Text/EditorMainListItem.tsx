@@ -42,6 +42,7 @@ function EditorMainListItem({
     // 텍스트에 style 적용한 경우
   }, [style]);
 
+  // block삭제 
   const RemoveHandler = (content: content) => {
     setContents(contents.filter((el) => el.idx !== idx));
   };

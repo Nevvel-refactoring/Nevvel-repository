@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState,useEffect } from 'react'
 import EditorMainAssetImageList from './EditorMainAssetImageList'
 import EditorMainAssetSoundList from './EditorMainAssetSoundList'
 import styled from 'styled-components'
@@ -8,6 +8,7 @@ import { useAtom,useAtomValue } from 'jotai'
 import {IoIosArrowBack} from 'react-icons/io'
 import { content } from 'editor'
 
+
 type EditorMainAssetContainerProps = {
   setContents: React.Dispatch<React.SetStateAction<content[]>>
   contents:content[]
@@ -15,8 +16,6 @@ type EditorMainAssetContainerProps = {
 
 function EditorMainAssetContainer( {setContents,contents}:EditorMainAssetContainerProps) {
   const [assetOpen, setAssetOpen] =useAtom(assetOpenAtom)
-
-
 
   return (<AssetContainer>
     <AssetHeaderContainer>
