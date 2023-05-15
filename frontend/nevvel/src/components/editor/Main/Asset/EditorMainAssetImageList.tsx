@@ -19,7 +19,7 @@ function EditorMainAssetImageList({
   setContents,
   contents,
 }: EditorMainAssetImageListProps) {
-  const [assetData, setAssetData] = useState(DummyAssetData_image);
+  const [assetData, setAssetData] = useState(DummyAssetData_image.content);
   const nowTextBlock = useAtomValue(nowTextBlockAtom);
 
   const getAssetData = async () => {
@@ -69,7 +69,7 @@ function EditorMainAssetImageList({
         <AssetList>현재 가지고 있는 이미지 에셋이 없습니다.</AssetList>
       ) : (
         <AssetList>
-          {assetData.content.map((asset, index) => (
+          {assetData.map((asset, index) => (
             <AssetItem key={index} onClick={() => ClickHandler(asset)}>
               <Img src={asset.thumbnail} alt="썸네일" />
             </AssetItem>

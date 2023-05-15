@@ -17,7 +17,7 @@ function EditorMainAssetSoundList({
   setContents,
   contents,
 }: EditorMainAssetAudioListProps) {
-  const [assetData, setAssetData] = useState(DummyAssetData_audio);
+  const [assetData, setAssetData] = useState(DummyAssetData_audio.content);
   const nowTextBlock = useAtomValue(nowTextBlockAtom);
 
   const getAssetData = async () => {
@@ -63,7 +63,7 @@ function EditorMainAssetSoundList({
         <AssetList>현재 가지고 있는 오디오 에셋이 없습니다.</AssetList>
       ) : (
         <AssetList>
-          {assetData.content.map((asset, index) => (
+          {assetData.map((asset, index) => (
             <AssetItem key={index} onClick={() => ClickHandler(asset)}>
               <Img src={asset.thumbnail} alt="썸네일" />
               {asset.title}
