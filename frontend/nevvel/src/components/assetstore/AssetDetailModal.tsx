@@ -10,7 +10,8 @@ import DummyEpisode from "./DummyEpisodeforMiri.json"
 
 interface AssetTag {
   id : number,
-  name : string,
+  tagName : string,
+  useCount : number
 }
 
 interface AssetUploader {
@@ -145,7 +146,7 @@ function AssetDetailModal({
                   openModalData.tags.map((tag) => {
                     return(
                     <CardInfo2Div key={tag.id}>
-                      <DetailInfoP>{tag.name}</DetailInfoP>
+                      <DetailInfoP>{tag.tagName}</DetailInfoP>
                     </CardInfo2Div>
                     )
                   })
@@ -181,9 +182,9 @@ function AssetDetailModal({
               <br />
               {
                 openModalData.isAvailable?
-                <ModalBtn onClick={OpenModalonModal}>구매</ModalBtn>
-                :
                 <UnModalBtn>구매완료</UnModalBtn>
+                :
+                <ModalBtn onClick={OpenModalonModal}>구매</ModalBtn>
               }
             </ColDiv>
 

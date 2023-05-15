@@ -7,10 +7,13 @@ import sounddata from "./DummyAssetData_Audio.json"
 import { Modal } from "../common/Modal";
 import AssetDetailModal from "./AssetDetailModal";
 
+import springApi from "@/src/api";
+
 
 interface AssetTag {
   id : number,
-  name : string,
+  tagName : string,
+  useCount : number
 }
 
 interface AssetUploader {
@@ -35,19 +38,24 @@ interface Asset {
 function AssetstoreAssetList() {
 
   const [AssetData, setAssetData] = useState<Array<Asset>>([]);
+  const [assetTypeTrigger, setAssetTypeTrigger] = useState<string>("IMAGE")
 
-  // axios로 데이터 get받아오기, 현재는 더미데이터
+  // axios로 데이터 get받아오기
   useEffect(() => {
-    // setAssetData(imgdata.content);
-    setAssetData(imgdata.content);
+    const getAssetList = async() => {
+      const res = await springApi.get(`/assets?assettype=${assetTypeTrigger}&pageNum=1&searchtype=ALL&sort =downloadCount`)
+      console.log(res.data.content)
+      setAssetData(res.data.content)
+    }
+    getAssetList()
   },[])
   // console.log('이건데', AssetData)
 
   const changeImg = () => {
-    setAssetData(imgdata.content)
+    setAssetTypeTrigger("IMAGE")
   }
   const changeSound = () => {
-    setAssetData(sounddata.content)
+    setAssetTypeTrigger("AUDIO")
   }
 
   // 에셋 디테일 모달 오픈 트리거
@@ -65,7 +73,8 @@ function AssetstoreAssetList() {
     isAvailable : false,
     tags: [{
       id : 0,
-      name : "",
+      tagName : "",
+      useCount : 0
     }],
     uploader : {
       id : 0,

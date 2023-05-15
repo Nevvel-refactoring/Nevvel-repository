@@ -390,6 +390,10 @@ const ImgUploadBtn = styled.img`
   border: 0.15rem solid #4D4D4D;
   border-radius: 1.5rem;
   /* float: left; */
+  :focus{
+    border: 0.15rem solid #4D4D4D;
+    box-shadow: 0.1rem 0.1rem 0.6rem;
+  }
   &:hover {
     box-shadow: 0.1rem 0.1rem 0.5rem;
   }
@@ -419,6 +423,10 @@ const AssetInfoInput1 = styled.input`
   height: 2.5rem;
   border: 0.15rem solid #4D4D4D;
   border-radius: 0.6rem;
+  :focus{
+    border: 0.15rem solid #4D4D4D;
+    box-shadow: 0.1rem 0.1rem 0.6rem;
+  }
 `
 
 const AssetInfoInput2 = styled.input`
@@ -428,6 +436,10 @@ const AssetInfoInput2 = styled.input`
   height: 7.5rem;
   border: 0.15rem solid #4D4D4D;
   border-radius: 0.8rem;
+  :focus{
+    border: 0.15rem solid #4D4D4D;
+    box-shadow: 0.1rem 0.1rem 0.6rem;
+  }
 `
 
 const ImgDelBtn = styled.button`

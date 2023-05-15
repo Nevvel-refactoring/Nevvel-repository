@@ -62,7 +62,7 @@ function assetstore({ content }: any) {
     getTagData();
   }, []);
 
-  const TopTenTag = tagData.slice(0, 9);
+  const TopTag = tagData.slice(0, 28);
 
   return (
     <Wrapper>
@@ -82,7 +82,7 @@ function assetstore({ content }: any) {
         <CardInfo2Div>
           <TagP>전체</TagP>
         </CardInfo2Div>
-        {TopTenTag.map((tags) => {
+        {TopTag.map((tags) => {
           return (
             <CardInfo2Div key={tags.id}>
               <TagP>{tags.tagName}</TagP>
@@ -96,7 +96,7 @@ function assetstore({ content }: any) {
 
       <AssetstoreAssetList />
 
-      {/* 여기부터 모달 */}
+      {/* 여기부터 업로드 모달 */}
       {modalOpen ? (
         <Modal
           modal={modalOpen}
@@ -129,6 +129,9 @@ function assetstore({ content }: any) {
           }
         />
       ) : null}
+
+      {/* 여기서부터 태그 모달 */}
+      
     </Wrapper>
   );
 }
@@ -221,7 +224,7 @@ const CardInfo2Div = styled.div`
   background-color: ${({ theme }) => theme.color.buttonText};
   color: #8385ff;
   width: auto;
-  height: 3rem;
+  height: 2.2rem;
   border-radius: 0.5rem;
   box-shadow: 0.1rem 0.1rem;
   border: 0.15rem solid #8385ff;
@@ -229,8 +232,8 @@ const CardInfo2Div = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-left: 1rem;
-  margin-right: 1rem;
+  margin-left:0.6rem;
+  margin-right: 0.6rem;
   &:hover {
     cursor: pointer;
     background-color: #8385ff;
@@ -239,9 +242,9 @@ const CardInfo2Div = styled.div`
 `;
 
 const TagP = styled.p`
-  font-size: 1.8rem;
-  margin-right: 1rem;
-  margin-left: 1rem;
+  font-size: 1.2rem;
+  margin-right: 0.6rem;
+  margin-left: 0.6rem;
 `;
 
 const ModalDiv1 = styled.div`

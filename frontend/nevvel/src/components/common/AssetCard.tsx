@@ -5,7 +5,8 @@ import { Modal } from "@/src/components/common/Modal";
 
 interface AssetTag {
   id : number,
-  name : string,
+  tagName : string,
+  useCount : number
 }
 
 interface AssetUploader {
@@ -126,7 +127,7 @@ function AssetCard({
               tags.slice(0,3).map((tag) => {
                 return (
                   <CardInfo2Div key={tag.id}>
-                    <CardInfo2>#{tag.name}</CardInfo2>
+                    <CardInfo2>#{tag.tagName}</CardInfo2>
                   </CardInfo2Div>
                 )
               })
