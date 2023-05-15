@@ -121,6 +121,7 @@ class ResourceServiceTest {
         Method makeThumbnailFromGifMethod = ResourceServiceImpl.class.getDeclaredMethod("makeThumbnailFromGif", File.class);
         makeThumbnailFromGifMethod.setAccessible(true);
         File result = (File) makeThumbnailFromGifMethod.invoke(resourceService, file);
+        Assertions.assertThat(result.getName()).isEqualTo("test_thumbnail.gif");
         result.delete();
 
     }
@@ -163,9 +164,9 @@ class ResourceServiceTest {
 
     @Test
 //    @Disabled
-    @DisplayName("convert Resolution Png")
-    void convertResolutionPngTest() throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
-        File file = new File("src/test/resources/test_thumbnail.png");
+    @DisplayName("convert Height Resolution Png")
+    void convertResolutionPngHeightTest() throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
+        File file = new File("src/test/resources/p.png");
         Method makeThumbnailFromGifMethod =
                 ResourceServiceImpl.class.getDeclaredMethod("convertResolutionPng", File.class, Integer.class, Integer.class);
         makeThumbnailFromGifMethod.setAccessible(true);
@@ -173,4 +174,15 @@ class ResourceServiceTest {
         result.delete();
     }
 
+    @Test
+//    @Disabled
+    @DisplayName("convert Width Resolution Png")
+    void convertResolutionPngWidthTest() throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
+        File file = new File("src/test/resources/p2.png");
+        Method makeThumbnailFromGifMethod =
+                ResourceServiceImpl.class.getDeclaredMethod("convertResolutionPng", File.class, Integer.class, Integer.class);
+        makeThumbnailFromGifMethod.setAccessible(true);
+        File result = (File) makeThumbnailFromGifMethod.invoke(resourceService, file, 200, 200);
+        result.delete();
+    }
 }
