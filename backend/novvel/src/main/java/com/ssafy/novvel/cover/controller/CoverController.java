@@ -97,4 +97,17 @@ public class CoverController {
         return new ResponseEntity<>(
             coverService.getPurchasedCover(customUserDetails.getMember(), pageable), HttpStatus.OK);
     }
+
+    @GetMapping("uploader/{uploaderId}")
+    @Operation(summary = "선택한 작가 글 보내기", description = "<strong>id에 해당하는 작가의 글을 반환</strong> 합니다.")
+    public ResponseEntity<Page<?>> getCoverOfUploader(@PathVariable("uploaderId") Long id,
+        @AuthenticationPrincipal CustomUserDetails customUserDetails,
+        Pageable pageable) {
+
+        return new ResponseEntity<>(
+            coverService.getCoverOfUploader(ControllerUtils.isCustomUserDetails(customUserDetails),
+                id, pageable),
+            HttpStatus.OK
+        );
+    }
 }

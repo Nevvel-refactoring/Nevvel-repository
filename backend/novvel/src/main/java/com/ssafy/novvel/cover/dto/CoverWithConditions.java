@@ -47,8 +47,10 @@ public class CoverWithConditions {
         this.thumbnail = cover.getResource().getThumbnailUrl();
         this.genre = cover.getGenre().getName();
         this.writer = new CoverWriter(cover.getMember().getId(), cover.getMember().getNickname());
-        this.isUploaded = cover.getLastPublishDate().isAfter(LocalDate.now().minusDays(7L));
-        this.isNew = cover.getFirstPublishDate().isAfter(LocalDate.now().minusDays(7L));
+        if(cover.getLastPublishDate() == null) this.isUploaded = false;
+        else this.isUploaded = cover.getLastPublishDate().isAfter(LocalDate.now().minusDays(7L));
+        if(cover.getFirstPublishDate() == null) this.isNew = false;
+        else this.isNew = cover.getFirstPublishDate().isAfter(LocalDate.now().minusDays(7L));
     }
 
 }

@@ -79,6 +79,7 @@ public class SecurityConfig {
                         "/default/**",
                         "/covers",
                         "/covers/*",
+                        "/covers/uploader/*",
                         "/genres",
                         "/assets",
                         "/assets/search",

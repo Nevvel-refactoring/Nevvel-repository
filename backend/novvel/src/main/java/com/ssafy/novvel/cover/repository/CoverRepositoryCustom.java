@@ -16,4 +16,6 @@ public interface CoverRepositoryCustom {
         Pageable pageable);
 
     List<EpisodeInfoDto> findEpisodesInfoDto(Cover cover, Member member);
+
+    Page<CoverWithConditions> findCoverById(Member member, Long id, Pageable pageable);
 }

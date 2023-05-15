@@ -32,4 +32,6 @@ public interface CoverService {
         Pageable pageable);
 
     Page<CoverPurchasedDto> getPurchasedCover(Member member, Pageable pageable);
+
+    Page<CoverWithConditions> getCoverOfUploader(Member member, Long id, Pageable pageable);
 }

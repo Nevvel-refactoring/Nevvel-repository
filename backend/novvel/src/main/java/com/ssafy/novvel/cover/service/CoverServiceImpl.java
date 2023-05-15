@@ -120,4 +120,9 @@ public class CoverServiceImpl implements CoverService {
 
         return coverRepository.findPurchasedCoverByMember(member.getId(), pageable);
     }
+
+    @Override
+    public Page<CoverWithConditions> getCoverOfUploader(Member member, Long id, Pageable pageable) {
+        return coverRepository.findCoverById(member, id, pageable) ;
+    }
 }

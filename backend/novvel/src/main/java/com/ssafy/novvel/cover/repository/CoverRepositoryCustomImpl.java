@@ -96,6 +96,45 @@ public class CoverRepositoryCustomImpl implements CoverRepositoryCustom {
         return query.fetch();
     }
 
+    @Override
+    public Page<CoverWithConditions> findCoverById(Member member, Long id, Pageable pageable) {
+
+        JPAQuery<List<CoverWithConditions>> query = new JPAQuery<>(entityManager);
+        JPAQuery<Long> countQuery = new JPAQuery<>(entityManager);
+
+        List<CoverWithConditions> content = query.select(new QCoverWithConditions(cover))
+            .from(cover)
+            .leftJoin(cover.resource)
+            .fetchJoin()
+            .leftJoin(cover.member)
+            .fetchJoin()
+            .leftJoin(cover.genre)
+            .fetchJoin()
+            .where(
+                checkStatus(CoverStatusType.ALL),
+                checkMine(id, member),
+                cover.member.id.eq(id)
+            )
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
+            .fetch();
+
+        Long count = countQuery.select(cover.count())
+            .from(cover)
+            .where(
+                checkStatus(CoverStatusType.ALL),
+                checkMine(id, member),
+                cover.id.eq(id)
+            )
+            .fetchOne();
+
+        return new PageImpl<>(
+            content,
+            pageable,
+            count == null ? 0 : count
+        );
+    }
+
     private Predicate checkStatus(CoverStatusType coverStatusType) {
         switch (coverStatusType) {
             case FINISHED:
@@ -164,19 +203,29 @@ public class CoverRepositoryCustomImpl implements CoverRepositoryCustom {
         }
 
         BooleanExpression booleanExpression = new CaseBuilder().when(
-            (transactionHistory.id.isNull()
-                .or(transactionHistory.pointChangeType.ne(PointChangeType.BUY_EPISODE)))
-                .and(episode.statusType.eq(EpisodeStatusType.DELETED)))
+                (transactionHistory.id.isNull()
+                    .or(transactionHistory.pointChangeType.ne(PointChangeType.BUY_EPISODE)))
+                    .and(episode.statusType.eq(EpisodeStatusType.DELETED)))
             .then(true)
             .otherwise(false)
             .eq(false);
 
-        if(!writer.getId().equals(member.getId())) {
+        if (!writer.getId().equals(member.getId())) {
             booleanExpression.and(episode.statusType.ne(EpisodeStatusType.TEMPORARY));
         }
 
         return booleanExpression;
 
     }
+
+    private Predicate checkMine(Long writerId, Member member) {
+        BooleanExpression booleanExpression = cover.coverStatusType.ne(CoverStatusType.DELETED);
+        if (member == null || !writerId.equals(member.getId())) {
+            return booleanExpression.and(cover.firstPublishDate.isNotNull());
+        }
+
+        return booleanExpression;
+    }
+
 
 }
