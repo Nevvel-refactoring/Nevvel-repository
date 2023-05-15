@@ -3,6 +3,8 @@ import { episode } from "series";
 import styled from "styled-components";
 import { useRouter } from "next/router";
 import { AiOutlineEye } from "react-icons/ai";
+import SeriesEpOnePurchase from "./SeriesEpOnePurchase";
+import { Modal } from "../common/Modal";
 
 type SeriesMainListItemProps = {
   episode: episode;
@@ -10,33 +12,54 @@ type SeriesMainListItemProps = {
 
 function SeriesMainListItem({ episode }: SeriesMainListItemProps) {
   const router = useRouter();
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [purchased, setPurchased] = useState(episode.isPurchased);
   const [IsRead, setIsRead] = useState(episode.isRead);
 
   const clickHandler = () => {
-    router.push({
-      pathname: "/viewer/[id]",
-      query: { id: episode.id },
-    });
+    if (episode.isPurchased === null && episode.point !== 0) {
+      setModalOpen(true);
+    } else {
+      router.push({
+        pathname: "/viewer/[id]",
+        query: { id: episode.id },
+      });
+    }
   };
 
   return (
-    <ItemContainer onClick={clickHandler} IsRead={IsRead}>
-      <div>{episode.title}</div>
-      <ItemBottom>
-        <Box>
-          <AiOutlineEye />
-          <BoxText>{episode.viewCount}</BoxText>
-        </Box>
-        <Box>
-          {new Date(episode.uploadedDateTime)
-            .toISOString()
-            .replace("T", " ")
-            .replaceAll("-", ".")
-            .slice(2, -8)}
-        </Box>
-      </ItemBottom>
-    </ItemContainer>
+    <>
+      {modalOpen && (
+        <Modal
+          modal={modalOpen}
+          setModal={setModalOpen}
+          width="500"
+          height="100"
+          element={<SeriesEpOnePurchase Info={episode} />}
+        />
+      )}
+      <ItemContainer onClick={clickHandler} IsRead={IsRead}>
+        <div>{episode.title}</div>
+        <ItemBottom>
+          {episode.point > 0 && (
+            <Box>
+              <BoxText>{episode.point}p</BoxText>
+            </Box>
+          )}
+          <Box>
+            <AiOutlineEye />
+            <BoxText>{episode.viewCount}</BoxText>
+          </Box>
+          <Box>
+            {new Date(episode.uploadedDateTime)
+              .toISOString()
+              .replace("T", " ")
+              .replaceAll("-", ".")
+              .slice(2, -8)}
+          </Box>
+        </ItemBottom>
+      </ItemContainer>
+    </>
   );
 }
 
