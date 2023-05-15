@@ -1,5 +1,7 @@
 package com.ssafy.novvel.resource.service;
 
+import com.ssafy.novvel.resource.entity.Resource;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -9,7 +11,7 @@ public interface S3Service {
 
     String findByUrl(String url);
 
-    void deleteFile(String fileName);
+    void deleteFile(Resource resource);
 
 
 }
