@@ -203,7 +203,7 @@ function ImgUpload(props:assetstoreProps) {
     alert("에셋 정보를 모두 입력해주세요.")
     
     // 테스트 끝나면 이거 지우기
-    console.log(formData)
+    // console.log(formData)
     setModalonModalOpen(true)
   }
   
