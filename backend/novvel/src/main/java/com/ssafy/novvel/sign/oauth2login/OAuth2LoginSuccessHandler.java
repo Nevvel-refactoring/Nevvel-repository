@@ -14,10 +14,9 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
-    @Value("${redirect.login.profile}")
-    private String profile;
-    @Value("${redirect.login.index}")
-    private String index;
+
+    @Value("${redirect.url}")
+    private String url;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -27,12 +26,8 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
         response.addCookie(oidcUser.getAttribute("accessToken"));
         response.addCookie(oidcUser.getAttribute("refreshToken"));
+        response.addCookie(oidcUser.getAttribute("userDto"));
 
-        if (authentication.getAuthorities().stream()
-            .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_GUEST"))) {
-            response.sendRedirect(profile);
-        } else {
-            response.sendRedirect(index);
-        }
+        response.sendRedirect(url);
     }
 }

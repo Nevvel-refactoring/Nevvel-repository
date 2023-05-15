@@ -2,6 +2,7 @@ package com.ssafy.novvel.config.security;
 
 import com.ssafy.novvel.config.security.filter.JwtAuthenticationProcessingFilter;
 import com.ssafy.novvel.member.repository.MemberRepository;
+import com.ssafy.novvel.util.token.UserDtoUtils;
 import com.ssafy.novvel.util.token.jwt.JWTProvider;
 import java.util.Arrays;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +33,7 @@ public class SecurityConfig {
     private final AuthenticationSuccessHandler OAuth2LoginSuccessHandler;
     private final OAuth2UserService<OidcUserRequest, OidcUser> oidcUserService;
     private final JWTProvider jwtProvider;
+    private final UserDtoUtils userDtoUtils;
     private final MemberRepository memberRepository;
     private final LogoutSuccessHandler logoutSuccessHandler;
 
@@ -39,11 +41,12 @@ public class SecurityConfig {
         AuthenticationSuccessHandler OAuth2LoginSuccessHandler,
         OAuth2UserService<OidcUserRequest, OidcUser> oidcUserService,
         JWTProvider jwtProvider,
-        MemberRepository memberRepository,
+        UserDtoUtils userDtoUtils, MemberRepository memberRepository,
         LogoutSuccessHandler logoutSuccessHandler) {
         this.OAuth2LoginSuccessHandler = OAuth2LoginSuccessHandler;
         this.oidcUserService = oidcUserService;
         this.jwtProvider = jwtProvider;
+        this.userDtoUtils = userDtoUtils;
         this.memberRepository = memberRepository;
         this.logoutSuccessHandler = logoutSuccessHandler;
     }
@@ -73,6 +76,7 @@ public class SecurityConfig {
             .and()
             .authorizeHttpRequests(authorize -> authorize
                 .antMatchers(HttpMethod.GET,
+                        "/default/**",
                         "/covers",
                         "/covers/*",
                         "/genres",
@@ -96,7 +100,8 @@ public class SecurityConfig {
                 .deleteCookies(JWTProvider.getAccessToken(), JWTProvider.getRefreshToken())
                 .logoutSuccessHandler(logoutSuccessHandler)
             )
-            .addFilterBefore(new JwtAuthenticationProcessingFilter(jwtProvider, memberRepository),
+            .addFilterBefore(new JwtAuthenticationProcessingFilter(jwtProvider, memberRepository,
+                    userDtoUtils),
                 LogoutFilter.class);
 
         //todo 에러발생시 처리 로직 수정 필요

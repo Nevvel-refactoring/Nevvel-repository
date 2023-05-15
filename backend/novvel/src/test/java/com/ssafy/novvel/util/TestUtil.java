@@ -187,14 +187,14 @@ public class TestUtil {
     public static List<Resource> getResources(int index) {
         List<Resource> result = new ArrayList<>();
         for (int i = 0; i < index; i++) {
-            result.add(new Resource(Long.valueOf(i), "test.gif", "path", true, "thumbnailpath"));
+            result.add(new Resource(Long.valueOf(i), "test.gif", "path", "test", "test", true, "thumbnailpath"));
 
         }
         return result;
     }
 
     public static Resource getMemberProfile() {
-        return new Resource(1L, "cat.jpeg", "path", true, "thumbnailpath");
+        return new Resource(1L, "cat.jpeg", "path", "test", "test", true, "thumbnailpath");
     }
 
     public static Set<Tag> getTagSet(int index) {

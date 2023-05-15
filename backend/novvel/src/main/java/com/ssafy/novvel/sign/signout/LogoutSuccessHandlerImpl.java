@@ -2,6 +2,7 @@ package com.ssafy.novvel.sign.signout;
 
 import com.ssafy.novvel.member.repository.MemberRepository;
 import com.ssafy.novvel.util.token.CustomUserDetails;
+import com.ssafy.novvel.util.token.UserDtoUtils;
 import java.io.IOException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -19,10 +20,11 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
 
-    @Value("${redirect.logout.index}")
-    private String index;
+    @Value("${redirect.url}")
+    private String url;
     private final MemberRepository memberRepository;
     private final JWTProvider jwtProvider;
+    private final UserDtoUtils userDtoUtils;
 
 
 
@@ -34,9 +36,11 @@ public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
 
         response.addCookie(jwtProvider.createEmptyCookie(JWTProvider.getAccessToken()));
         response.addCookie(jwtProvider.createEmptyCookie(JWTProvider.getRefreshToken()));
+        response.addCookie(userDtoUtils.removeUserDtoCookie());
 
         customUserDetails.getMember().removeToken();
+
         memberRepository.save(customUserDetails.getMember());
-        response.sendRedirect(index);
+        response.sendRedirect(url);
     }
 }

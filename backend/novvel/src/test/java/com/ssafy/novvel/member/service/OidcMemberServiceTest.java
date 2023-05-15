@@ -4,6 +4,7 @@ import com.ssafy.novvel.member.entity.Member;
 import com.ssafy.novvel.member.repository.MemberRepository;
 import com.ssafy.novvel.sign.oauth2login.OidcMemberService;
 import com.ssafy.novvel.util.TestUtil;
+import com.ssafy.novvel.util.token.UserDtoUtils;
 import com.ssafy.novvel.util.token.jwt.JWTProvider;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -29,6 +30,9 @@ class OidcMemberServiceTest {
     @Mock
     private JWTProvider jwtProvider;
 
+    @Mock
+    private UserDtoUtils userDtoUtils;
+
     private final String GET_AUTHORITY = "getAuthority";
 
     @Test
@@ -37,7 +41,7 @@ class OidcMemberServiceTest {
         throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
 
         //reflection
-        oidcMemberService = new OidcMemberService(memberRepository, jwtProvider);
+        oidcMemberService = new OidcMemberService(memberRepository, jwtProvider, userDtoUtils);
         Method getAuthority = OidcMemberService.class.getDeclaredMethod(GET_AUTHORITY,
             String.class, String.class, String.class);
         getAuthority.setAccessible(true);
@@ -60,7 +64,7 @@ class OidcMemberServiceTest {
     public void loginUSER()
         throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         //reflection
-        oidcMemberService = new OidcMemberService(memberRepository, jwtProvider);
+        oidcMemberService = new OidcMemberService(memberRepository, jwtProvider, userDtoUtils);
         Method getAuthority = OidcMemberService.class.getDeclaredMethod(GET_AUTHORITY,
             String.class, String.class, String.class);
         getAuthority.setAccessible(true);
@@ -84,7 +88,7 @@ class OidcMemberServiceTest {
     public void signUp()
         throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         //reflection
-        oidcMemberService = new OidcMemberService(memberRepository, jwtProvider);
+        oidcMemberService = new OidcMemberService(memberRepository, jwtProvider, userDtoUtils);
         Method getAuthority = OidcMemberService.class.getDeclaredMethod(GET_AUTHORITY,
             String.class, String.class, String.class);
         getAuthority.setAccessible(true);

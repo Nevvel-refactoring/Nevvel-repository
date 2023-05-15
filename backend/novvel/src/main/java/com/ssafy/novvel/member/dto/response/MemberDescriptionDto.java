@@ -1,6 +1,5 @@
-package com.ssafy.novvel.member.dto.request;
+package com.ssafy.novvel.member.dto.response;
 
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,12 +10,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MemberInfoRegistDto {
-    @NotNull
-    private String nickname;
-
-    @Size(max=500)
+public class MemberDescriptionDto {
+    @Size(max = 500)
     private String description;
 
-    private Boolean isDefaultImage;
 }
