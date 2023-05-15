@@ -147,6 +147,11 @@ function ImgUpload(props:assetstoreProps) {
     }
   }
 
+  useEffect(()=>{
+    console.log(jsonDatas)
+  },[jsonDatas])
+
+  
   // 모달에서 제출 버튼 누르면 시그널 받아서 axios
   const [axiosTrigger, setAxiosTrigger] = useState<boolean|null>(null)
 
