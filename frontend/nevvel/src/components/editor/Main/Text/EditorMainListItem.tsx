@@ -6,10 +6,10 @@ import { AiOutlineSound } from "react-icons/ai";
 import EditorMainMenu from "./EditorMainMenu";
 import { mobile } from "@/src/util/Mixin";
 import { content } from "editor";
-import { atom, useAtom } from "jotai";
+import { atom, useAtom, useAtomValue } from "jotai";
 import { assetOpenAtom, nowTextBlockAtom } from "@/src/store/EditorAssetStore";
-import DummyAssetData_image from "@/src/components/assetstore/DummyAssetData_Image.json";
-import DummyAssetData_audio from "@/src/components/assetstore/DummyAssetData_Audio.json";
+import { ImageAssetAtom } from "@/src/store/EditorAssetStore";
+import { AudioAssetAtom } from "@/src/store/EditorAssetStore";
 
 type EditorMainListItemProps = {
   content: content;
@@ -35,8 +35,8 @@ function EditorMainListItem({
   const [assetOpen, setAssetOpen] = useAtom(assetOpenAtom);
   const [nowTextBlock, setNowTextBlock] = useAtom(nowTextBlockAtom);
   const idx = content.idx;
-  const IMAGE = DummyAssetData_image;
-  const AUDIO = DummyAssetData_audio;
+  const IMAGE = useAtomValue(ImageAssetAtom);
+  const AUDIO = useAtomValue(AudioAssetAtom);
   useEffect(() => {
     // console.log(text);
     // 텍스트에 style 적용한 경우
@@ -96,7 +96,7 @@ function EditorMainListItem({
     if (content.event.length == 1 && index == 0 && asset.type === "IMAGE") {
       return (
         <AssetContainer key={index}>
-          <Img src={IMAGE.content[asset.assetId].thumbnail} alt="썸네일" />
+          <Img src={IMAGE[asset.assetId].thumbnail} alt="썸네일" />
           <AssetButton onClick={() => AssetHandler(2)}>
             <AiOutlineSound className="sound" size="24" />
           </AssetButton>
@@ -112,7 +112,7 @@ function EditorMainListItem({
           <AssetButton onClick={() => AssetHandler(1)}>
             <BiImageAdd className="image" size="24" />
           </AssetButton>
-          <Img src={AUDIO.content[asset.assetId].thumbnail} alt="썸네일" />
+          <Img src={AUDIO[asset.assetId].thumbnail} alt="썸네일" />
         </AssetContainer>
       );
     } else {
@@ -121,14 +121,14 @@ function EditorMainListItem({
           {asset.type === "IMAGE" && (
             <Img
               className="check"
-              src={IMAGE.content[asset.assetId].thumbnail}
+              src={IMAGE[asset.assetId].thumbnail}
               alt="썸네일"
             />
           )}
           {asset.type === "AUDIO" && (
             <Img
               className="check"
-              src={AUDIO.content[asset.assetId].thumbnail}
+              src={AUDIO[asset.assetId].thumbnail}
               alt="썸네일"
             />
           )}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import DummyAssetData_audio from "@/src/components/assetstore/DummyAssetData_Audio.json";
+import { useAtom } from "jotai";
 import styled from "styled-components";
 import { useAtomValue } from "jotai";
 import { nowTextBlockAtom } from "@/src/store/EditorAssetStore";
@@ -7,6 +7,7 @@ import { Asset } from "editor";
 import { content } from "editor";
 import { event } from "editor";
 import springApi from "@/src/api";
+import { AudioAssetAtom } from "@/src/store/EditorAssetStore";
 
 type EditorMainAssetAudioListProps = {
   setContents: React.Dispatch<React.SetStateAction<content[]>>;
@@ -17,7 +18,7 @@ function EditorMainAssetSoundList({
   setContents,
   contents,
 }: EditorMainAssetAudioListProps) {
-  const [assetData, setAssetData] = useState(DummyAssetData_audio.content);
+  const [assetData, setAssetData] = useAtom(AudioAssetAtom);
   const nowTextBlock = useAtomValue(nowTextBlockAtom);
 
   const getAssetData = async () => {

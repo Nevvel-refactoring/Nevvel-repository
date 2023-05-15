@@ -2,13 +2,15 @@ import React, { useEffect, useState } from "react";
 import DummyAssetData_image from "@/src/components/assetstore/DummyAssetData_Image.json";
 import styled from "styled-components";
 import AssetCard from "@/src/components/common/AssetCard";
-import { useAtomValue } from "jotai";
+import { useAtom, useAtomValue } from "jotai";
 import { nowTextBlockAtom } from "@/src/store/EditorAssetStore";
 import { Asset } from "editor";
 import { content } from "editor";
 import { event } from "editor";
 import { eventNames } from "process";
 import springApi from "@/src/api";
+import { ImageAssetAtom } from "@/src/store/EditorAssetStore";
+
 
 type EditorMainAssetImageListProps = {
   setContents: React.Dispatch<React.SetStateAction<content[]>>;
@@ -19,7 +21,7 @@ function EditorMainAssetImageList({
   setContents,
   contents,
 }: EditorMainAssetImageListProps) {
-  const [assetData, setAssetData] = useState(DummyAssetData_image.content);
+  const [assetData, setAssetData] = useAtom(ImageAssetAtom);
   const nowTextBlock = useAtomValue(nowTextBlockAtom);
 
   const getAssetData = async () => {
@@ -33,7 +35,12 @@ function EditorMainAssetImageList({
   };
   useEffect(() => {
     getAssetData();
+    // setAssetData(DummyAssetData_image.content)
   }, []);
+
+  useEffect(()=>{
+    console.log(assetData)
+  },[assetData])
 
   useEffect(() => {
     console.log(contents);

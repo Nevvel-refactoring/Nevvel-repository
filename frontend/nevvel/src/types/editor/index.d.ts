@@ -31,15 +31,21 @@ declare module "editor" {
     profileImage: string;
   }
 
-  interface Asset {
+  export interface AssetContent{
+    content:Asset[]
+  }
+
+
+  export interface Asset {
+    downloadCount: number;
     id: number;
+    isAvailable:boolean;
+    price: number;
+    tags: AssetTag[];
     title: string;
     type: string;
     thumbnail: string;
     url: string;
-    price: number;
-    downloadCount: number;
-    tags: Array<AssetTag>;
     uploader: AssetUploader;
   }
 }
