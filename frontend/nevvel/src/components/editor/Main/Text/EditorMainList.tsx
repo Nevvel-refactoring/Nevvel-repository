@@ -38,7 +38,7 @@ function EditorMainList({
         <ListWrapper>
           {contents.map((content, index) => (
             <EditorMainListItem
-              key={index}
+              key={content.idx}
               content={content}
               contents={contents}
               setContents={setContents}

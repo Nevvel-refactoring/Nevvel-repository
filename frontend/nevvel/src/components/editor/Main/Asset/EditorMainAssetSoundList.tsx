@@ -26,7 +26,7 @@ function EditorMainAssetSoundList({
     );
     if (res) {
       console.log(res);
-      setAssetData(res.data.contents);
+      setAssetData(res.data.content);
     }
   };
 
@@ -58,14 +58,20 @@ function EditorMainAssetSoundList({
     setContents(newBlocks);
   };
   return (
-    <AssetList>
-      {assetData.content.map((asset, index) => (
-        <AssetItem key={index} onClick={() => ClickHandler(asset)}>
-          <Img src={asset.thumbnail} alt="썸네일" />
-          {asset.title}
-        </AssetItem>
-      ))}
-    </AssetList>
+    <>
+      {!assetData ? (
+        <AssetList>현재 가지고 있는 오디오 에셋이 없습니다.</AssetList>
+      ) : (
+        <AssetList>
+          {assetData.content.map((asset, index) => (
+            <AssetItem key={index} onClick={() => ClickHandler(asset)}>
+              <Img src={asset.thumbnail} alt="썸네일" />
+              {asset.title}
+            </AssetItem>
+          ))}
+        </AssetList>
+      )}
+    </>
   );
 }
 
