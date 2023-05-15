@@ -162,6 +162,8 @@ function ImgUpload(props:assetstoreProps) {
     catch (error) {
       alert('업로드 과정에서 문제가 발생하였습니다.')
     }
+
+    props.setModalOpen(false)
   }
 
   // useEffect(()=>{
