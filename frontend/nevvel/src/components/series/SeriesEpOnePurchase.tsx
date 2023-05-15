@@ -19,7 +19,7 @@ function SeriesEpOnePurchase({ Info }: SeriesEpOnePurchaseProps) {
       });
       if (res.status === 201) {
         console.log(res);
-        router.push(`viewer/${Info.id}`);
+        router.push(`/viewer/${Info.id}`);
       } else if (res.status === 200) {
         if (confirm("포인트가 부족합니다. 충전하러 가시겠습니까?")) {
           router.push("/profile/purchase");
