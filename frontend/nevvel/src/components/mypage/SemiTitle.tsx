@@ -16,13 +16,17 @@ function BestNovels({ title, more }: Details) {
   return (
     <SemiTitleWrapper>
       <SemiTitle>{title}</SemiTitle>
-      <ViewMore
-        onClick={() => {
-          moreHandler(`${more}`);
-        }}
-      >
-        전체보기
-      </ViewMore>
+      {more === "" ? (
+        ""
+      ) : (
+        <ViewMore
+          onClick={() => {
+            moreHandler(`${more}`);
+          }}
+        >
+          전체보기
+        </ViewMore>
+      )}
     </SemiTitleWrapper>
   );
 }
@@ -39,7 +43,7 @@ const SemiTitleWrapper = styled.div`
 `;
 
 const SemiTitle = styled.div`
-  font-size: 1rem;
+  font-size: 1.125rem;
   /* font-weight: 800; */
 `;
 
