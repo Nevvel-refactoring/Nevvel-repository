@@ -66,10 +66,14 @@ function index() {
   }, []);
 
   const getViewerData = async (EID: number) => {
-    const res = await springApi.get(`/episodes/${EID}`);
-    if (res) {
-      console.log(res);
-      setEpisode(res.data);
+    try{
+      const res = await springApi.get(`/episodes/${EID}`);
+      if (res) {
+        console.log(res);
+        setEpisode(res.data);
+      }
+    }catch(error){
+      setEpisode(Dummy_Episode)
     }
   };
 

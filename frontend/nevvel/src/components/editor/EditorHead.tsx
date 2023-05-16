@@ -9,6 +9,7 @@ import { AiFillCheckCircle } from "react-icons/ai";
 import { useAtomValue } from "jotai";
 import { assetOpenAtom } from "@/src/store/EditorAssetStore";
 import springApi from "@/src/api";
+import { content } from "editor";
 
 type EditorHeadProps = {
   setEpisode: React.Dispatch<React.SetStateAction<episode>>;
@@ -19,12 +20,14 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
   const router = useRouter();
   const id = Number(router.query.id);
   const eid = Number(router.query.eid);
+  const title = router.query.title;
   const [postEpisode, setPostEpisode] = useState<episode>();
   const [modalOpen, setModalOpen] = useState(false);
   const [saveToast, setSaveToast] = useState(false);
   const [postModalOpen, setPostModalOpen] = useState(false);
   const assetOpen = useAtomValue(assetOpenAtom);
   const [postedEpisodeId, setPostedEpisodeId] = useState<number>();
+  const [reLocation, setRelocation] = useState<content[]>([]);
 
   useEffect(() => {
     console.log(episode);
@@ -66,6 +69,8 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
   };
 
   const PublishHandler = () => {
+    relocationHandler();
+    setRelocation([])
     if (episode.title == "") {
       alert("제목을 입력해주세요");
     } else if (episode.contents.length == 0) {
@@ -80,16 +85,17 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
   };
 
   const saveHandler = (e: string) => {
-    // 임시저장 axios 연결하면 제대로 해보기..
     if (episode.title == "") {
       alert("제목을 입력해주세요");
     } else if (episode.contents.length == 0) {
       alert("내용을 입력해주세요");
     } else {
       if (e == "save") {
+        relocationHandler()
         // 임시 저장을 클릭 했다면
         setSaveToast(true);
       } else if (e == "cancel") {
+        relocationHandler()
         setPostModalOpen(false);
         setSaveToast(true);
       }
@@ -132,12 +138,34 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
     }
   };
 
+  const relocationHandler = () => {
+      if (
+        episode.contents[episode.contents.length - 1]?.idx !=
+        episode.contents.length
+      ) {
+        episode.contents.map((content, index) => {
+          console.log(index)
+          reLocation.push({
+            idx: index + 1,
+            context: content.context,
+            event: content.event,
+          });
+        });
+        setEpisode({ ...episode, contents:reLocation});
+        setRelocation([])
+    }
+  };
+
+  const previewHandler = () => {
+    relocationHandler();
+    setModalOpen(true)
+  }
 
   return (
     <Wrapper>
       <ButtonWrapper>
         <WriteButtonContainer>
-          <WriteButton onClick={() => setModalOpen(true)}>미리보기</WriteButton>
+          <WriteButton onClick={previewHandler}>미리보기</WriteButton>
           {!eid && (
             <WriteButton onClick={() => saveHandler("save")}>
               임시저장
@@ -147,7 +175,7 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
         </WriteButtonContainer>
       </ButtonWrapper>
       <InputWrapper assetOpen={assetOpen}>
-        <SeriesTitle>여기다 시리즈 제목 넣으면 됩니다.</SeriesTitle>
+        <SeriesTitle>{title}</SeriesTitle>
         <TitleInput
           value={episode.title}
           onChange={Titlehandler}

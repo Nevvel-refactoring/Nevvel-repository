@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { BiImageAdd } from "react-icons/bi";
-import { TiDelete } from "react-icons/ti"
+import { TiDelete } from "react-icons/ti";
 import { AiOutlineSound } from "react-icons/ai";
 import EditorMainMenu from "./EditorMainMenu";
 import { mobile } from "@/src/util/Mixin";
@@ -16,12 +16,16 @@ type EditorMainListItemProps = {
   content: content;
   contents: content[];
   setContents: React.Dispatch<React.SetStateAction<content[]>>;
+  deleted:boolean;
+  setDeleted:React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 function EditorMainListItem({
   content,
   contents,
   setContents,
+  deleted,
+  setDeleted
 }: EditorMainListItemProps) {
   const [plus, setPlus] = useState(false);
   const textRef = useRef<HTMLDivElement>(null);
@@ -35,30 +39,104 @@ function EditorMainListItem({
   const [style, setStyle] = useState(false);
   const [assetOpen, setAssetOpen] = useAtom(assetOpenAtom);
   const [nowTextBlock, setNowTextBlock] = useAtom(nowTextBlockAtom);
+  // const [reLocation, setRelocation] = useState<content[]>([]);
+  // const [remove, setRemove] = useState(false);
+  // const [deleted, setDeleted] = useState(false)
   const idx = content.idx;
   const IMAGE = useAtomValue(ImageAssetAtom);
   const AUDIO = useAtomValue(AudioAssetAtom);
   const router = useRouter();
   const eid = router.query.eid;
+  // const relocation:content[] = []
 
   useEffect(() => {
     // console.log(text);
     // 텍스트에 style 적용한 경우
   }, [style]);
 
-  useEffect(() => {
-    console.log(IMAGE, "최초값");
-    console.log(AUDIO, "최초값");
-  }, []);
+  // useEffect(() => {
+  //   console.log(IMAGE, "최초값");
+  //   console.log(AUDIO, "최초값");
+  // }, []);
 
-  useEffect(() => {
-    console.log(IMAGE, "에셋 버튼 클릭 후");
-    console.log(AUDIO, "에셋 버튼 클릭 후");
-  }, [IMAGE, AUDIO]);
+  // useEffect(() => {
+  //   console.log(IMAGE, "에셋 버튼 클릭 후");
+  //   console.log(AUDIO, "에셋 버튼 클릭 후");
+  // }, [IMAGE, AUDIO]);
+
+  // useEffect(() => {
+  //   // if (reLocation.length == contents.length) {
+  //   //   setContents(reLocation);
+  //   // }
+  //   console.log("reLocation", reLocation);
+  // }, [reLocation]);
+
+  // useEffect(() => {
+  //   return () => {
+
+  //     if (contents[contents.length - 1].idx != contents.length) {
+  //       contents.map((content, index) => {
+  //         console.log()
+  //         reLocation.push({
+  //           idx: index + 1,
+  //           context: content.context,
+  //           event: content.event,
+  //         });
+  //       });
+  //     }
+      // setRemove(true);
+      // console.log(reLocation.length, "삭제 후 reLocation.length")
+      // console.log(contents.length,"contents.length")
+      // setContents(reLocation);
+  //   };
+  // }, [deleted]);
+
+  // useEffect(()=>{
+  //   console.log(reLocation, "삭제 후 reLocation");
+  // },[reLocation])
+
+  
+  // useEffect(() => {
+  //   if (remove) {
+  //     console.log("true");
+  //     setContents(reLocation);
+  //   }
+  //   return () => {
+  //     setRemove(false);
+  //     setRelocation([]);
+  //     console.log(contents)
+  //   };
+  // }, [remove]);
+
+  // useEffect(()=>{
+  //   if(contents.length-1 == reLocation.length){
+  //     setContents(reLocation)
+  //   }
+  //   return(()=>{
+  //     setRelocation([])
+  //   })
+  // },[reLocation])
+  // useEffect(() => {
+  //   return () => {
+  //     console.log(contents);
+  //   };
+  // }, [contents]);
 
   // block삭제
   const RemoveHandler = (content: content) => {
     setContents(contents.filter((el) => el.idx !== idx));
+    setDeleted(true)
+    // 삭제 후 idx 재 배치 해줘야 하기 때문에..
+    // contents.map((content, index) => {
+    //   setRelocation([
+    //     ...reLocation,
+    //     {
+    //       idx: index + 1,
+    //       context: content.context,
+    //       event: content.event,
+    //     },
+    //   ]);
+    // });
   };
 
   const handleChange = (event: React.FormEvent<HTMLDivElement>) => {
@@ -218,7 +296,7 @@ function EditorMainListItem({
           onCompositionStart={handleCompositionStart}
           onCompositionEnd={handleCompositionEnd}
           ref={textRef}
-          dangerouslySetInnerHTML={{ __html: text }}
+          dangerouslySetInnerHTML={{ __html: content.context }}
           onContextMenu={handleContextMenu}
         />
         <RemoveButton onClick={() => RemoveHandler(content)}>

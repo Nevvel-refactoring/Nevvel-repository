@@ -41,7 +41,7 @@ function viewer() {
   const scrollElement = scrollRef.current as HTMLDivElement;
   const [currentScroll, setCurrentScroll] = useState(0);
   const nowTextBlock = useAtomValue(numAtom);
-  const [EpisodeData, setEpisodeData] = useState<episodeViewer>();
+  const [EpisodeData, setEpisodeData] = useState<episodeViewer>(Dummy_Episode);
   const [imageEvent, setImageEvent] = useState<string>("");
   const [audioEvent, setAudioEvent] = useState<string>("");
   const [viewerColor, setViewerColor] = useState<string>("");

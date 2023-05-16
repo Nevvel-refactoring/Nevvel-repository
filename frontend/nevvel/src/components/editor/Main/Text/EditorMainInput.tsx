@@ -1,13 +1,17 @@
 import { tabletH } from "@/src/util/Mixin";
-import React, { useState,Dispatch, SetStateAction, useEffect, useRef } from "react";
+import React, {
+  useState,
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useRef,
+} from "react";
 import { useRouter } from "next/dist/client/router";
 import styled from "styled-components";
-import { episode,content,event } from "editor";
-
-
+import { episode, content, event } from "editor";
 
 type EditorMainInputProps = {
-  episode:episode;
+  episode: episode;
   currentText: string;
   setCurrentText: Dispatch<SetStateAction<string>>;
   contents: content[];
@@ -22,17 +26,23 @@ function EditorMainInput({
   setContents,
 }: EditorMainInputProps) {
   const router = useRouter();
-  const eid = router.query.eid
+  const eid = router.query.eid;
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const [nextId, setNextId] =useState(1)
-  useEffect(()=>{
-    console.log("인풋 렌더링 안하냐?")
-    console.log(eid,"eid")
-    if(eid){    
-      console.log("들옴")
-      setNextId(episode.contents.length+1)
-    }
-  },[])
+  const [nextId, setNextId] = useState(1);
+
+  useEffect(() => {
+    console.log("nextId", nextId);
+  }, [nextId]);
+
+  useEffect(() => {
+
+      setNextId(episode.contents.length + 1);
+
+  }, [episode]);
+
+  useEffect(() => {
+    console.log(nextId);
+  }, [nextId]);
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (event.key == "Enter") {
@@ -45,7 +55,7 @@ function EditorMainInput({
           event: [],
         };
         setContents([...contents, newBlock]);
-        setNextId(nextId+1)
+        setNextId(nextId + 1);
         setCurrentText("");
       }
     }
@@ -56,15 +66,14 @@ function EditorMainInput({
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto";
       textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
-
     }
   };
 
   // < ;quot 파싱하기
   return (
     <InputWrapper>
-    <LeftSpace />
-    <RightSpace />
+      <LeftSpace />
+      <RightSpace />
       <BlockInput
         ref={textareaRef}
         value={currentText}
@@ -91,11 +100,11 @@ const InputWrapper = styled.div`
 `;
 
 const LeftSpace = styled.div`
-   width: 10rem;
-`
-const RightSpace =styled.div`
-width: 2rem;
-`
+  width: 10rem;
+`;
+const RightSpace = styled.div`
+  width: 2rem;
+`;
 
 const BlockInput = styled.textarea`
   display: flex;
@@ -110,7 +119,6 @@ const BlockInput = styled.textarea`
   min-height: 3rem;
   resize: none;
   align-items: center;
-
 `;
 
 const SubmitButton = styled.button`

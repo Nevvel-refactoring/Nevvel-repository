@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { episodeViewer } from "viewer";
 import { episode } from "editor";
 import {
   AiFillCaretLeft,
@@ -15,21 +16,13 @@ import { Modal } from "../common/Modal";
 
 type ViewHeaderProps = {
   id: string | string[] | undefined;
-  EpisodeData: episode;
+  EpisodeData: episodeViewer;
 };
 
 function ViewHeader({ EpisodeData, id }: ViewHeaderProps) {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleteData, setDeleteData] = useState<episode>();
   const router = useRouter();
-  const putEpisodeData = {
-    coverId: EpisodeData.coverId,
-    statusType: EpisodeData.statusType,
-    point: 0,
-    title: EpisodeData.title,
-    contents: EpisodeData.contents,
-  };
-  console.log(putEpisodeData);
   const putViewerData = async (Id: number) => {
     // console.log(putEpisodeData)
     // // try {
@@ -44,7 +37,7 @@ function ViewHeader({ EpisodeData, id }: ViewHeaderProps) {
     //     console.log(res);
     router.push({
       pathname: "/editor/[id]/[eid]",
-      query: { id: EpisodeData.coverId, eid: id },
+      query: { id: EpisodeData.coverId, eid: id, title:EpisodeData.coverTitle },
     });
     //   }
     // }

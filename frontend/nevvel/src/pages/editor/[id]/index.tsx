@@ -3,13 +3,16 @@ import EditorHead from "@/src/components/editor/EditorHead";
 import EditorMain from "@/src/components/editor/EditorMain";
 import styled from "styled-components";
 import { episode } from "editor";
+import { useRouter } from "next/router";
 
 
 import { mobile } from "@/src/util/Mixin";
 
 function index() {
+  const router = useRouter();
+  const id = router.query.id
   const [episode, setEpisode] =useState<episode>({
-    coverId:296,
+    coverId:Number(id),
     title:"",
     statusType:"PUBLISHED",
     point:0,
@@ -29,7 +32,6 @@ function index() {
       <EditorHead 
       episode={episode}
       setEpisode={setEpisode}/>
-
       </EditorHeadWrapper>
       <EditorMain 
       setEpisode={setEpisode}

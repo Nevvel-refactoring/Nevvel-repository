@@ -14,6 +14,7 @@ import { useRouter } from "next/router";
 
 type EditorMainListProps = {
   episode: episode;
+  setEpisode: React.Dispatch<React.SetStateAction<episode>>;
   contents: content[];
   setContents: React.Dispatch<React.SetStateAction<content[]>>;
   currentText: string;
@@ -26,6 +27,7 @@ function EditorMainList({
   setContents,
   currentText,
   setCurrentText,
+  setEpisode,
 }: EditorMainListProps) {
   const scrollRef = useRef<any>();
   // useEffect(() => {
@@ -34,23 +36,68 @@ function EditorMainList({
   // }, [currentText,contents]);
   const router = useRouter();
   const eid = router.query.eid;
+  const [deleted, setDeleted] = useState(false);
+  const [reLocation, setRelocation] = useState<content[]>([]);
+
   useEffect(() => {
     console.log("mainlist", eid);
   }, []);
 
+  useEffect(() => {
+    if (deleted) {
+      relocationHandler();
+    }
+    return () => {
+      setDeleted(false);
+      setRelocation([]);
+      setEpisode({ ...episode, contents: reLocation });
+    };
+  }, [deleted]);
+
+  useEffect(()=>{
+    console.log(deleted,"deleted")
+  },[])
+
+  useEffect(() => {
+    if (!deleted) {
+      relocationHandler();
+    }
+    return(()=>{
+      if (!deleted) {
+      setRelocation([]);
+      }
+    })
+  }, [contents]);
+  const relocationHandler = () => {
+    if (contents[contents.length - 1]?.idx != contents.length) {
+      console.log("여기 안들어온건가");
+      contents.map((content, index) => {
+        reLocation.push({
+          idx: index + 1,
+          context: content.context,
+          event: content.event,
+        });
+      });
+      setEpisode({ ...episode, contents: reLocation });
+    }
+  };
+
+
   return (
     <MainWrapper>
       <MainContainer ref={scrollRef}>
-          <ListWrapper>
-            {contents.map((content, index) => (
-              <EditorMainListItem
-                key={content.idx}
-                content={content}
-                contents={contents}
-                setContents={setContents}
-              />
-            ))}
-          </ListWrapper>
+        <ListWrapper>
+          {episode.contents.map((content, index) => (
+            <EditorMainListItem
+              key={content.idx}
+              content={content}
+              contents={contents}
+              setContents={setContents}
+              deleted={deleted}
+              setDeleted={setDeleted}
+            />
+          ))}
+        </ListWrapper>
         <ContentWrapper>
           <InputWrapper>
             <EditorMainInput

@@ -18,27 +18,34 @@ function EditorMain({setEpisode,episode}:EditorMainProps) {
   const [contents, setContents] =useState<content[]>([]);
   const [currentText, setCurrentText] = useState("");
   const assetOpen = useAtomValue(assetOpenAtom) 
-
-
-  useEffect(()=>{
-    setEpisode({...episode,contents:contents})
-    // console.log("episode",episode)
-  },[contents])
-
+  
   useEffect(()=>{
     if (episode.contents.length !== 0){
       setContents(episode.contents)
     }
-  },[])
+  },[episode])
+
+  useEffect(()=>{
+    setEpisode({...episode,contents:contents})
+    console.log("episode 들오오냐 메인에",episode)
+  },[contents])
+
+  // useEffect(()=>{
+  //   if (episode.contents.length !== 0){
+  //     setContents(episode.contents)
+  //   }
+  //   console.log("최초 에피소드",episode)
+  // },[])
   
 
     return (<>
     <Wrapper assetOpen={assetOpen}>
       <EditorMainList
-      episode={episode}
+            episode={episode}
+            setEpisode={setEpisode}
             contents={contents}
             setContents={setContents}
-      currentText={currentText}
+             currentText={currentText}
             setCurrentText={setCurrentText}
             />
     </Wrapper>
