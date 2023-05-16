@@ -1,33 +1,43 @@
 import React, { useState } from "react";
-import { episode } from "series";
+import { episode, writer } from "series";
 import styled from "styled-components";
 import { useRouter } from "next/router";
 import { AiOutlineEye } from "react-icons/ai";
 import SeriesEpOnePurchase from "./SeriesEpOnePurchase";
 import { Modal } from "../common/Modal";
-import { loginAtom } from "@/src/store/Login";
+import { userInfoAtom, loginAtom } from "@/src/store/Login";
 import { useAtomValue } from "jotai";
 
 type SeriesMainListItemProps = {
   episode: episode;
+  writer: writer;
 };
 
-function SeriesMainListItem({ episode }: SeriesMainListItemProps) {
+function SeriesMainListItem({ episode, writer }: SeriesMainListItemProps) {
   const router = useRouter();
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [purchased, setPurchased] = useState(episode.isPurchased);
   const [IsRead, setIsRead] = useState(episode.isRead);
   const loginStatus = useAtomValue(loginAtom);
+  const userInfo = useAtomValue(userInfoAtom);
+
+  const routerPush = () => {
+    router.push({
+      pathname: "/viewer/[id]",
+      query: { id: episode.id },
+    });
+  };
 
   const clickHandler = () => {
     if (loginStatus) {
-      if (!episode.isPurchased && episode.point !== 0) {
-        setModalOpen(true);
+      if (writer.id !== userInfo?.id) {
+        if (!episode.isPurchased && episode.point !== 0) {
+          setModalOpen(true);
+        } else {
+          routerPush();
+        }
       } else {
-        router.push({
-          pathname: "/viewer/[id]",
-          query: { id: episode.id },
-        });
+        routerPush();
       }
     } else {
       alert("로그인 하세요");
@@ -60,7 +70,7 @@ function SeriesMainListItem({ episode }: SeriesMainListItemProps) {
           )}
           <Box>
             <AiOutlineEye />
-            <BoxText>{episode.viewCount}</BoxText>
+            <BoxText>{episode.views}</BoxText>
           </Box>
           <Box>
             {episode.uploadedDateTime &&

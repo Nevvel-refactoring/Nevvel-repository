@@ -93,9 +93,9 @@ function NovelSwiper(props: { content: Novel }) {
         // onSwiper={(swiper) => console.log(swiper)}
         // onSlideChange={() => console.log("slide change")}
       >
-        {novelSwiperData.map((novel, index: number) => {
+        {novelSwiperData.map((novel) => {
           return (
-            <SwiperSlide key={index}>
+            <SwiperSlide key={novel.id}>
               <NovelCard
                 id={novel.id}
                 title={novel.title}

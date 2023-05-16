@@ -6,19 +6,22 @@ interface Props {
   name: string;
   nav: string;
   pageNum: number;
+  canClick: boolean;
 }
 
-function GenreList({ id, name, nav, pageNum }: Props) {
+function GenreList({ id, name, nav, pageNum, canClick }: Props) {
   const router = useRouter();
 
   const genreSelectHandler = () => {
-    router.push(
-      {
-        pathname: `/novels/${nav}`,
-        query: { genre: id, sort: "like", name: name, pageNum: pageNum },
-      }
-      // `/novels/${nav}`
-    );
+    if (canClick) {
+      router.push(
+        {
+          pathname: `/novels/${nav}`,
+          query: { genre: id, sort: "like", name: name, pageNum: pageNum },
+        }
+        // `/novels/${nav}`
+      );
+    }
   };
 
   return (

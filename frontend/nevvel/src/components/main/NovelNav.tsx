@@ -1,6 +1,6 @@
 import GenreList from "./GenreList";
 import styled from "styled-components";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { NewvelApi } from "@/src/api";
 
 interface Nav {
@@ -28,6 +28,37 @@ function NovelNav({ nav, pageNum }: Nav) {
   ];
 
   const [genres, setGenres] = useState<Genre[] | undefined>(undefined);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [isDrag, setIsDrag] = useState<boolean>(false);
+  const [canClick, setCanClick] = useState<boolean>(true);
+  const [startX, setStartX] = useState<number>(0);
+
+  const scrollElement = scrollRef.current as HTMLDivElement;
+
+  const onDragStart = (e: React.MouseEvent<HTMLElement>) => {
+    setIsDrag(true);
+    setStartX(e.pageX);
+  };
+
+  const onDragLeave = () => {
+    setIsDrag(false);
+    setTimeout(() => setCanClick(true), 50); // 약간의 시간차가 있어야 클릭과 드래그를 구분 가능
+  };
+
+  const onDragEnd = () => {
+    setIsDrag(false);
+    setTimeout(() => setCanClick(true), 50); // 약간의 시간차가 있어야 클릭과 드래그를 구분 가능
+  };
+
+  const onDragMove = (e: React.MouseEvent<HTMLElement>) => {
+    if (isDrag) {
+      setCanClick(false); // 드래그에 있어야 일반 클릭과 드래그를 true false 나누어 처리 가능
+      e.preventDefault();
+      scrollElement.scrollLeft += startX - e.pageX;
+      setStartX(e.pageX);
+    }
+  };
+
   useEffect(() => {
     const getGenres = async () => {
       const res = await NewvelApi.allGenres();
@@ -38,7 +69,13 @@ function NovelNav({ nav, pageNum }: Nav) {
   }, []);
 
   return (
-    <Wrapper>
+    <Wrapper
+      ref={scrollRef}
+      onMouseDown={onDragStart}
+      onMouseMove={onDragMove}
+      onMouseUp={onDragEnd}
+      onMouseLeave={onDragLeave}
+    >
       {/* {genres} */}
       {genres?.map((genre) => (
         <GenreList
@@ -47,6 +84,7 @@ function NovelNav({ nav, pageNum }: Nav) {
           name={genre.name}
           nav={nav}
           pageNum={pageNum}
+          canClick={canClick}
         />
       ))}
     </Wrapper>

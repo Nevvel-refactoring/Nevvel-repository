@@ -5,15 +5,16 @@ declare module "series" {
     thumbnail: string;
     status: string;
     description: string;
-    genreName: string;
+    genre: string;
     isLiked: boolean;
-    writter: writter;
+    writer: writer;
     viewCount: number;
     likes: number;
+    lastReadEpisodeId: number;
     episodes: episode[];
   }
 
-  export interface writter {
+  export interface writer {
     id: number;
     nickname: string;
     profileImg: string;
@@ -22,7 +23,7 @@ declare module "series" {
   export interface episode {
     id: number;
     title: string;
-    viewCount: number;
+    views: number;
     isPurchased: boolean;
     isRead: boolean;
     point: number;

@@ -150,7 +150,12 @@ const SearchBar = styled.div`
   height: 1.7rem;
 
   ${tabletH} {
-    width: 18rem;
+    width: 16rem;
+  }
+  ${mobile} {
+    width: 12rem;
+    padding-left: 6px;
+    padding-right: 6px;
   }
 `;
 
@@ -158,6 +163,13 @@ const SearchBarInput = styled.input`
   background-color: ${({ theme }) => theme.color.searchBar};
   border: none;
   width: 23rem;
+  ${tabletH} {
+    width: 15rem;
+  }
+  ${mobile} {
+    width: 10rem;
+    font-size: 12px;
+  }
 `;
 
 const SearchIcon = styled.div`

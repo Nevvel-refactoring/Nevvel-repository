@@ -29,22 +29,10 @@ function SeriesHeader({
 }: SeriesHeaderProps) {
   const router = useRouter();
   const [modalOpen, setModalOpen] = useState(false);
-  const [readId, setReadId] = useState<number>();
+  const readId = SeriesData.lastReadEpisodeId;
+  const thumnail = SeriesData.thumbnail;
   const userInfo = useAtomValue(userInfoAtom);
   const loginStatus = useAtomValue(loginAtom);
-
-  useEffect(() => {
-    let latestRead = "0000-00-00T00:00:00.000000";
-    let latestId;
-    SeriesData.episodes.map((episode) => {
-      if (episode.isRead && episode.uploadedDateTime > latestRead) {
-        latestRead = episode.uploadedDateTime;
-        latestId = episode.id;
-      }
-    });
-    setReadId(latestId);
-    console.log(latestId, latestRead);
-  }, []);
 
   // cover 좋아요하기
   const postSeriesLike = async (Id: number) => {
@@ -80,10 +68,10 @@ function SeriesHeader({
       <SeriesInfo>
         <SeriesCover>
           <Image
-            src={unupload}
+            src={thumnail ? thumnail : unupload}
             alt="thumbnail"
             width={150}
-            height={150}
+            height={222}
             draggable="false"
           />
           <SeriesInfoContainer>
@@ -100,7 +88,7 @@ function SeriesHeader({
         <SeriesEx>
           <SeriesText className="title">
             <span>{SeriesData.title}</span>
-            {loginStatus && SeriesData.writter?.id === userInfo?.id ? (
+            {loginStatus && SeriesData.writer.id === userInfo?.id ? (
               <span>
                 <TbEdit
                   onClick={() => {
@@ -125,12 +113,12 @@ function SeriesHeader({
             )}
           </SeriesText>
           <SeriesText className="writter">
-            {SeriesData.writter?.nickname}
+            {SeriesData.writer.nickname}
           </SeriesText>
           <SeriesText className="description">
             {SeriesData.description}
           </SeriesText>
-          <SeriesText className="genre">{SeriesData.genreName}</SeriesText>
+          <SeriesText className="genre">{SeriesData.genre}</SeriesText>
           <SeriesBtnContainer>
             <SeriesBtn
               className="first"
@@ -147,7 +135,11 @@ function SeriesHeader({
             <SeriesBtn
               className="choice"
               onClick={() =>
-                loginStatus ? setModalOpen(true) : alert("로그인 하세요")
+                loginStatus && userInfo?.id !== SeriesData.writer.id
+                  ? setModalOpen(true)
+                  : loginStatus
+                  ? alert("작성자입니다.")
+                  : alert("로그인 하세요")
               }
             >
               선택구매
@@ -208,6 +200,7 @@ const SeriesEx = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  margin: 1rem 0rem;
   width: 70%;
   div {
     padding: 0.5rem;
@@ -267,7 +260,7 @@ const SeriesText = styled.div`
 
   &.writter {
     font-weight: 500;
-    font-size: 18px;
+    font-size: 13px;
     color: ${({ theme }) => theme.color.text1};
   }
 

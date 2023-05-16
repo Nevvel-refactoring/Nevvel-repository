@@ -20,9 +20,16 @@ interface Props {
 function NavigationBottom(props: Props) {
   const router = useRouter();
   const value = useAtomValue(themeAtom);
+  const [userD, setUserD] = useState<boolean | number>(false);
 
   // 소설 목록 클릭했을 때 배경색 주기
   const [clicked, setClicked] = useState<string | null>(null);
+
+  useEffect(() => {
+    const isTouchDevice: boolean | number =
+      navigator.maxTouchPoints || "ontouchstart" in document.documentElement;
+    setUserD(isTouchDevice);
+  }, []);
 
   const genreSelectHandler = () => {
     router.push(
@@ -81,7 +88,9 @@ function NavigationBottom(props: Props) {
     <Wrapper clicked={clicked === null}>
       <LogoNav onClick={logoHandler}>
         <Link href="/">
-          {value === "light" ? (
+          {userD ? (
+            <Image src={nevvel_m_dark} alt="Logo" width={25} height={25} />
+          ) : value === "light" ? (
             <Image src={nevvel_light} alt="Logo" width={100} height={25} />
           ) : (
             <Image src={nevvel_dark} alt="Logo" width={100} height={25} />
@@ -91,7 +100,7 @@ function NavigationBottom(props: Props) {
       <Novel>
         <BackgroundDiv>
           <NavList clicked={clicked === "genre"} onClick={genreSelectHandler}>
-            장르별 소설
+            {userD ? "장르" : "장르별 소설"}
           </NavList>
         </BackgroundDiv>
         <BackgroundDiv>
@@ -99,17 +108,19 @@ function NavigationBottom(props: Props) {
             clicked={clicked === "completed"}
             onClick={completedSelectHandler}
           >
-            완결 소설
+            {userD ? "완결" : "완결 소설"}
           </NavList>
         </BackgroundDiv>
         <BackgroundDiv>
           <NavList clicked={clicked === "latest"} onClick={latestSelectHandler}>
-            최신 소설
+            {userD ? "최신" : "최신 소설"}
           </NavList>
         </BackgroundDiv>
         <BackgroundDiv>
           <AssetStore onClick={assetstoreHandler}>
-            <Link href="/assetstore/assetstore">에셋 스토어</Link>
+            <Link href="/assetstore/assetstore">
+              {userD ? "에셋" : "에셋 스토어"}
+            </Link>
           </AssetStore>
         </BackgroundDiv>
       </Novel>
@@ -144,7 +155,7 @@ const Novel = styled.div`
   display: flex;
   justify-content: space-between;
   width: 60%;
-  margin-left: 20%;
+  margin-left: 10%;
 
   ${tabletH} {
     margin-left: 0;
@@ -153,7 +164,7 @@ const Novel = styled.div`
   }
 
   ${mobile} {
-    margin-left: 2rem;
+    margin-left: 1rem;
     width: 100%;
   }
 `;
@@ -176,11 +187,21 @@ const NavList = styled.div<{ clicked: boolean }>`
     clicked ? theme.color.subNavbar : ""};
   color: ${({ clicked, theme }) =>
     clicked ? theme.color.text2 : theme.color.text1};
+  ${mobile} {
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 12px;
+  }
 `;
 
 const AssetStore = styled.div`
   text-align: center;
   width: 100%;
+  a {
+    ${mobile} {
+      font-size: 12px;
+    }
+  }
 `;
 
 export default NavigationBottom;

@@ -24,7 +24,11 @@ function SeriesMainList({ Info, isLatest }: SeriesMainListProps) {
   return (
     <ListContainer>
       {episodes.map((episode) => (
-        <SeriesMainListItem key={episode.id} episode={episode} />
+        <SeriesMainListItem
+          key={episode.id}
+          episode={episode}
+          writer={Info.writer}
+        />
       ))}
     </ListContainer>
   );
