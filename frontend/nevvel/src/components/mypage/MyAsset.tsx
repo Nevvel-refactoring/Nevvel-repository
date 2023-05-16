@@ -12,7 +12,7 @@ function MyAsset() {
       const res = await NewvelApi.purchasedAssets();
       console.log(res.data);
     };
-    getPurchasedAssets();
+    // getPurchasedAssets();
   }, []);
 
   // 만든 에셋

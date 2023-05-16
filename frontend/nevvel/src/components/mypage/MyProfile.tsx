@@ -14,7 +14,7 @@ function MyProfile() {
   useEffect(() => {
     const getUserData = async () => {
       const res = await NewvelApi.profileInfo();
-      console.log(res.data.description);
+      // console.log(res.data.description);
       setUserDescription(res.data.description);
     };
     getUserData();
@@ -76,4 +76,6 @@ const NickName = styled.div`
   font-weight: 800;
 `;
 
-const Description = styled.div``;
+const Description = styled.div`
+  margin-top: 1rem;
+`;

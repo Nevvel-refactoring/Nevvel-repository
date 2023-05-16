@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import { loginAtom, userInfoAtom } from "@/src/store/Login";
+import { loginAtom } from "@/src/store/Login";
 import { useAtomValue } from "jotai";
 import NovelCard from "@/src/components/common/NovelCard";
 import axios from "axios";
-import springApi from "@/src/api";
+import { NewvelApi } from "@/src/api";
 import Image from "next/image";
 import nevvel_m_dark from "../../assets/img/nevvel_m_dark.png";
 import styled from "styled-components";
@@ -53,45 +53,44 @@ interface Novel {
 function UploadedNovel() {
   // 로그인 여부 확인
   const loginStatus = useAtomValue(loginAtom);
-  const userInfoStatus = useAtomValue(userInfoAtom);
 
   // 로그아웃 상태인 경우 메인페이지로 리다이렉트
   // 로그인 상태인 경우 axios 요청
   const router = useRouter();
-  const [uploadedNovel, setUploadedNovel] = useState<Novel | undefined>(
+  const [purchasedNovel, setPurchasedNovel] = useState<Novel | undefined>(
     undefined
   );
   useEffect(() => {
-    const getUploadedCovers = async () => {
-      const res = await springApi.get(`/covers/uploader/${userInfoStatus?.id}`);
+    const getPurchasedCovers = async () => {
+      const res = await NewvelApi.purchasedCovers();
       console.log(res.data);
-      setUploadedNovel(res.data);
+      setPurchasedNovel(res.data);
     };
     if (!loginStatus) {
       router.push({ pathname: "/" });
     } else {
-      getUploadedCovers();
+      getPurchasedCovers();
     }
   }, []);
 
   return (
     <Wrapper>
-      <NovelTop>작성한 소설</NovelTop>
-      {uploadedNovel?.empty ? (
+      <NovelTop>구매한 소설</NovelTop>
+      {purchasedNovel?.empty ? (
         <NovelEmptyWrapper>
           <ImageWrapper>
             <Image
               src={nevvel_m_dark}
-              alt="작성한 소설이 존재하지 않습니다."
+              alt="구매한 소설이 존재하지 않습니다."
               width={300}
               height={300}
             />
           </ImageWrapper>
-          <NovelEmpty>작성한 소설이 존재하지 않습니다.</NovelEmpty>
+          <NovelEmpty>구매한 소설이 존재하지 않습니다.</NovelEmpty>
         </NovelEmptyWrapper>
       ) : (
         <NovelExists>
-          {uploadedNovel?.content.map((novel, index: number) => {
+          {purchasedNovel?.content.map((novel, index: number) => {
             return (
               <NovelCard
                 key={index}
