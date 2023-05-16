@@ -313,6 +313,7 @@ const AudUploadLabel = styled.label`
   justify-content: center;
   &:hover{
     cursor: pointer;
+    box-shadow: 0.1rem 0.1rem 0.5rem;
   }
 `
 

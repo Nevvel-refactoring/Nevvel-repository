@@ -208,24 +208,27 @@ const CardInfo1 = styled.p`
 
 const CardInfo2 = styled.p`
   color: ${({ theme }) => theme.color.text1};
+  display: flex;
+  justify-content: left;
+  /* max-width: 3.6rem; */
+  padding-left: 0.3rem;
+  padding-right: 0.3rem;
+  margin-top: 5%;
+  font-size: 90%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  margin-top: 5%;
-  font-size: 100%;
-  display: flex;
-  justify-content: left;
   /* margin-left: 10%; */
 `
 
 const CardInfo2Div = styled.div`
   background-color: ${({ theme }) => theme.color.buttonText};
   color: black;
-  width: 4rem;
-  height: 2rem;
+  width: auto;
+  height: 1.8rem;
   border-radius: 0.5rem;
   /* box-shadow: 0.5rem 0.5rem 0.2rem; */
-  border: 0.15rem inset black;
+  border: 0.1rem inset black;
   /* text-align: center; */
   display: flex;
   align-items: center;
@@ -235,4 +238,6 @@ const CardInfo2Div = styled.div`
 
 const RowDiv = styled.div`
   display: flex;
+  width: 13rem;
+  /* white-space: w; */
 `

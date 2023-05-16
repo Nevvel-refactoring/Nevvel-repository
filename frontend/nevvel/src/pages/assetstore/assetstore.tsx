@@ -15,6 +15,7 @@ import AudUpload from "@/src/components/assetstore/AudUpload";
 
 import TagData from "@/src/components/assetstore/DummyTagData.json";
 import { NewvelApi } from "@/src/api";
+import TagAddModal from "@/src/components/assetstore/TagAddModal";
 
 import type { GetServerSideProps, GetServerSidePropsContext, NextPage } from "next"
 import { Props } from "next/dist/client/script";
@@ -64,6 +65,13 @@ function assetstore({ content }: any) {
 
   const TopTag = tagData.slice(0, 28);
 
+  const [tagModalOpen, setTagModalOpen] = useState<boolean>(false)
+
+  const AddTag = () => {
+    setTagModalOpen(true);
+    console.log('되는데')
+  };
+
   return (
     <Wrapper>
       {content}
@@ -85,11 +93,11 @@ function assetstore({ content }: any) {
         {TopTag.map((tags) => {
           return (
             <CardInfo2Div key={tags.id}>
-              <TagP>{tags.tagName}</TagP>
+              <TagP>#{tags.tagName}</TagP>
             </CardInfo2Div>
           );
         })}
-        <CardInfo2Div>
+        <CardInfo2Div onClick={AddTag} >
           <TagP>+</TagP>
         </CardInfo2Div>
       </RowDiv>
@@ -131,6 +139,21 @@ function assetstore({ content }: any) {
       ) : null}
 
       {/* 여기서부터 태그 모달 */}
+      {
+        tagModalOpen ? (
+          <Modal
+            modal={tagModalOpen}
+            setModal={setTagModalOpen}
+            width="800"
+            height="400"
+            element={
+              <TagAddModal
+                tagData={tagData}
+              />
+            }
+          />
+        ) : null
+      }
       
     </Wrapper>
   );
@@ -158,6 +181,7 @@ export default assetstore;
 const Wrapper = styled.div`
   background-color: ${({ theme }) => theme.color.background};
   display: flex;
+  align-items: center;
   flex-direction: column;
   width: 100%;
   height: 100%;
@@ -167,13 +191,13 @@ const Wrapper = styled.div`
 `;
 
 const SearchBtnDiv = styled.div`
-  width: 100%;
-  height: 100%;
+  width: 87%;
+  /* height: 100%; */
   padding-top: 1%;
   padding-left: 1%;
   padding-right: 1%;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
 `;
 
 const SearchBar = styled.div`
@@ -186,7 +210,7 @@ const SearchBar = styled.div`
   padding-left: 1rem;
   padding-right: 1rem;
   width: 24rem;
-  height: 4rem;
+  height: 3rem;
 
   ${tabletH} {
     width: 18rem;
@@ -202,20 +226,24 @@ const SearchBarInput = styled.input`
 const WriteBtn = styled.button`
   background-color: ${({ theme }) => theme.color.button};
   color: ${({ theme }) => theme.color.buttonText};
-  width: 10rem;
-  height: 4rem;
+  width: 8rem;
+  height: 3rem;
   border-radius: 1rem;
-  font-size: 1.5rem;
-  margin-left: 2rem;
+  font-size: 1.2rem;
+  /* margin-left: 2rem; */
+  &:hover{
+    background-color: #8385ff;
+  }
 `;
 
 const RowDiv = styled.div`
+  width: 87%;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
   margin-top: 2rem;
   margin-bottom: 1rem;
-  height: 8rem;
+  height: 6rem;
   flex-wrap: wrap;
 `;
 
@@ -224,9 +252,9 @@ const CardInfo2Div = styled.div`
   background-color: ${({ theme }) => theme.color.buttonText};
   color: #8385ff;
   width: auto;
-  height: 2.2rem;
+  height: 2rem;
   border-radius: 0.5rem;
-  box-shadow: 0.1rem 0.1rem;
+  box-shadow: 0.05rem 0.05rem;
   border: 0.15rem solid #8385ff;
   /* text-align: center; */
   display: flex;
@@ -241,8 +269,24 @@ const CardInfo2Div = styled.div`
   }
 `;
 
+const ClickCardInfo2Div = styled.div`
+  background-color: #8385ff;
+  color: white;
+  width: auto;
+  height: 2rem;
+  border-radius: 0.5rem;
+  box-shadow: 0.05rem 0.05rem;
+  border: 0.15rem solid #8385ff;
+  /* text-align: center; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left:0.6rem;
+  margin-right: 0.6rem;
+`
+
 const TagP = styled.p`
-  font-size: 1.2rem;
+  font-size: 0.9rem;
   margin-right: 0.6rem;
   margin-left: 0.6rem;
 `;
