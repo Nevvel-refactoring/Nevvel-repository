@@ -10,7 +10,7 @@ import styled from "styled-components";
 import springApi from "@/src/api";
 import DummyAssetData_audio from "@/src/components/assetstore/DummyAssetData_Audio.json";
 import DummyAssetData_image from "@/src/components/assetstore/DummyAssetData_Image.json";
-import { ImageAssetAtom,AudioAssetAtom } from "@/src/store/EditorAssetStore";
+import { ImageAssetAtom, AudioAssetAtom } from "@/src/store/EditorAssetStore";
 
 interface Novel {
   content: {
@@ -53,7 +53,36 @@ interface Novel {
   empty: boolean;
 }
 
-export default function Home(props: { userDTO: string; content: Novel }) {
+interface AssetTag {
+  id: number;
+  tagName: string;
+  useCount: number;
+}
+
+interface AssetUploader {
+  id: number;
+  nickname: string;
+  profileImage: string;
+}
+
+interface Asset {
+  id: number;
+  title: string;
+  type: string;
+  thumbnail: string;
+  url: string;
+  price: number;
+  downloadCount: number;
+  isAvailable: boolean;
+  tags: Array<AssetTag>;
+  uploader: AssetUploader;
+}
+
+export default function Home(props: {
+  userDTO: string;
+  novels: Novel;
+  assets: Asset[];
+}) {
   // console.log(props.userDTO);
   const userDTO = props.userDTO === "" ? "" : JSON.parse(props.userDTO);
   const newUserInfo =
@@ -79,39 +108,34 @@ export default function Home(props: { userDTO: string; content: Novel }) {
   useEffect(() => {
     setLoginStatus(userDTO === "" ? false : true);
     setUserInfoStatus(newUserInfo);
-    return (()=>{
-      // if (loginStatus){
+    return () => {
+      if (loginStatus) {
         getAssetImgData();
         getAssetAudioData();
-      // }
-    })
+      }
+    };
   }, []);
   const [assetImageData, setAssetImageData] = useAtom(ImageAssetAtom);
   const [assetAudioData, setAssetAudioData] = useAtom(AudioAssetAtom);
-  useEffect(()=>{
-    console.log("assetImageData",assetImageData)
-    console.log("assetAudioData",assetAudioData)
-  },[assetImageData,assetAudioData])
 
-
-  
-  // 이미지 get 요청 
+  // 이미지 get 요청
   const getAssetImgData = async () => {
-    try{
+    try {
       const res = await springApi.get(
         "assets/purchased-on?assettype=IMAGE&page=1&size=10&sort=createdDateTime"
       );
       if (res) {
         console.log(res);
         setAssetImageData(res.data.content);
-    }}catch(error){
-      console.log(error)
-      setAssetImageData(DummyAssetData_image.content)
+      }
+    } catch (error) {
+      console.log(error);
+      setAssetImageData(DummyAssetData_image.content);
     }
   };
-  // 오디오 get 요청 
+  // 오디오 get 요청
   const getAssetAudioData = async () => {
-    try{
+    try {
       const res = await springApi.get(
         "assets/purchased-on?assettype=AUDIO&page=1&size=10&sort=createdDateTime"
       );
@@ -119,14 +143,12 @@ export default function Home(props: { userDTO: string; content: Novel }) {
         console.log(res);
         setAssetAudioData(res.data.content);
       }
-    }catch(error){
-      console.log(error)
-      setAssetAudioData(DummyAssetData_audio.content)
+    } catch (error) {
+      console.log(error);
+      setAssetAudioData(DummyAssetData_audio.content);
     }
   };
-  
 
-  
   // console.log(loginStatus);
   // console.log(userInfoStatus);
 
@@ -134,12 +156,12 @@ export default function Home(props: { userDTO: string; content: Novel }) {
     <HomeWrapper>
       <DetailWrapper>
         <BestDetails title="베스트 콘텐츠" more="/novels" />
-        <NovelSwiper content={props.content} />
+        <NovelSwiper content={props.novels} />
       </DetailWrapper>
       <Line />
       <DetailWrapper>
         <BestDetails title="베스트 에셋" more="/assetstore/assetstore" />
-        <AssetSwiper />
+        <AssetSwiper content={props.assets} />
       </DetailWrapper>
     </HomeWrapper>
   );
@@ -168,10 +190,23 @@ export async function getServerSideProps({ req }: NextPageContext) {
     console.log(error);
   }
 
+  let assets = undefined;
+  try {
+    const res = await axios.get("http://k8d1061.p.ssafy.io/api/assets", {
+      params: {
+        sort: "downloadCount,desc",
+      },
+    });
+    assets = res.data.content;
+  } catch (error) {
+    console.log(error);
+  }
+
   return {
     props: {
       userDTO: userDTOcookie,
-      content: novels,
+      novels: novels,
+      assets: assets,
     },
   };
 }
