@@ -33,8 +33,13 @@ export const MyPageModal = ({
   const kakaoLogout = () => {
     axios
       .post("http://k8d1061.p.ssafy.io/api/users/signout")
-      .then((response) => console.log(response))
+      .then(() => logoutRoute())
       .catch((error) => console.log(error));
+  };
+
+  // 로그아웃 후 메인페이지 리다이렉트
+  const logoutRoute = () => {
+    router.push({ pathname: "/" });
   };
 
   return (
