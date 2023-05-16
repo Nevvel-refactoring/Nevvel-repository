@@ -5,25 +5,23 @@ import com.ssafy.novvel.cover.dto.CoverWithConditions;
 import com.ssafy.novvel.cover.dto.CoverInfoAndEpisodesDto;
 import com.ssafy.novvel.cover.dto.CoverModifyDto;
 import com.ssafy.novvel.cover.dto.CoverPurchasedDto;
+import com.ssafy.novvel.cover.dto.CoverWriter;
 import com.ssafy.novvel.cover.repository.CoverRepository;
 import com.ssafy.novvel.cover.dto.CoverRegisterDto;
 import com.ssafy.novvel.cover.entity.Cover;
+import com.ssafy.novvel.episode.entity.ReadEpisode;
+import com.ssafy.novvel.episode.repository.ReadEpisodeRepository;
 import com.ssafy.novvel.exception.NotYourAuthorizationException;
 import com.ssafy.novvel.genre.repository.GenreRepository;
 import com.ssafy.novvel.member.entity.Member;
 import com.ssafy.novvel.resource.entity.Resource;
 import com.ssafy.novvel.resource.service.ResourceService;
-import com.ssafy.novvel.util.token.CustomUserDetails;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
-import javax.naming.AuthenticationException;
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -35,12 +33,15 @@ public class CoverServiceImpl implements CoverService {
     private final ResourceService resourceService;
     private final GenreRepository genreRepository;
     private final CoverRepository coverRepository;
+    private final ReadEpisodeRepository readEpisodeRepository;
 
     public CoverServiceImpl(ResourceService resourceService,
-        GenreRepository genreRepository, CoverRepository coverRepository) {
+        GenreRepository genreRepository, CoverRepository coverRepository,
+        ReadEpisodeRepository readEpisodeRepository) {
         this.resourceService = resourceService;
         this.genreRepository = genreRepository;
         this.coverRepository = coverRepository;
+        this.readEpisodeRepository = readEpisodeRepository;
     }
 
     @Override
@@ -62,7 +63,21 @@ public class CoverServiceImpl implements CoverService {
         CoverInfoAndEpisodesDto coverInfoAndEpisodesDto = new CoverInfoAndEpisodesDto();
         coverInfoAndEpisodesDto.setTitle(cover.getTitle());
         coverInfoAndEpisodesDto.setDescription(cover.getDescription());
-        coverInfoAndEpisodesDto.setGenreName(cover.getGenre().getName());
+        coverInfoAndEpisodesDto.setGenre(cover.getGenre().getName());
+        coverInfoAndEpisodesDto.setThumbnail(cover.getResource().getThumbnailUrl());
+        coverInfoAndEpisodesDto.setWriter(
+            new CoverWriter(cover.getMember().getId(), cover.getMember().getNickname()));
+
+        ReadEpisode readEpisode = null;
+        if(member != null) {
+            readEpisode = readEpisodeRepository.findTopByMemberIdOrderByLastModifyedDateTimeDesc(
+                member.getId()).orElse(null);
+        }
+        Long lastReadEpisodeId = null;
+        if(readEpisode != null) {
+            lastReadEpisodeId = readEpisode.getEpisode().getId();
+        }
+        coverInfoAndEpisodesDto.setLastReadEpisodeId(lastReadEpisodeId);
 
         coverInfoAndEpisodesDto.setEpisodes(coverRepository.findEpisodesInfoDto(cover, member));
         return coverInfoAndEpisodesDto;
@@ -99,7 +114,6 @@ public class CoverServiceImpl implements CoverService {
         if (current == null || previous == null) {
             return null;
         }
-
 
         if (!current.getUrl().equals(previous.getUrl())) {
             return previous;

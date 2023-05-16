@@ -3,10 +3,13 @@ package com.ssafy.novvel.cover.service;
 import com.ssafy.novvel.cover.dto.CoverInfoAndEpisodesDto;
 import com.ssafy.novvel.cover.dto.CoverModifyDto;
 import com.ssafy.novvel.cover.dto.CoverRegisterDto;
+import com.ssafy.novvel.cover.dto.CoverWriter;
 import com.ssafy.novvel.cover.dto.EpisodeInfoDto;
 import com.ssafy.novvel.cover.entity.Cover;
 import com.ssafy.novvel.cover.entity.CoverStatusType;
 import com.ssafy.novvel.cover.repository.CoverRepository;
+import com.ssafy.novvel.episode.entity.ReadEpisode;
+import com.ssafy.novvel.episode.repository.ReadEpisodeRepository;
 import com.ssafy.novvel.exception.NotYourAuthorizationException;
 import com.ssafy.novvel.genre.entity.Genre;
 import com.ssafy.novvel.genre.repository.GenreRepository;
@@ -44,6 +47,9 @@ class CoverServiceTest {
 
     @Mock
     GenreRepository genreRepository;
+
+    @Mock
+    ReadEpisodeRepository readEpisodeRepository;
 
     @Mock
     ResourceService resourceService;
@@ -95,15 +101,17 @@ class CoverServiceTest {
             .title("test").build());
 
         List<EpisodeInfoDto> list = new ArrayList<>();
-        list.add(new EpisodeInfoDto(1L, 0L, 0L, LocalDateTime.now(),
+        list.add(new EpisodeInfoDto(1L, "test", 0L, 0L, LocalDateTime.now(),
             PointChangeType.BUY_EPISODE, true));
-        list.add(new EpisodeInfoDto(2L, 0L, 0L, LocalDateTime.now(),
+        list.add(new EpisodeInfoDto(2L, "test", 0L, 0L, LocalDateTime.now(),
             PointChangeType.SELL_EPISODE, true));
 
         CoverInfoAndEpisodesDto expect = CoverInfoAndEpisodesDto.builder()
             .episodes(list)
-            .genreName(given.get().getGenre().getName())
+            .genre(given.get().getGenre().getName())
             .title(given.get().getTitle())
+            .writer(new CoverWriter(given.get().getMember().getId(),
+                given.get().getMember().getNickname()))
             .build();
 
         // when
@@ -114,7 +122,7 @@ class CoverServiceTest {
         // then
         Assertions.assertThat(result.getTitle()).isEqualTo(expect.getTitle());
         Assertions.assertThat(result.getDescription()).isEqualTo(expect.getDescription());
-        Assertions.assertThat(result.getGenreName()).isEqualTo(expect.getGenreName());
+        Assertions.assertThat(result.getGenre()).isEqualTo(expect.getGenre());
         Assertions.assertThat(result.getEpisodes().size()).isEqualTo(expect.getEpisodes().size());
         Assertions.assertThat(result.getEpisodes().get(0).getIsPurchased()).isEqualTo(true);
         Assertions.assertThat(result.getEpisodes().get(1).getIsPurchased()).isEqualTo(false);
@@ -267,7 +275,7 @@ class CoverServiceTest {
 
         Resource oldResource = TestUtil.getMemberProfile();
         Resource newResource = new Resource(2L, "test.jpg",
-            "newUrl",  "test", "newUrl", true, "newThumbnailUrl");
+            "newUrl", "test", "newUrl", true, "newThumbnailUrl");
 
         CoverModifyDto coverModifyDto = CoverModifyDto.builder()
             .coverStatusType(CoverStatusType.FINISHED)

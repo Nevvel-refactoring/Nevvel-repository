@@ -1,9 +1,7 @@
 package com.ssafy.novvel.cover.repository;
 
 import com.ssafy.novvel.cover.dto.CoverPurchasedDto;
-import com.ssafy.novvel.cover.dto.EpisodeInfoDto;
 import com.ssafy.novvel.cover.entity.Cover;
-import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

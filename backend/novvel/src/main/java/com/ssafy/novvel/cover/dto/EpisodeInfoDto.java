@@ -8,7 +8,6 @@ import javax.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
 @Builder
@@ -18,11 +17,13 @@ public class EpisodeInfoDto {
     @NotNull
     private Long id;
 
+    private String title;
+
     @PositiveOrZero
     private Long point;
 
     @PositiveOrZero
-    private Long viewCount;
+    private Long views;
 
     private LocalDateTime uploadedDateTime;
 
@@ -30,21 +31,23 @@ public class EpisodeInfoDto {
     private Boolean isRead;
 
     @QueryProjection
-    public EpisodeInfoDto(Long id, Long point, Long viewCount, LocalDateTime localDateTime,
+    public EpisodeInfoDto(Long id, String title, Long point, Long viewCount, LocalDateTime publishedDate,
         PointChangeType pointChangeType, Boolean isRead) {
         this.id = id;
         this.point = point;
-        this.viewCount = viewCount;
-        this.uploadedDateTime = localDateTime;
+        this.views = viewCount;
+        this.uploadedDateTime = publishedDate;
         this.isPurchased = PointChangeType.BUY_EPISODE.equals(pointChangeType);
         this.isRead = isRead;
     }
 
     @QueryProjection
-    public EpisodeInfoDto(Long id, Long point, Long viewCount, LocalDateTime localDateTime) {
+    public EpisodeInfoDto(Long id, String title, Long point, Long viewCount, LocalDateTime localDateTime) {
         this.id = id;
         this.point = point;
-        this.viewCount = viewCount;
+        this.views = viewCount;
         this.uploadedDateTime = localDateTime;
+        this.isPurchased = false;
+        this.isRead = false;
     }
 }
