@@ -37,9 +37,9 @@ export const MyPageModal = ({
       .catch((error) => console.log(error));
   };
 
-  // 로그아웃 후 메인페이지 리다이렉트
+  // 로그아웃 후 로그아웃페이지 리다이렉트
   const logoutRoute = () => {
-    router.push({ pathname: "/" });
+    router.push({ pathname: "/logout" });
   };
 
   return (
