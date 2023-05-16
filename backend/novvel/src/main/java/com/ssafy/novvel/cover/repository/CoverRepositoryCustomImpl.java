@@ -90,7 +90,8 @@ public class CoverRepositoryCustomImpl implements CoverRepositoryCustom {
         checkMemberForJoin(query, member);
         query.where(
             episode.cover.id.eq(cover.getId()),
-            checkMemberForWhere(cover.getMember(), member)
+            checkPurchased(member),
+            checkWriter(cover.getMember(), member)
         );
 
         return query.fetch();
@@ -197,25 +198,25 @@ public class CoverRepositoryCustomImpl implements CoverRepositoryCustom {
         }
     }
 
-    private Predicate checkMemberForWhere(Member writer, Member member) {
+    private Predicate checkPurchased(Member member) {
         if (member == null) {
             return episode.statusType.eq(EpisodeStatusType.PUBLISHED);
         }
 
-        BooleanExpression booleanExpression = new CaseBuilder().when(
+        return new CaseBuilder().when(
                 (transactionHistory.id.isNull()
                     .or(transactionHistory.pointChangeType.ne(PointChangeType.BUY_EPISODE)))
                     .and(episode.statusType.eq(EpisodeStatusType.DELETED)))
             .then(true)
             .otherwise(false)
             .eq(false);
+    }
 
-        if (!writer.getId().equals(member.getId())) {
-            booleanExpression.and(episode.statusType.ne(EpisodeStatusType.TEMPORARY));
+    private Predicate checkWriter(Member writer, Member member) {
+        if(member == null || !writer.getId().equals(member.getId())) {
+            return episode.statusType.ne(EpisodeStatusType.TEMPORARY);
         }
-
-        return booleanExpression;
-
+        return null;
     }
 
     private Predicate checkMine(Long writerId, Member member) {
