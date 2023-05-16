@@ -1,12 +1,27 @@
+import { useState } from "react";
 import NavigationTop from "./NavigationTop";
 import NavigationBottom from "./NavigationBottom";
 import styled from "styled-components";
 
 function Navigation() {
+  const [clickNull, setClickNull] = useState(false);
+
+  // NavTop 요소 클릭한 경우
+  const clickTopHandler = () => {
+    setClickNull(true);
+  };
+
+  const clickBottomHandler = () => {
+    setClickNull(false);
+  };
+
   return (
     <Wrapper>
-      <NavigationTop />
-      <NavigationBottom />
+      <NavigationTop onClickTop={clickTopHandler} />
+      <NavigationBottom
+        clickNull={clickNull}
+        onClickBottom={clickBottomHandler}
+      />
     </Wrapper>
   );
 }

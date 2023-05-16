@@ -9,7 +9,11 @@ import { MyPageModal } from "./MyPageModal";
 import { tabletH } from "../../util/Mixin";
 import { mobile } from "../../util/Mixin";
 
-function NavigationTop() {
+interface Props {
+  onClickTop: () => void;
+}
+
+function NavigationTop(props: Props) {
   const [word, setWord] = useState<string>("");
 
   const searchWordHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,6 +42,7 @@ function NavigationTop() {
         },
       });
       setWord("");
+      props.onClickTop();
     }
     // 아닌 경우 (실시간 요청 보내는 경우 사용)
     // else {}
@@ -53,12 +58,23 @@ function NavigationTop() {
       },
     });
     setWord("");
+    props.onClickTop();
   };
 
   // 프로필 클릭 시 모달
   const [modalStatus, setModalStatus] = useState(false);
   const modalOpenHandler = () => {
     setModalStatus(true);
+  };
+
+  // 로그인 시 소설 배경색 없애기
+  const loginHandler = () => {
+    props.onClickTop();
+  };
+
+  // 프로필 클릭 시 소설 배경색 없애기
+  const clickProfileHandler = () => {
+    props.onClickTop();
   };
 
   return (
@@ -86,6 +102,7 @@ function NavigationTop() {
                 setModal={setModalStatus}
                 width="100"
                 height="70"
+                onClickProfile={clickProfileHandler}
               />
             ) : (
               ""
@@ -95,7 +112,9 @@ function NavigationTop() {
       ) : (
         <Profile loginStatus={loginStatus}>
           <LogIn>
-            <Link href="/login">로그인</Link>
+            <Link href="/login" onClick={loginHandler}>
+              로그인
+            </Link>
           </LogIn>
         </Profile>
       )}
@@ -162,7 +181,9 @@ const LogIn = styled.div`
   font-size: 13.5px;
 `;
 
-const MyPage = styled.div``;
+const MyPage = styled.div`
+  z-index: 3;
+`;
 
 const ImageDiv = styled.div`
   border: 1px solid ${({ theme }) => theme.color.text1};
@@ -170,10 +191,12 @@ const ImageDiv = styled.div`
   object-fit: cover;
   margin-top: 2rem;
   cursor: pointer;
+  z-index: 3;
 `;
 
 const Img = styled.img`
   width: 30px;
   height: 30px;
   border-radius: 100rem;
+  z-index: -1;
 `;

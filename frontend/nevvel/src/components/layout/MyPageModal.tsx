@@ -8,9 +8,15 @@ interface ModalProps {
   width: string;
   height: string;
   setModal: Dispatch<SetStateAction<boolean>>;
+  onClickProfile: () => void;
 }
 
-export const MyPageModal = ({ width, height, setModal }: ModalProps) => {
+export const MyPageModal = ({
+  width,
+  height,
+  setModal,
+  onClickProfile,
+}: ModalProps) => {
   const disableModal = () => {
     setModal(false);
   };
@@ -20,6 +26,7 @@ export const MyPageModal = ({ width, height, setModal }: ModalProps) => {
   const toMyPageHandler = () => {
     router.push({ pathname: "/myPage" });
     setModal(false);
+    onClickProfile();
   };
 
   // 로그아웃

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import Image from "next/image";
@@ -12,7 +12,12 @@ import { mobile } from "../../util/Mixin";
 import { themeAtom } from "@/src/store/Theme";
 import { useAtomValue } from "jotai";
 
-function NavigationBottom() {
+interface Props {
+  clickNull: boolean;
+  onClickBottom: () => void;
+}
+
+function NavigationBottom(props: Props) {
   const router = useRouter();
   const value = useAtomValue(themeAtom);
 
@@ -28,6 +33,7 @@ function NavigationBottom() {
       // `/novels/genres`
     );
     setClicked("genre");
+    props.onClickBottom();
   };
 
   const completedSelectHandler = () => {
@@ -39,6 +45,7 @@ function NavigationBottom() {
       // `/novels/completed`
     );
     setClicked("completed");
+    props.onClickBottom();
   };
 
   const latestSelectHandler = () => {
@@ -50,6 +57,7 @@ function NavigationBottom() {
       // `/novels/latest`
     );
     setClicked("latest");
+    props.onClickBottom();
   };
 
   // assetstore 클릭 시 색상 초기화 설정을 위한 handler
@@ -61,6 +69,13 @@ function NavigationBottom() {
   const logoHandler = () => {
     setClicked(null);
   };
+
+  // NavigationTop에서 버튼 클릭했을 때
+  useEffect(() => {
+    if (props.clickNull) {
+      setClicked(null);
+    }
+  }, [props.clickNull]);
 
   return (
     <Wrapper clicked={clicked === null}>
