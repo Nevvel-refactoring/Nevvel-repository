@@ -98,6 +98,7 @@ class CoverServiceTest {
         Optional<Cover> given = Optional.of(Cover.builder()
             .id(1L).coverStatusType(CoverStatusType.SERIALIZED).genre(genre)
             .member(TestUtil.getUSERMember().orElse(null))
+            .resource(TestUtil.getResource())
             .title("test").build());
 
         List<EpisodeInfoDto> list = new ArrayList<>();
