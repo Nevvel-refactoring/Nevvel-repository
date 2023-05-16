@@ -92,7 +92,7 @@ function MyNovel() {
   useEffect(() => {
     const getPurchasedCovers = async () => {
       const res = await NewvelApi.purchasedCovers();
-      console.log(res.data);
+      // console.log(res.data);
       setPurchasedNovel(res.data);
       if (res.data.empty) {
         setPurchasedMore("");
