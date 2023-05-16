@@ -4,6 +4,8 @@ import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { episode } from "series";
 import styled from "styled-components";
+import { userInfoAtom } from "@/src/store/Login";
+import { useAtomValue } from "jotai";
 
 type SeriesEpOnePurchaseProps = {
   Info: episode;
@@ -11,6 +13,8 @@ type SeriesEpOnePurchaseProps = {
 
 function SeriesEpOnePurchase({ Info }: SeriesEpOnePurchaseProps) {
   const router = useRouter();
+  const userInfo = useAtomValue(userInfoAtom);
+
   const episodePurchase = async () => {
     try {
       const res = await springApi.post("episodes/purchasing", {
@@ -31,7 +35,9 @@ function SeriesEpOnePurchase({ Info }: SeriesEpOnePurchaseProps) {
   };
   return (
     <div>
-      <WalletPoint>00님의 남은 포인트 xxxp</WalletPoint>
+      <WalletPoint>
+        {userInfo?.nickname}님의 잔여 포인트 {userInfo?.point}p
+      </WalletPoint>
       <Wrapper>
         <PurchaseWrapper>
           <PurchaseTitle>{Info.title}</PurchaseTitle>

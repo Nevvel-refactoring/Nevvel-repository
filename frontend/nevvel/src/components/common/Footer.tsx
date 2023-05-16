@@ -4,7 +4,9 @@ import styled from "styled-components";
 function Footer() {
   return (
     <Wrapper>
-      <p>(주)Nevvel</p>
+      <p>
+        <b>(주)Nevvel</b>
+      </p>
       <FlexDiv>
         <p>개발팀: Free Season</p>
         <p>|</p>
@@ -31,6 +33,7 @@ const Wrapper = styled.div`
   opacity: 30%;
   padding: 30px;
   margin: 50px 0px;
+  bottom: 0;
 `;
 
 const SmallFont = styled.div`

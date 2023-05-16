@@ -4,6 +4,8 @@ import { useRouter } from "next/router";
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { cover, shoppingList } from "series";
 import styled from "styled-components";
+import { userInfoAtom } from "@/src/store/Login";
+import { useAtomValue } from "jotai";
 
 type SeriesSelectedProps = {
   Info: cover;
@@ -20,6 +22,7 @@ function SeriesSelected({
   const [checkAllEp, setCheckAllEp] = useState<boolean>(false);
   const [point, setPoint] = useState<number>(0);
   const [episodeList, setEpisodeList] = useState<number[]>([]);
+  const userInfo = useAtomValue(userInfoAtom);
   const router = useRouter();
 
   const checkHandler = (e: number) => {
@@ -126,7 +129,7 @@ function SeriesSelected({
         ))}
       </ListWrapper>
       <SeriesBtn onClick={episodePurchase}>구매하기</SeriesBtn>
-      <p>잔여 포인트 00p</p>
+      <p>잔여 포인트 {userInfo?.point}p</p>
     </Wrapper>
   );
 }
@@ -153,10 +156,6 @@ const Wrapper = styled.div`
   align-content: space-between;
   height: 50vh;
   align-items: center;
-  ${mobile} {
-    padding-top: 10%;
-    padding-bottom: 10%;
-  }
 `;
 const ListWrapper = styled.div`
   overflow: scroll;

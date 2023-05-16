@@ -5,6 +5,8 @@ import { useRouter } from "next/router";
 import { AiOutlineEye } from "react-icons/ai";
 import SeriesEpOnePurchase from "./SeriesEpOnePurchase";
 import { Modal } from "../common/Modal";
+import { loginAtom } from "@/src/store/Login";
+import { useAtomValue } from "jotai";
 
 type SeriesMainListItemProps = {
   episode: episode;
@@ -15,15 +17,20 @@ function SeriesMainListItem({ episode }: SeriesMainListItemProps) {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [purchased, setPurchased] = useState(episode.isPurchased);
   const [IsRead, setIsRead] = useState(episode.isRead);
+  const loginStatus = useAtomValue(loginAtom);
 
   const clickHandler = () => {
-    if (!episode.isPurchased && episode.point !== 0) {
-      setModalOpen(true);
+    if (loginStatus) {
+      if (!episode.isPurchased && episode.point !== 0) {
+        setModalOpen(true);
+      } else {
+        router.push({
+          pathname: "/viewer/[id]",
+          query: { id: episode.id },
+        });
+      }
     } else {
-      router.push({
-        pathname: "/viewer/[id]",
-        query: { id: episode.id },
-      });
+      alert("로그인 하세요");
     }
   };
 

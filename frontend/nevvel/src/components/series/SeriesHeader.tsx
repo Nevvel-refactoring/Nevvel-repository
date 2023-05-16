@@ -6,12 +6,12 @@ import unupload from "../../../public/UnUploadImgBtn.png";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { AiOutlineEye } from "react-icons/ai";
 import { TbEdit } from "react-icons/tb";
-import { mobile } from "@/src/util/Mixin";
+import { mobile, tabletH } from "@/src/util/Mixin";
 import { useRouter } from "next/router";
 import { Modal } from "../common/Modal";
 import SeriesSelected from "./SeriesSelected";
 import springApi from "@/src/api";
-import { userInfoAtom } from "@/src/store/Login";
+import { userInfoAtom, loginAtom } from "@/src/store/Login";
 import { useAtomValue } from "jotai";
 
 type SeriesHeaderProps = {
@@ -31,6 +31,7 @@ function SeriesHeader({
   const [modalOpen, setModalOpen] = useState(false);
   const [readId, setReadId] = useState<number>();
   const userInfo = useAtomValue(userInfoAtom);
+  const loginStatus = useAtomValue(loginAtom);
 
   useEffect(() => {
     let latestRead = "0000-00-00T00:00:00.000000";
@@ -51,20 +52,25 @@ function SeriesHeader({
     const res = await springApi.post(`/covers/likes/${Id}`);
     if (res) {
       console.log(res);
+      setIsPurchase(isPurchased + 1);
     }
   };
 
   const clickHandler = (e: string) => {
-    if (e === "first") {
-      router.push({
-        pathname: "/viewer/[id]",
-        query: { id: SeriesData.episodes[0].id },
-      });
-    } else if (e === "continue") {
-      router.push({
-        pathname: "/viewer/[id]",
-        query: { id: readId },
-      });
+    if (loginStatus) {
+      if (e === "first") {
+        router.push({
+          pathname: "/viewer/[id]",
+          query: { id: SeriesData.episodes[0].id },
+        });
+      } else if (e === "continue") {
+        router.push({
+          pathname: "/viewer/[id]",
+          query: { id: readId },
+        });
+      }
+    } else {
+      alert("로그인 하세요");
     }
   };
 
@@ -73,7 +79,13 @@ function SeriesHeader({
       <HeaderTitle>시리즈 상세보기 </HeaderTitle>
       <SeriesInfo>
         <SeriesCover>
-          <Image src={unupload} alt="thumbnail" width={150} height={150} />
+          <Image
+            src={unupload}
+            alt="thumbnail"
+            width={150}
+            height={150}
+            draggable="false"
+          />
           <SeriesInfoContainer>
             <SeriesText>
               <AiOutlineEye />
@@ -88,7 +100,7 @@ function SeriesHeader({
         <SeriesEx>
           <SeriesText className="title">
             <span>{SeriesData.title}</span>
-            {SeriesData.writter?.id === userInfo?.id && (
+            {loginStatus && SeriesData.writter?.id === userInfo?.id ? (
               <span>
                 <TbEdit
                   onClick={() => {
@@ -101,6 +113,15 @@ function SeriesHeader({
                   }}
                 />
               </span>
+            ) : (
+              <LikeBtn
+                onClick={() => {
+                  postSeriesLike(Number(coverId));
+                }}
+              >
+                {SeriesData.isLiked && <AiFillHeart size={25} />}
+                {!SeriesData.isLiked && <AiOutlineHeart size={25} />}
+              </LikeBtn>
             )}
           </SeriesText>
           <SeriesText className="writter">
@@ -123,17 +144,14 @@ function SeriesHeader({
             >
               {readId ? "이어보기" : "첫화보기"}
             </SeriesBtn>
-            <SeriesBtn className="choice" onClick={() => setModalOpen(true)}>
+            <SeriesBtn
+              className="choice"
+              onClick={() =>
+                loginStatus ? setModalOpen(true) : alert("로그인 하세요")
+              }
+            >
               선택구매
             </SeriesBtn>
-            <LikeBtn
-              onClick={() => {
-                postSeriesLike(Number(coverId));
-              }}
-            >
-              {SeriesData.isLiked && <AiFillHeart size={25} />}
-              {!SeriesData.isLiked && <AiOutlineHeart size={25} />}
-            </LikeBtn>
           </SeriesBtnContainer>
         </SeriesEx>
       </SeriesInfo>
@@ -180,7 +198,7 @@ const SeriesInfo = styled.div`
   margin-top: 1rem;
   padding-bottom: 2rem;
   border-bottom: 1px solid ${({ theme }) => theme.color.opacityText3};
-  ${mobile} {
+  ${tabletH} {
     flex-direction: column;
     align-items: center;
   }
@@ -210,6 +228,10 @@ const SeriesCover = styled.div`
 const SeriesBtnContainer = styled.div`
   display: flex;
   align-items: center;
+  ${mobile} {
+    flex-direction: column;
+    align-items: center;
+  }
 `;
 const SeriesBtn = styled.button`
   /* border: 1px solid ${({ theme }) => theme.color.text1}; */
@@ -225,6 +247,10 @@ const SeriesBtn = styled.button`
   &.choice {
     background-color: ${({ theme }) => theme.color.text2};
     color: ${({ theme }) => theme.color.text1};
+  }
+  ${mobile} {
+    margin-top: 0.5rem;
+    width: 100%;
   }
 `;
 const SeriesText = styled.div`
