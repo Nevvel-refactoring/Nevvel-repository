@@ -84,6 +84,13 @@ function NavigationBottom(props: Props) {
     }
   }, [props.clickNull]);
 
+  // series 페이지로 넘어갔을 때
+  useEffect(() => {
+    if (router.pathname === "/series/[id]") {
+      setClicked(null);
+    }
+  }, [router]);
+
   return (
     <Wrapper clicked={clicked === null}>
       <LogoNav onClick={logoHandler}>
