@@ -14,7 +14,7 @@ interface Content {
   status: string;
   thumbnail: string;
   genre: string;
-  writer: {
+  coverWriter: {
     id: number;
     nickname: string;
   };
@@ -124,8 +124,8 @@ function MyNovel() {
                     key={index}
                     id={novel.id}
                     title={novel.title}
-                    writer={novel.writer.nickname}
-                    writerId={novel.writer.id}
+                    writer={novel.coverWriter.nickname}
+                    writerId={novel.coverWriter.id}
                     genre={novel.genre}
                     thumbnail={novel.thumbnail}
                   />
@@ -148,8 +148,8 @@ function MyNovel() {
                     key={index}
                     id={novel.id}
                     title={novel.title}
-                    writer={novel.writer.nickname}
-                    writerId={novel.writer.id}
+                    writer={novel.coverWriter.nickname}
+                    writerId={novel.coverWriter.id}
                     genre={novel.genre}
                     thumbnail={novel.thumbnail}
                   />

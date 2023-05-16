@@ -27,8 +27,7 @@ function NovelCard(props: Novel) {
         <NovelTitleDiv>
           <NovelTitle>{props.title}</NovelTitle>
         </NovelTitleDiv>
-        {/* <NovelWriter>{props.writer}</NovelWriter> */}
-        <NovelWriter>"작가 이름이 없나"</NovelWriter>
+        <NovelWriter>{props.writer}</NovelWriter>
         <NovelGenre>{props.genre}</NovelGenre>
       </NovelDesc>
     </Wrapper>
