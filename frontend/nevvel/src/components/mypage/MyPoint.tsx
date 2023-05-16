@@ -1,7 +1,11 @@
+import { userInfoAtom } from "@/src/store/Login";
+import { useAtomValue } from "jotai";
 import { useRouter } from "next/dist/client/router";
 import styled from "styled-components";
 
 function MyPoint() {
+  const userInfoStatus = useAtomValue(userInfoAtom);
+
   const router = useRouter();
 
   const pointChargeHandler = () => {
@@ -16,12 +20,8 @@ function MyPoint() {
       </TitleWrapper>
       <PointContent>
         <TextWrapper>
-          <TextTitle>현재 포인트</TextTitle>
-          <TextTitle>포인트 사용내역</TextTitle>
-        </TextWrapper>
-        <TextWrapper>
-          <TextTitle>700</TextTitle>
-          <TextTitle>300</TextTitle>
+          <TextTitle>보유 포인트:</TextTitle>
+          <TextTitle>{userInfoStatus?.point.toLocaleString()}원</TextTitle>
         </TextWrapper>
       </PointContent>
     </PointWrapper>
@@ -31,12 +31,12 @@ function MyPoint() {
 export default MyPoint;
 
 const PointWrapper = styled.div`
-  width: 30%;
+  margin-top: 2rem;
 `;
 
 const TitleWrapper = styled.div`
   display: flex;
-  justify-content: space-between;
+  align-items: center;
 `;
 
 const PointTitle = styled.div`
@@ -45,19 +45,27 @@ const PointTitle = styled.div`
 `;
 
 const ChargePoint = styled.div`
-  font-size: 0.8rem;
-  border-bottom: 1px solid;
+  margin-left: 2rem;
   cursor: pointer;
+  &:hover {
+    color: #8385ff;
+  }
 `;
 
 const PointContent = styled.div`
   display: flex;
-  background-color: #e6e6e6;
+  margin-top: 1rem;
+  margin-left: 1rem;
+  padding: 1rem;
   border-radius: 1rem;
+  background-color: ${({ theme }) => theme.color.searchBar};
 `;
 
 const TextWrapper = styled.div`
-  width: 80%;
+  display: flex;
 `;
 
-const TextTitle = styled.div``;
+const TextTitle = styled.div`
+  margin-left: 1rem;
+  color: #000000;
+`;

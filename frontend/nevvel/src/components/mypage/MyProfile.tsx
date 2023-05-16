@@ -1,21 +1,35 @@
-import Image from "next/image";
+import { userInfoAtom } from "@/src/store/Login";
+import { useAtomValue } from "jotai";
+import { useEffect, useState } from "react";
+import { NewvelApi } from "@/src/api";
 import styled from "styled-components";
 
 function MyProfile() {
+  const userInfoStatus = useAtomValue(userInfoAtom);
+
+  // 유저 Description 받아오기
+  const [userDescription, setUserDescription] = useState<string | undefined>(
+    undefined
+  );
+  useEffect(() => {
+    const getUserData = async () => {
+      const res = await NewvelApi.profileInfo();
+      console.log(res.data);
+      setUserDescription(res.data);
+    };
+    getUserData();
+  }, []);
+
   return (
     <ProfileWrapper>
       <TitleWrapper>내 프로필</TitleWrapper>
       <ProfileContent>
         <ProfileImgDiv>
-          {/* <Image /> */}
-          이미지를 대신할 아무말
+          <ProfileImg src={userInfoStatus?.profileImage} alt="내 프로필 사진" />
         </ProfileImgDiv>
         <NickNameDescDiv>
-          <NickName>내 닉네임</NickName>
-          <Description>
-            설명 설명 설명 설명 설명 설명 설명 설명 설명 설명 설명 설명 설명
-            설명 설명 설명 설명 설명 설명 설명 설명 설명 설명 설명 설명 설명{" "}
-          </Description>
+          <NickName>{userInfoStatus?.nickname}</NickName>
+          <Description>{userDescription}</Description>
         </NickNameDescDiv>
       </ProfileContent>
     </ProfileWrapper>
@@ -24,9 +38,7 @@ function MyProfile() {
 
 export default MyProfile;
 
-const ProfileWrapper = styled.div`
-  width: 50%;
-`;
+const ProfileWrapper = styled.div``;
 
 const TitleWrapper = styled.div`
   font-size: 20px;
@@ -35,15 +47,33 @@ const TitleWrapper = styled.div`
 
 const ProfileContent = styled.div`
   display: flex;
+  align-items: center;
+  margin-top: 2rem;
 `;
 
-const ProfileImgDiv = styled.div``;
+const ProfileImgDiv = styled.div`
+  border: 1px solid ${({ theme }) => theme.color.text1};
+  border-radius: 100rem;
+  object-fit: cover;
+  width: 128px;
+  height: 128px;
+`;
+
+const ProfileImg = styled.img`
+  width: 100%;
+  height: 100%;
+  border-radius: 100rem;
+`;
 
 const NickNameDescDiv = styled.div`
   display: flex;
   flex-direction: column;
+  margin-left: 1rem;
 `;
 
-const NickName = styled.div``;
+const NickName = styled.div`
+  font-size: 18px;
+  font-weight: 800;
+`;
 
 const Description = styled.div``;

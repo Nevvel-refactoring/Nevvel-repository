@@ -71,10 +71,9 @@ function MyPage() {
     <Wrapper>
       {loginStatus ? (
         <>
-          <ProfilePointWrapper>
-            <MyProfile />
-            <MyPoint />
-          </ProfilePointWrapper>
+          <ProfilePointWrapper></ProfilePointWrapper>
+          <MyProfile />
+          <MyPoint />
           <MyNovel />
           <MyAsset />
         </>

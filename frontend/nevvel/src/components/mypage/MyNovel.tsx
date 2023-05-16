@@ -2,6 +2,11 @@ import SemiTitle from "./SemiTitle";
 import styled from "styled-components";
 
 function MyNovel() {
+  // 작성한 소설
+
+  // 구매한 소설
+
+  // 좋아요한 소설
   return (
     <NovelWrapper>
       <TitleWrapper>웹소설</TitleWrapper>
@@ -14,7 +19,9 @@ function MyNovel() {
 
 export default MyNovel;
 
-const NovelWrapper = styled.div``;
+const NovelWrapper = styled.div`
+  margin-top: 2rem;
+`;
 
 const TitleWrapper = styled.div`
   font-size: 20px;

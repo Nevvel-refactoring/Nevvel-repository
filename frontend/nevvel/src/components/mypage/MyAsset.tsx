@@ -2,6 +2,9 @@ import SemiTitle from "./SemiTitle";
 import styled from "styled-components";
 
 function MyAsset() {
+  // 구매한 에셋
+
+  // 만든 에셋
   return (
     <AssetWrapper>
       <TitleWrapper>에셋</TitleWrapper>
@@ -13,7 +16,9 @@ function MyAsset() {
 
 export default MyAsset;
 
-const AssetWrapper = styled.div``;
+const AssetWrapper = styled.div`
+  margin-top: 2rem;
+`;
 
 const TitleWrapper = styled.div`
   font-size: 20px;
