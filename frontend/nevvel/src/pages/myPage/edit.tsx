@@ -1,10 +1,21 @@
+import { useEffect } from "react";
+import { useRouter } from "next/router";
 import { loginAtom } from "@/src/store/Login";
 import { useAtomValue } from "jotai";
 import MyProfile from "@/src/components/mypage/MyProfile";
 import styled from "styled-components";
 
 function EditMyProfile() {
+  // 로그인 여부 확인
   const loginStatus = useAtomValue(loginAtom);
+
+  // 로그아웃 상태인 경우 메인페이지로 리다이렉트
+  const router = useRouter();
+  useEffect(() => {
+    if (!loginStatus) {
+      router.push({ pathname: "/" });
+    }
+  }, []);
 
   return (
     <Wrapper>
@@ -14,7 +25,7 @@ function EditMyProfile() {
           <MyProfile />
         </>
       ) : (
-        <ProfileTitle>로그인 하세요</ProfileTitle>
+        <></>
       )}
     </Wrapper>
   );

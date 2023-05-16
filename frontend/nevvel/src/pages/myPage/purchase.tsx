@@ -2,6 +2,8 @@ import springApi from "@/src/api";
 import RadioInput from "@/src/components/common/RadioInput";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
+import { loginAtom } from "@/src/store/Login";
+import { useAtomValue } from "jotai";
 import styled from "styled-components";
 
 export interface RequestPayAdditionalParams {
@@ -88,8 +90,18 @@ declare global {
 }
 
 function Purchase() {
-  const [amount, setAmount] = useState<number>(1000);
+  // 로그인 여부 확인
+  const loginStatus = useAtomValue(loginAtom);
+
+  // 로그아웃 상태인 경우 메인페이지로 리다이렉트
   const router = useRouter();
+  useEffect(() => {
+    if (!loginStatus) {
+      router.push({ pathname: "/" });
+    }
+  }, []);
+
+  const [amount, setAmount] = useState<number>(1000);
 
   const money = [
     {
