@@ -164,10 +164,10 @@ const SearchBarInput = styled.input`
   border: none;
   width: 23rem;
   ${tabletH} {
-    width: 15rem;
+    width: 12rem;
   }
   ${mobile} {
-    width: 10rem;
+    width: 8rem;
     font-size: 12px;
   }
 `;

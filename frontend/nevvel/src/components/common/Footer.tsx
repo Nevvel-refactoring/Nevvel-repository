@@ -32,7 +32,7 @@ const Wrapper = styled.div`
   background-color: ${({ theme }) => theme.color.hover};
   opacity: 30%;
   padding: 30px;
-  margin: 50px 0px;
+  margin-top: 50px;
   bottom: 0;
 `;
 

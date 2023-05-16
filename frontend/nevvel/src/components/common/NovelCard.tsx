@@ -63,20 +63,31 @@ const NovelTitleDiv = styled.div`
 
 const NovelTitle = styled.div`
   padding-top: 1rem;
-  font-size: 18px;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 180%;
   text-align: center;
-  height: 3.25rem;
   overflow: hidden;
   text-overflow: ellipsis;
 `;
 
 const NovelWriter = styled.div`
-  padding-top: 1rem;
-  font-size: 14px;
+  font-size: 12px;
   text-align: center;
 `;
 
 const NovelGenre = styled.div`
-  padding-top: 1rem;
+  margin: 0.5rem;
+  padding: 0.5rem;
+  display: flex;
   text-align: center;
+  align-items: center;
+  background-color: ${({ theme }) => theme.color.searchBar};
+  opacity: 70%;
+  color: ${({ theme }) => theme.color.text3};
+  max-width: fit-content;
+  justify-content: center;
+  border-radius: 0.5rem;
+  font-size: 10px;
+  height: 1.5rem;
 `;

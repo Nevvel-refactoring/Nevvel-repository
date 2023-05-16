@@ -70,8 +70,8 @@ function NovelSwiper(props: { content: Novel }) {
         style={swiperStyle}
         // install Swiper modules
         modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
-        spaceBetween={0}
-        slidesPerView={1}
+        spaceBetween={60}
+        slidesPerView={2}
         breakpoints={{
           500: {
             slidesPerView: 2,

@@ -70,7 +70,7 @@ function SeriesHeader({
           <Image
             src={thumnail ? thumnail : unupload}
             alt="thumbnail"
-            width={150}
+            width={148}
             height={222}
             draggable="false"
           />
