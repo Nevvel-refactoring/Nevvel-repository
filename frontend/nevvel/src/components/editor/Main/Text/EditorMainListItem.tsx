@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { BiImageAdd } from "react-icons/bi";
-import { BsFillTrashFill } from "react-icons/bs";
+import { TiDelete } from "react-icons/ti"
 import { AiOutlineSound } from "react-icons/ai";
 import EditorMainMenu from "./EditorMainMenu";
 import { mobile } from "@/src/util/Mixin";
@@ -222,7 +222,7 @@ function EditorMainListItem({
           onContextMenu={handleContextMenu}
         />
         <RemoveButton onClick={() => RemoveHandler(content)}>
-          <BsFillTrashFill size="24" />
+          <TiDelete size="24" />
         </RemoveButton>
       </BlockContainer>
     </div>

@@ -4,6 +4,7 @@ import {
   AiFillCaretLeft,
   AiFillCaretRight,
   AiOutlineHome,
+  AiFillSetting,
 } from "react-icons/ai";
 import { FiEdit } from "react-icons/fi";
 import { BsFillTrashFill } from "react-icons/bs";
@@ -13,12 +14,19 @@ import { mobile, tabletH } from "@/src/util/Mixin";
 import springApi from "@/src/api";
 import { Modal } from "../common/Modal";
 
-type ViewHeaderProps = {
+type ViewerMobileBottomProps = {
   id: string | string[] | undefined;
   EpisodeData: episode;
+  setSettingBox: React.Dispatch<React.SetStateAction<boolean>>;
+  settingBox: boolean;
 };
 
-function ViewHeader({ EpisodeData, id }: ViewHeaderProps) {
+function ViewerMobileBottom({
+  EpisodeData,
+  id,
+  setSettingBox,
+  settingBox,
+}: ViewerMobileBottomProps) {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleteData, setDeleteData] = useState<episode>();
   const router = useRouter();
@@ -94,20 +102,23 @@ function ViewHeader({ EpisodeData, id }: ViewHeaderProps) {
   return (
     <>
       <HeaderTopContainer>
+        <Btn>
           <AiFillCaretLeft size={24} />
-        <EpisodeTitleContainer>
-            <AiOutlineHome onClick={clickHandler} size={24} />
-          <EpisodeTitle>{EpisodeData.title}</EpisodeTitle>
-          <Btn onClick={editHandler}>
-            <FiEdit size={18} />
-          </Btn>
-          <Btn onClick={deleteModalHandler}>
-            <BsFillTrashFill size={18} />
-          </Btn>
-        </EpisodeTitleContainer>
+        </Btn>
+        <Btn>
           <AiFillCaretRight size={24} />
+        </Btn>
+        <AiOutlineHome onClick={clickHandler} size={24} />
+        <Btn onClick={editHandler}>
+          <FiEdit size={18} />
+        </Btn>
+        <Btn onClick={deleteModalHandler}>
+          <BsFillTrashFill size={18} />
+        </Btn>
+        <Btn onClick={() => setSettingBox(!settingBox)}>
+          <AiFillSetting size={18} />
+        </Btn>
       </HeaderTopContainer>
-      <ProgressBar />
       {deleteModalOpen && (
         <Modal
           modal={deleteModalOpen}
@@ -127,62 +138,24 @@ function ViewHeader({ EpisodeData, id }: ViewHeaderProps) {
   );
 }
 const HeaderTopContainer = styled.div`
-  width: 60%;
+  width: 80%;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   text-align: center;
   align-items: center;
-  ${mobile} {
-    width: 80%;
-    justify-content: center;
-  }
-`;
-
-const ProgressBar = styled.div``;
-const EpisodeTitleContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  text-align: center;
-  align-items: center;
   ${tabletH} {
-    width: 60%;
   }
   ${mobile} {
     width: 80%;
-  }
-`;
-const EpisodeTitle = styled.div`
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  width: 100%;
-  ${tabletH} {
-    width: 60%;
-  }
-  ${mobile} {
-    width: 100%;
-  }
-`;
-const EpisodeHome = styled.button`
-  margin-right: 1rem;
-  color: ${({ theme }) => theme.color.text1};
-  ${mobile} {
-    display: none;
+    justify-content: space-between;
   }
 `;
 
 const Btn = styled.div`
   margin-left: 1rem;
   ${mobile} {
-    display: none;
-  }
-`;
-const MoveBtn = styled.button`
-  ${mobile} {
-    display: none;
   }
 `;
 
-export default ViewHeader;
+export default ViewerMobileBottom;

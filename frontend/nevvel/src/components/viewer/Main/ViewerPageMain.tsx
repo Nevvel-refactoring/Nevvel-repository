@@ -5,6 +5,7 @@ import { mobile } from "@/src/util/Mixin";
 import ViewerPageTextBlock from "../ViewerPageTextBlock";
 
 type viewerPageMainProps = {
+  viewerColor:string
   EpisodeData: episodeViewer;
   fontSize: number;
   whiteSpace: number;
@@ -15,6 +16,7 @@ type viewerPageMainProps = {
 
 function ViewerPageMain({
   EpisodeData,
+  viewerColor,
   fontSize,
   fontStyle,
   interval,
@@ -31,7 +33,7 @@ function ViewerPageMain({
         whiteSpace={whiteSpace}
       >
         {contents.map((content, index) => (
-          <TextBlock interval={interval} key={index}>
+          <TextBlock viewerColor={viewerColor} interval={interval} key={index}>
             <ViewerPageTextBlock 
             content={content}
             />
@@ -57,7 +59,7 @@ const Container = styled.div<{
       props.fontSize == 3 ? 16 : props.fontSize * 5.5}px;
   }
 `;
-const TextBlock = styled.div<{ interval: number }>`
+const TextBlock = styled.div<{ interval: number, viewerColor:string }>`
   z-index: 100;
   padding: ${(props) => props.interval * 0.5}rem;
   

@@ -6,6 +6,7 @@ import { event } from "viewer";
 import { mobile } from "@/src/util/Mixin";
 
 type viwerMainProps = {
+  viewerColor:string;
   tabNumber: number;
   fontSize: number;
   whiteSpace: number;
@@ -15,6 +16,7 @@ type viwerMainProps = {
   setEventCatch: React.Dispatch<React.SetStateAction<boolean>>;
 };
 function ViewerTabMain({
+  viewerColor,
   EpisodeData,
   tabNumber,
   fontSize,
@@ -36,6 +38,7 @@ function ViewerTabMain({
       >
         {EpisodeData.contents.map((content, index) => (
           <ViewerTextBlock
+          viewerColor={viewerColor}
             interval={interval}
             key={index}
             content={content}
@@ -63,8 +66,12 @@ const Container = styled.div<{
   font-size: ${(props) => props.fontSize * 4}px;
   ${mobile} {
     font-size: ${(props) =>
-      props.fontSize == 3 ? 12 : props.fontSize * 3.5}px;
+       props.fontSize == 3 ? 16 : props.fontSize * 5.5}px;
   }
+  color:white;
+  /* opacity: 0.8; */
+  mix-blend-mode: difference;
+  font-weight: 100;
 `;
 
 export default ViewerTabMain;

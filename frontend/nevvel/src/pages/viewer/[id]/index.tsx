@@ -9,19 +9,19 @@ import { GetStaticPaths, GetStaticProps } from "next";
 
 import springApi from "@/src/api";
 import { AiFillSetting } from "react-icons/ai";
+
 import { mobile, tabletH } from "@/src/util/Mixin";
 import { episodeViewer } from "viewer";
 
 import ViewHeader from "../../../components/viewer/ViewHeader";
 import ViewerTabMain from "../../../components/viewer/Main/ViewerTabMain";
 import ViewerPageMain from "@/src/components/viewer/Main/ViewerPageMain";
+import ViewerMobileBottom from "@/src/components/viewer/ViewerMobileBottom";
 import Dummy_Episode from "../../../components/viewer/DummyEpisodeData.json";
 
 import eyes from "@/src/assets/img/eyes.png";
 import SettingBox from "@/src/components/viewer/SettingBox";
-
-
-
+import { themeAtom } from "@/src/store/Theme";
 
 function viewer() {
   const router = useRouter();
@@ -41,11 +41,14 @@ function viewer() {
   const scrollElement = scrollRef.current as HTMLDivElement;
   const [currentScroll, setCurrentScroll] = useState(0);
   const nowTextBlock = useAtomValue(numAtom);
-  const [EpisodeData, setEpisodeData] = useState<episodeViewer>(Dummy_Episode);
+  const [EpisodeData, setEpisodeData] = useState<episodeViewer>();
   const [imageEvent, setImageEvent] = useState<string>("");
   const [audioEvent, setAudioEvent] = useState<string>("");
+  const [viewerColor, setViewerColor] = useState<string>("");
 
- 
+  useEffect(() => {
+    console.log(viewerColor);
+  }, [viewerColor]);
 
   // 소설 받아오기 페이지
   const getViewerData = async (Id: number) => {
@@ -100,11 +103,9 @@ function viewer() {
     return () => {
       if (eventCatch) {
         setEventCatch(false);
-        setImageEvent("");
       }
       if (audioEventCatch) {
         setAudioEventCatch(false);
-        setAudioEvent("");
       }
     };
     console.log(nowTextBlock);
@@ -124,10 +125,12 @@ function viewer() {
           if (event.type === "IMAGE") {
             console.log("이미지당");
             setEventCatch(true);
+            setImageEvent(event.assetUrl);
           }
           if (event.type === "AUDIO") {
             console.log("소리당");
             setAudioEventCatch(true);
+            setAudioEvent(event.assetUrl);
           }
         }
       }
@@ -194,7 +197,7 @@ function viewer() {
   return (
     <>
       {EpisodeData && (
-        <ViewerWrapper>
+        <ViewerWrapper viewerColor={viewerColor}>
           <HeaderContainer onClick={() => clickhandler("head")}>
             {headerToggle && EpisodeData ? (
               <ViewHeader id={id} EpisodeData={EpisodeData} />
@@ -204,12 +207,13 @@ function viewer() {
           <MainWrapper onClick={() => setHeaderToggle(false)}>
             {eventCatch ? (
               <ImageEvent>
-                <Image src={imageEvent} alt="Logo" fill />
+                <img src={imageEvent} alt="Logo" />
               </ImageEvent>
             ) : null}
             {writeMode ? (
               <MainContainer writeMode={writeMode}>
                 <ViewerPageMain
+                viewerColor={viewerColor}
                   EpisodeData={EpisodeData}
                   fontSize={fontSize}
                   fontStyle={fontStyle}
@@ -227,6 +231,7 @@ function viewer() {
                   <div>{EpisodeData.title}</div>
                 ) : (
                   <ViewerTabMain
+                  viewerColor={viewerColor}
                     fontSize={fontSize}
                     fontStyle={fontStyle}
                     whiteSpace={whiteSpace}
@@ -253,17 +258,30 @@ function viewer() {
                 setInterval={setInterval}
                 setWhiteSpace={setWhiteSpace}
                 setFontSize={setFontSize}
+                setViewerColor={setViewerColor}
+                viewerColor={viewerColor}
               />
             </>
           ) : null}
           {audioEventCatch && <audio ref={audioRef} src={`${audioEvent}`} />}
+          <BottomContainer onClick={() => clickhandler("head")}>
+            {headerToggle && EpisodeData ? (
+              <ViewerMobileBottom
+                id={id}
+                EpisodeData={EpisodeData}
+                setSettingBox={setSettingBox}
+                settingBox={settingBox}
+              />
+            ) : null}
+          </BottomContainer>
         </ViewerWrapper>
       )}
     </>
   );
 }
 
-const ViewerWrapper = styled.div`
+const ViewerWrapper = styled.div<{ viewerColor: string }>`
+  background-color:${(props)=>props.viewerColor};
   display: flex;
   flex-direction: column;
   height: 100vh;
@@ -271,6 +289,7 @@ const ViewerWrapper = styled.div`
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  color:${(props)=>props.viewerColor =="#1a1a1a" ? ("#fefefe"):("#1a1a1a")};
   ${mobile} {
     font-size: 16px;
   }
@@ -285,7 +304,22 @@ const HeaderContainer = styled.div`
   width: 100%;
   height: 15vh;
 `;
-const MainWrapper = styled.div``;
+
+const BottomContainer = styled.div`
+  visibility: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 15vh;
+  ${tabletH}{
+    visibility: visible;
+  }
+`;
+
+const MainWrapper = styled.div`
+  height: 80vh;
+`;
 
 const MainContainer = styled.div<{ writeMode: boolean }>`
   height: ${(props) => (props.writeMode ? 50 : 70)}vh;
@@ -311,11 +345,13 @@ const ImageEvent = styled.div`
   /* position: relative; */
   position: fixed;
   opacity: 0.7;
-  left: 25%;
+  left: 40%;
+  top: 35%;
   z-index: 10;
   width: 600px;
   height: 600px;
   ${tabletH} {
+    top: 40%;
     left: 20%;
     width: 500px;
     height: 500px;
@@ -335,8 +371,12 @@ const SettingBtn = styled.button`
   top: 80%;
   left: 90%;
   color: ${({ theme }) => theme.color.text1};
+  ${tabletH}{
+    display: none;
+  }
   ${mobile} {
     left: 80%;
+    display: none;
   }
 `;
 
