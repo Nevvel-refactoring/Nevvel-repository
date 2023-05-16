@@ -10,6 +10,7 @@ import { atom, useAtom, useAtomValue } from "jotai";
 import { assetOpenAtom, nowTextBlockAtom } from "@/src/store/EditorAssetStore";
 import { ImageAssetAtom } from "@/src/store/EditorAssetStore";
 import { AudioAssetAtom } from "@/src/store/EditorAssetStore";
+import { useRouter } from "next/router";
 
 type EditorMainListItemProps = {
   content: content;
@@ -37,6 +38,9 @@ function EditorMainListItem({
   const idx = content.idx;
   const IMAGE = useAtomValue(ImageAssetAtom);
   const AUDIO = useAtomValue(AudioAssetAtom);
+  const router = useRouter();
+  const eid = router.query.eid;
+
   useEffect(() => {
     // console.log(text);
     // 텍스트에 style 적용한 경우
@@ -109,7 +113,7 @@ function EditorMainListItem({
       );
       return (
         <AssetContainer key={index}>
-          <Img src={IMAGE[assetImageFindIndex].thumbnail} alt="썸네일" />
+          <Img src={IMAGE[assetImageFindIndex]?.thumbnail} alt="썸네일" />
           <AssetButton onClick={() => AssetHandler(2)}>
             <AiOutlineSound className="sound" size="24" />
           </AssetButton>
@@ -128,7 +132,7 @@ function EditorMainListItem({
           <AssetButton onClick={() => AssetHandler(1)}>
             <BiImageAdd className="image" size="24" />
           </AssetButton>
-          <Img src={AUDIO[assetAudioFindIndex].thumbnail} alt="썸네일" />
+          <Img src={AUDIO[assetAudioFindIndex]?.thumbnail} alt="썸네일" />
         </AssetContainer>
       );
     } else {
@@ -143,14 +147,14 @@ function EditorMainListItem({
           {asset.type === "IMAGE" && (
             <Img
               className="check"
-              src={IMAGE[assetImageFindIndex].thumbnail}
+              src={IMAGE[assetImageFindIndex]?.thumbnail}
               alt="썸네일"
             />
           )}
           {asset.type === "AUDIO" && (
             <Img
               className="check"
-              src={AUDIO[assetAudioFindIndex].thumbnail}
+              src={AUDIO[assetAudioFindIndex]?.thumbnail}
               alt="썸네일"
             />
           )}
@@ -193,17 +197,18 @@ function EditorMainListItem({
                   <PlusButton onClick={() => setPlus(!plus)}>-</PlusButton>
                 </>
               ) : (
-                ImageEvent
+                <>{eid ? null : ImageEvent}</>
               )}
             </AssetButtonContainer>
           </>
-        ) : (<>
-          <AssetButtonContainer>
-            <Space>&nbsp;</Space>
-            <Space>&nbsp;</Space>
-            <PlusButton onClick={() => setPlus(!plus)}>+</PlusButton>
-          </AssetButtonContainer>
-        </>
+        ) : (
+          <>
+            <AssetButtonContainer>
+              <Space>&nbsp;</Space>
+              <Space>&nbsp;</Space>
+              <PlusButton onClick={() => setPlus(!plus)}>+</PlusButton>
+            </AssetButtonContainer>
+          </>
         )}
         <TextBlock
           key={content.idx}
@@ -269,9 +274,9 @@ const AssetButton = styled.button`
   }
 `;
 const Space = styled.div`
-    width: 3.5rem;
+  width: 3.5rem;
   height: 2.5rem;
-`
+`;
 
 const PlusButton = styled.button`
   width: 2rem;

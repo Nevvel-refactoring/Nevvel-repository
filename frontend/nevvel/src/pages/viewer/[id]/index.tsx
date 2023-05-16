@@ -19,7 +19,9 @@ import Dummy_Episode from "../../../components/viewer/DummyEpisodeData.json";
 
 import eyes from "@/src/assets/img/eyes.png";
 import SettingBox from "@/src/components/viewer/SettingBox";
-import DummyAssetData_audio from "@/src/components/assetstore/DummyAssetData_Audio.json";
+
+
+
 
 function viewer() {
   const router = useRouter();
@@ -36,21 +38,25 @@ function viewer() {
   const [interval, setInterval] = useState(1);
   const audioRef = useRef<any>(null);
   const scrollRef = useRef<any>();
+  const scrollElement = scrollRef.current as HTMLDivElement;
+  const [currentScroll, setCurrentScroll] = useState(0);
   const nowTextBlock = useAtomValue(numAtom);
   const [EpisodeData, setEpisodeData] = useState<episodeViewer>(Dummy_Episode);
   const [imageEvent, setImageEvent] = useState<string>("");
   const [audioEvent, setAudioEvent] = useState<string>("");
 
+ 
+
   // 소설 받아오기 페이지
   const getViewerData = async (Id: number) => {
-    try{
+    try {
       const res = await springApi.get(`/episodes/${Id}`);
       if (res) {
         console.log(res);
         setEpisodeData(res.data);
       }
-    }catch(error){
-      console.log(error)
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -94,7 +100,7 @@ function viewer() {
     return () => {
       if (eventCatch) {
         setEventCatch(false);
-        setImageEvent("")
+        setImageEvent("");
       }
       if (audioEventCatch) {
         setAudioEventCatch(false);
@@ -103,12 +109,14 @@ function viewer() {
     };
     console.log(nowTextBlock);
   }, [nowTextBlock]);
-  // useEffect(()=>{
-  //   scrollRef.current.scrollTop = scrollRef.current?.scrollHeight;
-  // },[tabNumber])
 
   useEffect(() => {
+    if (scrollElement) {
+      scrollElement.scrollTop = scrollRef.current?.scrollHeight;
+    }
+  }, [tabNumber]);
 
+  useEffect(() => {
     if (EpisodeData) {
       if (EpisodeData.contents[tabNumber - 1].event.length !== 0) {
         const events = EpisodeData.contents[tabNumber - 1].event;
@@ -248,12 +256,7 @@ function viewer() {
               />
             </>
           ) : null}
-          {audioEventCatch && (
-            <audio
-              ref={audioRef}
-              src={`${audioEvent}`}
-            />
-          )}
+          {audioEventCatch && <audio ref={audioRef} src={`${audioEvent}`} />}
         </ViewerWrapper>
       )}
     </>

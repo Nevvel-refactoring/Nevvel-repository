@@ -7,6 +7,10 @@ import BestDetails from "../components/main/BestDetails";
 import AssetSwiper from "../components/main/AssetSwiper";
 import axios from "axios";
 import styled from "styled-components";
+import springApi from "@/src/api";
+import DummyAssetData_audio from "@/src/components/assetstore/DummyAssetData_Audio.json";
+import DummyAssetData_image from "@/src/components/assetstore/DummyAssetData_Image.json";
+import { ImageAssetAtom,AudioAssetAtom } from "@/src/store/EditorAssetStore";
 
 interface Novel {
   content: {
@@ -75,8 +79,54 @@ export default function Home(props: { userDTO: string; content: Novel }) {
   useEffect(() => {
     setLoginStatus(userDTO === "" ? false : true);
     setUserInfoStatus(newUserInfo);
+    return (()=>{
+      // if (loginStatus){
+        getAssetImgData();
+        getAssetAudioData();
+      // }
+    })
   }, []);
+  const [assetImageData, setAssetImageData] = useAtom(ImageAssetAtom);
+  const [assetAudioData, setAssetAudioData] = useAtom(AudioAssetAtom);
+  useEffect(()=>{
+    console.log("assetImageData",assetImageData)
+    console.log("assetAudioData",assetAudioData)
+  },[assetImageData,assetAudioData])
 
+
+  
+  // 이미지 get 요청 
+  const getAssetImgData = async () => {
+    try{
+      const res = await springApi.get(
+        "assets/purchased-on?assettype=IMAGE&page=1&size=10&sort=createdDateTime"
+      );
+      if (res) {
+        console.log(res);
+        setAssetImageData(res.data.content);
+    }}catch(error){
+      console.log(error)
+      setAssetImageData(DummyAssetData_image.content)
+    }
+  };
+  // 오디오 get 요청 
+  const getAssetAudioData = async () => {
+    try{
+      const res = await springApi.get(
+        "assets/purchased-on?assettype=AUDIO&page=1&size=10&sort=createdDateTime"
+      );
+      if (res) {
+        console.log(res);
+        setAssetAudioData(res.data.content);
+      }
+    }catch(error){
+      console.log(error)
+      setAssetAudioData(DummyAssetData_audio.content)
+    }
+  };
+  
+
+  
   // console.log(loginStatus);
   // console.log(userInfoStatus);
 

@@ -7,13 +7,60 @@ import Dummy_Episode from "../../../../components/viewer/DummyEpisodeData.json";
 import { useRouter } from "next/dist/client/router";
 import { mobile } from "@/src/util/Mixin";
 import springApi from "@/src/api";
+import { putEditorAtom } from "@/src/store/EditorAssetStore";
+import DummyAssetData_audio from "@/src/components/assetstore/DummyAssetData_Audio.json";
+import DummyAssetData_image from "@/src/components/assetstore/DummyAssetData_Image.json";
+import { ImageAssetAtom,AudioAssetAtom } from "@/src/store/EditorAssetStore";
+import { useAtom } from "jotai";
 
 function index() {
   const router = useRouter();
   const eid = router.query.eid;
   const id =router.query.id
   const [episode, setEpisode] = useState<episode>(Dummy_Episode);
+  const [putEditorStatus, setPutEditorStatus] = useState(putEditorAtom)
   const scrollRef = useRef<any>();
+
+  const [assetImageData, setAssetImageData] = useAtom(ImageAssetAtom);
+  const [assetAudioData, setAssetAudioData] = useAtom(AudioAssetAtom);
+  
+  // 이미지 get 요청 
+  const getAssetImgData = async () => {
+    try{
+      const res = await springApi.get(
+        "assets/purchased-on?assettype=IMAGE&page=1&size=10&sort=createdDateTime"
+      );
+      if (res) {
+        console.log(res);
+        setAssetImageData(res.data.content);
+    }}catch(error){
+      console.log(error)
+      setAssetImageData(DummyAssetData_image.content)
+    }
+  };
+  // 오디오 get 요청 
+  const getAssetAudioData = async () => {
+    try{
+      const res = await springApi.get(
+        "assets/purchased-on?assettype=AUDIO&page=1&size=10&sort=createdDateTime"
+      );
+      if (res) {
+        console.log(res);
+        setAssetAudioData(res.data.content);
+      }
+    }catch(error){
+      console.log(error)
+      setAssetAudioData(DummyAssetData_audio.content)
+    }
+  };
+  
+
+
+  useEffect(() => {
+    getAssetImgData();
+    getAssetAudioData();
+    // setAssetData(DummyAssetData_image.content)
+  }, []);
 
   const getViewerData = async (EID: number) => {
     const res = await springApi.get(`/episodes/${EID}`);
@@ -29,6 +76,8 @@ function index() {
       const EID = Number(eid);
       console.log("router", EID);
       getViewerData(EID);
+
+
     // } else {
     //   setEpisodeData(Dummy_Episode);
     }
@@ -36,12 +85,10 @@ function index() {
   }, []);
 
 
-
-
-
   useEffect(() => {
     scrollRef.current.scrollTop = scrollRef.current?.scrollHeight;
   }, [episode]);
+
   return (
     <Wrapper>
       <EditorWrapper ref={scrollRef}>

@@ -8,11 +8,12 @@ import React, {
 import styled from "styled-components";
 import EditorMainListItem from "./EditorMainListItem";
 import EditorMainAssetContainer from "../Asset/EditorMainAssetContainer";
-import { content,episode } from "editor";
+import { content, episode } from "editor";
 import EditorMainInput from "./EditorMainInput";
+import { useRouter } from "next/router";
 
 type EditorMainListProps = {
-  episode:episode;
+  episode: episode;
   contents: content[];
   setContents: React.Dispatch<React.SetStateAction<content[]>>;
   currentText: string;
@@ -31,24 +32,29 @@ function EditorMainList({
   //   console.log(scrollRef.current?.scrollHeight)
   //   scrollRef.current.scrollTop = (scrollRef.current?.scrollHeight + 64);
   // }, [currentText,contents]);
+  const router = useRouter();
+  const eid = router.query.eid;
+  useEffect(() => {
+    console.log("mainlist", eid);
+  }, []);
 
   return (
     <MainWrapper>
       <MainContainer ref={scrollRef}>
-        <ListWrapper>
-          {contents.map((content, index) => (
-            <EditorMainListItem
-              key={content.idx}
-              content={content}
-              contents={contents}
-              setContents={setContents}
-            />
-          ))}
-        </ListWrapper>
+          <ListWrapper>
+            {contents.map((content, index) => (
+              <EditorMainListItem
+                key={content.idx}
+                content={content}
+                contents={contents}
+                setContents={setContents}
+              />
+            ))}
+          </ListWrapper>
         <ContentWrapper>
           <InputWrapper>
             <EditorMainInput
-            episode={episode}
+              episode={episode}
               currentText={currentText}
               setCurrentText={setCurrentText}
               contents={contents}
