@@ -56,7 +56,7 @@ public class SecurityConfig {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowedOrigins(
             Arrays.asList("http://k8d1061.p.ssafy.io", "http://k8d106.p.ssafy.io:3000", "https://k8d106.p.ssafy.io",
-                    "http://localhost:3000"));
+                    "http://localhost:3000", "http://localhost"));
         corsConfiguration.addAllowedMethod("*");
         corsConfiguration.addAllowedHeader("*");
         corsConfiguration.setAllowCredentials(true);
@@ -97,7 +97,6 @@ public class SecurityConfig {
             )
             .logout(logout -> logout
                 .logoutUrl("/users/signout")
-                .logoutSuccessUrl("http://k8d1061.p.ssafy.io/")
                 .deleteCookies(JWTProvider.getAccessToken(), JWTProvider.getRefreshToken())
                 .logoutSuccessHandler(logoutSuccessHandler)
             )
