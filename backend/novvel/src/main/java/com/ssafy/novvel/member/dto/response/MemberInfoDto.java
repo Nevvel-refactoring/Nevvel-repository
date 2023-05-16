@@ -25,7 +25,7 @@ public class MemberInfoDto {
 
     public MemberInfoDto(Member member, String url) {
         this.id = member.getId();
-        this.profileImage = member.getProfile() == null ? url+"/default/profile/default_profile.png" : member.getProfile().getThumbnailUrl();
+        this.profileImage = member.getProfile() == null ? url+"/default/profile/default_profile.jpg" : member.getProfile().getThumbnailUrl();
         this.nickname = member.getNickname();
         this.point = member.getPoint();
     }
