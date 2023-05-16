@@ -14,8 +14,8 @@ function MyProfile() {
   useEffect(() => {
     const getUserData = async () => {
       const res = await NewvelApi.profileInfo();
-      console.log(res.data);
-      setUserDescription(res.data);
+      console.log(res.data.description);
+      setUserDescription(res.data.description);
     };
     getUserData();
   }, []);

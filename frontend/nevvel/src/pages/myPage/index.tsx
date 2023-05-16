@@ -71,7 +71,6 @@ function MyPage() {
     <Wrapper>
       {loginStatus ? (
         <>
-          <ProfilePointWrapper></ProfilePointWrapper>
           <MyProfile />
           <MyPoint />
           <MyNovel />
@@ -90,9 +89,4 @@ const Wrapper = styled.div`
   margin-left: 10%;
   margin-right: 10%;
   margin-top: 3rem;
-`;
-
-const ProfilePointWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
 `;

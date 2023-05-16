@@ -58,7 +58,7 @@ const PointContent = styled.div`
   margin-left: 1rem;
   padding: 1rem;
   border-radius: 1rem;
-  background-color: ${({ theme }) => theme.color.searchBar};
+  background-color: ${({ theme }) => theme.color.hover};
 `;
 
 const TextWrapper = styled.div`
@@ -67,5 +67,4 @@ const TextWrapper = styled.div`
 
 const TextTitle = styled.div`
   margin-left: 1rem;
-  color: #000000;
 `;
