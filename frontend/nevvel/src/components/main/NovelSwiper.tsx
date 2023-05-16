@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import styled from "styled-components";
 
 // import Swiper core and required modules
@@ -13,9 +12,6 @@ import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 
 import NovelCard from "../common/NovelCard";
-
-import { useRouter } from "next/router";
-import springApi from "@/src/api";
 
 interface Novel {
   content: {
@@ -58,29 +54,9 @@ interface Novel {
   empty: boolean;
 }
 
-function NovelSwiper() {
-  const router = useRouter();
-  const [novelData, setNovelData] = useState<Novel | undefined>(undefined);
-
-  // 소설 목록 받아오기
-  useEffect(() => {
-    const getNovelData = async () => {
-      const res = await springApi.get("/covers");
-      setNovelData(res.data);
-    };
-    getNovelData();
-  }, []);
-
-  // 그 중 10개 받아오기
-  const novelSwiperData = novelData?.content.slice(0, 10);
-
-  const clickHandler = () => {
-    router.push({
-      pathname: "series/[id]",
-      query: { id: 1 },
-      // 나중에 novel.id로 수정하시면 될 것 같습니다!
-    });
-  };
+function NovelSwiper(props: { content: Novel }) {
+  // 소설 10개 받아오기
+  const novelSwiperData = props.content?.content.slice(0, 10);
 
   // swiper height 설정
   const swiperStyle = {
@@ -117,9 +93,9 @@ function NovelSwiper() {
         // onSwiper={(swiper) => console.log(swiper)}
         // onSlideChange={() => console.log("slide change")}
       >
-        {novelSwiperData?.map((novel, index: number) => {
+        {novelSwiperData.map((novel, index: number) => {
           return (
-            <SwiperSlide key={index} onClick={clickHandler}>
+            <SwiperSlide key={index}>
               <NovelCard
                 id={novel.id}
                 title={novel.title}

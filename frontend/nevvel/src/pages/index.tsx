@@ -5,9 +5,51 @@ import { useEffect } from "react";
 import NovelSwiper from "../components/main/NovelSwiper";
 import BestDetails from "../components/main/BestDetails";
 import AssetSwiper from "../components/main/AssetSwiper";
+import axios from "axios";
 import styled from "styled-components";
 
-export default function Home(props: { userDTO: string }) {
+interface Novel {
+  content: {
+    id: number;
+    title: string;
+    status: string;
+    thumbnail: string;
+    genre: string;
+    writer: {
+      id: number;
+      nickname: string;
+    };
+    isUploaded: boolean;
+    isNew: boolean;
+  }[];
+  pageable: {
+    sort: {
+      sorted: boolean;
+      unsorted: boolean;
+      empty: boolean;
+    };
+    pageSize: number;
+    pageNumber: number;
+    offset: number;
+    paged: boolean;
+    unpaged: boolean;
+  };
+  totalPages: number;
+  totalElements: number;
+  last: boolean;
+  number: number;
+  sort: {
+    sorted: boolean;
+    unsorted: boolean;
+    empty: boolean;
+  };
+  size: number;
+  numberOfElements: number;
+  first: boolean;
+  empty: boolean;
+}
+
+export default function Home(props: { userDTO: string; content: Novel }) {
   // console.log(props.userDTO);
   const userDTO = props.userDTO === "" ? "" : JSON.parse(props.userDTO);
   const newUserInfo =
@@ -42,7 +84,7 @@ export default function Home(props: { userDTO: string }) {
     <HomeWrapper>
       <DetailWrapper>
         <BestDetails title="베스트 콘텐츠" more="/novels" />
-        <NovelSwiper />
+        <NovelSwiper content={props.content} />
       </DetailWrapper>
       <Line />
       <DetailWrapper>
@@ -68,9 +110,18 @@ export async function getServerSideProps({ req }: NextPageContext) {
     }
   }
 
+  let novels = undefined;
+  try {
+    const res = await axios.get("http://k8d1061.p.ssafy.io/api/covers");
+    novels = res.data;
+  } catch (error) {
+    console.log(error);
+  }
+
   return {
     props: {
       userDTO: userDTOcookie,
+      content: novels,
     },
   };
 }
