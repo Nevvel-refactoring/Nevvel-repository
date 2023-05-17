@@ -3,8 +3,12 @@ import styled from "styled-components";
 import { cover } from "series";
 import Image from "next/image";
 import unupload from "../../../public/UnUploadImgBtn.png";
-import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
-import { AiOutlineEye } from "react-icons/ai";
+import {
+  AiFillHeart,
+  AiOutlineHeart,
+  AiOutlineEye,
+  AiOutlineSetting,
+} from "react-icons/ai";
 import { TbEdit } from "react-icons/tb";
 import { mobile, tabletH } from "@/src/util/Mixin";
 import { useRouter } from "next/router";
@@ -13,6 +17,7 @@ import SeriesSelected from "./SeriesSelected";
 import springApi from "@/src/api";
 import { userInfoAtom, loginAtom } from "@/src/store/Login";
 import { useAtomValue } from "jotai";
+import SeriesEdit from "./SeriesEdit";
 
 type SeriesHeaderProps = {
   SeriesData: cover;
@@ -29,6 +34,7 @@ function SeriesHeader({
 }: SeriesHeaderProps) {
   const router = useRouter();
   const [modalOpen, setModalOpen] = useState(false);
+  const [modalOpen2, setModalOpen2] = useState(false);
   const readId = SeriesData.lastReadEpisodeId;
   const thumnail = SeriesData.thumbnail;
   const userInfo = useAtomValue(userInfoAtom);
@@ -92,8 +98,10 @@ function SeriesHeader({
           <SeriesText className="title">
             <span>{SeriesData.title}</span>
             {loginStatus && SeriesData.writer.id === userInfo?.id ? (
+              // {true && SeriesData.writer.id !== userInfo?.id ? (
               <span>
                 <TbEdit
+                  size={25}
                   onClick={() => {
                     router.push({
                       pathname: `/editor/${coverId}`,
@@ -102,6 +110,10 @@ function SeriesHeader({
                       },
                     });
                   }}
+                />
+                <AiOutlineSetting
+                  size={25}
+                  onClick={() => setModalOpen2(true)}
                 />
               </span>
             ) : (
@@ -161,6 +173,22 @@ function SeriesHeader({
               Info={SeriesData}
               setIsPurchase={setIsPurchase}
               isPurchased={isPurchased}
+            />
+          }
+        />
+      )}
+      {modalOpen2 && (
+        <Modal
+          modal={modalOpen2}
+          setModal={setModalOpen2}
+          width="300"
+          height="500"
+          element={
+            <SeriesEdit
+              Info={SeriesData}
+              setModalOpen2={setModalOpen2}
+              setAfterEdit={setIsPurchase}
+              afterEdit={isPurchased}
             />
           }
         />
@@ -288,6 +316,7 @@ const SeriesText = styled.div`
   }
   > span > svg {
     cursor: pointer;
+    padding: 2px;
   }
 `;
 

@@ -1,5 +1,5 @@
 import springApi from "@/src/api";
-import { mobile } from "@/src/util/Mixin";
+import { mobile, tabletH } from "@/src/util/Mixin";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { episode } from "series";
@@ -80,6 +80,12 @@ const PurchaseWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   width: 20rem;
+  ${tabletH} {
+    width: 9rem;
+  }
+  ${mobile} {
+    width: 7rem;
+  }
 `;
 
 const SeriesBtn = styled.button`

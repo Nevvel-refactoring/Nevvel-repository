@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { episode, writer } from "series";
 import styled from "styled-components";
 import { useRouter } from "next/router";
@@ -20,6 +20,13 @@ function SeriesMainListItem({ episode, writer }: SeriesMainListItemProps) {
   const [IsRead, setIsRead] = useState(episode.isRead);
   const loginStatus = useAtomValue(loginAtom);
   const userInfo = useAtomValue(userInfoAtom);
+  const [userD, setUserD] = useState<boolean | number>(false);
+
+  useEffect(() => {
+    const isTouchDevice: boolean | number =
+      navigator.maxTouchPoints || "ontouchstart" in document.documentElement;
+    setUserD(isTouchDevice);
+  }, []);
 
   const routerPush = () => {
     router.push({
@@ -50,7 +57,7 @@ function SeriesMainListItem({ episode, writer }: SeriesMainListItemProps) {
         <Modal
           modal={modalOpen}
           setModal={setModalOpen}
-          width="500"
+          width={userD ? "300" : "500"}
           height="100"
           element={<SeriesEpOnePurchase Info={episode} />}
         />

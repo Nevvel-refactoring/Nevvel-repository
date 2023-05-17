@@ -147,14 +147,14 @@ const AllSelect = styled.div`
 `;
 
 const Wrapper = styled.div`
-  padding-top: 5%;
-  padding-bottom: 5%;
+  padding-top: 10px;
+  padding-bottom: 10px;
   font-size: 14px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-content: space-between;
-  height: 50vh;
+  height: 400px;
   align-items: center;
 `;
 const ListWrapper = styled.div`
