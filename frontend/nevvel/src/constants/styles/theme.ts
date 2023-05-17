@@ -5,7 +5,7 @@ export const lightTheme: DefaultTheme = {
     text1: "#000000",
     text2: "#ffffff",
     text3: "#666666",
-    viewDark:"#1a1a1a",
+    viewDark: "#1a1a1a",
     buttonText: "#ffffff",
     pointText: "5c5db3",
     navbar: "#ffffff",
@@ -18,6 +18,8 @@ export const lightTheme: DefaultTheme = {
     editor: "#dadaff",
     wrongButton: "#808080",
     opacityText3: "#66666640",
+    newSpan: "#a2ff00",
+    upSpan: "#ffe600",
   },
 };
 
@@ -27,7 +29,7 @@ export const darkTheme: DefaultTheme = {
     text1: "#e6e6e6",
     text2: "#000000",
     text3: "#999999",
-    viewDark:"#1a1a1a",
+    viewDark: "#1a1a1a",
     buttonText: "#000000",
     pointText: "5c5db3",
     navbar: "#000000",
@@ -40,5 +42,7 @@ export const darkTheme: DefaultTheme = {
     editor: "#27284c",
     wrongButton: "#808080",
     opacityText3: "#99999940",
+    newSpan: "#84d100",
+    upSpan: "#dac400",
   },
 };

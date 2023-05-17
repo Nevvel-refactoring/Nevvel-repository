@@ -69,6 +69,8 @@ function SearchNovel(props: { word: string }) {
                 writerId={novel.writer.id}
                 genre={novel.genre}
                 thumbnail={novel.thumbnail}
+                isUploaded={novel.isUploaded}
+                isNew={novel.isNew}
               />
             );
           })}

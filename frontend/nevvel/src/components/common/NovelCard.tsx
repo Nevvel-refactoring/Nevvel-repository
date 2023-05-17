@@ -9,10 +9,13 @@ interface Novel {
   writerId: number;
   genre: string;
   thumbnail: string;
+  isUploaded?: boolean;
+  isNew?: boolean;
 }
 
 function NovelCard(props: Novel) {
   // console.log(props);
+  // const isUploaded = props.isUploaded;
 
   const router = useRouter();
   const novelDetailHandler = () => {
@@ -22,7 +25,13 @@ function NovelCard(props: Novel) {
   return (
     <Wrapper onClick={novelDetailHandler}>
       {/* <Image src={props.thumbnail} alt="thumbnail" width={25} height={25} /> */}
-      <Image src={props.thumbnail} alt="thumbnail" width={148} height={222} />
+      <ImgDiv>
+        <StatusSpan>
+          {props.isUploaded && <UpdateNovel id="up">UP</UpdateNovel>}
+          {props.isNew && <NewNovel id="new">신작</NewNovel>}
+        </StatusSpan>
+        <Image src={props.thumbnail} alt="thumbnail" width={148} height={222} />
+      </ImgDiv>
       <NovelDesc>
         <NovelTitleDiv>
           <NovelTitle>{props.title}</NovelTitle>
@@ -62,12 +71,13 @@ const NovelTitleDiv = styled.div`
 `;
 
 const NovelTitle = styled.div`
-  padding-top: 1rem;
-  font-size: 20px;
+  font-size: 17px;
   font-weight: 700;
   line-height: 180%;
   text-align: center;
   overflow: hidden;
+  width: 13rem;
+  white-space: nowrap;
   text-overflow: ellipsis;
 `;
 
@@ -89,4 +99,36 @@ const NovelGenre = styled.div`
   border-radius: 0.5rem;
   font-size: 10px;
   height: 1.5rem;
+`;
+
+const ImgDiv = styled.div`
+  position: relative;
+  display: flex;
+`;
+
+const NewNovel = styled.span`
+  color: white;
+  font-size: 8px;
+  font-weight: 700;
+  /* background-color: ${({ theme }) => theme.color.point}; */
+  padding: 2px;
+  margin: 2px;
+  border-radius: 3px;
+  background-color: ${({ theme }) => theme.color.newSpan};
+`;
+
+const UpdateNovel = styled.span`
+  color: white;
+  font-size: 8px;
+  font-weight: 700;
+  /* background-color: ${({ theme }) => theme.color.point}; */
+  padding: 2px;
+  margin: 2px;
+  border-radius: 3px;
+  background-color: ${({ theme }) => theme.color.upSpan};
+`;
+
+const StatusSpan = styled.span`
+  position: absolute;
+  margin: 3px;
 `;
