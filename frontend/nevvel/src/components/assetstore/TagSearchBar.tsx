@@ -17,6 +17,7 @@ type ImageUploadProps = {
   selectTag: string[];
   AddTag: (newSelectTag:string) => void;
   TagInputWidth? : string;
+  AddTagTrigger : boolean
 }
 
 function TagSearchBar(props:ImageUploadProps){
@@ -84,7 +85,7 @@ function TagSearchBar(props:ImageUploadProps){
 
   // 자동완성에 없는 경우 엔터 치면 새로운 태그 생성
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter'){
+    if (event.key === 'Enter' && props.AddTagTrigger === true){
       if (keyword) {
         props.AddTag(keyword.trim())
       }

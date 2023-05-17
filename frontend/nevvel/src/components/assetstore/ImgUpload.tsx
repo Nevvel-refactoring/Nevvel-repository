@@ -95,6 +95,10 @@ function ImgUpload(props:assetstoreProps) {
 
 
   // 태그 저장
+
+  // 저장된 태그 외 입력하는 태그도 추가할지 결정하는 트리거
+  const AddTagTrigger = true
+
   const [selectTag, setSelectTag] = useState<string[]>([])
 
   const AddTag = (newSelectTag:string) => {
@@ -307,6 +311,7 @@ function ImgUpload(props:assetstoreProps) {
             selectTag={selectTag}
             AddTag={AddTag}
             TagInputWidth={"15rem"}
+            AddTagTrigger={AddTagTrigger}
           />
           <TagRowDiv>
             {

@@ -38,22 +38,50 @@ interface Asset {
 interface AssetstorePorps {
   afterUpload : boolean;
   setAfterUpload : React.Dispatch<React.SetStateAction<boolean>>;
+  reaxiosTrigger : boolean;
+  setReaxiosTrigger : React.Dispatch<React.SetStateAction<boolean>>;
+  queryString : string;
 }
 
 function AssetstoreAssetList(props : AssetstorePorps) {
 
   const [AssetData, setAssetData] = useState<Array<Asset>>([]);
 
+  const [axiosURI, setAxiosURI] = useState<string>("/assets?assettype=IMAGE&page=1&searchtype=ALL&sort=downloadCount,desc")
+
+  const [uritoAxios, setUritoAxios] = useState<boolean>(false)
+
+  useEffect(() => {
+    if (props.reaxiosTrigger === true){
+      setAxiosURI(props.queryString)
+      props.setReaxiosTrigger(false)
+      setUritoAxios(true)
+    }
+  },[props.reaxiosTrigger])
+
+
   // axios로 데이터 get받아오기
   useEffect(() => {
     const getAssetList = async() => {
-      const res = await springApi.get(`/assets?assettype=IMAGE&pageNum=1&searchtype=ALL&sort =downloadCount`)
+      const res = await springApi.get(`${axiosURI}`)
       console.log(res.data.content)
       setAssetData(res.data.content)
     }
     getAssetList()
   },[])
-  // console.log('이건데', AssetData)
+
+  // reaxios로 데이터 get 받아오기
+  useEffect(() => {
+    const getAssetList = async() => {
+      const res = await springApi.get(`${axiosURI}`)
+      console.log(res.data.content)
+      setAssetData(res.data.content)
+      setUritoAxios(false)
+    }
+    if (uritoAxios === true){
+      getAssetList()
+    }
+  },[uritoAxios])
 
 
   // axios reloader
