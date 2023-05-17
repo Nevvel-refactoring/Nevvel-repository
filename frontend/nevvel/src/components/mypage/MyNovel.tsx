@@ -135,7 +135,7 @@ function MyNovel() {
           )}
         </UploadedNovelDiv>
       </NovelContent>
-      {/* <NovelContent>
+      <NovelContent>
         <SemiTitle title="구매한 소설" more={purchasedMore} />
         <PurchasedNovelDiv>
           {purchasedNovel?.empty ? (
@@ -158,7 +158,7 @@ function MyNovel() {
             </NovelDiv>
           )}
         </PurchasedNovelDiv>
-      </NovelContent> */}
+      </NovelContent>
       <NovelContent>
         <SemiTitle title="좋아요한 소설" more="" />
       </NovelContent>

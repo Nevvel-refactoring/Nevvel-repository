@@ -3,6 +3,9 @@ import axios from "axios";
 import SemiTitle from "./SemiTitle";
 import styled from "styled-components";
 import { NewvelApi } from "@/src/api";
+import AssetCard from "../common/AssetCard";
+import { Modal } from "../common/Modal";
+import AssetDetailModal from "../assetstore/AssetDetailModal";
 
 interface Content {
   id: number;
@@ -80,8 +83,41 @@ function MyAsset() {
   }, []);
   // 구매한 에셋 5개 받아오기
   useEffect(() => {
+    console.log(purchasedAsset?.content?.slice(0, 5));
     setPurchasedAsset5(purchasedAsset?.content?.slice(0, 5));
   }, [purchasedAsset]);
+
+  // 에셋 디테일 모달 오픈 트리거
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+
+  // 에셋 디테일로 열리는 에셋의 key값
+  const [openModalData, setOpenModalData] = useState<Content>({
+    id: 0,
+    title: "",
+    type: "",
+    thumbnail: "",
+    url: "",
+    price: 0,
+    downloadCount: 0,
+    isAvailable: false,
+    tags: [
+      {
+        id: 0,
+        tagName: "",
+        useCount: 0,
+      },
+    ],
+    uploader: {
+      id: 0,
+      nickname: "",
+      profileImage: "",
+    },
+  });
+
+  // 모달의 모달이 어떻게 나올지 결정해주는 인자
+  const [modalStarter, setModalStarter] = useState<boolean>(true);
+
+  const [axiosReloader, setAxiosReloaer] = useState<boolean>(false);
 
   return (
     <AssetWrapper>
@@ -91,6 +127,47 @@ function MyAsset() {
       </AssetContent>
       <AssetContent>
         <SemiTitle title="구매한 에셋" more={purchasedMore} />
+        <PurchasedAssetDiv>
+          {purchasedAsset?.empty ? (
+            <EmptyDiv>구매한 에셋이 존재하지 않습니다.</EmptyDiv>
+          ) : (
+            <AssetDiv>
+              {purchasedAsset5?.map((asset, index: number) => {
+                return (
+                  <AssetCard
+                    key={index}
+                    AssetData={asset}
+                    id={asset.id}
+                    title={asset.title}
+                    type={asset.type}
+                    thumbnail={asset.thumbnail}
+                    url={asset.url}
+                    tags={asset.tags}
+                    setModalOpen={setModalOpen}
+                    setOpenModalData={setOpenModalData}
+                  />
+                );
+              })}
+            </AssetDiv>
+          )}
+          {/* 모달 */}
+          {modalOpen ? (
+            <Modal
+              modal={modalOpen}
+              setModal={setModalOpen}
+              width="800"
+              height="710"
+              element={
+                <AssetDetailModal
+                  openModalData={openModalData}
+                  setModalOpen={setModalOpen}
+                  modalStarter={modalStarter}
+                  setAxiosReloaer={setAxiosReloaer}
+                />
+              }
+            />
+          ) : null}
+        </PurchasedAssetDiv>
       </AssetContent>
     </AssetWrapper>
   );
@@ -111,3 +188,13 @@ const AssetContent = styled.div`
   display: flex;
   flex-direction: column;
 `;
+
+const PurchasedAssetDiv = styled.div``;
+
+const EmptyDiv = styled.div`
+  padding-left: 8%;
+  margin-top: 1rem;
+  text-align: center;
+`;
+
+const AssetDiv = styled.div``;
