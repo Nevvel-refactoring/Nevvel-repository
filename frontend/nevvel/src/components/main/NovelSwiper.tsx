@@ -12,6 +12,7 @@ import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 
 import NovelCard from "../common/NovelCard";
+import { mobile, tabletH } from "@/src/util/Mixin";
 
 interface Novel {
   content: {
@@ -126,4 +127,12 @@ const Wrapper = styled.div`
   padding-bottom: 1%;
   padding-left: 10%;
   padding-right: 12%;
+  ${tabletH} {
+    padding-left: 7%;
+    padding-right: 8%;
+  }
+  ${mobile} {
+    padding-left: 3%;
+    padding-right: 3.2%;
+  }
 `;

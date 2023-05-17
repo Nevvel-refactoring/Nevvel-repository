@@ -85,7 +85,6 @@ const NovelGenre = styled.div`
   background-color: ${({ theme }) => theme.color.searchBar};
   opacity: 70%;
   color: ${({ theme }) => theme.color.text3};
-  max-width: fit-content;
   justify-content: center;
   border-radius: 0.5rem;
   font-size: 10px;

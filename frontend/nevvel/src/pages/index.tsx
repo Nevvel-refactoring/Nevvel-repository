@@ -218,7 +218,9 @@ const HomeWrapper = styled.div`
   color: ${({ theme }) => theme.color.text1};
 `;
 
-const DetailWrapper = styled.div``;
+const DetailWrapper = styled.div`
+  padding: 1rem 0rem;
+`;
 
 const Line = styled.hr`
   width: 82%;

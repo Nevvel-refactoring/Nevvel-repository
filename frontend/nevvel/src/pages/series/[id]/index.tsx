@@ -6,6 +6,7 @@ import SeriesData from "@/src/components/series/DummySeriesData.json";
 import springApi from "@/src/api";
 import { cover } from "series";
 import { useRouter } from "next/dist/client/router";
+import { mobile, tabletH } from "@/src/util/Mixin";
 
 function index() {
   const [seriesData, setSeriesData] = useState<cover>();
@@ -58,6 +59,14 @@ const SeriesWrapper = styled.div`
   margin-left: 20%;
   margin-right: 20%;
   position: relative;
+  ${tabletH} {
+    margin-left: 10%;
+    margin-right: 10%;
+  }
+  ${mobile} {
+    margin-left: 5%;
+    margin-right: 5%;
+  }
 `;
 
 export default index;

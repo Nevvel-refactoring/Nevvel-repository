@@ -87,7 +87,7 @@ function NavigationTop(props: Props) {
           placeholder="작품명, 작가명을 입력하세요"
         />
         <SearchIcon>
-          <AiOutlineSearch onClick={clickResultHandler} />
+          <AiOutlineSearch onClick={clickResultHandler} color="#666666"/>
         </SearchIcon>
       </SearchBar>
       {loginStatus ? (
