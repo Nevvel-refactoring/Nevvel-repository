@@ -63,7 +63,6 @@ function MyNovel() {
   const [uploadedMore, setUploadedMore] = useState("");
   useEffect(() => {
     const getUploadedCovers = async () => {
-      // const res = await axios.get(`http://localhost:8080/api/covers/uploader/${userInfoStatus?.id}`)
       const res = await springApi.get(`/covers/uploader/${userInfoStatus?.id}`);
       // console.log(res.data);
       setUploadedNovel(res.data);
@@ -92,7 +91,6 @@ function MyNovel() {
   const [purchasedMore, setPurchasedMore] = useState("");
   useEffect(() => {
     const getPurchasedCovers = async () => {
-      // const res = await axios.get("http://localhost:8080/api/covers/purchased-on")
       const res = await NewvelApi.purchasedCovers();
       // console.log(res.data);
       setPurchasedNovel(res.data);
@@ -107,7 +105,7 @@ function MyNovel() {
   // 구매한 소설 5개 받아오기
   useEffect(() => {
     setPurchasedNovel5(purchasedNovel?.content?.slice(0, 5));
-  });
+  }, [purchasedNovel]);
 
   // 좋아요한 소설
   return (
