@@ -1,18 +1,12 @@
 package com.ssafy.novvel.sign.oauth2login;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ssafy.novvel.member.dto.response.MemberInfoDto;
 import com.ssafy.novvel.member.entity.Member;
 import com.ssafy.novvel.member.repository.MemberRepository;
 import com.ssafy.novvel.util.token.UserDtoUtils;
 import com.ssafy.novvel.util.token.jwt.JWTProvider;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.Set;
 import javax.servlet.http.Cookie;
-import javax.transaction.Transactional;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
@@ -70,7 +64,7 @@ public class OidcMemberService implements OAuth2UserService<OidcUserRequest, Oid
             .orElseGet(() -> memberRepository.save(Member.builder()
                 .sub(sub)
                 .email(email)
-                .nickname(email)
+                .nickname(sub)
                 .description("")
                 .role("ROLE_USER")
                 .refreshToken(refreshToken)
