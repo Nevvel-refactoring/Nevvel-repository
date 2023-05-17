@@ -73,8 +73,8 @@ function purchasedAsset() {
   );
   useEffect(() => {
     const getPurchasedAssets = async () => {
-      const res = await NewvelApi.purchasedCovers();
-      console.log(res.data);
+      const res = await NewvelApi.purchasedAssets();
+      // console.log(res.data);
       setPurchasedAsset(res.data);
     };
     // if (!loginStatus) {
