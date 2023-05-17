@@ -9,7 +9,7 @@ function MyPoint() {
   const router = useRouter();
 
   const pointChargeHandler = () => {
-    router.push({ pathname: "/myPage/purchase#" });
+    router.push({ pathname: "/myPage/purchase" });
   };
 
   return (

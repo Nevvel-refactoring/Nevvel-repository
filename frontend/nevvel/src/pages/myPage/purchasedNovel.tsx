@@ -66,11 +66,11 @@ function UploadedNovel() {
       // console.log(res.data);
       setPurchasedNovel(res.data);
     };
-    if (!loginStatus) {
-      router.push({ pathname: "/#" });
-    } else {
+    // if (!loginStatus) {
+    //   router.push({ pathname: "/" });
+    // } else {
       getPurchasedCovers();
-    }
+    // }
   }, []);
 
   return (

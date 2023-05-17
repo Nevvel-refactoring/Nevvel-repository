@@ -71,7 +71,7 @@ function MyNovel() {
       if (res.data.empty) {
         setUploadedMore("");
       } else {
-        setUploadedMore("/myPage/uploadedNovel#");
+        setUploadedMore("/myPage/uploadedNovel");
       }
     };
     getUploadedCovers();
@@ -99,7 +99,7 @@ function MyNovel() {
       if (res.data.empty) {
         setPurchasedMore("");
       } else {
-        setPurchasedMore("/myPage/purchasedNovel#");
+        setPurchasedMore("/myPage/purchasedNovel");
       }
     };
     getPurchasedCovers();
