@@ -69,16 +69,16 @@ function MyPage() {
 
   return (
     <Wrapper>
-      {loginStatus ? (
-        <>
+      {/* {loginStatus ? (
+        <> */}
           <MyProfile />
           <MyPoint />
           <MyNovel />
           <MyAsset />
-        </>
+        {/* </>
       ) : (
         <></>
-      )}
+      )} */}
     </Wrapper>
   );
 }
