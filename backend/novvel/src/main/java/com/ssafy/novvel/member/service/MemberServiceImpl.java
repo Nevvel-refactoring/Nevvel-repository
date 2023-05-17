@@ -52,7 +52,7 @@ public class MemberServiceImpl implements MemberService {
         MemberChanged memberChanged = new MemberChanged();
 
         Resource resource = member.getProfile();
-        if(!(multipartFile == null || multipartFile.isEmpty())) {
+        if(!multipartFile.isEmpty()) {
             resource = resourceService.saveFile(multipartFile);
         } else if(memberInfoRegistDto.getIsDefaultImage()) {
             resource = null;
@@ -68,7 +68,7 @@ public class MemberServiceImpl implements MemberService {
 
         memberChanged.setMember(fullInfoMember);
 
-        if(resource == null || !resource.getId().equals(member.getProfile().getId())) {
+        if(resource == null || !resource.equals(member.getProfile())) {
             if(member.getProfile() != null)
                 resourceRepository.delete(member.getProfile());
             memberChanged.setRemovedResource(member.getProfile());

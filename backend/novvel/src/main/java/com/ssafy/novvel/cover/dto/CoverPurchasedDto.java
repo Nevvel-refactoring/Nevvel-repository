@@ -1,15 +1,12 @@
 package com.ssafy.novvel.cover.dto;
 
 import com.ssafy.novvel.cover.entity.Cover;
-import com.ssafy.novvel.cover.util.DefaultImage;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
