@@ -49,8 +49,7 @@ interface AssetSwiperProps {
 
 function AssetSwiper(props: AssetSwiperProps) {
 
-  // const[axiosReloader, setAxiosReloaer] = useState<boolean>(false)
-  
+
   // 에셋 10개 받아오기
   const assetSwiperData = props.content.slice(0, 10);
 

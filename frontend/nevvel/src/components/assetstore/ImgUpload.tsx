@@ -12,8 +12,8 @@ import springApi from "@/src/api";
 type assetstoreProps = {
   modalOpen: boolean;
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-};
-
+  setAfterUpload: React.Dispatch<React.SetStateAction<boolean>>;
+}
 // type TagType = {
 //   tagName: string,
 // }
@@ -178,6 +178,7 @@ function ImgUpload(props:assetstoreProps) {
     }
 
     props.setModalOpen(false)
+    props.setAfterUpload(true)
   }
 
   // useEffect(()=>{

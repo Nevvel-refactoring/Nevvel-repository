@@ -8,6 +8,7 @@ import springApi from "@/src/api";
 type assetstoreProps = {
   modalOpen: boolean;
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setAfterUpload: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 type AudType = {
@@ -152,7 +153,10 @@ function AudUpload(props:assetstoreProps) {
       alert('업로드 과정에서 문제가 발생하였습니다.')
     }
 
-    props.setModalOpen(false)  }
+    props.setModalOpen(false)
+    props.setAfterUpload(true)
+    
+  }
   
   // 제출버튼 비활성화
   const UnsubmitAsset = () => {

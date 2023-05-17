@@ -35,7 +35,12 @@ interface Asset {
   uploader : AssetUploader
 }
 
-function AssetstoreAssetList() {
+interface AssetstorePorps {
+  afterUpload : boolean;
+  setAfterUpload : React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+function AssetstoreAssetList(props : AssetstorePorps) {
 
   const [AssetData, setAssetData] = useState<Array<Asset>>([]);
 
@@ -61,11 +66,15 @@ function AssetstoreAssetList() {
       console.log(res.data.content)
       setAssetData(res.data.content)
       setAxiosReloaer(false)
+      props.setAfterUpload(false)
     }
     if (axiosReloader === true) {
       getAssetList()
     }
-  },[axiosReloader])  
+    if (axiosReloader === true){
+      getAssetList()
+    }
+  },[axiosReloader, props.afterUpload])  
 
 
 

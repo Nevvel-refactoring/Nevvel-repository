@@ -86,6 +86,9 @@ function assetstore({ content }: any) {
     setImgAudTrigger("IMAGE")
   }
 
+  // 에셋 업로드 후 axios 트리거
+  const [afterUpload, setAfterUpload] = useState<boolean>(false)
+
   return (
     <Wrapper>
       {content}
@@ -140,7 +143,10 @@ function assetstore({ content }: any) {
         <p>|</p>
         <PopNewSwitchBtn>최신순</PopNewSwitchBtn>
       </SwitchDiv>
-      <AssetstoreAssetList />
+      <AssetstoreAssetList
+        afterUpload={afterUpload}
+        setAfterUpload={setAfterUpload}
+      />
 
       {/* 여기부터 업로드 모달 */}
       {modalOpen ? (
@@ -168,9 +174,9 @@ function assetstore({ content }: any) {
                 <ModalCloseBtn onClick={CloseAssetUpload}>닫기</ModalCloseBtn>
               </ModalDiv1>
             ) : modalChange === 1 ? (
-              <ImgUpload modalOpen={modalOpen} setModalOpen={setModalOpen} />
+              <ImgUpload modalOpen={modalOpen} setModalOpen={setModalOpen} setAfterUpload={setAfterUpload} />
             ) : (
-              <AudUpload modalOpen={modalOpen} setModalOpen={setModalOpen} />
+              <AudUpload modalOpen={modalOpen} setModalOpen={setModalOpen} setAfterUpload={setAfterUpload} />
             )
           }
         />
