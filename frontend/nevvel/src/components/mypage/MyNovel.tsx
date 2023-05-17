@@ -14,7 +14,7 @@ interface Content {
   status: string;
   thumbnail: string;
   genre: string;
-  coverWriter: {
+  writer: {
     id: number;
     nickname: string;
   };
@@ -63,6 +63,7 @@ function MyNovel() {
   const [uploadedMore, setUploadedMore] = useState("");
   useEffect(() => {
     const getUploadedCovers = async () => {
+      // const res = await axios.get(`http://localhost:8080/api/covers/uploader/${userInfoStatus?.id}`)
       const res = await springApi.get(`/covers/uploader/${userInfoStatus?.id}`);
       // console.log(res.data);
       setUploadedNovel(res.data);
@@ -91,6 +92,7 @@ function MyNovel() {
   const [purchasedMore, setPurchasedMore] = useState("");
   useEffect(() => {
     const getPurchasedCovers = async () => {
+      // const res = await axios.get("http://localhost:8080/api/covers/purchased-on")
       const res = await NewvelApi.purchasedCovers();
       // console.log(res.data);
       setPurchasedNovel(res.data);
@@ -124,8 +126,8 @@ function MyNovel() {
                     key={index}
                     id={novel.id}
                     title={novel.title}
-                    writer={novel.coverWriter.nickname}
-                    writerId={novel.coverWriter.id}
+                    writer={novel.writer.nickname}
+                    writerId={novel.writer.id}
                     genre={novel.genre}
                     thumbnail={novel.thumbnail}
                   />
@@ -148,8 +150,8 @@ function MyNovel() {
                     key={index}
                     id={novel.id}
                     title={novel.title}
-                    writer={novel.coverWriter.nickname}
-                    writerId={novel.coverWriter.id}
+                    writer={novel.writer.nickname}
+                    writerId={novel.writer.id}
                     genre={novel.genre}
                     thumbnail={novel.thumbnail}
                   />

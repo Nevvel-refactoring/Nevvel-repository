@@ -16,7 +16,7 @@ interface Novel {
     status: string;
     thumbnail: string;
     genre: string;
-    coverWriter: {
+    writer: {
       id: number;
       nickname: string;
     };
@@ -63,7 +63,7 @@ function UploadedNovel() {
   useEffect(() => {
     const getPurchasedCovers = async () => {
       const res = await NewvelApi.purchasedCovers();
-      console.log(res.data);
+      // console.log(res.data);
       setPurchasedNovel(res.data);
     };
     if (!loginStatus) {
@@ -96,8 +96,8 @@ function UploadedNovel() {
                 key={index}
                 id={novel.id}
                 title={novel.title}
-                writer={novel.coverWriter.nickname}
-                writerId={novel.coverWriter.id}
+                writer={novel.writer.nickname}
+                writerId={novel.writer.id}
                 genre={novel.genre}
                 thumbnail={novel.thumbnail}
               />

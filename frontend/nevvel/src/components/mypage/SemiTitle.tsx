@@ -47,8 +47,11 @@ const SemiTitle = styled.div`
   /* font-weight: 800; */
 `;
 
-const ViewMore = styled.div`
+const ViewMore = styled.button`
   font-size: 0.8rem;
-  border-bottom: 1px solid;
+  /* border-bottom: 1px solid; */
+  border: none;
+  background: none;
+  text-decoration: underline;
   cursor: pointer;
 `;
