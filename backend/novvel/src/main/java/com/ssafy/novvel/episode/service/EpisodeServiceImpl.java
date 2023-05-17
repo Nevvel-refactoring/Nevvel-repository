@@ -99,7 +99,7 @@ public class EpisodeServiceImpl implements EpisodeService {
         Episode episode = episodeRepository.findById(episodeId).orElseThrow(
                 () -> new NotFoundException("Episode가 없습니다."));
 
-        Cover cover = coverRepository.findById(episode.getCover().getId()).orElseThrow(
+        Cover cover = coverRepository.findJoinMemberById(episode.getCover().getId()).orElseThrow(
                 () -> new NotFoundException("시리즈가 없습니다."));
 
         // 현재 유저가 에피소드의 작성자인지 -> 아니라면 구매자인지 확인
@@ -141,7 +141,7 @@ public class EpisodeServiceImpl implements EpisodeService {
         // 읽은 소설 처리하기
         readEpisodeRepository.save(new ReadEpisode(episode, member));
 
-        return new EpisodeContextDto(cover.getId(), cover.getTitle(), episode.getTitle(),
+        return new EpisodeContextDto(cover.getId(), cover.getMember().getId(), cover.getTitle(), episode.getTitle(),
                 episode.getId(), episode.getPoint(), context.getContents(),
                 episodeRepository.findPrevEpisodeId(episode.getPublishedDate(), cover, episodeId),
                 episodeRepository.findNextEpisodeId(episode.getPublishedDate(), cover, episodeId));
