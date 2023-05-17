@@ -198,7 +198,7 @@ const MyPage = styled.div`
 `;
 
 const ImageDiv = styled.div`
-  border: 1px solid ${({ theme }) => theme.color.text1};
+  /* border: 1px solid ${({ theme }) => theme.color.text1}; */
   border-radius: 100rem;
   object-fit: cover;
   margin-top: 2rem;
