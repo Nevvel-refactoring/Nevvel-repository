@@ -92,14 +92,14 @@ declare global {
 function Purchase() {
   // 로그인 여부 확인
   const loginStatus = useAtomValue(loginAtom);
+  const router = useRouter();
 
   // 로그아웃 상태인 경우 메인페이지로 리다이렉트
-  const router = useRouter();
-  useEffect(() => {
-    if (!loginStatus) {
-      router.push({ pathname: "/" });
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (!loginStatus) {
+  //     router.push({ pathname: "/" });
+  //   }
+  // }, []);
 
   const [amount, setAmount] = useState<number>(1000);
 
