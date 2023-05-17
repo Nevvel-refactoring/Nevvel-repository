@@ -15,7 +15,7 @@ public class CoverPurchasedDto {
     private String title;
     private String thumbnail;
     private String genre;
-    private CoverWriter coverWriter;
+    private CoverWriter writer;
 
     public CoverPurchasedDto(Cover cover, String thumbnail, String genre,
         Long memberId, String memberNickname) {
@@ -23,6 +23,6 @@ public class CoverPurchasedDto {
         this.title = cover.getTitle();
         this.thumbnail = thumbnail;
         this.genre = genre;
-        this.coverWriter = new CoverWriter(memberId, memberNickname);
+        this.writer = new CoverWriter(memberId, memberNickname);
     }
 }
