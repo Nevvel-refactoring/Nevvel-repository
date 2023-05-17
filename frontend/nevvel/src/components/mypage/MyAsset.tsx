@@ -68,7 +68,7 @@ function MyAsset() {
   useEffect(() => {
     const getPurchasedAssets = async () => {
       const res = await NewvelApi.purchasedAssets();
-      // console.log(res.data);
+      console.log(res.data);
       setPurchasedAsset(res.data);
       if (res.data.empty) {
         setPurchasedMore("");
