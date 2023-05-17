@@ -17,7 +17,7 @@ function MyProfile() {
       // console.log(res.data.description);
       setUserDescription(res.data.description);
     };
-    // getUserData();
+    getUserData();
   }, []);
 
   return (

@@ -197,4 +197,7 @@ const EmptyDiv = styled.div`
   text-align: center;
 `;
 
-const AssetDiv = styled.div``;
+const AssetDiv = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+`;
