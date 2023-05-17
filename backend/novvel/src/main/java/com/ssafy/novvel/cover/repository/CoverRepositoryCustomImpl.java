@@ -9,16 +9,19 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.ssafy.novvel.cover.dto.CoverSearchConditions;
 import com.ssafy.novvel.cover.dto.CoverSortType;
 import com.ssafy.novvel.cover.dto.CoverWithConditions;
+import com.ssafy.novvel.cover.dto.CoverWriter;
 import com.ssafy.novvel.cover.dto.EpisodeInfoDto;
 import com.ssafy.novvel.cover.dto.QCoverWithConditions;
 import com.ssafy.novvel.cover.dto.QEpisodeInfoDto;
 import com.ssafy.novvel.cover.entity.Cover;
 import com.ssafy.novvel.cover.entity.CoverStatusType;
+import com.ssafy.novvel.cover.util.DefaultImage;
 import com.ssafy.novvel.episode.entity.EpisodeStatusType;
 import com.ssafy.novvel.member.entity.Member;
 import com.ssafy.novvel.transactionhistory.entity.PointChangeType;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -34,19 +37,22 @@ import static com.ssafy.novvel.transactionhistory.entity.QTransactionHistory.tra
 public class CoverRepositoryCustomImpl implements CoverRepositoryCustom {
 
     private final EntityManager entityManager;
+    private final DefaultImage defaultImage;
 
-    public CoverRepositoryCustomImpl(EntityManager entityManager) {
+    public CoverRepositoryCustomImpl(EntityManager entityManager,
+        DefaultImage defaultImage) {
         this.entityManager = entityManager;
+        this.defaultImage = defaultImage;
     }
 
     @Override
     public Page<CoverWithConditions> searchCover(CoverSearchConditions coverSearchConditions,
         Pageable pageable) {
 
-        JPAQuery<List<CoverWithConditions>> query = new JPAQuery<>(entityManager);
+        JPAQuery<List<Cover>> query = new JPAQuery<>(entityManager);
         JPAQuery<Long> countQuery = new JPAQuery<>(entityManager);
 
-        List<CoverWithConditions> content = query.select(new QCoverWithConditions(cover))
+        List<Cover> content = query.select(cover)
             .from(cover)
             .leftJoin(cover.resource)
             .fetchJoin()
@@ -75,7 +81,7 @@ public class CoverRepositoryCustomImpl implements CoverRepositoryCustom {
             .fetchOne();
 
         return new PageImpl<>(
-            content,
+            content.stream().map(this::covertCoverWithConditions).collect(Collectors.toList()),
             pageable,
             count == null ? 0 : count
         );
@@ -100,10 +106,10 @@ public class CoverRepositoryCustomImpl implements CoverRepositoryCustom {
     @Override
     public Page<CoverWithConditions> findCoverById(Member member, Long id, Pageable pageable) {
 
-        JPAQuery<List<CoverWithConditions>> query = new JPAQuery<>(entityManager);
+        JPAQuery<List<Cover>> query = new JPAQuery<>(entityManager);
         JPAQuery<Long> countQuery = new JPAQuery<>(entityManager);
 
-        List<CoverWithConditions> content = query.select(new QCoverWithConditions(cover))
+        List<Cover> content = query.select(cover)
             .from(cover)
             .leftJoin(cover.resource)
             .fetchJoin()
@@ -130,7 +136,7 @@ public class CoverRepositoryCustomImpl implements CoverRepositoryCustom {
             .fetchOne();
 
         return new PageImpl<>(
-            content,
+            content.stream().map(this::covertCoverWithConditions).collect(Collectors.toList()),
             pageable,
             count == null ? 0 : count
         );
@@ -173,12 +179,14 @@ public class CoverRepositoryCustomImpl implements CoverRepositoryCustom {
 
     private void checkMemberForSelect(JPAQuery<EpisodeInfoDto> query, Member member) {
         if (member == null) {
-            query.select(new QEpisodeInfoDto(episode.id, episode.title, episode.point, episode.viewCount,
-                episode.publishedDate));
+            query.select(
+                new QEpisodeInfoDto(episode.id, episode.title, episode.point, episode.viewCount,
+                    episode.publishedDate));
         } else {
-            query.select(new QEpisodeInfoDto(episode.id, episode.title, episode.point, episode.viewCount,
-                episode.publishedDate, transactionHistory.pointChangeType,
-                readEpisode.member.id.isNotNull()));
+            query.select(
+                new QEpisodeInfoDto(episode.id, episode.title, episode.point, episode.viewCount,
+                    episode.publishedDate, transactionHistory.pointChangeType,
+                    readEpisode.member.id.isNotNull()));
         }
     }
 
@@ -213,7 +221,7 @@ public class CoverRepositoryCustomImpl implements CoverRepositoryCustom {
     }
 
     private Predicate checkWriter(Member writer, Member member) {
-        if(member == null || !writer.getId().equals(member.getId())) {
+        if (member == null || !writer.getId().equals(member.getId())) {
             return episode.statusType.ne(EpisodeStatusType.TEMPORARY);
         }
         return null;
@@ -228,5 +236,30 @@ public class CoverRepositoryCustomImpl implements CoverRepositoryCustom {
         return booleanExpression;
     }
 
+    private CoverWithConditions covertCoverWithConditions(Cover cover) {
 
+        String thumbnail = null;
+        if (cover.getResource() != null) {
+            thumbnail = cover.getResource().getThumbnailUrl();
+        }
+
+        String genreName = null;
+        if (cover.getGenre() != null) {
+            genreName = cover.getGenre().getName();
+        }
+
+        return CoverWithConditions.builder()
+            .id(cover.getId())
+            .title(cover.getTitle())
+            .status(cover.getCoverStatusType())
+            .thumbnail(thumbnail == null ? defaultImage.getImageByGenreName(genreName) : thumbnail)
+            .genre(genreName)
+            .writerId(cover.getMember().getId())
+            .writerNickname(cover.getMember().getNickname())
+            .isUploaded(cover.getLastPublishDate() == null ? Boolean.FALSE
+                : cover.getLastPublishDate().isAfter(LocalDate.now().minusDays(7L)))
+            .isNew(cover.getFirstPublishDate() == null ? Boolean.FALSE
+                : cover.getFirstPublishDate().isAfter(LocalDate.now().minusDays(7L)))
+            .build();
+    }
 }
