@@ -71,7 +71,7 @@ function MyAsset() {
   useEffect(() => {
     const getPurchasedAssets = async () => {
       const res = await NewvelApi.purchasedAssets();
-      console.log(res.data);
+      // console.log(res.data);
       setPurchasedAsset(res.data);
       if (res.data.empty) {
         setPurchasedMore("");
@@ -83,7 +83,7 @@ function MyAsset() {
   }, []);
   // 구매한 에셋 5개 받아오기
   useEffect(() => {
-    console.log(purchasedAsset?.content?.slice(0, 5));
+    // console.log(purchasedAsset?.content?.slice(0, 5));
     setPurchasedAsset5(purchasedAsset?.content?.slice(0, 5));
   }, [purchasedAsset]);
 
@@ -197,7 +197,4 @@ const EmptyDiv = styled.div`
   text-align: center;
 `;
 
-const AssetDiv = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-`;
+const AssetDiv = styled.div``;

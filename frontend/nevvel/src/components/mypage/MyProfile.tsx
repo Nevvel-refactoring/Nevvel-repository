@@ -60,8 +60,8 @@ const ProfileImgDiv = styled.div`
 `;
 
 const ProfileImg = styled.img`
-  width: 100%;
-  height: 100%;
+  width: 128px;
+  height: 128px;
   border-radius: 100rem;
 `;
 
