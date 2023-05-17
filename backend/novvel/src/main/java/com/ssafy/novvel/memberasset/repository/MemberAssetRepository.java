@@ -24,7 +24,12 @@ public interface MemberAssetRepository extends JpaRepository<MemberAsset, Long> 
 
     @Query(value = "SELECT ma FROM MemberAsset ma LEFT JOIN ma.asset WHERE ma.member = :member AND ma.type = 'BUY' AND ma.asset.type = :assetType",
             countQuery = "SELECT COUNT(ma) FROM MemberAsset ma LEFT JOIN ma.asset WHERE ma.member = :member AND ma.type = 'BUY' AND ma.asset.type = :assetType")
-    Page<MemberAsset> findPageByMember(@Param("assetType")AssetType assetType, @Param("member") Member member, Pageable pageable);
+    Page<MemberAsset> findPageByMember(@Param("assetType") AssetType assetType, @Param("member") Member member, Pageable pageable);
+
+    @Query(value = "SELECT ma FROM MemberAsset ma LEFT JOIN ma.asset WHERE ma.member = :member AND ma.type = 'BUY'",
+            countQuery = "SELECT COUNT(ma) FROM MemberAsset ma LEFT JOIN ma.asset WHERE ma.member = :member AND ma.type = 'BUY'")
+    Page<MemberAsset> findPageByMember(@Param("member") Member member, Pageable pageable);
+
     Optional<MemberAsset> findByAssetAndMember(Asset asset, Member member);
 
 }

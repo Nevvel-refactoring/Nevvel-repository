@@ -29,7 +29,7 @@ public interface AssetService {
     Page<AssetSearchDto> searchAsset(AssetFilterDto assetFilterDto, Member member, Pageable pageable);
     Page<AssetSearchDto> searchAssetByKeywordAndTags(AssetSearchReqKeywordTagDto assetSearchReqKeywordTagDto, Member member, Pageable pageable);
 
-    Page<AssetSearchDto> searchAssetByUploader(Long uploaderId, Member member, Pageable pageable);
+    Page<AssetSearchDto> searchAssetByUploader(Long uploaderId, Member member, AssetType assetType, Pageable pageable);
 
     Page<Tag> findPageTags(Pageable pageable);
 

@@ -202,7 +202,7 @@ public class AssetServiceTest {
         Mockito.doReturn(findByMemberResult).when(assetRepository).findByMember(members.get(0), pageable);
         Mockito.doReturn(findByAssetInResult).when(assetTagRepository).findByAssetIn(findByMemberResult.getContent());
         Mockito.doReturn(findByMemberAndAssetInResult).when(memberAssetRepository).findByMemberAndAssetIn(members.get(1), findByMemberResult.getContent());
-        Page<AssetSearchDto> assetSearchDtos = assetService.searchAssetByUploader(0L, members.get(1), pageable);
+        Page<AssetSearchDto> assetSearchDtos = assetService.searchAssetByUploader(0L, members.get(1), null, pageable);
 
         //then
         Mockito.verify(memberRepository, Mockito.times(1)).findById(Mockito.any(Long.class));

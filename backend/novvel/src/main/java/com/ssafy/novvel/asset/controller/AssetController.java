@@ -81,11 +81,12 @@ public class AssetController {
     @GetMapping("/uploader/{memberId}")
     @Operation(summary = "member_id가 등록한 에셋을 반환")
     public ResponseEntity<Page<AssetSearchDto>> searchByMemberId(@PathVariable("memberId") Long memberId,
+                                                                 @RequestParam(value = "assettype", required = false) AssetType assetType,
                                                                  @AuthenticationPrincipal Object principal,
                                                                  Pageable pageable) {
         Member member = ControllerUtils.isCustomUserDetails(principal);
         Page<AssetSearchDto> assetSearchDtoPage =
-                assetService.searchAssetByUploader(memberId, member, pageable);
+                assetService.searchAssetByUploader(memberId, member, assetType, pageable);
 
         return new ResponseEntity<>(assetSearchDtoPage, HttpStatus.OK);
     }
@@ -102,7 +103,7 @@ public class AssetController {
 
     @GetMapping("/purchased-on")
     @Operation(summary = "구매한 에셋 보기", description = "<strong>내가 구매한 에셋</strong>을 반환 합니다.")
-    public ResponseEntity<Page<AssetSearchDto>> myAssets(@RequestParam("assettype") AssetType assetType,
+    public ResponseEntity<Page<AssetSearchDto>> myAssets(@RequestParam(value = "assettype", required = false) AssetType assetType,
                                                          @AuthenticationPrincipal CustomUserDetails customUserDetails,
                                                          Pageable pageable) {
 

@@ -29,6 +29,7 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -143,11 +144,18 @@ public class AssetServiceImpl implements AssetService {
 
 
     @Override
-    public Page<AssetSearchDto> searchAssetByUploader(Long uploaderId, Member member, Pageable pageable) {
+    public Page<AssetSearchDto> searchAssetByUploader(Long uploaderId, Member member, AssetType assetType, Pageable pageable) {
         member = (member == null) ? null : member;
         Member uploader = memberRepository.findById(uploaderId).orElseThrow(() -> new NotFoundException("uploader not found"));
 
-        Page<Asset> assetPage = assetRepository.findByMember(uploader, pageable);
+        //assetType이 없으면 전체조회
+        Page<Asset> assetPage;
+        if (assetType == null) {
+            assetPage = assetRepository.findByMember(uploader, pageable);
+        } else {
+            assetPage = assetRepository.findByMemberAndAssetType(uploader, assetType, pageable);
+        }
+
         List<AssetSearchDto> assetSearchDtos = assetPage.getContent().stream()
                 .map(asset -> new AssetSearchDto(asset))
                 .collect(Collectors.toList());
@@ -172,16 +180,25 @@ public class AssetServiceImpl implements AssetService {
 
     @Override
     public Page<AssetSearchDto> searchMyAssets(AssetType assetType, Member member, Pageable pageable) {
-        Page<MemberAsset> assetPage = memberAssetRepository.findPageByMember(assetType, member, pageable);
+        Page<MemberAsset> assetPage;
+        if (assetType == null) {
+            assetPage = memberAssetRepository.findPageByMember(member, pageable);
+        } else {
+            assetPage = memberAssetRepository.findPageByMember(assetType, member, pageable);
+        }
+
         List<Asset> assets = assetPage.getContent().stream()
                 .map(MemberAsset::getAsset)
                 .collect(Collectors.toList());
         assets = assetRepository.findJoinMemberByAssets(assets);
 
+        List<AssetSearchDto> result = assets.stream()
+                .map(asset -> new AssetSearchDto(asset, true))
+                .collect(Collectors.toList());
+        result = findTags(assets, result);
+
         return new PageImpl<>(
-                assets.stream()
-                        .map(asset -> new AssetSearchDto(asset, true))
-                        .collect(Collectors.toList()),
+                result,
                 pageable,
                 assetPage.getTotalPages()
         );
@@ -197,7 +214,6 @@ public class AssetServiceImpl implements AssetService {
                 }
             }
         }
-
 
         return assetSearchDtos;
     }
