@@ -39,10 +39,20 @@ function EditorMainAssetContainer({
       if (res) {
         console.log(res);
         setAssetStore(res.data.content);
+        setAxiosReloaer(false)
     }}catch(error){
       console.log(error)
     }
   };
+
+  // axios reloaer
+  const[axiosReloader, setAxiosReloaer] = useState<boolean>(false)
+
+  useEffect(() => {
+    if (axiosReloader === true){
+      getAssetStoreData();
+    }
+  },[axiosReloader])
 
   return (
     <AssetContainer>
@@ -75,7 +85,7 @@ function EditorMainAssetContainer({
           />
         )}
       </AssetStoreContainer>
-      <AssetStoreContainer>{assetOpen === 3 && <EditorMainAssetTotalList assetStore={assetStore} />}</AssetStoreContainer>
+      <AssetStoreContainer>{assetOpen === 3 && <EditorMainAssetTotalList assetStore={assetStore} setAxiosReloaer={setAxiosReloaer} />}</AssetStoreContainer>
     </AssetContainer>
   );
 }

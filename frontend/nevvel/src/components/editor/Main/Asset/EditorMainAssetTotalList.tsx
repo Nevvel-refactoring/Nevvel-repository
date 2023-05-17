@@ -7,11 +7,14 @@ import AssetDetailModal from "@/src/components/assetstore/AssetDetailModal";
 
 type EditorMainAssetTotalListProps = {
   assetStore: Asset[];
+  setAxiosReloaer: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 function EditorMainAssetTotalList({
   assetStore,
+  setAxiosReloaer,
 }: EditorMainAssetTotalListProps) {
+
 
    // 에셋 디테일 모달 오픈 트리거
   const [modalOpen, setModalOpen] = useState<boolean>(false);
@@ -71,6 +74,7 @@ function EditorMainAssetTotalList({
               openModalData={openModalData}
               setModalOpen={setModalOpen}
               modalStarter={modalStarter}
+              setAxiosReloaer={setAxiosReloaer}  
             />
           }
         />

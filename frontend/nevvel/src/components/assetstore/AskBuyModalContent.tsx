@@ -6,10 +6,12 @@ import springApi from "@/src/api";
 type ModalonModalProps = {
   setModalonModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setModalChanger: React.Dispatch<React.SetStateAction<boolean>>;
+  setBuyBtnChanger : React.Dispatch<React.SetStateAction<boolean>>;
   AssetId : number
+  setAxiosReloaer : React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-function AskBuyModalContent({setModalonModalOpen, setModalChanger, AssetId} : ModalonModalProps) {
+function AskBuyModalContent({setModalonModalOpen, setModalChanger, AssetId, setBuyBtnChanger, setAxiosReloaer} : ModalonModalProps) {
 
   const BuyAsset = () => {
     // axios
@@ -17,6 +19,8 @@ function AskBuyModalContent({setModalonModalOpen, setModalChanger, AssetId} : Mo
       .then(res => {
         if (res.status === 201) {
           setModalChanger(true)
+          setBuyBtnChanger(true)
+          setAxiosReloaer(true)
         } else if (res.status === 200) {
           alert('포인트 잔액이 부족합니다')
           setModalonModalOpen(false)
@@ -32,6 +36,7 @@ function AskBuyModalContent({setModalonModalOpen, setModalChanger, AssetId} : Mo
 
   const CloseBuyModal = () => {
     setModalonModalOpen(false)
+    setBuyBtnChanger(true)
   }
 
   return(

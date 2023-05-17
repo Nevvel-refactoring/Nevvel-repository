@@ -89,7 +89,7 @@ function TagSearchBar(props:ImageUploadProps){
         props.AddTag(keyword.trim())
       }
     }
-    setKeyword("")
+    // setKeyword("")
   }
 
 

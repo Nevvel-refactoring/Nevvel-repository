@@ -443,13 +443,13 @@ const AssetInfoInput3 = styled.input`
 
 
 const TagRowDiv = styled.div`
-  width: 14rem;
-  height: 4rem;
+  width: 15rem;
+  height: 6rem;
   display: flex;
   flex-direction: row;
-  justify-content: left;
+  justify-content: flex-start;
   margin-top: 0.5rem;
-  white-space: nowrap;
+  flex-wrap: wrap;
 `
 
 // 에셋카드 재활용
@@ -467,6 +467,7 @@ const CardInfo2Div = styled.div`
   justify-content: center;
   margin-left: 0.5rem;
   font-size: 1rem;
+  margin-top: 0.2rem;
 `
 
 const ModalCloseBtn = styled.button`

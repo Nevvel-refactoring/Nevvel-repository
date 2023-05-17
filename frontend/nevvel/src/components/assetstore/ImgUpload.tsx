@@ -456,11 +456,13 @@ const ImgDelBtn = styled.button`
 
 const TagRowDiv = styled.div`
   width: 15rem;
-  height: 2.5rem;
+  height: 3rem;
   display: flex;
   flex-direction: row;
-  justify-content: left;
+  justify-content: flex-start;
+  /* align-items: center; */
   margin-top: 0.5rem;
+  flex-wrap: wrap;
 `
 
 // 에셋카드 재활용
@@ -478,6 +480,7 @@ const CardInfo2Div = styled.div`
   justify-content: center;
   margin-left: 0.5rem;
   font-size: 1rem;
+  margin-top: 0.2rem;
 `
 
 const ModalCloseBtn = styled.button`

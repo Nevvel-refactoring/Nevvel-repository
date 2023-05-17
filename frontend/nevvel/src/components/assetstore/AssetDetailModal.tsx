@@ -35,12 +35,14 @@ type ModalDataProps = {
   };
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   modalStarter: boolean;
+  setAxiosReloaer : React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 function AssetDetailModal({
   openModalData,
   setModalOpen,
-  modalStarter
+  modalStarter,
+  setAxiosReloaer,
   } : ModalDataProps) {
 
   // 오디오 재생
@@ -70,12 +72,16 @@ function AssetDetailModal({
   // 에셋 아이디 정의
   const AssetId = openModalData.id
 
+
   // 구매버튼으로 모달 위의 모달 열기
   const [modalonModalOpen, setModalonModalOpen] = useState<boolean>(false)
 
   const OpenModalonModal = () => {
     setModalonModalOpen(true)
   }
+
+  // 구매버튼 체인저
+  const [buyBtnChanger, setBuyBtnChanger] = useState<boolean>(openModalData.isAvailable)
 
   // 모달 위의 모달 changer
   const [modalChanger, setModalChanger] = useState<boolean>(false)
@@ -184,7 +190,7 @@ function AssetDetailModal({
               <br />
               <br />
               {
-                openModalData.isAvailable?
+                buyBtnChanger?
                 <UnModalBtn>구매완료</UnModalBtn>
                 :
                 <ModalBtn onClick={OpenModalonModal}>구매</ModalBtn>
@@ -279,6 +285,8 @@ function AssetDetailModal({
                 setModalonModalOpen={setModalonModalOpen}
                 setModalChanger={setModalChanger}
                 AssetId={AssetId}
+                setBuyBtnChanger={setBuyBtnChanger}
+                setAxiosReloaer={setAxiosReloaer}
               />
             )
           }

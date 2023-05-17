@@ -51,6 +51,24 @@ function AssetstoreAssetList() {
   // console.log('이건데', AssetData)
 
 
+  // axios reloader
+
+  const[axiosReloader, setAxiosReloaer] = useState<boolean>(false)
+
+  useEffect(() => {
+    const getAssetList = async() => {
+      const res = await springApi.get(`/assets?assettype=IMAGE&pageNum=1&searchtype=ALL&sort =downloadCount`)
+      console.log(res.data.content)
+      setAssetData(res.data.content)
+      setAxiosReloaer(false)
+    }
+    if (axiosReloader === true) {
+      getAssetList()
+    }
+  },[axiosReloader])  
+
+
+
   // 에셋 디테일 모달 오픈 트리거
   const [modalOpen, setModalOpen] = useState<boolean>(false);
 
@@ -76,6 +94,8 @@ function AssetstoreAssetList() {
     }
   })
 
+
+  
   // 모달의 모달이 어떻게 나올지 결정해주는 인자
   const [modalStarter, setModalStarter] = useState<boolean>(true)
 
@@ -116,6 +136,7 @@ function AssetstoreAssetList() {
               openModalData={openModalData}
               setModalOpen={setModalOpen}
               modalStarter={modalStarter}
+              setAxiosReloaer={setAxiosReloaer}              
             />
           }
         />
