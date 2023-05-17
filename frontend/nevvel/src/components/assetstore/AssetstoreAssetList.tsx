@@ -38,12 +38,11 @@ interface Asset {
 function AssetstoreAssetList() {
 
   const [AssetData, setAssetData] = useState<Array<Asset>>([]);
-  const [assetTypeTrigger, setAssetTypeTrigger] = useState<string>("IMAGE")
 
   // axios로 데이터 get받아오기
   useEffect(() => {
     const getAssetList = async() => {
-      const res = await springApi.get(`/assets?assettype=${assetTypeTrigger}&pageNum=1&searchtype=ALL&sort =downloadCount`)
+      const res = await springApi.get(`/assets?assettype=IMAGE&pageNum=1&searchtype=ALL&sort =downloadCount`)
       console.log(res.data.content)
       setAssetData(res.data.content)
     }
@@ -51,12 +50,6 @@ function AssetstoreAssetList() {
   },[])
   // console.log('이건데', AssetData)
 
-  const changeImg = () => {
-    setAssetTypeTrigger("IMAGE")
-  }
-  const changeSound = () => {
-    setAssetTypeTrigger("AUDIO")
-  }
 
   // 에셋 디테일 모달 오픈 트리거
   const [modalOpen, setModalOpen] = useState<boolean>(false);
@@ -88,11 +81,6 @@ function AssetstoreAssetList() {
 
   return(
     <div>
-      <div>
-        {/* 이미지 데이터/사운드 데이터 스위치 버튼 */}
-        <button onClick={changeImg}>이미지</button>
-        <button onClick={changeSound}>사운드</button>
-      </div>
       <Wrapper>
         {
           AssetData.map((AssetData) => {

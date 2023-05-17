@@ -67,6 +67,9 @@ function AssetDetailModal({
     audioRef.current.pause()
   }
 
+  // 에셋 아이디 정의
+  const AssetId = openModalData.id
+
   // 구매버튼으로 모달 위의 모달 열기
   const [modalonModalOpen, setModalonModalOpen] = useState<boolean>(false)
 
@@ -275,6 +278,7 @@ function AssetDetailModal({
               <AskBuyModalContent
                 setModalonModalOpen={setModalonModalOpen}
                 setModalChanger={setModalChanger}
+                AssetId={AssetId}
               />
             )
           }

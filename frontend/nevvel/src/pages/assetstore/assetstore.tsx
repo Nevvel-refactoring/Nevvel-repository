@@ -20,6 +20,9 @@ import TagAddModal from "@/src/components/assetstore/TagAddModal";
 import type { GetServerSideProps, GetServerSidePropsContext, NextPage } from "next"
 import { Props } from "next/dist/client/script";
 
+import { BiImage } from "react-icons/bi";
+import { AiOutlineSound } from "react-icons/ai";
+
 
 type TagData = {
   id: number;
@@ -72,6 +75,17 @@ function assetstore({ content }: any) {
     console.log('되는데')
   };
 
+  // 이미지/사운드 버튼 스위치
+  const [imgAudTrigger, setImgAudTrigger] = useState<string>("IMAGE")
+
+  const SwitchtoAud = () => {
+    setImgAudTrigger("AUDIO")
+  }
+
+  const SwitchtoImg = () => {
+    setImgAudTrigger("IMAGE")
+  }
+
   return (
     <Wrapper>
       {content}
@@ -86,7 +100,7 @@ function assetstore({ content }: any) {
         </SearchBar>
         <WriteBtn onClick={AssetUpload}>에셋 업로드</WriteBtn>
       </SearchBtnDiv>
-      <RowDiv>
+      <TagRowDiv>
         <CardInfo2Div>
           <TagP>전체</TagP>
         </CardInfo2Div>
@@ -100,8 +114,32 @@ function assetstore({ content }: any) {
         <CardInfo2Div onClick={AddTag} >
           <TagP>+</TagP>
         </CardInfo2Div>
-      </RowDiv>
-
+      </TagRowDiv>
+      <SwitchDiv>
+        {
+          (imgAudTrigger === "IMAGE") ?
+          <ImgAudSwitchDiv>
+            <ClickImgSwitchBtn>
+              <BiImage />
+            </ClickImgSwitchBtn>
+            <AudSwitchBtn onClick={SwitchtoAud}>
+              <AiOutlineSound />
+            </AudSwitchBtn>
+          </ImgAudSwitchDiv>
+          :
+          <ImgAudSwitchDiv>
+            <ImgSwitchBtn onClick={SwitchtoImg}>
+              <BiImage />
+            </ImgSwitchBtn>
+            <ClickAudSwitchBtn>
+              <AiOutlineSound />
+            </ClickAudSwitchBtn>
+          </ImgAudSwitchDiv>
+        }
+        <PopNewSwitchBtn>인기순</PopNewSwitchBtn>
+        <p>|</p>
+        <PopNewSwitchBtn>최신순</PopNewSwitchBtn>
+      </SwitchDiv>
       <AssetstoreAssetList />
 
       {/* 여기부터 업로드 모달 */}
@@ -190,6 +228,9 @@ const Wrapper = styled.div`
   padding-right: 3%;
 `;
 
+
+// 서치바 및 업로드 버튼
+
 const SearchBtnDiv = styled.div`
   width: 87%;
   /* height: 100%; */
@@ -236,13 +277,16 @@ const WriteBtn = styled.button`
   }
 `;
 
-const RowDiv = styled.div`
+
+// 에셋 태그
+
+const TagRowDiv = styled.div`
   width: 87%;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
   margin-top: 2rem;
-  margin-bottom: 1rem;
+  /* margin-bottom: 1rem; */
   height: 6rem;
   flex-wrap: wrap;
 `;
@@ -290,6 +334,67 @@ const TagP = styled.p`
   margin-right: 0.6rem;
   margin-left: 0.6rem;
 `;
+
+
+
+// 스위치 영역
+
+const SwitchDiv = styled.div`
+  width: 87%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  height: 2rem;
+  font-size: 1.2rem;
+  `
+
+// 이미지/오디오 스위치
+const ImgAudSwitchDiv = styled.div`
+  width: 6.2rem;
+  height: 3rem;
+  border: 0.1rem solid #4D4D4D;
+  border-radius: 0.5rem;
+  display: flex;
+`
+
+const ImgSwitchBtn = styled.button`
+  background-color : ${({ theme }) => theme.color.pointText};
+  width: 3rem;
+  height: 100%;
+  font-size: 1rem;
+`
+const ClickImgSwitchBtn = styled.button`
+  width: 3rem;
+  height: 100%;
+  border-right: 0.1rem solid #4D4D4D;
+  background-color: #8385ff;
+`
+const AudSwitchBtn = styled.button`
+  width: 3rem;
+  height: 100%;
+`
+const ClickAudSwitchBtn = styled.button`
+  width: 3rem;
+  height: 100%;
+  border-left: 0.1rem solid #4D4D4D;
+  background-color: #8385ff;
+`
+
+
+// 인기/최신 스위치
+const PopNewSwitchBtn = styled.button`
+  color : ${({ theme }) => theme.color.button};
+  width: 4rem;
+  height: 2rem;
+  font-size: 1.2rem;
+  /* border: 0.1rem solid black; */
+`
+
+
+// 여기서부터 모달
 
 const ModalDiv1 = styled.div`
   /* display: flex;
