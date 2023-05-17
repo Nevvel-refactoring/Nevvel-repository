@@ -31,6 +31,8 @@ export const MyPageModal = ({
 
   // 로그아웃
   const kakaoLogout = () => {
+    setModal(false);
+    onClickProfile();
     axios
       .post("http://k8d1061.p.ssafy.io/api/users/signout")
       .then(() => logoutRoute())
