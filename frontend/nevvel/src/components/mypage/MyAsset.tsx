@@ -2,10 +2,12 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import SemiTitle from "./SemiTitle";
 import styled from "styled-components";
-import { NewvelApi } from "@/src/api";
+import springApi, { NewvelApi } from "@/src/api";
 import AssetCard from "../common/AssetCard";
 import { Modal } from "../common/Modal";
 import AssetDetailModal from "../assetstore/AssetDetailModal";
+import { useAtomValue } from "jotai";
+import { userInfoAtom } from "@/src/store/Login";
 
 interface Content {
   id: number;
@@ -58,7 +60,33 @@ interface Asset {
 }
 
 function MyAsset() {
+  const userInfoStatus = useAtomValue(userInfoAtom);
   // 만든 에셋
+  const [uploadedAsset, setUploadedAsset] = useState<Asset | undefined>(
+    undefined
+  );
+  const [uploadedAsset5, setUploadedAsset5] = useState<Content[] | undefined>(
+    undefined
+  );
+  const [uploadedMore, setUploadedMore] = useState("");
+  useEffect(() => {
+    const getUploadedAssets = async () => {
+      const res = await springApi.get(`/assets/uploader/${userInfoStatus?.id}`);
+      // console.log(res.data);
+      setUploadedAsset(res.data);
+      if (res.data.empty) {
+        setUploadedMore("");
+      } else {
+        setUploadedMore("/myPage/uploadedAsset");
+      }
+    };
+    getUploadedAssets();
+  }, []);
+  // 구매한 에셋 5개 받아오기
+  useEffect(() => {
+    // console.log(uploadedAsset?.content?.slice(0, 5));
+    setUploadedAsset5(uploadedAsset?.content?.slice(0, 5));
+  }, [uploadedAsset]);
 
   // 구매한 에셋
   const [purchasedAsset, setPurchasedAsset] = useState<Asset | undefined>(
@@ -123,7 +151,48 @@ function MyAsset() {
     <AssetWrapper>
       <TitleWrapper>에셋</TitleWrapper>
       <AssetContent>
-        <SemiTitle title="만든 에셋" more="" />
+        <SemiTitle title="생성한 에셋" more={uploadedMore} />
+        <UploadedAssetDiv>
+          {uploadedAsset?.empty ? (
+            <EmptyDiv>생성한 에셋이 존재하지 않습니다.</EmptyDiv>
+          ) : (
+            <AssetDiv>
+              {uploadedAsset5?.map((asset, index: number) => {
+                return (
+                  <AssetCard
+                    key={index}
+                    AssetData={asset}
+                    id={asset.id}
+                    title={asset.title}
+                    type={asset.type}
+                    thumbnail={asset.thumbnail}
+                    url={asset.url}
+                    tags={asset.tags}
+                    setModalOpen={setModalOpen}
+                    setOpenModalData={setOpenModalData}
+                  />
+                );
+              })}
+            </AssetDiv>
+          )}
+          {/* 모달 */}
+          {modalOpen ? (
+            <Modal
+              modal={modalOpen}
+              setModal={setModalOpen}
+              width="800"
+              height="710"
+              element={
+                <AssetDetailModal
+                  openModalData={openModalData}
+                  setModalOpen={setModalOpen}
+                  modalStarter={modalStarter}
+                  setAxiosReloaer={setAxiosReloaer}
+                />
+              }
+            />
+          ) : null}
+        </UploadedAssetDiv>
       </AssetContent>
       <AssetContent>
         <SemiTitle title="구매한 에셋" more={purchasedMore} />
@@ -190,6 +259,8 @@ const AssetContent = styled.div`
 `;
 
 const PurchasedAssetDiv = styled.div``;
+
+const UploadedAssetDiv = styled.div``;
 
 const EmptyDiv = styled.div`
   padding-left: 8%;
