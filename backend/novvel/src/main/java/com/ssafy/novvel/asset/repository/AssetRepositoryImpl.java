@@ -17,6 +17,7 @@ import com.ssafy.novvel.asset.entity.QAsset;
 import com.ssafy.novvel.member.entity.Member;
 import com.ssafy.novvel.memberasset.entity.QMemberAsset;
 import com.ssafy.novvel.util.QueryDslUtil;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -37,15 +38,9 @@ import static com.ssafy.novvel.resource.entity.QResource.resource;
 import static org.springframework.util.ObjectUtils.isEmpty;
 
 @Slf4j
+@RequiredArgsConstructor
 public class AssetRepositoryImpl implements AssetReposiotryCustom {
-    private final JPAQueryFactory queryFactory;
     private final EntityManager em;
-
-    public AssetRepositoryImpl(EntityManager em) {
-        this.queryFactory = new JPAQueryFactory(em);
-        this.em = em;
-    }
-
 
     @Override
     @Transactional
@@ -54,12 +49,14 @@ public class AssetRepositoryImpl implements AssetReposiotryCustom {
         if (searchMember != null) {
             em.merge(searchMember);
         }
+        JPAQueryFactory queryFactory = new JPAQueryFactory(em);
+        JPAQueryFactory countQueryFactory = new JPAQueryFactory(em);
         List<OrderSpecifier> ORDERS = getAllOrderSpecifiers(pageable);
         QAsset qAsset = asset;
         QMemberAsset qMemberAsset = memberAsset;
         List<Tuple> tuples = queryFactory
                 .select(qAsset,
-                        ExpressionUtils.as(isAvailable(qMemberAsset,qAsset,searchMember)
+                        ExpressionUtils.as(isAvailable(qMemberAsset, qAsset, searchMember)
                                 , "isAvailable")
                 )
                 .from(asset)
@@ -77,6 +74,16 @@ public class AssetRepositoryImpl implements AssetReposiotryCustom {
                 .limit(pageable.getPageSize())
                 .fetch();
 
+        Long count = countQueryFactory
+                .select(qAsset.count())
+                .from(asset)
+                .where(
+                        checkAssetType(assetFilterDto.getAssettype())
+                        , searchType(assetFilterDto.getSearchtype(), searchMember, qAsset)
+                        , searchByTag(assetFilterDto.getTags(), qAsset)
+                )
+                .fetchOne();
+
         Page<AssetSearchDto> result = new PageImpl<>(
                 tuples.stream()
                         .map(tuple -> {
@@ -86,13 +93,13 @@ public class AssetRepositoryImpl implements AssetReposiotryCustom {
                         })
                         .collect(Collectors.toList())
                 , pageable,
-                tuples.size()
+                count
         );
         return result;
     }
 
-    private BooleanExpression isAvailable(QMemberAsset qMemberAsset,QAsset qAsset, Member searchMember){
-        if(searchMember ==null){
+    private BooleanExpression isAvailable(QMemberAsset qMemberAsset, QAsset qAsset, Member searchMember) {
+        if (searchMember == null) {
             return Expressions.asBoolean(false);
         }
         return JPAExpressions
@@ -158,13 +165,18 @@ public class AssetRepositoryImpl implements AssetReposiotryCustom {
         if (searchMember != null) {
             em.merge(searchMember);
         }
+        JPAQueryFactory queryFactory = new JPAQueryFactory(em);
+        JPAQueryFactory countQueryFactory = new JPAQueryFactory(em);
+
         List<OrderSpecifier> ORDERS = getAllOrderSpecifiers(pageable);
+
         QAsset qAsset = asset;
         QMemberAsset qMemberAsset = memberAsset;
+
         List<Tuple> tuples = queryFactory
                 .select(qAsset,
                         ExpressionUtils.as(
-                                isAvailable(qMemberAsset,qAsset,searchMember)
+                                isAvailable(qMemberAsset, qAsset, searchMember)
                                 , "isAvailable")
                 )
                 .from(asset)
@@ -182,6 +194,16 @@ public class AssetRepositoryImpl implements AssetReposiotryCustom {
                 .limit(pageable.getPageSize())
                 .fetch();
 
+        Long count = countQueryFactory
+                .select(qAsset.count())
+                .from(asset)
+                .where(
+                        checkAssetType(reqKeywordTagDto.getAssetType()),
+                        searchByKeword(reqKeywordTagDto.getKeyword()),
+                        searchByTag(reqKeywordTagDto.getTags(), qAsset)
+                )
+                .fetchOne();
+
         Page<AssetSearchDto> result = new PageImpl<>(
                 tuples.stream()
                         .map(tuple -> {
@@ -191,7 +213,7 @@ public class AssetRepositoryImpl implements AssetReposiotryCustom {
                         })
                         .collect(Collectors.toList())
                 , pageable,
-                tuples.size()
+                count
         );
         return result;
     }
