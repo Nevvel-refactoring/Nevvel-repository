@@ -158,6 +158,7 @@ export default function Home(props: {
 
   useEffect(() => {
     if (axiosReloader === true){
+      setAxiosReloaer(false)
       location.reload()
     }
   },[axiosReloader])
