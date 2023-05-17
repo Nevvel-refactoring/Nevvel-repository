@@ -6,20 +6,26 @@ import com.ssafy.novvel.cover.dto.CoverInfoAndEpisodesDto;
 import com.ssafy.novvel.cover.dto.CoverModifyDto;
 import com.ssafy.novvel.cover.dto.CoverPurchasedDto;
 import com.ssafy.novvel.cover.dto.CoverWriter;
+import com.ssafy.novvel.cover.entity.LikedCover;
+import com.ssafy.novvel.cover.repository.LikedCoverRepository;
 import com.ssafy.novvel.cover.repository.CoverRepository;
 import com.ssafy.novvel.cover.dto.CoverRegisterDto;
 import com.ssafy.novvel.cover.entity.Cover;
 import com.ssafy.novvel.episode.entity.ReadEpisode;
 import com.ssafy.novvel.episode.repository.ReadEpisodeRepository;
+import com.ssafy.novvel.exception.NotFoundException;
 import com.ssafy.novvel.exception.NotYourAuthorizationException;
 import com.ssafy.novvel.genre.repository.GenreRepository;
 import com.ssafy.novvel.member.entity.Member;
+import com.ssafy.novvel.member.repository.MemberRepository;
 import com.ssafy.novvel.resource.entity.Resource;
 import com.ssafy.novvel.resource.service.ResourceService;
 import java.io.IOException;
 import java.util.Objects;
+import java.util.Optional;
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,30 +35,38 @@ import org.springframework.web.multipart.MultipartFile;
 @Slf4j
 @Service
 public class CoverServiceImpl implements CoverService {
+    private final MemberRepository memberRepository;
 
     private final ResourceService resourceService;
     private final GenreRepository genreRepository;
     private final CoverRepository coverRepository;
     private final ReadEpisodeRepository readEpisodeRepository;
+    private final LikedCoverRepository likedCoverRepository;
 
-    public CoverServiceImpl(ResourceService resourceService,
-        GenreRepository genreRepository, CoverRepository coverRepository,
-        ReadEpisodeRepository readEpisodeRepository) {
+    public CoverServiceImpl(
+            ResourceService resourceService,
+            GenreRepository genreRepository,
+            CoverRepository coverRepository,
+            ReadEpisodeRepository readEpisodeRepository,
+            LikedCoverRepository likedCoverRepository,
+            MemberRepository memberRepository) {
         this.resourceService = resourceService;
         this.genreRepository = genreRepository;
         this.coverRepository = coverRepository;
         this.readEpisodeRepository = readEpisodeRepository;
+        this.likedCoverRepository = likedCoverRepository;
+        this.memberRepository = memberRepository;
     }
 
     @Override
     @Transactional
     public Cover registerCover(MultipartFile multipartFile, CoverRegisterDto coverRegisterDto,
-        Member member) throws IOException, EntityNotFoundException {
+                               Member member) throws IOException, EntityNotFoundException {
 
         Resource resource = resourceService.saveFile(multipartFile);
 
         return coverRepository.save(new Cover(resource, coverRegisterDto, member,
-            genreRepository.getReferenceById(coverRegisterDto.getGenreId())));
+                genreRepository.getReferenceById(coverRegisterDto.getGenreId())));
 
     }
 
@@ -66,7 +80,7 @@ public class CoverServiceImpl implements CoverService {
         coverInfoAndEpisodesDto.setGenre(cover.getGenre().getName());
         coverInfoAndEpisodesDto.setThumbnail(cover.getResource().getThumbnailUrl());
         coverInfoAndEpisodesDto.setWriter(
-            new CoverWriter(cover.getMember().getId(), cover.getMember().getNickname()));
+                new CoverWriter(cover.getMember().getId(), cover.getMember().getNickname()));
 
         ReadEpisode readEpisode = null;
         if(member != null) {
@@ -74,7 +88,7 @@ public class CoverServiceImpl implements CoverService {
                 member.getId(), coverId);
         }
         Long lastReadEpisodeId = null;
-        if(readEpisode != null) {
+        if (readEpisode != null) {
             lastReadEpisodeId = readEpisode.getEpisode().getId();
         }
         coverInfoAndEpisodesDto.setLastReadEpisodeId(lastReadEpisodeId);
@@ -86,8 +100,8 @@ public class CoverServiceImpl implements CoverService {
     @Override
     @Transactional
     public Resource updateCover(MultipartFile multipartFile, Long coverId,
-        CoverModifyDto coverModifyDto,
-        Long userId) throws NotYourAuthorizationException, IOException {
+                                CoverModifyDto coverModifyDto,
+                                Long userId) throws NotYourAuthorizationException, IOException {
 
         Cover cover = coverRepository.findById(coverId).orElseThrow(NullPointerException::new);
 
@@ -99,10 +113,10 @@ public class CoverServiceImpl implements CoverService {
             Resource resource = resourceService.saveFile(multipartFile);
 
             Cover newCover = coverRepository.save(
-                new Cover(resource, coverId, cover.getLastPublishDate(),
-                    cover.getFirstPublishDate(), cover.getLikes(), cover.getViewCount(),
-                    coverModifyDto, cover.getMember(),
-                    genreRepository.getReferenceById(coverModifyDto.getGenreId())));
+                    new Cover(resource, coverId, cover.getLastPublishDate(),
+                            cover.getFirstPublishDate(), cover.getLikes(), cover.getViewCount(),
+                            coverModifyDto, cover.getMember(),
+                            genreRepository.getReferenceById(coverModifyDto.getGenreId())));
 
             return findPreviousResourceInS3(newCover.getResource(), cover.getResource());
         }
@@ -124,7 +138,7 @@ public class CoverServiceImpl implements CoverService {
 
     @Override
     public Page<CoverWithConditions> searchCoverWithCondition(
-        CoverSearchConditions coverSearchConditions, Pageable pageable) {
+            CoverSearchConditions coverSearchConditions, Pageable pageable) {
 
         return coverRepository.searchCover(coverSearchConditions, pageable);
     }
@@ -137,6 +151,29 @@ public class CoverServiceImpl implements CoverService {
 
     @Override
     public Page<CoverWithConditions> getCoverOfUploader(Member member, Long id, Pageable pageable) {
-        return coverRepository.findCoverById(member, id, pageable) ;
+        return coverRepository.findCoverById(member, id, pageable);
+    }
+
+    @Override
+    @Transactional
+    public int likeCover(Member member, Long coverId) {
+        member = memberRepository.save(member);
+        Optional<LikedCover> likedCoverOptional = likedCoverRepository.findByMemberAndCoverId(member, coverId);
+
+        if (likedCoverOptional.isEmpty()) {
+            Cover cover = coverRepository.findById(coverId).orElseThrow(() -> new NotFoundException("해당 소설을 찾을 수 없습니다"));
+            LikedCover likedCover = new LikedCover(cover, member);
+            likedCoverRepository.save(likedCover);
+            return 201;
+        } else {
+            likedCoverRepository.delete(likedCoverOptional.get());
+            return 200;
+        }
+
+    }
+
+    @Override
+    public Page<CoverWithConditions> getFavoriteCover(Member member, Pageable pageable) {
+        return likedCoverRepository.getLikedCovers(member, pageable);
     }
 }
