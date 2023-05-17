@@ -70,6 +70,8 @@ public class OidcMemberService implements OAuth2UserService<OidcUserRequest, Oid
             .orElseGet(() -> memberRepository.save(Member.builder()
                 .sub(sub)
                 .email(email)
+                .nickname(email)
+                .description("")
                 .role("ROLE_USER")
                 .refreshToken(refreshToken)
                 .point(0L)
