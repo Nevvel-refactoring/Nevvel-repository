@@ -99,10 +99,10 @@ function TagSearchBar(props:ImageUploadProps){
     >
       <AssetInfoInput1
         TagInputWidth={props.TagInputWidth}
-        placeholder="에셋 태그를 입력해주세요."
+        placeholder="에셋 태그를 입력해주세요.(최대 8글자)"
         onChange={onChangeKeyword}
         onKeyDown={handleKeyDown}
-        maxLength={4}
+        maxLength={8}
        />
        {
         keyword?

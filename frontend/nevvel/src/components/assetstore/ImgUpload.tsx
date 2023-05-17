@@ -22,7 +22,7 @@ type ImgType = {
   type: string,
   title: string,
   description: string,
-  point: number,
+  point: number|null,
   tags: string[],
 }
 
@@ -86,11 +86,11 @@ function ImgUpload(props:assetstoreProps) {
   }
 
   // 가격저장
-  const [price, setPrice] = useState<number>(0)
+  const [price, setPrice] = useState<number|null>(null)
 
   const onChangePrice = (e: React.ChangeEvent<HTMLInputElement>) => {
     const pricevalue = parseInt(e.target.value);
-    setPrice(isNaN(pricevalue) ? 0 : pricevalue);
+    setPrice(isNaN(pricevalue) ? null : pricevalue);
   }
 
 
@@ -112,7 +112,7 @@ function ImgUpload(props:assetstoreProps) {
     type: "",
     title: "",
     description: "",
-    point: 0,
+    point: null,
     tags: [""],
   })
 
@@ -469,7 +469,9 @@ const TagRowDiv = styled.div`
 const CardInfo2Div = styled.div`
   background-color: white;
   color: black;
-  width: 4rem;
+  /* width: 4rem; */
+  padding-left: 0.15rem;
+  padding-right: 0.15rem;
   height: 2rem;
   border-radius: 0.5rem;
   /* box-shadow: 0.5rem 0.5rem 0.2rem; */

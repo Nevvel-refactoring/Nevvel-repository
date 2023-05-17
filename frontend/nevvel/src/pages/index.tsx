@@ -11,6 +11,8 @@ import springApi from "@/src/api";
 import DummyAssetData_audio from "@/src/components/assetstore/DummyAssetData_Audio.json";
 import DummyAssetData_image from "@/src/components/assetstore/DummyAssetData_Image.json";
 import { ImageAssetAtom, AudioAssetAtom } from "@/src/store/EditorAssetStore";
+import React from "react";
+import { useState } from "react";
 
 interface Novel {
   content: {
@@ -152,6 +154,14 @@ export default function Home(props: {
   // console.log(loginStatus);
   // console.log(userInfoStatus);
 
+  const[axiosReloader, setAxiosReloaer] = useState<boolean>(false)
+
+  useEffect(() => {
+    if (axiosReloader === true){
+      location.reload()
+    }
+  },[axiosReloader])
+
   return (
     <HomeWrapper>
       <DetailWrapper>
@@ -161,7 +171,7 @@ export default function Home(props: {
       <Line />
       <DetailWrapper>
         <BestDetails title="베스트 에셋" more="/assetstore/assetstore" />
-        <AssetSwiper content={props.assets} />
+        <AssetSwiper content={props.assets} setAxiosReloaer={setAxiosReloaer} />
       </DetailWrapper>
     </HomeWrapper>
   );

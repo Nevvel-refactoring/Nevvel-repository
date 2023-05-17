@@ -456,7 +456,9 @@ const TagRowDiv = styled.div`
 const CardInfo2Div = styled.div`
   background-color: white;
   color: black;
-  width: 4rem;
+  /* width: 4rem; */
+  padding-left: 0.15rem;
+  padding-right: 0.15rem;
   height: 2rem;
   border-radius: 0.5rem;
   /* box-shadow: 0.5rem 0.5rem 0.2rem; */
