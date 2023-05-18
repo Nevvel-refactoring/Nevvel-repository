@@ -48,16 +48,28 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     public MemberChanged addMemberInfo(MultipartFile multipartFile, MemberInfoRegistDto memberInfoRegistDto,
         Member member) throws IOException {
-
+        member = memberRepository.findSubJoinFetchResource(member.getSub());
+        if (member == null) {
+            throw new NullPointerException();
+        }
         MemberChanged memberChanged = new MemberChanged();
 
         Resource resource = member.getProfile();
-        if(!multipartFile.isEmpty()) {
+        if (!(multipartFile == null || multipartFile.isEmpty())) {
             resource = resourceService.saveFile(multipartFile);
-        } else if(memberInfoRegistDto.getIsDefaultImage()) {
+        } else if (memberInfoRegistDto.getIsDefaultImage()) {
             resource = null;
         }
 
+        log.info("멤버 프로파일: " + member.getProfile());
+
+        if (member.getProfile() != null) {
+            if (resource == null || !resource.getId().equals(member.getProfile().getId())) {
+                memberChanged.setRemovedResource(member.getProfile());
+                log.info("memberChanged: member" + memberChanged.getRemovedResource().getId());
+                resourceRepository.delete(member.getProfile());
+            }
+        }
 
         Member fullInfoMember = new Member(member.getId(), resource,
             memberInfoRegistDto.getNickname(),
@@ -67,12 +79,6 @@ public class MemberServiceImpl implements MemberService {
         memberRepository.save(fullInfoMember);
 
         memberChanged.setMember(fullInfoMember);
-
-        if(resource == null || !resource.equals(member.getProfile())) {
-            if(member.getProfile() != null)
-                resourceRepository.delete(member.getProfile());
-            memberChanged.setRemovedResource(member.getProfile());
-        }
 
         return memberChanged;
     }

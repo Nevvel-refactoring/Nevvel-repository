@@ -66,14 +66,15 @@ public class CoverController {
     @PutMapping("/{cover-num}")
     @Operation(summary = "소설(표지) 수정", description = "소설(표지)를 <strong>수정</strong> 합니다.")
     public ResponseEntity<?> modifyCover(@PathVariable("cover-num") Long coverId,
-                                         @RequestPart(value = "file") MultipartFile file,
-                                         @RequestPart(value = "coverModifyDto") CoverModifyDto coverModifyDto,
-                                         @AuthenticationPrincipal CustomUserDetails customUserDetails)
-            throws AuthenticationException, IOException {
+        @RequestPart(value = "file") MultipartFile file,
+        @RequestPart(value = "coverModifyDto") CoverModifyDto coverModifyDto,
+        @AuthenticationPrincipal CustomUserDetails customUserDetails)
+        throws AuthenticationException, IOException {
 
 
         Resource resource = coverService.updateCover(file, coverId, coverModifyDto, customUserDetails.getId());
-        if (resource != null) {
+
+        if(resource != null) {
             S3Service.deleteFile(resource);
         }
 
@@ -83,32 +84,32 @@ public class CoverController {
     @GetMapping()
     @Operation(summary = "소설(표지) 목록", description = "<strong>소설(표지)들을 상태와 함께 반환</strong> 합니다.")
     public ResponseEntity<Page<CoverWithConditions>> searchCover(
-            CoverSearchConditions coverSearchCriteria, Pageable pageable) {
+        CoverSearchConditions coverSearchCriteria, Pageable pageable) {
 
         return new ResponseEntity<>(coverService.searchCoverWithCondition(coverSearchCriteria, pageable),
-                HttpStatus.OK);
+            HttpStatus.OK);
 
     }
 
     @GetMapping("/purchased-on")
     @Operation(summary = "구매한 소설(표지) 목록", description = "<strong>구매한 소설(표지)들을 반환</strong> 합니다.")
     public ResponseEntity<Page<CoverPurchasedDto>> getPurchasedCover(
-            @AuthenticationPrincipal CustomUserDetails customUserDetails, Pageable pageable) {
+        @AuthenticationPrincipal CustomUserDetails customUserDetails, Pageable pageable) {
 
         return new ResponseEntity<>(
-                coverService.getPurchasedCover(customUserDetails.getMember(), pageable), HttpStatus.OK);
+            coverService.getPurchasedCover(customUserDetails.getMember(), pageable), HttpStatus.OK);
     }
 
     @GetMapping("uploader/{uploaderId}")
     @Operation(summary = "선택한 작가 글 보내기", description = "<strong>id에 해당하는 작가의 글을 반환</strong> 합니다.")
     public ResponseEntity<Page<?>> getCoverOfUploader(@PathVariable("uploaderId") Long id,
-                                                      @AuthenticationPrincipal CustomUserDetails customUserDetails,
-                                                      Pageable pageable) {
+        @AuthenticationPrincipal CustomUserDetails customUserDetails,
+        Pageable pageable) {
 
         return new ResponseEntity<>(
-                coverService.getCoverOfUploader(ControllerUtils.isCustomUserDetails(customUserDetails),
-                        id, pageable),
-                HttpStatus.OK
+            coverService.getCoverOfUploader(ControllerUtils.isCustomUserDetails(customUserDetails),
+                id, pageable),
+            HttpStatus.OK
         );
     }
 

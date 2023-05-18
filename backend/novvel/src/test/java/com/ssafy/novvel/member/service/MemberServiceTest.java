@@ -41,7 +41,7 @@ class MemberServiceTest {
 
         // given
         Member member = TestUtil.getUSERMemberHasDesc();
-        
+
         // when
         MemberDescriptionDto result = memberServiceImpl.getMemberInfo(member);
 
@@ -68,11 +68,13 @@ class MemberServiceTest {
         Member member = TestUtil.getUSERMemberHasDesc();
 
         // when
+        Mockito.doReturn(TestUtil.getUSERMember().get()).when(memberRepository)
+            .findSubJoinFetchResource(TestUtil.getUSERMember().get().getSub());
         Mockito.doReturn(resource).when(resourceService).saveFile(multipartFile);
         Mockito.doReturn(member).when(memberRepository).save(Mockito.any());
 
         MemberChanged result = memberServiceImpl.addMemberInfo(multipartFile, memberInfoRegistDto,
-            TestUtil.getGUESTMember().get());
+            TestUtil.getUSERMember().get());
 
         // then
         Assertions.assertThat(result.getMember())
@@ -97,6 +99,8 @@ class MemberServiceTest {
         Member member = TestUtil.getUSERMember().get();
 
         // when
+        Mockito.doReturn(TestUtil.getGUESTMember().get()).when(memberRepository)
+            .findSubJoinFetchResource(TestUtil.getGUESTMember().get().getSub());
         Mockito.doReturn(resource).when(resourceService).saveFile(multipartFile);
         Mockito.doReturn(member).when(memberRepository).save(Mockito.any());
 

@@ -88,7 +88,7 @@ public class Cover extends BaseEntity {
         this.viewCount = viewCount;
         this.id = coverId;
         this.member = member;
-        this.coverStatusType = coverModifyDto.getCoverStatusType();
+        this.coverStatusType = coverModifyDto.getStatus();
         this.title = coverModifyDto.getTitle();
         this.description = coverModifyDto.getDescription();
         this.genre = genre;

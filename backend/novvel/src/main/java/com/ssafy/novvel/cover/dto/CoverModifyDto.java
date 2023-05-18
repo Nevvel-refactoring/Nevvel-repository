@@ -21,9 +21,10 @@ public class CoverModifyDto {
     private String description;
 
     @NotNull
-    private Long genreId;
+    private Long genre;
 
     @NotNull
-    private CoverStatusType coverStatusType;
+    private CoverStatusType status;
 
+    Boolean isDefaultImage;
 }

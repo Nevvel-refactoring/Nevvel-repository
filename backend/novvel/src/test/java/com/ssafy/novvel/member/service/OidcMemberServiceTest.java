@@ -2,6 +2,7 @@ package com.ssafy.novvel.member.service;
 
 import com.ssafy.novvel.member.entity.Member;
 import com.ssafy.novvel.member.repository.MemberRepository;
+import com.ssafy.novvel.resource.repository.ResourceRepository;
 import com.ssafy.novvel.sign.oauth2login.OidcMemberService;
 import com.ssafy.novvel.util.TestUtil;
 import com.ssafy.novvel.util.token.UserDtoUtils;
@@ -33,6 +34,9 @@ class OidcMemberServiceTest {
 
     @Mock
     private UserDtoUtils userDtoUtils;
+
+    @Mock
+    private ResourceRepository resourceRepository;
 
     private final String GET_AUTHORITY = "getAuthority";
     private final String FIND_OR_CREATE_MEMBER = "findOrCreateMember";
@@ -67,7 +71,6 @@ class OidcMemberServiceTest {
     }
 
     @Test
-    @Disabled
     @DisplayName("sign up Test")
     public void signUp()
         throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {

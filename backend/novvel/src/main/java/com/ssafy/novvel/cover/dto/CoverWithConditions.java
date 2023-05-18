@@ -24,7 +24,6 @@ public class CoverWithConditions {
     private Boolean isNew;
 
     @Builder
-    //@QueryProjection
     public CoverWithConditions(Long id, String title,
         CoverStatusType status, String thumbnail, String genre, Long writerId,
         String writerNickname, Boolean isUploaded, Boolean isNew) {
@@ -37,20 +36,4 @@ public class CoverWithConditions {
         this.isUploaded = isUploaded;
         this.isNew = isNew;
     }
-
-    @Builder
-    @QueryProjection
-    public CoverWithConditions(Cover cover) {
-        this.id = cover.getId();
-        this.title = cover.getTitle();
-        this.status = cover.getCoverStatusType();
-        this.thumbnail = cover.getResource().getThumbnailUrl();
-        this.genre = cover.getGenre().getName();
-        this.writer = new CoverWriter(cover.getMember().getId(), cover.getMember().getNickname());
-        if(cover.getLastPublishDate() == null) this.isUploaded = false;
-        else this.isUploaded = cover.getLastPublishDate().isAfter(LocalDate.now().minusDays(7L));
-        if(cover.getFirstPublishDate() == null) this.isNew = false;
-        else this.isNew = cover.getFirstPublishDate().isAfter(LocalDate.now().minusDays(7L));
-    }
-
 }

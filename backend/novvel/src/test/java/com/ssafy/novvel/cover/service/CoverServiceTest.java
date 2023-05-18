@@ -8,13 +8,14 @@ import com.ssafy.novvel.cover.dto.EpisodeInfoDto;
 import com.ssafy.novvel.cover.entity.Cover;
 import com.ssafy.novvel.cover.entity.CoverStatusType;
 import com.ssafy.novvel.cover.repository.CoverRepository;
-import com.ssafy.novvel.episode.entity.ReadEpisode;
+import com.ssafy.novvel.cover.util.DefaultImage;
 import com.ssafy.novvel.episode.repository.ReadEpisodeRepository;
 import com.ssafy.novvel.exception.NotYourAuthorizationException;
 import com.ssafy.novvel.genre.entity.Genre;
 import com.ssafy.novvel.genre.repository.GenreRepository;
 import com.ssafy.novvel.member.entity.Member;
 import com.ssafy.novvel.resource.entity.Resource;
+import com.ssafy.novvel.resource.repository.ResourceRepository;
 import com.ssafy.novvel.resource.service.ResourceService;
 import com.ssafy.novvel.transactionhistory.entity.PointChangeType;
 import com.ssafy.novvel.util.TestUtil;
@@ -27,6 +28,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -53,6 +55,12 @@ class CoverServiceTest {
 
     @Mock
     ResourceService resourceService;
+
+    @Mock
+    ResourceRepository resourceRepository;
+
+//    @Mock
+//    DefaultImage defaultImage;
 
     @Test
     void registerCover() throws IOException {
@@ -95,11 +103,11 @@ class CoverServiceTest {
         // given
         Member member = TestUtil.getMember();
         Genre genre = Genre.builder().id(1L).name("test_genre").build();
-        Optional<Cover> given = Optional.of(Cover.builder()
+        Cover given = Cover.builder()
             .id(1L).coverStatusType(CoverStatusType.SERIALIZED).genre(genre)
             .member(TestUtil.getUSERMember().orElse(null))
             .resource(TestUtil.getResource())
-            .title("test").build());
+            .title("test").build();
 
         List<EpisodeInfoDto> list = new ArrayList<>();
         list.add(new EpisodeInfoDto(1L, "test", 0L, 0L, LocalDateTime.now(),
@@ -109,15 +117,15 @@ class CoverServiceTest {
 
         CoverInfoAndEpisodesDto expect = CoverInfoAndEpisodesDto.builder()
             .episodes(list)
-            .genre(given.get().getGenre().getName())
-            .title(given.get().getTitle())
-            .writer(new CoverWriter(given.get().getMember().getId(),
-                given.get().getMember().getNickname()))
+            .genre(given.getGenre().getName())
+            .title(given.getTitle())
+            .writer(new CoverWriter(given.getMember().getId(),
+                given.getMember().getNickname()))
             .build();
 
         // when
-        Mockito.doReturn(given).when(coverRepository).findById(1L);
-        Mockito.doReturn(list).when(coverRepository).findEpisodesInfoDto(given.get(), member);
+        Mockito.doReturn(given).when(coverRepository).findCoverById(1L);
+        Mockito.doReturn(list).when(coverRepository).findEpisodesInfoDto(given, member);
         CoverInfoAndEpisodesDto result = coverService.getAllEpisodes(1L, member);
 
         // then
@@ -139,7 +147,7 @@ class CoverServiceTest {
             Files.probeContentType(file.toPath()), Files.readAllBytes(file.toPath()));
 
         CoverModifyDto coverModifyDto = CoverModifyDto.builder()
-            .coverStatusType(CoverStatusType.FINISHED)
+            .status(CoverStatusType.FINISHED)
             .description("test")
             .title("title")
             .build();
@@ -147,7 +155,7 @@ class CoverServiceTest {
         Long memberId = 1L;
 
         // when
-        Mockito.doThrow(new NullPointerException()).when(coverRepository).findById(Mockito.any());
+        Mockito.doThrow(new NullPointerException()).when(coverRepository).findCoverById(Mockito.any());
 
         // then
         Assertions.assertThatThrownBy(
@@ -165,7 +173,7 @@ class CoverServiceTest {
             Files.probeContentType(file.toPath()), Files.readAllBytes(file.toPath()));
 
         CoverModifyDto coverModifyDto = CoverModifyDto.builder()
-            .coverStatusType(CoverStatusType.FINISHED)
+            .status(CoverStatusType.FINISHED)
             .description("test")
             .title("title")
             .build();
@@ -173,8 +181,7 @@ class CoverServiceTest {
         Long memberId = 2L;
         Genre genre = Genre.builder().id(1L).build();
 
-        Optional<Cover> given = Optional.of(
-            Cover.builder()
+        Cover given = Cover.builder()
                 .id(1L)
                 .coverStatusType(CoverStatusType.SERIALIZED).genre(genre)
                 .likes(0L)
@@ -184,10 +191,10 @@ class CoverServiceTest {
                 .description(coverModifyDto.getDescription())
                 .firstPublishDate(LocalDate.of(2023, 4, 17))
                 .lastPublishDate(LocalDate.of(2023, 4, 17))
-                .build());
+                .build();
 
         // when
-        Mockito.doReturn(given).when(coverRepository).findById(Mockito.any());
+        Mockito.doReturn(given).when(coverRepository).findCoverById(Mockito.any());
 
         Assertions.assertThatThrownBy(
                 () -> coverService.updateCover(multipartFile, 1L, coverModifyDto, memberId))
@@ -200,10 +207,7 @@ class CoverServiceTest {
         // given
         Member member = TestUtil.getMember();
 
-        Optional<Cover> given = Optional.empty();
-
         // when
-        Mockito.doReturn(given).when(coverRepository).findById(1L);
         Assertions.assertThatThrownBy(() -> coverService.getAllEpisodes(1L, member))
             .isInstanceOf(NullPointerException.class);
 
@@ -220,15 +224,14 @@ class CoverServiceTest {
             "newUrl", "test", "newThumbnailUrl", true, "test");
 
         CoverModifyDto coverModifyDto = CoverModifyDto.builder()
-            .coverStatusType(CoverStatusType.FINISHED)
+            .status(CoverStatusType.FINISHED)
             .description("test")
             .title("title")
             .build();
 
         Genre genre = Genre.builder().id(1L).build();
 
-        Optional<Cover> given = Optional.of(
-            Cover.builder()
+        Cover given = Cover.builder()
                 .id(1L)
                 .coverStatusType(CoverStatusType.SERIALIZED)
                 .genre(Genre.builder().id(2L).build())
@@ -239,7 +242,7 @@ class CoverServiceTest {
                 .description("test")
                 .firstPublishDate(LocalDate.of(2023, 4, 17))
                 .lastPublishDate(LocalDate.of(2023, 4, 17))
-                .build());
+                .build();
 
         Cover newCover = Cover.builder()
             .id(1L)
@@ -255,7 +258,7 @@ class CoverServiceTest {
             .build();
 
         // when
-        Mockito.doReturn(given).when(coverRepository).findById(Mockito.any());
+        Mockito.doReturn(given).when(coverRepository).findCoverById(Mockito.any());
         Mockito.doReturn(newResource).when(resourceService).saveFile(multipartFile);
         Mockito.doReturn(genre).when(genreRepository).getReferenceById(Mockito.any());
         Mockito.doReturn(newCover).when(coverRepository).save(Mockito.any());
@@ -275,22 +278,21 @@ class CoverServiceTest {
             Files.probeContentType(file.toPath()), Files.readAllBytes(file.toPath()));
 
         Resource oldResource = TestUtil.getMemberProfile();
-        Resource newResource = new Resource(2L, "test.jpg",
+        Resource newResource = new Resource(2L, "cat.jpeg",
             "newUrl", "test", "newUrl", true, "newThumbnailUrl");
 
         CoverModifyDto coverModifyDto = CoverModifyDto.builder()
-            .coverStatusType(CoverStatusType.FINISHED)
+            .status(CoverStatusType.FINISHED)
             .description("test")
             .title("title")
             .build();
 
         Genre genre = Genre.builder().id(1L).build();
 
-        Optional<Cover> given = Optional.of(
-            Cover.builder()
+        Cover given = Cover.builder()
                 .id(1L)
                 .coverStatusType(CoverStatusType.SERIALIZED)
-                .genre(Genre.builder().id(2L).build())
+                .genre(genre)
                 .resource(oldResource)
                 .likes(0L)
                 .member(TestUtil.getMember())
@@ -298,7 +300,7 @@ class CoverServiceTest {
                 .description("test")
                 .firstPublishDate(LocalDate.of(2023, 4, 17))
                 .lastPublishDate(LocalDate.of(2023, 4, 17))
-                .build());
+                .build();
 
         Cover newCover = Cover.builder()
             .id(1L)
@@ -314,10 +316,11 @@ class CoverServiceTest {
             .build();
 
         // when
-        Mockito.doReturn(given).when(coverRepository).findById(Mockito.any());
+        Mockito.doReturn(given).when(coverRepository).findCoverById(1L);
         Mockito.doReturn(newResource).when(resourceService).saveFile(multipartFile);
         Mockito.doReturn(genre).when(genreRepository).getReferenceById(Mockito.any());
         Mockito.doReturn(newCover).when(coverRepository).save(Mockito.any());
+        Mockito.doNothing().when(resourceRepository).delete(Mockito.any());
         Resource result = coverService.updateCover(multipartFile, 1L, coverModifyDto,
             TestUtil.getMember().getId());
 

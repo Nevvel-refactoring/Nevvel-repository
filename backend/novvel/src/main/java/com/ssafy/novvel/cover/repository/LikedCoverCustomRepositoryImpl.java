@@ -5,9 +5,12 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.ssafy.novvel.cover.dto.CoverWithConditions;
-import com.ssafy.novvel.cover.dto.QCoverWithConditions;
+import com.ssafy.novvel.cover.entity.Cover;
+import com.ssafy.novvel.cover.util.DefaultImage;
 import com.ssafy.novvel.member.entity.Member;
 import com.ssafy.novvel.util.QueryDslUtil;
+import java.time.LocalDate;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -27,16 +30,16 @@ public class LikedCoverCustomRepositoryImpl implements LikedCoverCustomRepositor
 
     @Override
     @Transactional
-    public Page<CoverWithConditions> getLikedCovers(Member member, Pageable pageable) {
+    public Page<CoverWithConditions> getLikedCovers(Member member, Pageable pageable, DefaultImage defaultImage) {
         entityManager.merge(member);
 
-        JPAQuery<List<CoverWithConditions>> query = new JPAQuery<>(entityManager);
+        JPAQuery<List<Cover>> query = new JPAQuery<>(entityManager);
         JPAQuery<Long> countQuery = new JPAQuery<>(entityManager);
 
         List<OrderSpecifier> ORDERS = getAllOrderSpecifiers(pageable);
 
-        List<CoverWithConditions> coverWithConditionList = query
-                .select(new QCoverWithConditions(cover))
+        List<Cover> coverList = query
+                .select(cover)
                 .from(cover)
                 .where(
                     cover.in(
@@ -67,9 +70,10 @@ public class LikedCoverCustomRepositoryImpl implements LikedCoverCustomRepositor
 
 
         return new PageImpl<>(
-                coverWithConditionList,
+                coverList.stream().map(c -> covertCoverWithConditions(c, defaultImage)).collect(
+                    Collectors.toList()),
                 pageable,
-                count
+                count == null ? 0 : count
         );
 
     }
@@ -122,6 +126,33 @@ public class LikedCoverCustomRepositoryImpl implements LikedCoverCustomRepositor
 
         return ORDERS;
 
+    }
+
+    private CoverWithConditions covertCoverWithConditions(Cover cover, DefaultImage defaultImage) {
+
+        String thumbnail = null;
+        if (cover.getResource() != null) {
+            thumbnail = cover.getResource().getThumbnailUrl();
+        }
+
+        String genreName = null;
+        if (cover.getGenre() != null) {
+            genreName = cover.getGenre().getName();
+        }
+
+        return CoverWithConditions.builder()
+            .id(cover.getId())
+            .title(cover.getTitle())
+            .status(cover.getCoverStatusType())
+            .thumbnail(thumbnail == null ? defaultImage.getImageByGenreName(genreName) : thumbnail)
+            .genre(genreName)
+            .writerId(cover.getMember().getId())
+            .writerNickname(cover.getMember().getNickname())
+            .isUploaded(cover.getLastPublishDate() == null ? Boolean.FALSE
+                : cover.getLastPublishDate().isAfter(LocalDate.now().minusDays(7L)))
+            .isNew(cover.getFirstPublishDate() == null ? Boolean.FALSE
+                : cover.getFirstPublishDate().isAfter(LocalDate.now().minusDays(7L)))
+            .build();
     }
 }
 

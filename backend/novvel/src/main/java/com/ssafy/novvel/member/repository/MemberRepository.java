@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
-    @Query(value = "SELECT m FROM Member AS m JOIN FETCH m.profile WHERE m.sub = :sub")
+    @Query(value = "SELECT m FROM Member AS m LEFT JOIN FETCH m.profile WHERE m.sub = :sub")
     Member findSubJoinFetchResource(@Param("sub") String sub);
 
     Optional<Member> findBySub(String sub);
