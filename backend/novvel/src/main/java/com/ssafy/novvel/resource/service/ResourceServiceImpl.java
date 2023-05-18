@@ -118,7 +118,7 @@ public class ResourceServiceImpl implements ResourceService {
         //todo gif중간으로 자를지 처음으로 자를지 정할것
         int frameCount = gifDecoder.getFrameCount();
 
-        BufferedImage image = gifDecoder.getFrame(0); // 인덱스에 해당하는 프레임 추출
+        BufferedImage image = gifDecoder.getFrame(frameCount/2); // 인덱스에 해당하는 프레임 추출
         ImageIO.write(image, "gif", result);
 
         return result;
