@@ -1,8 +1,6 @@
 package com.ssafy.novvel.cover.dto;
 
 import com.ssafy.novvel.genre.dto.GenreDto;
-import com.ssafy.novvel.genre.entity.Genre;
-import com.ssafy.novvel.member.entity.Member;
 import java.util.List;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -18,6 +16,8 @@ import lombok.Setter;
 @Setter
 @Builder
 public class CoverInfoAndEpisodesDto {
+
+    private Long coverId;
 
     @NotNull
     private String title;

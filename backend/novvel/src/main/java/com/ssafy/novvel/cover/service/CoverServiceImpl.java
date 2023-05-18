@@ -16,7 +16,6 @@ import com.ssafy.novvel.episode.entity.ReadEpisode;
 import com.ssafy.novvel.episode.repository.ReadEpisodeRepository;
 import com.ssafy.novvel.exception.NotFoundException;
 import com.ssafy.novvel.exception.NotYourAuthorizationException;
-import com.ssafy.novvel.genre.dto.GenreDto;
 import com.ssafy.novvel.genre.repository.GenreRepository;
 import com.ssafy.novvel.member.entity.Member;
 import com.ssafy.novvel.member.repository.MemberRepository;
@@ -91,6 +90,7 @@ public class CoverServiceImpl implements CoverService {
             throw new NullPointerException();
         }
         CoverInfoAndEpisodesDto coverInfoAndEpisodesDto = new CoverInfoAndEpisodesDto();
+        coverInfoAndEpisodesDto.setCoverId(cover.getId());
         coverInfoAndEpisodesDto.setTitle(cover.getTitle());
         coverInfoAndEpisodesDto.setDescription(cover.getDescription());
         coverInfoAndEpisodesDto.setGenre(cover.getGenre().toDto());
