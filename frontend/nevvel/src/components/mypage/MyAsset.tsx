@@ -271,4 +271,5 @@ const EmptyDiv = styled.div`
 const AssetDiv = styled.div`
   display: flex;
   flex-wrap: wrap;
+  margin-left: 2rem;
 `;

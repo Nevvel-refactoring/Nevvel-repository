@@ -182,4 +182,6 @@ const ImageWrapper = styled.div`
 const NovelExists = styled.div`
   display: flex;
   flex-wrap: wrap;
+  margin-left: 10%;
+  margin-right: 10%;
 `;
