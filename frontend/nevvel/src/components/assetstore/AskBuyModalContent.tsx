@@ -76,14 +76,14 @@ const RowDiv = styled.div`
 `
 
 const AskP = styled.p`
-  font-size: 2rem;
+  font-size: 1.5rem;
   margin-top: 3.5rem;
 `
 
 const ModalCloseBtn = styled.button`
-  background-color: ${({ theme }) => theme.color.button};
-  color: ${({ theme }) => theme.color.buttonText};
-  width: 12rem;
+  background-color: ${({ theme }) => theme.color.Text2};
+  color: ${({ theme }) => theme.color.Text1};
+  width: 8rem;
   height: 3rem;
   border: 0.1rem solid black;
   border-radius: 0.5rem;
@@ -94,7 +94,7 @@ const ModalCloseBtn = styled.button`
 const BuyBtn = styled.button`
   background-color: ${({ theme }) => theme.color.button};
   color: ${({ theme }) => theme.color.buttonText};
-  width: 12rem;
+  width: 8rem;
   height: 3rem;
   border: 0.1rem solid black;
   border-radius: 0.5rem;
