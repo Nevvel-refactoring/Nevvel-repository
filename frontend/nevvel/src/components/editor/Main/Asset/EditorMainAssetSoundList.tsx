@@ -2,12 +2,16 @@ import React, { useState, useEffect } from "react";
 import { useAtom } from "jotai";
 import styled from "styled-components";
 import { useAtomValue } from "jotai";
-import { nowTextBlockAtom } from "@/src/store/EditorAssetStore";
+import {
+  nowTextBlockAtom,
+  totalEventCheckAtom,
+} from "@/src/store/EditorAssetStore";
 import { Asset } from "editor";
 import { content } from "editor";
 import { event } from "editor";
 import springApi from "@/src/api";
 import { AudioAssetAtom } from "@/src/store/EditorAssetStore";
+import { totalEventAtom } from "@/src/store/EditorAssetStore";
 
 type EditorMainAssetAudioListProps = {
   setContents: React.Dispatch<React.SetStateAction<content[]>>;
@@ -20,32 +24,54 @@ function EditorMainAssetSoundList({
 }: EditorMainAssetAudioListProps) {
   const nowTextBlock = useAtomValue(nowTextBlockAtom);
   const assetData = useAtomValue(AudioAssetAtom);
+  const [totalEvent, setTotalEvent] = useAtom(totalEventAtom);
+  const [totalEventCheck, setTotalEventCheck] = useAtom(totalEventCheckAtom);
 
   useEffect(() => {
     console.log(contents);
   }, [contents]);
 
   const ClickHandler = (asset: Asset) => {
-    const newBlocks = [...contents];
-    const index = newBlocks.findIndex((el) => el.idx === nowTextBlock);
-    if (newBlocks[index].event.length >= 2) {
+    if (nowTextBlock == 0) {
+      if (totalEvent.event.length >= 2) {
+      } else {
+        if (totalEvent.event.length !== 0) {
+          if (totalEvent.event[0].type !== "AUDIO") {
+            totalEvent.event.push({
+              assetId: asset.id,
+              type: asset.type,
+            });
+          }
+        } else {
+          totalEvent.event.push({
+            assetId: asset.id,
+            type: asset.type,
+          });
+        }
+      }
+      setTotalEventCheck(!totalEventCheck);
     } else {
-      if (newBlocks[index].event.length !== 0) {
-        if (newBlocks[index].event[0].type == "AUDIO") {
+      const newBlocks = [...contents];
+      const index = newBlocks.findIndex((el) => el.idx === nowTextBlock);
+      if (newBlocks[index].event.length >= 2) {
+      } else {
+        if (newBlocks[index].event.length !== 0) {
+          if (newBlocks[index].event[0].type == "AUDIO") {
+          } else {
+            newBlocks[index].event.push({
+              assetId: asset.id,
+              type: asset.type,
+            });
+          }
         } else {
           newBlocks[index].event.push({
             assetId: asset.id,
             type: asset.type,
           });
         }
-      } else {
-        newBlocks[index].event.push({
-          assetId: asset.id,
-          type: asset.type,
-        });
       }
+      setContents(newBlocks);
     }
-    setContents(newBlocks);
   };
   return (
     <>

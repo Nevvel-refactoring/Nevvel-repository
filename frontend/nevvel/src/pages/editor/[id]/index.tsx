@@ -127,6 +127,9 @@ const Wrapper = styled.div`
   ${mobile} {
     flex-direction: column;
   }
+
+  margin: 0;
+  padding: 0;
 `;
 const EditorHeadWrapper = styled.div``;
 
@@ -135,7 +138,7 @@ const EditorWrapper = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 90vh;
+  height: 100vh;
 `;
 
 export default index;

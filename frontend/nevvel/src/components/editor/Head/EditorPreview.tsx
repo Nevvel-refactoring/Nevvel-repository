@@ -63,7 +63,7 @@ function EditorPreview({ postEpisode }: EditorPreviewProps) {
           <EditorPreviewTab
             EpisodeData={postEpisode}
             tabNumber={tabNumber}
-            setEventCatch={setEventCatch} fontSize={4} whiteSpace={1} interval={3} fontStyle={""}/>
+             fontSize={4} whiteSpace={1} interval={3} fontStyle={""}/>
         ) : (<>미리보기 할 내용이 존재하지 않습니다.</>)}
       </PreviewMain>
     </PreviewWrapper>
@@ -76,13 +76,20 @@ const PreviewWrapper = styled.div`
 `;
 const PreviewHeader = styled.div`
   width: 100%;
-  border-bottom: 1px solid ${({ theme }) => theme.color.text1};
+  border-bottom: 1px solid ${({ theme }) => theme.color.opacityText3};
+  padding-bottom: 1rem;
+  padding-top: 1rem;
+  font-size:14px;
+  display: flex;
+  justify-content: center;
 `;
 
 const PreviewMain = styled.div`
-  margin-top: 10%;
+  margin-top: 5%;
   width: 60vh;
   height: 70vh;
-  overflow: scroll;
+  ::-webkit-scrollbar {
+    display: none; 
+  }
 `;
 export default EditorPreview;

@@ -3,7 +3,11 @@ import DummyAssetData_image from "@/src/components/assetstore/DummyAssetData_Ima
 import styled from "styled-components";
 import AssetCard from "@/src/components/common/AssetCard";
 import { useAtom, useAtomValue } from "jotai";
-import { nowTextBlockAtom } from "@/src/store/EditorAssetStore";
+import {
+  nowTextBlockAtom,
+  totalEventCheckAtom,
+  totalEventAtom,
+} from "@/src/store/EditorAssetStore";
 import { Asset } from "editor";
 import { content } from "editor";
 import { event } from "editor";
@@ -21,6 +25,8 @@ function EditorMainAssetImageList({
 }: EditorMainAssetImageListProps) {
   const assetData = useAtomValue(ImageAssetAtom);
   const nowTextBlock = useAtomValue(nowTextBlockAtom);
+  const [totalEvent, setTotalEvent] = useAtom(totalEventAtom);
+  const [totalEventCheck, setTotalEventCheck] = useAtom(totalEventCheckAtom);
 
   useEffect(() => {
     console.log(assetData);
@@ -32,30 +38,51 @@ function EditorMainAssetImageList({
 
   // 에셋 수정 삭제 기능도 구현해야함!
   const ClickHandler = (asset: Asset) => {
-    const newBlocks = [...contents];
-    const index = newBlocks.findIndex((el) => el.idx === nowTextBlock);
-    if (newBlocks[index].event.length >= 2) {
-    } else {
-      if (newBlocks[index].event.length !== 0) {
-        // 에셋 이벤트가 이미 있는 경우
-        if (newBlocks[index].event[0].type == "IMAGE") {
+    if (nowTextBlock == 0) {
+      if (totalEvent.event.length >= 2) {
+      } else {
+        if (totalEvent.event.length !== 0) {
+          if (totalEvent.event[0].type !== "IMAGE") {
+            const queue = {
+              assetId: asset.id,
+              type: asset.type,
+            };
+            totalEvent.event.push(queue);
+          }
         } else {
-          const queue = newBlocks[index].event[0];
-          newBlocks[index].event[0] = {
+          totalEvent.event.push({
             assetId: asset.id,
             type: asset.type,
-          };
-          newBlocks[index].event.push(queue);
+          });
         }
-      } else {
-        // 에셋 이벤트가 없는 경우
-        newBlocks[index].event.push({
-          assetId: asset.id,
-          type: asset.type,
-        });
       }
+      setTotalEventCheck(!totalEventCheck);
+    } else {
+      const newBlocks = [...contents];
+      const index = newBlocks.findIndex((el) => el.idx === nowTextBlock);
+      if (newBlocks[index].event.length >= 2) {
+      } else {
+        if (newBlocks[index].event.length !== 0) {
+          // 에셋 이벤트가 이미 있는 경우
+          if (newBlocks[index].event[0].type == "IMAGE") {
+          } else {
+            const queue = newBlocks[index].event[0];
+            newBlocks[index].event[0] = {
+              assetId: asset.id,
+              type: asset.type,
+            };
+            newBlocks[index].event.push(queue);
+          }
+        } else {
+          // 에셋 이벤트가 없는 경우
+          newBlocks[index].event.push({
+            assetId: asset.id,
+            type: asset.type,
+          });
+        }
+      }
+      setContents(newBlocks);
     }
-    setContents(newBlocks);
   };
   return (
     <>

@@ -6,12 +6,16 @@ import { useRouter } from "next/router";
 import { Modal } from "../common/Modal";
 import EditorPreview from "./Head/EditorPreview";
 import { AiFillCheckCircle } from "react-icons/ai";
-import { useAtomValue } from "jotai";
-import { assetOpenAtom } from "@/src/store/EditorAssetStore";
+import { useAtomValue, useAtom } from "jotai";
+import { assetOpenAtom, nowTextBlockAtom,totalEventAtom,totalEventCheckAtom } from "@/src/store/EditorAssetStore";
 import springApi from "@/src/api";
 import { content } from "editor";
+import { BiImageAdd } from "react-icons/bi";
+
+import { AiOutlineSound } from "react-icons/ai";
 
 import { BiCaretUp, BiCaretDown } from "react-icons/bi";
+import { mobile } from "@/src/util/Mixin";
 type EditorHeadProps = {
   setEpisode: React.Dispatch<React.SetStateAction<episode>>;
   episode: episode;
@@ -26,7 +30,6 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
   const [modalOpen, setModalOpen] = useState(false);
   const [saveToast, setSaveToast] = useState(false);
   const [postModalOpen, setPostModalOpen] = useState(false);
-  const assetOpen = useAtomValue(assetOpenAtom);
   const [postedEpisodeId, setPostedEpisodeId] = useState<number>();
   const [reLocation, setRelocation] = useState<content[]>([]);
   const [reservationEpisode, setReservationEpisode] = useState<postEpisode>();
@@ -39,6 +42,13 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
     minutes: "00",
   });
   const [toggle, setToggle] = useState(false);
+  const [assetOpen, setAssetOpen] = useAtom(assetOpenAtom);
+  const [nowTextBlock, setNowTextBlock] = useAtom(nowTextBlockAtom);
+  const totalEventValue = useAtomValue(totalEventAtom)
+  const totalEventCheckValue = useAtomValue(totalEventCheckAtom)
+  useEffect(()=>{
+    console.log(totalEventValue)
+  },[totalEventCheckValue])
 
   useEffect(() => {
     if (toggle) {
@@ -106,6 +116,9 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
       if (episode.statusType == "TEMPORARY") {
         setEpisode({ ...episode, statusType: "PUBLISHED" });
       }
+      if(totalEventValue.event.length !==0){
+        episode.contents.unshift(totalEventValue)
+      }
       setPostModalOpen(true);
       setPostEpisode(episode);
     }
@@ -133,6 +146,7 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
           hours: new Date().getHours() + 1,
           minutes: "00",
         });
+        episode.contents.shift()
         setToggle(false);
       }
       setEpisode({ ...episode, statusType: "TEMPORARY" });
@@ -408,6 +422,20 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
   //   setReservationDate({...reservationDate,})
   // },[reservationDate])
 
+  const AssetHandler = (e: number) => {
+    if (e === 1) {
+      setAssetOpen(1);
+      setNowTextBlock(0);
+
+    } else if(e === 2 ) {
+      setAssetOpen(2);
+      setNowTextBlock(0);
+
+    }
+  };
+
+ 
+
   return (
     <Wrapper>
       <ButtonWrapper>
@@ -429,14 +457,23 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
           name="title"
           placeholder="에피소드 명을 입력하세요"
         />
-        {/* <BackGroundAssetContainer>전체 에셋</BackGroundAssetContainer> */}
       </InputWrapper>
+      <TotalAssetButtonContainer>
+        {totalEventValue&& totalEventValue.event.length !== 0?(<Color>{totalEventValue.event[0]?.type}{totalEventValue.event[1]?.type}</Color>):(null) }
+      <AssetButton onClick={() => AssetHandler(1)}>
+        <BiImageAdd className="image" size="24" />
+      </AssetButton>
+      <AssetButton onClick={() => AssetHandler(2)}>
+        <AiOutlineSound className="sound" size="24" />
+      </AssetButton>
+
+      </TotalAssetButtonContainer>
       {modalOpen && (
         <Modal
           modal={modalOpen}
           setModal={setModalOpen}
-          width="600"
-          height="800"
+          width="750"
+          height="600"
           element={
             <div>
               <EditorPreview postEpisode={episode} />
@@ -462,14 +499,10 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
                 <ModalContainer>
                   <ModalPostHeader>발행</ModalPostHeader>
                   <ModalPostForm>
-                    <ModalListItemData>
+                    <ModalListItem>
                       제목
-                      <div>{reservationEpisode?.title}</div>
-                    </ModalListItemData>
-                    <ModalListItemData>
-                      전체 에셋
-                      <div>{reservationEpisode?.title}</div>
-                    </ModalListItemData>
+                      <div>{postEpisode?.title}</div>
+                    </ModalListItem>
                     <ModalListItem>
                       포인트
                       <div>{pointChange}point</div>
@@ -484,20 +517,17 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
                     </ModalListItem>
                     <ModalListItem>
                       발행시간 설정
-                        <ToggleBtnContainer  onClick={() => setToggle(true)}>
-                          <ToggleBtn
-                            toggle={toggle}
-                            className="reserve"
-                          ></ToggleBtn>
-                          <ToggleBtnText>예약발행</ToggleBtnText>
-                        </ToggleBtnContainer>
-                        <ToggleBtnContainer  onClick={() => setToggle(false)}>
-                          <ToggleBtn
-                            toggle={toggle}
-                            className="now"
-                          ></ToggleBtn>
-                          <ToggleBtnText>바로발행</ToggleBtnText>
-                        </ToggleBtnContainer>
+                      <ToggleBtnContainer onClick={() => setToggle(true)}>
+                        <ToggleBtn
+                          toggle={toggle}
+                          className="reserve"
+                        ></ToggleBtn>
+                        <ToggleBtnText>예약발행</ToggleBtnText>
+                      </ToggleBtnContainer>
+                      <ToggleBtnContainer onClick={() => setToggle(false)}>
+                        <ToggleBtn toggle={toggle} className="now"></ToggleBtn>
+                        <ToggleBtnText>바로발행</ToggleBtnText>
+                      </ToggleBtnContainer>
                     </ModalListItem>
 
                     {toggle ? (
@@ -595,8 +625,8 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
                     <button onClick={() => setToggle(!toggle)}>toggle</button>
                     {toggle ? (
                       <>
-                      <ModalListItem>
-                      예약날짜
+                        <ModalListItem>
+                          예약날짜
                           <ModalListItemData>
                             <div>{reservationDate.year}년</div>
                             <BtnContainer>
@@ -648,7 +678,7 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
                           <PostBtn onClick={() => saveHandler("cancel")}>
                             취소
                           </PostBtn>
-                      </ModalListItem>
+                        </ModalListItem>
                       </>
                     ) : (
                       <>
@@ -678,6 +708,9 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
     </Wrapper>
   );
 }
+const Color = styled.div`
+  color:black;
+`
 
 const Wrapper = styled.div`
   display: flex;
@@ -702,7 +735,7 @@ const WriteButton = styled.button`
 const InputWrapper = styled.div<{ assetOpen: number }>`
   display: flex;
   flex-direction: column;
-  width: 90%;
+  width: 100%;
   justify-content: center;
   text-align: center;
   align-items: flex-start;
@@ -727,9 +760,14 @@ const TitleInput = styled.input`
   border-radius: 10px;
   font-size: 1.5rem;
   /* box-shadow: 0px 0px 3px gray; */
-  width: 70%;
+  width: 100%;
   ::placeholder {
-    font-size: 1.5rem;
+    font-size: 1rem;
+  }
+  ${mobile} {
+    ::placeholder {
+      font-size: 12px;
+    }
   }
 `;
 
@@ -745,6 +783,23 @@ const BackGroundAssetContainer = styled.div`
   border-radius: 10px;
   width: 30%;
   height: 2rem;
+`;
+
+const AssetButton = styled.button`
+  width: 3.5rem;
+  height: 2.5rem;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  margin-left: 0.3rem;
+  border: 2px solid ${({ theme }) => theme.color.hover};
+  border-radius: 10px;
+  color: ${({ theme }) => theme.color.hover};
+  :hover {
+    color: ${({ theme }) => theme.color.point};
+    border: 2px solid ${({ theme }) => theme.color.point};
+  }
 `;
 
 const ToastContainer = styled.div<{ assetOpen: number }>`
@@ -806,7 +861,7 @@ const ModalListItem = styled.div`
   align-items: center;
   justify-content: space-between;
 
-  &.now{
+  &.now {
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
   }
@@ -841,7 +896,7 @@ const ToggleBtn = styled.div<{ toggle: boolean }>`
         ? ({ theme }) => theme.color.background
         : ({ theme }) => theme.color.hover};
   }
-  width:0.7rem;
+  width: 0.7rem;
   height: 0.7rem;
   border-radius: 50%;
   padding: 0.2rem;
@@ -849,11 +904,11 @@ const ToggleBtn = styled.div<{ toggle: boolean }>`
   cursor: pointer;
 `;
 const ToggleBtnContainer = styled.div`
-width: 4.5rem;
-display:flex;
-text-align: center;
-align-items: center;
-justify-content: space-between;
+  width: 4.5rem;
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: space-between;
 `;
 
 const PostBtn = styled.button`
@@ -879,5 +934,13 @@ const BottomBtn = styled.div`
   align-items: center;
   justify-content: center;
 `;
+
+const TotalAssetButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-left: 25%;
+  margin-right: 30%;
+
+`
 
 export default EditorHead;

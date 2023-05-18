@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { BiBold, BiItalic } from "react-icons/bi";
 import EditorMainMenuColor from "./EditorMainMenuColor";
@@ -15,12 +15,14 @@ function EditorMainMenu({ setText, x, y, style, setStyle }: EditorMainMenuProps)
   const positionY = y;
   const [colorDrop, setColorDrop] = useState(false);
 
-  const handleSelectionStyle = (style: string) => {
+  const handleSelectionStyle = (type: string) => {
     const selection = window.getSelection();
     if (selection) {
       const range = selection.getRangeAt(0);
       const selectedText = range.toString();
-      const formattedText = `<${style}>${selectedText}</${style}>`;
+      const formattedText = `<${type}>${selectedText}</${type}>`;
+      console.log(formattedText)
+      setText(formattedText)
       range.deleteContents();
       range.insertNode(
         document.createRange().createContextualFragment(formattedText)
@@ -39,6 +41,7 @@ function EditorMainMenu({ setText, x, y, style, setStyle }: EditorMainMenuProps)
       const range = selection.getRangeAt(0);
       const selectedText = range.toString();
       const formattedText = `<span style="font-size: ${size}px">${selectedText}</span>`;
+      setText(formattedText)
       range.deleteContents();
       range.insertNode(
         document.createRange().createContextualFragment(formattedText)

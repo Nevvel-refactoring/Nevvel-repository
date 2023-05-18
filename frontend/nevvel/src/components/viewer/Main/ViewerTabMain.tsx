@@ -68,7 +68,7 @@ const Container = styled.div<{
     font-size: ${(props) =>
        props.fontSize == 3 ? 16 : props.fontSize * 5.5}px;
   }
-  color:white;
+  color: white;
   /* opacity: 0.8; */
   mix-blend-mode: difference;
   font-weight: 100;

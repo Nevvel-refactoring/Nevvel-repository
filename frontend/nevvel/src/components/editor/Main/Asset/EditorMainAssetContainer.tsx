@@ -108,6 +108,7 @@ const AssetContainer = styled.div`
     width: 100vw;
     height: 30vh;
   }
+  z-index: 100;
 `;
 const AssetStoreTitle = styled.div`
   color: ${({ theme }) => theme.color.point};

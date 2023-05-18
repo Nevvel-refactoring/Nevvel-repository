@@ -8,24 +8,29 @@ type ViewerTextBlockProps = {
   content: content;
   tabNumber: number;
   setEventCatch: React.Dispatch<React.SetStateAction<boolean>>;
-  interval:number;
-  
+  interval: number;
 };
 
 function EditorPreviewTextBlock({
   content,
   tabNumber,
   setEventCatch,
-  interval
+  interval,
 }: ViewerTextBlockProps) {
-
   return (
-    <>{content.idx <= tabNumber && <TextBlock interval={interval}>{content.context}</TextBlock>}</>
+    <>
+      {content.idx <= tabNumber && (
+        <TextBlock
+          interval={interval}
+          dangerouslySetInnerHTML={{ __html: content.context }}
+        />
+      )}
+    </>
   );
 }
 
-const TextBlock = styled.div<{interval:number}>`
+const TextBlock = styled.div<{ interval: number }>`
   z-index: 100;
-  padding:${(props)=>(props.interval)*0.5}rem;
+  padding: ${(props) => props.interval * 0.5}rem;
 `;
 export default EditorPreviewTextBlock;

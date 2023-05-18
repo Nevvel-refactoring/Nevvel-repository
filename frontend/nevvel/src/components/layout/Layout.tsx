@@ -32,7 +32,7 @@ const Wrapper = styled.div`
   padding: 0;
   margin: 0;
   height: auto;
-  width: 100wh;
+  width: 100vw;
   background-color: ${({ theme }) => theme.color.background};
   color: ${({ theme }) => theme.color.text1};
 `;

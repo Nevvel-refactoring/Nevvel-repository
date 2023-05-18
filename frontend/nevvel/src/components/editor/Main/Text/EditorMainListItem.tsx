@@ -4,7 +4,7 @@ import { BiImageAdd } from "react-icons/bi";
 import { TiDelete } from "react-icons/ti";
 import { AiOutlineSound } from "react-icons/ai";
 import EditorMainMenu from "./EditorMainMenu";
-import { mobile } from "@/src/util/Mixin";
+import { bigMobile, mobile } from "@/src/util/Mixin";
 import { content } from "editor";
 import { atom, useAtom, useAtomValue } from "jotai";
 import { assetOpenAtom, nowTextBlockAtom } from "@/src/store/EditorAssetStore";
@@ -50,9 +50,25 @@ function EditorMainListItem({
   // const relocation:content[] = []
 
   useEffect(() => {
-    // console.log(text);
     // 텍스트에 style 적용한 경우
+    return (()=>{
+      console.log("text",text)
+      setContents(contents.map((el) => {
+        if (el.idx === idx) {
+          return { ...el, context: text };
+        }
+        return el;
+      }));
+    })
   }, [style]);
+  useEffect(()=>{
+    setContents(contents.map((el) => {
+      if (el.idx === idx) {
+        return { ...el, context: text };
+      }
+      return el;
+    }));
+  },[text])
 
   // useEffect(() => {
   //   console.log(IMAGE, "최초값");
@@ -315,6 +331,9 @@ const BlockContainer = styled.div`
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
   width: 100%;
+  ${bigMobile}{
+    flex-direction: column;
+  }
 `;
 const AssetButtonContainer = styled.div`
   width: 10rem;
@@ -324,6 +343,9 @@ const AssetButtonContainer = styled.div`
   margin-left: 0.5rem;
   margin-right: 0.5rem;
   justify-content: center;
+  ${bigMobile}{
+    display: flex;
+  }
 `;
 
 const AssetContainer = styled.div`

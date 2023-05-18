@@ -1,4 +1,4 @@
-import { tabletH } from "@/src/util/Mixin";
+import { bigMobile, tabletH } from "@/src/util/Mixin";
 import React, {
   useState,
   Dispatch,
@@ -117,6 +117,9 @@ const BlockInput = styled.textarea`
   min-height: 3rem;
   resize: none;
   align-items: center;
+  ${bigMobile}{
+  
+  }
 `;
 
 const SubmitButton = styled.button`
