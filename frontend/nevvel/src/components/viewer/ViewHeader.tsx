@@ -82,11 +82,11 @@ function ViewHeader({ EpisodeData, id, headerEpisodeData,setTotalImage,setTotalA
   };
 
   const postHandler = async () => {
-    console.log(deleteData);
+    // console.log(deleteData);
     try {
       const res = await springApi.post("/episodes", deleteData);
       if (res.status === 201) {
-        console.log(res);
+        // console.log(res);
         alert(`${EpisodeData.title}가 삭제되었습니다`);
       }
     } catch (error) {

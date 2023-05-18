@@ -27,7 +27,7 @@ function EditorMain({setEpisode,episode}:EditorMainProps) {
 
   useEffect(()=>{
     setEpisode({...episode,contents:contents})
-    console.log("episode 들오오냐 메인에",episode)
+    // console.log("episode 들오오냐 메인에",episode)
   },[contents])
 
   // useEffect(()=>{

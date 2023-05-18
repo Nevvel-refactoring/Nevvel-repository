@@ -26,7 +26,7 @@ function ViewerTabMain({
   setEventCatch,
 }: viwerMainProps) {
   useEffect(() => {
-    console.log(fontStyle);
+    // console.log(fontStyle);
   }, [fontStyle]);
 
   return (

@@ -20,9 +20,9 @@ function CustomRouter({ children, router }: CustomRouterProps) {
     // setChangeTheme(localChangeTheme);
     // setLoginStatus(localLoginStatus);
     // setUserInfoStatus(localUserInfoStatus);
-    console.log(localChangeTheme);
-    console.log(localLoginStatus);
-    console.log(localUserInfoStatus);
+    // console.log(localChangeTheme);
+    // console.log(localLoginStatus);
+    // console.log(localUserInfoStatus);
   }, [router.pathname]);
 
   return <>{children}</>;

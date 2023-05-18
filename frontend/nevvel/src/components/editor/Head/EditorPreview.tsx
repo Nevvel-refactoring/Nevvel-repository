@@ -16,8 +16,8 @@ function EditorPreview({ postEpisode }: EditorPreviewProps) {
   const [tabNumber, setTabNumber] = useState(0); // tab mode 일 때 사용
   const [eventCatch, setEventCatch] = useState(false); // tab mode 일때 이벤트 있는 경우 사용
 
-  console.log("여기");
-  console.log(postEpisode, "postEpisode");
+  // console.log("여기");
+  // console.log(postEpisode, "postEpisode");
 
   useEffect(() => {
     if (postEpisode.contents) {
@@ -28,10 +28,10 @@ function EditorPreview({ postEpisode }: EditorPreviewProps) {
         const events = postEpisode.contents[tabNumber]?.event;
         for (const event of events) {
           if (event.type === "IMAGE") {
-            console.log("이미지당");
+            // console.log("이미지당");
             setEventCatch(true);
           } else {
-            console.log("소리당");
+            // console.log("소리당");
           }
         }
       }
@@ -45,14 +45,14 @@ function EditorPreview({ postEpisode }: EditorPreviewProps) {
 
   const countHandler = () => {
     const contentLength = postEpisode.contents.length;
-    console.log();
-    console.log("이거 댐?");
+    // console.log();
+    // console.log("이거 댐?");
     if (tabNumber <= contentLength - 1) {
       setTabNumber(tabNumber + 1);
     } else if (tabNumber === contentLength - 1) {
-      console.log("마지막 입니다. ");
+      // console.log("마지막 입니다. ");
     }
-    console.log(tabNumber);
+    // console.log(tabNumber);
   };
 
   return (

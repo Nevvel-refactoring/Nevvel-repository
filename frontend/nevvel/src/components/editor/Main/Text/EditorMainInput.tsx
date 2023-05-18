@@ -31,7 +31,7 @@ function EditorMainInput({
   const [nextId, setNextId] = useState(1);
 
   useEffect(() => {
-    console.log("nextId", nextId);
+    // console.log("nextId", nextId);
   }, [nextId]);
 
   useEffect(() => {
@@ -39,7 +39,7 @@ function EditorMainInput({
   }, [episode]);
 
   useEffect(() => {
-    console.log(nextId);
+    // console.log(nextId);
   }, [nextId]);
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {

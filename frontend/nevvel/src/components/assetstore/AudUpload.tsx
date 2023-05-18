@@ -132,7 +132,7 @@ function AudUpload(props:assetstoreProps) {
 
     try{
       // 들어오는지 테스트
-      console.log(audio, title, description, price, selectTag) 
+      // console.log(audio, title, description, price, selectTag) 
       
       // 제출버튼 누르면 formdata에 데이터 집어넣기
       if (audio) {
@@ -147,7 +147,7 @@ function AudUpload(props:assetstoreProps) {
           'Content-Type': 'multipart/form-data'
         }
       }).then(res => {
-        console.log(res)
+        // console.log(res)
       }).catch(err => {
         console.log("에러남 error")
       })

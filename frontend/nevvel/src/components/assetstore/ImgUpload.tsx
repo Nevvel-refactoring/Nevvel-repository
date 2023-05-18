@@ -146,7 +146,7 @@ function ImgUpload(props:assetstoreProps) {
 
     try{
       // 들어오는지 테스트
-      console.log(image, title, description, price, selectTag)
+      // console.log(image, title, description, price, selectTag)
 
       // 태그 리스트 객체화
       // const tagOjectList = selectTag.map((tag) => ({ tagName : tag }))
@@ -171,7 +171,7 @@ function ImgUpload(props:assetstoreProps) {
           'Content-Type': 'multipart/form-data'
         }
       }).then(res => {
-        console.log(res)
+        // console.log(res)
       }).catch(err => {
         console.log("에러남 error")
       })

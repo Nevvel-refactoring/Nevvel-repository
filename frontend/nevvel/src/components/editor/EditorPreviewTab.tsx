@@ -33,7 +33,7 @@ function EditorPreviewTab({
   const AUDIO = useAtomValue(AudioAssetAtom);
   const audioRef = useRef<any>(null);
   useEffect(() => {
-    console.log(fontStyle);
+    // console.log(fontStyle);
   }, [fontStyle]);
 
   useEffect(() => {
@@ -47,12 +47,12 @@ function EditorPreviewTab({
         const events = EpisodeData.contents[tabNumber - 1]?.event;
         for (const event of events) {
           if (event.type === "IMAGE") {
-            console.log("이미지당");
+            // console.log("이미지당");
             setEventCatch(true);
             setImageEvent(IMAGE.find((el) => el.id === event.assetId)?.url);
           }
           if (event.type === "AUDIO") {
-            console.log("소리당");
+            // console.log("소리당");
             setAudioEventCatch(true);
             setAudioEvent(AUDIO.find((el) => el.id === event.assetId)?.url);
           }
@@ -79,7 +79,7 @@ function EditorPreviewTab({
     if (EpisodeData) {
       const contents = EpisodeData.contents;
       for (const content of contents) {
-        console.log(content);
+        // console.log(content);
       }
     }
   }, [audioEventCatch]);
