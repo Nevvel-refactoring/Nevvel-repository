@@ -24,6 +24,8 @@ type SeriesHeaderProps = {
   coverId: string | string[] | undefined;
   isPurchased: number;
   setIsPurchase: Dispatch<SetStateAction<number>>;
+  isEdited: boolean;
+  setIsEdited: Dispatch<SetStateAction<boolean>>;
 };
 
 function SeriesHeader({
@@ -31,6 +33,8 @@ function SeriesHeader({
   coverId,
   setIsPurchase,
   isPurchased,
+  isEdited,
+  setIsEdited,
 }: SeriesHeaderProps) {
   const router = useRouter();
   const [modalOpen, setModalOpen] = useState(false);
@@ -70,7 +74,6 @@ function SeriesHeader({
       alert("로그인 하세요");
     }
   };
-  
 
   return (
     <HeaderContainer>
@@ -190,6 +193,8 @@ function SeriesHeader({
               setModalOpen2={setModalOpen2}
               setAfterEdit={setIsPurchase}
               afterEdit={isPurchased}
+              isEdited={isEdited}
+              setIsEdited={setIsEdited}
             />
           }
         />

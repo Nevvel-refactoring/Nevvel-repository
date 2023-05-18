@@ -11,6 +11,7 @@ import { mobile, tabletH } from "@/src/util/Mixin";
 function index() {
   const [seriesData, setSeriesData] = useState<cover>();
   const [isPurchased, setIsPurchase] = useState<number>(0);
+  const [isEdited, setIsEdited] = useState<boolean>(false)
   const router = useRouter();
   const id = router.query.id;
 
@@ -31,7 +32,7 @@ function index() {
     } else {
       // setEpisodeData(Dummy_Episode); // merge 하기 전에 주석처리! 위에꺼는 해제
     }
-  }, [id, isPurchased]);
+  }, [id, isPurchased, isEdited]);
 
   return (
     <Wrapper>
@@ -42,6 +43,8 @@ function index() {
             coverId={id}
             setIsPurchase={setIsPurchase}
             isPurchased={isPurchased}
+            isEdited={isEdited}
+            setIsEdited={setIsEdited}
           />
           <SeriesMain SeriesData={seriesData} />
         </SeriesWrapper>
