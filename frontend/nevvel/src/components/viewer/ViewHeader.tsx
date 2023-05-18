@@ -124,7 +124,7 @@ function ViewHeader({ EpisodeData, id, headerEpisodeData,setTotalImage,setTotalA
         <EpisodeTitleContainer>
           <AiOutlineHome className="home" onClick={clickHandler} size={24} />
           <EpisodeTitle>{EpisodeData.title}</EpisodeTitle>
-          {loginStatus && headerEpisodeData?.writerId === userInfo?.id && (
+          {loginStatus && headerEpisodeData?.wirterId === userInfo?.id && (
             <>
               <Btn onClick={editHandler}>
                 <FiEdit size={18} />

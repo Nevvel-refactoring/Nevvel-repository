@@ -77,6 +77,7 @@ function EditorMainInput({
         value={currentText}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
+        placeholder="등록할 내용을 입력하세요"
       />
       <RightSpace />
       {/* <SubmitButton onClick={handleClick}>제출</SubmitButton> */}
@@ -101,7 +102,7 @@ const LeftSpace = styled.div`
   width: 10rem;
 `;
 const RightSpace = styled.div`
-  width: 2rem;
+  width: 1rem;
 `;
 
 const BlockInput = styled.textarea`

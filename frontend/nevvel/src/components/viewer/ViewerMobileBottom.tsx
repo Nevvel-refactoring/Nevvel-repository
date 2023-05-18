@@ -146,7 +146,7 @@ function ViewerMobileBottom({
           />
         </Btn>
         <AiOutlineHome onClick={clickHandler} size={24} />
-        {loginStatus && headerEpisodeData?.writerId === userInfo?.id && (
+        {loginStatus && headerEpisodeData?.wirterId === userInfo?.id && (
           <>
             <Btn onClick={editHandler}>
               <FiEdit size={18} />

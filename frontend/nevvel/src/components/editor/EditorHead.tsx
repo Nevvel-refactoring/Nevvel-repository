@@ -7,7 +7,14 @@ import { Modal } from "../common/Modal";
 import EditorPreview from "./Head/EditorPreview";
 import { AiFillCheckCircle } from "react-icons/ai";
 import { useAtomValue, useAtom } from "jotai";
-import { assetOpenAtom, nowTextBlockAtom,totalEventAtom,totalEventCheckAtom } from "@/src/store/EditorAssetStore";
+import {
+  assetOpenAtom,
+  nowTextBlockAtom,
+  totalEventAtom,
+  totalEventCheckAtom,
+  ImageAssetAtom,
+  AudioAssetAtom,
+} from "@/src/store/EditorAssetStore";
 import springApi from "@/src/api";
 import { content } from "editor";
 import { BiImageAdd } from "react-icons/bi";
@@ -44,11 +51,23 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
   const [toggle, setToggle] = useState(false);
   const [assetOpen, setAssetOpen] = useAtom(assetOpenAtom);
   const [nowTextBlock, setNowTextBlock] = useAtom(nowTextBlockAtom);
-  const totalEventValue = useAtomValue(totalEventAtom)
-  const totalEventCheckValue = useAtomValue(totalEventCheckAtom)
+  const totalEventValue = useAtomValue(totalEventAtom);
+  const totalEventCheckValue = useAtomValue(totalEventCheckAtom);
+  const ImageAssetValue = useAtomValue(ImageAssetAtom);
+  const AudioAssetValue = useAtomValue(AudioAssetAtom);
+  const [imageUrl, setImageUrl] = useState<number>();
+  const [AudioUrl, setAudioUrl] = useState<number>();
+
   useEffect(()=>{
-    console.log(totalEventValue)
-  },[totalEventCheckValue])
+    console.log(ImageAssetValue)
+    console.log(AudioAssetValue)
+    console.log(imageUrl)
+    console.log(AudioUrl)
+  })
+
+  useEffect(() => {
+    console.log(totalEventValue);
+  }, [totalEventCheckValue]);
 
   useEffect(() => {
     if (toggle) {
@@ -116,8 +135,8 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
       if (episode.statusType == "TEMPORARY") {
         setEpisode({ ...episode, statusType: "PUBLISHED" });
       }
-      if(totalEventValue.event.length !==0){
-        episode.contents.unshift(totalEventValue)
+      if (totalEventValue.event.length !== 0) {
+        episode.contents.unshift(totalEventValue);
       }
       setPostModalOpen(true);
       setPostEpisode(episode);
@@ -146,11 +165,12 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
           hours: new Date().getHours() + 1,
           minutes: "00",
         });
-        episode.contents.shift()
+        episode.contents.shift();
         setToggle(false);
       }
       setEpisode({ ...episode, statusType: "TEMPORARY" });
     }
+    ``;
   };
 
   const postHandler = async () => {
@@ -426,15 +446,37 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
     if (e === 1) {
       setAssetOpen(1);
       setNowTextBlock(0);
-
-    } else if(e === 2 ) {
+    } else if (e === 2) {
       setAssetOpen(2);
       setNowTextBlock(0);
-
     }
   };
 
- 
+  useEffect(() => {
+    if (totalEventValue && totalEventValue.event.length !== 0) {
+      if (totalEventValue.event.length===1&&totalEventValue.event[0].type === "IMAGE") {
+        console.log(totalEventValue.event[0].assetId,"이미지만")
+        const ImagefindIndex = ImageAssetValue.findIndex(
+          (el) => el.id == totalEventValue.event[0].assetId
+        );
+        setImageUrl(ImagefindIndex);
+      } else if (totalEventValue.event.length===1&&totalEventValue.event[0].type === "AUDI0") {
+        const AudiofindIndex = AudioAssetValue.findIndex(
+          (el) => el.id == totalEventValue.event[0].assetId
+        );
+        setAudioUrl(AudiofindIndex);
+      } else if (totalEventValue.event.length === 2) {
+        const ImagefindIndex = ImageAssetValue.findIndex(
+          (el) => el.id == totalEventValue.event[0].assetId
+        );
+        setImageUrl(ImagefindIndex);
+        const AudiofindIndex = AudioAssetValue.findIndex(
+          (el) => el.id == totalEventValue.event[1].assetId
+        );
+        setAudioUrl(AudiofindIndex);
+      }
+    }
+  });
 
   return (
     <Wrapper>
@@ -457,17 +499,29 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
           name="title"
           placeholder="에피소드 명을 입력하세요"
         />
-      </InputWrapper>
       <TotalAssetButtonContainer>
-        {totalEventValue&& totalEventValue.event.length !== 0?(<Color>{totalEventValue.event[0]?.type}{totalEventValue.event[1]?.type}</Color>):(null) }
-      <AssetButton onClick={() => AssetHandler(1)}>
-        <BiImageAdd className="image" size="24" />
-      </AssetButton>
-      <AssetButton onClick={() => AssetHandler(2)}>
-        <AiOutlineSound className="sound" size="24" />
-      </AssetButton>
-
+          {totalEventValue.event.length == 0 ||
+          (totalEventValue.event.length == 1 &&
+            totalEventValue.event[0].type === "AUDIO") ? (
+              <AssetButton onClick={() => AssetHandler(1)}>
+            <BiImageAdd className="image" size="24" />
+        </AssetButton>
+          ) : (
+            <>{imageUrl && <Img src={ImageAssetValue[imageUrl]?.thumbnail} alt="썸네일" />}</>
+          )}
+          {totalEventValue.event.length == 0 ||
+          (totalEventValue.event.length == 1 &&
+            totalEventValue.event[0].type === "IMAGE") ? (
+              <AssetButton onClick={() => AssetHandler(2)}>
+            <AiOutlineSound className="sound" size="24" />
+        </AssetButton>
+          ) : (
+            <>
+              {AudioUrl && <Img src={AudioAssetValue[AudioUrl]?.thumbnail} alt="썸네일"/>}
+            </>
+          )}
       </TotalAssetButtonContainer>
+      </InputWrapper>
       {modalOpen && (
         <Modal
           modal={modalOpen}
@@ -686,7 +740,7 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
                           등록을 누르시면 바로 발행 됩니다.
                         </ModalListItem>
                         <BottomBtn>
-                          <PostBtn className="first" onClick={postHandler}>
+                          <PostBtn className="first" onClick={puthandler}>
                             등록
                           </PostBtn>
                           <PostBtn
@@ -709,8 +763,8 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
   );
 }
 const Color = styled.div`
-  color:black;
-`
+  color: black;
+`;
 
 const Wrapper = styled.div`
   display: flex;
@@ -734,11 +788,12 @@ const WriteButton = styled.button`
 `;
 const InputWrapper = styled.div<{ assetOpen: number }>`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   width: 100%;
   justify-content: center;
   text-align: center;
   align-items: flex-start;
+  align-items: center;
   margin-left: 1.5rem;
   padding-left: ${(props) => (props.assetOpen ? 30 : 20)}%;
   padding-right: ${(props) => (props.assetOpen ? 15 : 20)}%;
@@ -938,9 +993,13 @@ const BottomBtn = styled.div`
 const TotalAssetButtonContainer = styled.div`
   display: flex;
   justify-content: center;
-  margin-left: 25%;
-  margin-right: 30%;
+  margin-right: 5rem;
+`;
+const Img = styled.img`
+  width: 3.5rem;
+  height: 2.5rem;
 
-`
-
+    margin-left: 0.3rem;
+  border-radius: 10px;
+`;
 export default EditorHead;

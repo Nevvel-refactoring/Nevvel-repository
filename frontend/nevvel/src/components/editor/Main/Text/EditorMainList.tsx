@@ -140,13 +140,13 @@ const ListWrapper = styled.div`
 `;
 
 const ContentWrapper = styled.div`
-  flex: 1;
+  width: 100%;
 `;
 
 const InputWrapper = styled.div`
   display: flex;
   flex-grow: 1;
-  margin-top: 0.5rem;
+  width: 100%;
   /* padding: 0.5rem; */
   /* background-color: ${({ theme }) => theme.color.secondary}; */
   /* border-radius: 5px; */
