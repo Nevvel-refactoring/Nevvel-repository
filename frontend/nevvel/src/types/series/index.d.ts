@@ -5,7 +5,7 @@ declare module "series" {
     thumbnail: string;
     status: string;
     description: string;
-    genre: string;
+    genre: { id: number; name: string };
     isLiked: boolean;
     writer: writer;
     viewCount: number;

@@ -1,5 +1,5 @@
 import springApi, { NewvelApi } from "@/src/api";
-import Router from "next/router";
+import { useRouter } from "next/router";
 import React, {
   Dispatch,
   SetStateAction,
@@ -110,6 +110,7 @@ function CreateNewNovel({ setModalOpen }: Props) {
     });
   }, [image, title, description, genre]);
 
+  const router = useRouter();
   const SubmitEdit = async () => {
     const formData = new FormData();
 
@@ -132,7 +133,8 @@ function CreateNewNovel({ setModalOpen }: Props) {
           },
         })
         .then((res) => {
-          console.log(res);
+          console.log(res.data);
+          router.push({ pathname: `/series/${res.data}` });
         })
         .catch((err) => {
           console.log("에러남 error");

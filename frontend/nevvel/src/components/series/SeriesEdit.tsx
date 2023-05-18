@@ -19,8 +19,9 @@ type SeriesEditProps = {
 interface CoverEdit {
   title: string;
   description: string;
-  genreId: number | null;
-  coverStatusType: string;
+  genre: number | null;
+  status: string;
+  isDefaultImage: boolean;
 }
 
 function SeriesEdit({
@@ -42,6 +43,7 @@ function SeriesEdit({
         const extension = fileName.split(".").pop()?.toLowerCase();
         if (extension && allowedExtensions.includes(extension)) {
           setImage(files[0]);
+          setIsDefaultImage(false);
         } else {
           alert("지원되지 않는 파일 확장자입니다.");
         }
@@ -57,6 +59,7 @@ function SeriesEdit({
   // 이미지 파일 삭제
   const DeleteImg = () => {
     setImage(null);
+    setIsDefaultImage(true);
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
@@ -82,21 +85,28 @@ function SeriesEdit({
 
   //   "SERIALIZED" | "FINISHED" | "DELETED"
 
+  // 커버 사진 수정 여부
+  const [isDefaultImage, setIsDefaultImage] = useState<boolean>(false);
+
   // 전체 JsonData
   const [jsonDatas, setJasonDatas] = useState<CoverEdit>({
     title: Info.title,
     description: Info.description,
-    genreId: 0,
-    coverStatusType: Info.status,
+    genre: Info.genre.id,
+    status: Info.status,
+    isDefaultImage: false,
   });
 
   useEffect(() => {
     // jsonDatas에 json 집어넣기
-    setJasonDatas({
-      title: title,
-      description: description,
-      genreId: 0,
-      coverStatusType: coverStatusType,
+    setJasonDatas((prevState) => {
+      return {
+        ...prevState,
+        title: title,
+        description: description,
+        status: coverStatusType,
+        isDefaultImage: isDefaultImage,
+      };
     });
   }, [image, title, description, coverStatusType]);
 
@@ -104,7 +114,7 @@ function SeriesEdit({
     const formData = new FormData();
 
     try {
-      console.log(image, title, description, coverStatusType);
+      console.log(image, title, description, coverStatusType, isDefaultImage);
       // 제출버튼 누르면 formdata에 데이터 집어넣기
       if (image) {
         formData.append("file", image);

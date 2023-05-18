@@ -134,7 +134,7 @@ function SeriesHeader({
           <SeriesText className="description">
             {SeriesData.description}
           </SeriesText>
-          <SeriesText className="genre">{SeriesData.genre}</SeriesText>
+          <SeriesText className="genre">{SeriesData.genre.name}</SeriesText>
           <SeriesBtnContainer>
             <SeriesBtn
               className="first"
