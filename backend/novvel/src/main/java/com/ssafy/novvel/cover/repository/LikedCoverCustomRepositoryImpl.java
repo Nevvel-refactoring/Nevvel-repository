@@ -135,23 +135,21 @@ public class LikedCoverCustomRepositoryImpl implements LikedCoverCustomRepositor
             thumbnail = cover.getResource().getThumbnailUrl();
         }
 
-        String genreName = null;
-        if (cover.getGenre() != null) {
-            genreName = cover.getGenre().getName();
-        }
-
         return CoverWithConditions.builder()
             .id(cover.getId())
             .title(cover.getTitle())
             .status(cover.getCoverStatusType())
-            .thumbnail(thumbnail == null ? defaultImage.getImageByGenreName(genreName) : thumbnail)
-            .genre(genreName)
+            .thumbnail(thumbnail == null ?
+                defaultImage.getImageByGenreName(cover.getGenre().getName())
+                : thumbnail)
+            .genre(cover.getGenre())
             .writerId(cover.getMember().getId())
             .writerNickname(cover.getMember().getNickname())
             .isUploaded(cover.getLastPublishDate() == null ? Boolean.FALSE
                 : cover.getLastPublishDate().isAfter(LocalDate.now().minusDays(7L)))
             .isNew(cover.getFirstPublishDate() == null ? Boolean.FALSE
                 : cover.getFirstPublishDate().isAfter(LocalDate.now().minusDays(7L)))
+            .likes(cover.getLikes())
             .build();
     }
 }

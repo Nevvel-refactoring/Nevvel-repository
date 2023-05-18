@@ -16,6 +16,7 @@ import com.ssafy.novvel.episode.entity.ReadEpisode;
 import com.ssafy.novvel.episode.repository.ReadEpisodeRepository;
 import com.ssafy.novvel.exception.NotFoundException;
 import com.ssafy.novvel.exception.NotYourAuthorizationException;
+import com.ssafy.novvel.genre.dto.GenreDto;
 import com.ssafy.novvel.genre.repository.GenreRepository;
 import com.ssafy.novvel.member.entity.Member;
 import com.ssafy.novvel.member.repository.MemberRepository;
@@ -92,7 +93,9 @@ public class CoverServiceImpl implements CoverService {
         CoverInfoAndEpisodesDto coverInfoAndEpisodesDto = new CoverInfoAndEpisodesDto();
         coverInfoAndEpisodesDto.setTitle(cover.getTitle());
         coverInfoAndEpisodesDto.setDescription(cover.getDescription());
-        coverInfoAndEpisodesDto.setGenre(cover.getGenre().getName());
+        coverInfoAndEpisodesDto.setGenre(cover.getGenre().toDto());
+        coverInfoAndEpisodesDto.setViews(cover.getViewCount());
+        coverInfoAndEpisodesDto.setLikes(cover.getLikes());
         String thumbnail;
         if (cover.getResource() == null || cover.getResource().getThumbnailUrl() == null) {
             thumbnail = defaultImage.getImageByGenreName(cover.getGenre().getName());
@@ -175,7 +178,7 @@ public class CoverServiceImpl implements CoverService {
             page.getContent().stream().map(coverPurchasedDto -> {
                 coverPurchasedDto.setThumbnail(
                     coverPurchasedDto.getThumbnail() == null ?
-                        defaultImage.getImageByGenreName(coverPurchasedDto.getGenre())
+                        defaultImage.getImageByGenreName(coverPurchasedDto.getGenre().getName())
                         : coverPurchasedDto.getThumbnail());
                 return coverPurchasedDto;
             }).collect(Collectors.toList());
@@ -195,14 +198,19 @@ public class CoverServiceImpl implements CoverService {
         Optional<LikedCover> likedCoverOptional = likedCoverRepository.findByMemberAndCoverId(
             member, coverId);
 
+        Cover cover = coverRepository.findById(coverId)
+            .orElseThrow(() -> new NotFoundException("해당 소설을 찾을 수 없습니다"));
+
         if (likedCoverOptional.isEmpty()) {
-            Cover cover = coverRepository.findById(coverId)
-                .orElseThrow(() -> new NotFoundException("해당 소설을 찾을 수 없습니다"));
             LikedCover likedCover = new LikedCover(cover, member);
             likedCoverRepository.save(likedCover);
+            cover.plusLikes();
+            coverRepository.save(cover);
             return 201;
         } else {
             likedCoverRepository.delete(likedCoverOptional.get());
+            cover.minusLikes();
+            coverRepository.save(cover);
             return 200;
         }
 

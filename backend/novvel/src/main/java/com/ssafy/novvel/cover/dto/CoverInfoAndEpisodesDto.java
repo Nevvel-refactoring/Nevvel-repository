@@ -1,5 +1,6 @@
 package com.ssafy.novvel.cover.dto;
 
+import com.ssafy.novvel.genre.dto.GenreDto;
 import com.ssafy.novvel.genre.entity.Genre;
 import com.ssafy.novvel.member.entity.Member;
 import java.util.List;
@@ -23,7 +24,7 @@ public class CoverInfoAndEpisodesDto {
     @Size(max = 500)
     private String description;
     @NotNull
-    private String genre;
+    private GenreDto genre;
 
     private String thumbnail;
     private CoverWriter writer;
@@ -31,4 +32,7 @@ public class CoverInfoAndEpisodesDto {
     private Long lastReadEpisodeId;
 
     private List<EpisodeInfoDto> episodes;
+
+    private Long views;
+    private Long likes;
 }

@@ -1,5 +1,6 @@
 package com.ssafy.novvel.cover.repository;
 
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Predicate;
@@ -30,6 +31,7 @@ import static com.ssafy.novvel.cover.entity.QCover.cover;
 import static com.ssafy.novvel.episode.entity.QEpisode.episode;
 import static com.ssafy.novvel.episode.entity.QReadEpisode.readEpisode;
 import static com.ssafy.novvel.transactionhistory.entity.QTransactionHistory.transactionHistory;
+import static com.ssafy.novvel.cover.entity.QLikedCover.likedCover;
 
 @Slf4j
 public class CoverRepositoryCustomImpl implements CoverRepositoryCustom {
@@ -77,7 +79,9 @@ public class CoverRepositoryCustomImpl implements CoverRepositoryCustom {
             .fetchOne();
 
         return new PageImpl<>(
-            content.stream().map(c -> covertCoverWithConditions(c, defaultImage)).collect(Collectors.toList()),
+            content.stream().map(
+                    c -> covertCoverWithConditions(c, defaultImage))
+                .collect(Collectors.toList()),
             pageable,
             count == null ? 0 : count
         );
@@ -133,7 +137,8 @@ public class CoverRepositoryCustomImpl implements CoverRepositoryCustom {
             .fetchOne();
 
         return new PageImpl<>(
-            content.stream().map(c -> covertCoverWithConditions(c, defaultImage)).collect(Collectors.toList()),
+            content.stream().map(
+                c -> covertCoverWithConditions(c, defaultImage)).collect(Collectors.toList()),
             pageable,
             count == null ? 0 : count
         );
@@ -163,7 +168,9 @@ public class CoverRepositoryCustomImpl implements CoverRepositoryCustom {
 
     private Predicate checkKeyword(String keyword) {
         log.info(keyword);
-        if("".equals(keyword)) return null;
+        if ("".equals(keyword)) {
+            return null;
+        }
         return cover.title.contains(keyword)
             .or(cover.member.nickname.contains(keyword));
     }
@@ -183,12 +190,14 @@ public class CoverRepositoryCustomImpl implements CoverRepositoryCustom {
 
     private void checkMemberForSelect(JPAQuery<EpisodeInfoDto> query, Member member) {
         if (member == null) {
-            query.select(new QEpisodeInfoDto(episode.id, episode.title, episode.point, episode.viewCount,
-                episode.publishedDate));
+            query.select(
+                new QEpisodeInfoDto(episode.id, episode.title, episode.point, episode.viewCount,
+                    episode.publishedDate));
         } else {
-            query.select(new QEpisodeInfoDto(episode.id, episode.title, episode.point, episode.viewCount,
-                episode.publishedDate, transactionHistory.pointChangeType,
-                readEpisode.member.id.isNotNull()));
+            query.select(
+                new QEpisodeInfoDto(episode.id, episode.title, episode.point, episode.viewCount,
+                    episode.publishedDate, transactionHistory.pointChangeType,
+                    readEpisode.member.id.isNotNull()));
         }
     }
 
@@ -245,23 +254,22 @@ public class CoverRepositoryCustomImpl implements CoverRepositoryCustom {
             thumbnail = cover.getResource().getThumbnailUrl();
         }
 
-        String genreName = null;
-        if (cover.getGenre() != null) {
-            genreName = cover.getGenre().getName();
-        }
-
         return CoverWithConditions.builder()
             .id(cover.getId())
             .title(cover.getTitle())
             .status(cover.getCoverStatusType())
-            .thumbnail(thumbnail == null ? defaultImage.getImageByGenreName(genreName) : thumbnail)
-            .genre(genreName)
+            .thumbnail(thumbnail == null ?
+                defaultImage.getImageByGenreName(cover.getGenre().getName())
+                : thumbnail)
+            .views(cover.getViewCount())
+            .genre(cover.getGenre())
             .writerId(cover.getMember().getId())
             .writerNickname(cover.getMember().getNickname())
             .isUploaded(cover.getLastPublishDate() == null ? Boolean.FALSE
                 : cover.getLastPublishDate().isAfter(LocalDate.now().minusDays(7L)))
             .isNew(cover.getFirstPublishDate() == null ? Boolean.FALSE
                 : cover.getFirstPublishDate().isAfter(LocalDate.now().minusDays(7L)))
+            .likes(cover.getLikes())
             .build();
     }
 }

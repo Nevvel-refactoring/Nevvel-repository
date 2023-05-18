@@ -55,27 +55,30 @@ public class MemberController {
 
     @PutMapping("/signup")
     @Operation(summary = "멤버 정보 수정", description = "<strong>사용자의 수정할 정보를 입력</strong> 합니다.")
-    public ResponseEntity<?> registryMemberInfo(@RequestPart("file") MultipartFile multipartFile,
+    public ResponseEntity<?> registryMemberInfo(
+        @RequestPart(value = "file", required = false) MultipartFile multipartFile,
         @RequestPart("memberInfoRegistDto") MemberInfoRegistDto memberInfoRegistDto,
         @AuthenticationPrincipal CustomUserDetails customUserDetails,
         HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         Cookie accessToken = null;
 
-        for(Cookie cookie : request.getCookies()) {
-            if(cookie.getName().equals(JWTProvider.getAccessToken())) {
+        for (Cookie cookie : request.getCookies()) {
+            if (cookie.getName().equals(JWTProvider.getAccessToken())) {
                 accessToken = cookie;
             }
         }
 
-        MemberChanged memberChanged = memberService.addMemberInfo(multipartFile, memberInfoRegistDto,
+        MemberChanged memberChanged = memberService.addMemberInfo(multipartFile,
+            memberInfoRegistDto,
             customUserDetails.getMember());
 
-        if(memberChanged.getMember() != null && accessToken != null) {
-            response.addCookie(userDtoUtils.createUserDtoCookie(memberChanged.getMember(), accessToken.getMaxAge()));
+        if (memberChanged.getMember() != null && accessToken != null) {
+            response.addCookie(userDtoUtils.createUserDtoCookie(memberChanged.getMember(),
+                accessToken.getMaxAge()));
         }
 
-        if(memberChanged.getRemovedResource() != null) {
+        if (memberChanged.getRemovedResource() != null) {
             s3Service.deleteFile(memberChanged.getRemovedResource());
         }
 

@@ -18,7 +18,7 @@ public interface CoverRepository extends JpaRepository<Cover, Long>, CoverReposi
     @Query(
         value =
             "SELECT new com.ssafy.novvel.cover.dto.CoverPurchasedDto(c, r.thumbnailUrl,"
-                + " g.name, m.id, m.nickname) "
+                + " g, m.id, m.nickname) "
                 + "FROM PurchasedCover as pc "
                 + "LEFT JOIN Cover as c "
                 + "ON pc.cover.id = c.id "

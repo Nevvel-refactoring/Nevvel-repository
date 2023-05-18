@@ -94,4 +94,12 @@ public class Cover extends BaseEntity {
         this.genre = genre;
 
     }
+
+    public void plusLikes() {
+        this.likes++;
+    }
+
+    public void minusLikes() {
+        this.likes--;
+    }
 }

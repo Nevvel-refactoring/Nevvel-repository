@@ -42,7 +42,7 @@ public class CoverController {
 
     @PostMapping()
     @Operation(summary = "소설(표지) 등록", description = "소설(표지)를 <strong>등록</strong> 합니다.")
-    public ResponseEntity<?> registerCover(@RequestPart(value = "file") MultipartFile file,
+    public ResponseEntity<?> registerCover(@RequestPart(value = "file", required = false) MultipartFile file,
                                            @RequestPart(value = "coverRegisterDto") CoverRegisterDto coverRegisterDto,
                                            @AuthenticationPrincipal CustomUserDetails customUserDetails) throws IOException {
 
@@ -66,7 +66,7 @@ public class CoverController {
     @PutMapping("/{cover-num}")
     @Operation(summary = "소설(표지) 수정", description = "소설(표지)를 <strong>수정</strong> 합니다.")
     public ResponseEntity<?> modifyCover(@PathVariable("cover-num") Long coverId,
-        @RequestPart(value = "file") MultipartFile file,
+        @RequestPart(value = "file", required = false) MultipartFile file,
         @RequestPart(value = "coverModifyDto") CoverModifyDto coverModifyDto,
         @AuthenticationPrincipal CustomUserDetails customUserDetails)
         throws AuthenticationException, IOException {
