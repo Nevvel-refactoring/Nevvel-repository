@@ -58,6 +58,7 @@ public class CoverRepositoryCustomImpl implements CoverRepositoryCustom {
             .where(
                 checkStatus(coverSearchConditions.getStatus()),
                 checkGenre(coverSearchConditions.getGenre()),
+                checkKeyword(coverSearchConditions.getKeyword()),
                 cover.firstPublishDate.isNotNull()
             )
             .orderBy(order(coverSearchConditions.getSorttype()))
@@ -158,6 +159,13 @@ public class CoverRepositoryCustomImpl implements CoverRepositoryCustom {
             return null;
         }
         return cover.genre.id.eq(genreId);
+    }
+
+    private Predicate checkKeyword(String keyword) {
+        log.info(keyword);
+        if("".equals(keyword)) return null;
+        return cover.title.contains(keyword)
+            .or(cover.member.nickname.contains(keyword));
     }
 
     private OrderSpecifier<?> order(CoverSortType coverSortType) {

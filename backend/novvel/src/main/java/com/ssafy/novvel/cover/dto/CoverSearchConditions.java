@@ -22,4 +22,5 @@ public class CoverSearchConditions {
     @Enumerated(EnumType.STRING)
     private CoverStatusType status = CoverStatusType.ALL;
     private Long genre = 1L;
+    private String keyword = "";
 }
