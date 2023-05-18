@@ -7,7 +7,7 @@ import springApi from "@/src/api";
 import { cover } from "series";
 import { useRouter } from "next/dist/client/router";
 import { mobile, tabletH } from "@/src/util/Mixin";
-import { GetStaticPropsContext } from "next";
+import { GetServerSidePropsContext } from "next";
 import axios from "axios";
 
 interface Content {
@@ -31,6 +31,7 @@ function index(props: { seriesData: cover }) {
   // const id = router.query.id;
 
   const seriesData = props.seriesData;
+  console.log(seriesData);
 
   // cover 정보 받아오기
   // const getSeriesData = async (Id: number) => {
@@ -68,32 +69,71 @@ function index(props: { seriesData: cover }) {
   );
 }
 
-export async function getStaticPaths() {
-  const res = await axios.get("https://k8d1061.p.ssafy.io/api/covers");
-  const series = await res.data;
+// export async function getStaticPaths() {
+//   const res = await axios.get("https://k8d1061.p.ssafy.io/api/covers");
+//   const series = await res.data;
 
-  const paths = series.content.map((serie: Content) => ({
-    params: { id: serie.id.toString() },
-  }));
-  return {
-    paths,
-    fallback: "blocking",
+//   const paths = series.content.map((serie: Content) => ({
+//     params: { id: serie.id.toString() },
+//   }));
+//   return {
+//     paths,
+//     fallback: "blocking",
+//   };
+// }
+
+// export async function getStaticProps(context: GetStaticPropsContext) {
+//   const seriesId = context.params?.id ?? "";
+
+//   const res = await axios.get(
+//     `https://k8d1061.p.ssafy.io/api/covers/${seriesId}`
+//   );
+//   const seriesData = res.data;
+
+//   return {
+//     props: {
+//       seriesData,
+//     },
+//     revalidate: 1,
+//   };
+// }
+
+// 쿠키 확인
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const id = context.params?.id;
+  const cookies =
+    context.req && context.req.headers && context.req.headers.cookie
+      ? context.req.headers.cookie
+      : "";
+  const cookie = decodeURIComponent(cookies);
+  const parts = cookie.split("; ");
+  let usercookie = "";
+  for (let i = 0; i < parts.length; i++) {
+    if (parts[i].startsWith("accessToken=")) {
+      usercookie = parts[i].substring("accessToken=".length);
+      break;
+    }
+  }
+
+  let seriesData = undefined;
+  let config = {
+    headers: { Cookie: "token=" + usercookie },
+    withCredentials: true,
   };
-}
-
-export async function getStaticProps(context: GetStaticPropsContext) {
-  const seriesId = context.params?.id ?? "";
-
-  const res = await axios.get(
-    `https://k8d1061.p.ssafy.io/api/covers/${seriesId}`
-  );
-  const seriesData = res.data;
+  try {
+    const res = await axios.get(
+      `https://k8d1061.p.ssafy.io/api/covers/${id}`,
+      config
+    );
+    seriesData = res.data;
+  } catch (error) {
+    console.log(error);
+  }
 
   return {
     props: {
-      seriesData,
+      seriesData: seriesData,
     },
-    revalidate: 1,
   };
 }
 
