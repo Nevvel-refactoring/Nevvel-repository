@@ -7,8 +7,10 @@ import springApi from "@/src/api";
 import { cover } from "series";
 import { useRouter } from "next/dist/client/router";
 import { mobile, tabletH } from "@/src/util/Mixin";
-import { GetServerSidePropsContext } from "next";
-import axios from "axios";
+
+import { NextPageContext } from "next";
+import { loginAtom, userInfoAtom } from "../../../store/Login";
+import { useAtom } from "jotai";
 
 interface Content {
   id: number;
@@ -24,33 +26,52 @@ interface Content {
   isNew: boolean;
 }
 
-function index(props: { seriesData: cover }) {
-  // const [seriesData, setSeriesData] = useState<cover>();
-  const [isPurchased, setIsPurchase] = useState<number>(0);
-  // const router = useRouter();
-  // const id = router.query.id;
+function index(props: { userDTO: string }) {
+  const userDTO = props.userDTO === "" ? "" : JSON.parse(props.userDTO);
+  const newUserInfo =
+    userDTO === ""
+      ? undefined
+      : {
+          id: userDTO.id,
+          nickname: userDTO.nickname,
+          profileImage: userDTO.profileImage,
+          point: userDTO.point,
+        };
 
-  const seriesData = props.seriesData;
-  console.log(seriesData);
+  // 쿠키 상태 관리
+  const [loginStatus, setLoginStatus] = useAtom(loginAtom);
+  const [userInfoStatus, setUserInfoStatus] = useAtom(userInfoAtom);
+  useEffect(() => {
+    setLoginStatus(userDTO === "" ? false : true);
+    setUserInfoStatus(newUserInfo);
+  }, []);
+
+  const [seriesData, setSeriesData] = useState<cover>();
+  const [isPurchased, setIsPurchase] = useState<number>(0);
+  const router = useRouter();
+  const id = router.query.id;
+
+  // const seriesData = props.seriesData;
+  // console.log(seriesData);
 
   // cover 정보 받아오기
-  // const getSeriesData = async (Id: number) => {
-  //   const res = await springApi.get(`/covers/${Id}`);
-  //   if (res) {
-  //     console.log(res);
-  //     setSeriesData(res.data);
-  //   }
-  // };
+  const getSeriesData = async (Id: number) => {
+    const res = await springApi.get(`/covers/${Id}`);
+    if (res) {
+      console.log(res);
+      setSeriesData(res.data);
+    }
+  };
 
-  // useEffect(() => {
-  //   console.log(id);
-  //   if (id) {
-  //     const Id = Number(id);
-  //     getSeriesData(Id);
-  //   } else {
-  //     // setEpisodeData(Dummy_Episode); // merge 하기 전에 주석처리! 위에꺼는 해제
-  //   }
-  // }, [id, isPurchased]);
+  useEffect(() => {
+    console.log(id);
+    if (id) {
+      const Id = Number(id);
+      getSeriesData(Id);
+    } else {
+      // setEpisodeData(Dummy_Episode); // merge 하기 전에 주석처리! 위에꺼는 해제
+    }
+  }, [id, isPurchased]);
 
   return (
     <Wrapper>
@@ -99,40 +120,22 @@ function index(props: { seriesData: cover }) {
 // }
 
 // 쿠키 확인
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const id = context.params?.id;
+export async function getServerSideProps({ req }: NextPageContext) {
   const cookies =
-    context.req && context.req.headers && context.req.headers.cookie
-      ? context.req.headers.cookie
-      : "";
+    req && req.headers && req.headers.cookie ? req.headers.cookie : "";
   const cookie = decodeURIComponent(cookies);
+  // 쿠키를 ; 기준으로 나누어 그 중 userDto가 존재하는지 확인
   const parts = cookie.split("; ");
-  let usercookie = "";
+  let userDTOcookie = "";
   for (let i = 0; i < parts.length; i++) {
-    if (parts[i].startsWith("accessToken=")) {
-      usercookie = parts[i].substring("accessToken=".length);
+    if (parts[i].startsWith("userDto=")) {
+      userDTOcookie = parts[i].substring("userDto=".length);
       break;
     }
   }
-
-  let seriesData = undefined;
-  let config = {
-    headers: { Cookie: "token=" + usercookie },
-    withCredentials: true,
-  };
-  try {
-    const res = await axios.get(
-      `https://k8d1061.p.ssafy.io/api/covers/${id}`,
-      config
-    );
-    seriesData = res.data;
-  } catch (error) {
-    console.log(error);
-  }
-
   return {
     props: {
-      seriesData: seriesData,
+      userDTO: userDTOcookie,
     },
   };
 }
