@@ -59,7 +59,7 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
   const [AudioUrl, setAudioUrl] = useState<number>();
 
   useEffect(() => {
-    console.log(totalEvent);
+    // console.log(totalEvent);
   }, [totalEventCheckValue]);
 
   useEffect(() => {
@@ -79,7 +79,7 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
   }, [toggle]);
 
   useEffect(() => {
-    console.log(episode);
+    // console.log(episode);
   }, [episode]);
 
   useEffect(() => {
@@ -99,12 +99,12 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
   useEffect(() => {
     if (saveToast) {
       setPostEpisode(episode);
-      console.log(saveToast);
+      // console.log(saveToast);
     }
   }, [saveToast]);
 
   useEffect(() => {
-    console.log(postEpisode);
+    // console.log(postEpisode);
     if (postEpisode?.statusType == "TEMPORARY") {
       postHandler();
     }
@@ -170,11 +170,11 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
     try {
       const res = await springApi.post("/episodes", postEpisode);
       if (res.status === 201) {
-        console.log(res);
+        // console.log(res);
         setPostedEpisodeId(res.data);
       }
     } catch (error) {
-      console.log(postEpisode);
+      // console.log(postEpisode);
       console.log(error);
     }
     // setPostedEpisodeId(320);
@@ -184,18 +184,18 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
     try {
       const res = await springApi.post("/episodes");
       if (res.status === 201) {
-        console.log(res);
+        // console.log(res);
         setPostedEpisodeId(res.data);
       }
     } catch (error) {
       console.log(error);
-      console.log(reservationEpisode);
+      // console.log(reservationEpisode);
     }
     // setPostedEpisodeId(320);
   };
 
   const puthandler = async () => {
-    console.log(postEpisode);
+    // console.log(postEpisode);
     try {
       const res = await springApi.put(`/episodes/${eid}`, {
         coverId: id,
@@ -205,7 +205,7 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
         contents: postEpisode?.contents,
       });
       if (res) {
-        console.log(res);
+        // console.log(res);
         router.push({
           pathname: "/viewer/[id]",
           query: { id: eid },
@@ -222,7 +222,7 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
       episode.contents.length
     ) {
       episode.contents.map((content, index) => {
-        console.log(index);
+        // console.log(index);
         reLocation.push({
           idx: index + 1,
           context: content.context,
@@ -284,7 +284,7 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
 
   useEffect(() => {
     if (reservationEpisode?.reservationTime !== "") {
-      console.log("여기 오나");
+      // console.log("여기 오나");
       ReservationHandler();
     }
   }, [reservationEpisode]);

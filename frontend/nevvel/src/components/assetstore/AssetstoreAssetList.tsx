@@ -64,7 +64,7 @@ function AssetstoreAssetList(props : AssetstorePorps) {
   useEffect(() => {
     const getAssetList = async() => {
       const res = await springApi.get(`${axiosURI}`)
-      console.log(res.data.content)
+      // console.log(res.data.content)
       setAssetData(res.data.content)
     }
     getAssetList()
@@ -74,7 +74,7 @@ function AssetstoreAssetList(props : AssetstorePorps) {
   useEffect(() => {
     const getAssetList = async() => {
       const res = await springApi.get(`${axiosURI}`)
-      console.log(res.data.content)
+      // console.log(res.data.content)
       setAssetData(res.data.content)
       setUritoAxios(false)
     }
@@ -91,7 +91,7 @@ function AssetstoreAssetList(props : AssetstorePorps) {
   useEffect(() => {
     const getAssetList = async() => {
       const res = await springApi.get(`/assets?assettype=IMAGE&pageNum=1&searchtype=ALL&sort =downloadCount`)
-      console.log(res.data.content)
+      // console.log(res.data.content)
       setAssetData(res.data.content)
       setAxiosReloaer(false)
       props.setAfterUpload(false)

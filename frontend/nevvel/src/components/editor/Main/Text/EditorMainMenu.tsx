@@ -21,7 +21,7 @@ function EditorMainMenu({ setText, x, y, style, setStyle }: EditorMainMenuProps)
       const range = selection.getRangeAt(0);
       const selectedText = range.toString();
       const formattedText = `<${type}>${selectedText}</${type}>`;
-      console.log(formattedText)
+      // console.log(formattedText)
       setText(formattedText)
       range.deleteContents();
       range.insertNode(
