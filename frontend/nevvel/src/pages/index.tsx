@@ -195,7 +195,7 @@ export async function getServerSideProps({ req }: NextPageContext) {
 
   let novels = undefined;
   try {
-    const res = await axios.get("http://k8d1061.p.ssafy.io/api/covers");
+    const res = await axios.get("https://k8d1061.p.ssafy.io/api/covers");
     novels = res.data;
   } catch (error) {
     console.log(error);
@@ -203,7 +203,7 @@ export async function getServerSideProps({ req }: NextPageContext) {
 
   let assets = undefined;
   try {
-    const res = await axios.get("http://k8d1061.p.ssafy.io/api/assets", {
+    const res = await axios.get("https://k8d1061.p.ssafy.io/api/assets", {
       params: {
         sort: "downloadCount,desc",
       },

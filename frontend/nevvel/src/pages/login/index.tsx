@@ -8,7 +8,7 @@ function Login() {
   const router = useRouter();
 
   const kakaoLogin = () => {
-    router.push("http://k8d1061.p.ssafy.io/api/oauth2/authorization/kakao");
+    router.push("https://k8d1061.p.ssafy.io/api/oauth2/authorization/kakao");
   };
 
   return (
