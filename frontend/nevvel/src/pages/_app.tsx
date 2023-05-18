@@ -35,12 +35,12 @@ function App({ Component, pageProps }: AppProps) {
     <Provider>
       <ThemeProvider theme={theme === "light" ? lightTheme : darkTheme}>
         <GlobalStyle />
-        <CustomRouter>
+        {/* <CustomRouter> */}
           <DarkModeToggle setTheme={setTheme} theme={theme} />
           <Layout>
             <Component {...pageProps} />
           </Layout>
-        </CustomRouter>
+        {/* </CustomRouter> */}
       </ThemeProvider>
     </Provider>
   );
