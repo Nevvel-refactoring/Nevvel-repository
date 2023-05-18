@@ -41,7 +41,10 @@ function SeriesSelected({
       });
       if (res.status === 201) {
         console.log(res);
-        setIsPurchase(isPurchased + 1);
+        setTimeout(function () {
+          setIsPurchase(isPurchased + 1);
+          console.log("결제함");
+        }, 1500);
       } else if (res.status === 200) {
         if (confirm("포인트가 부족합니다. 충전하러 가시겠습니까?")) {
           router.push("/myPage/purchase");

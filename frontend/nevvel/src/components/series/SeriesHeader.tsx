@@ -39,6 +39,7 @@ function SeriesHeader({
   const router = useRouter();
   const [modalOpen, setModalOpen] = useState(false);
   const [modalOpen2, setModalOpen2] = useState(false);
+  const [isLiked, setIsLiked] = useState(SeriesData.isLiked);
   const readId = SeriesData.lastReadEpisodeId;
   const thumnail = SeriesData.thumbnail;
   const userInfo = useAtomValue(userInfoAtom);
@@ -48,9 +49,9 @@ function SeriesHeader({
   const postSeriesLike = async (Id: number) => {
     if (loginStatus) {
       const res = await springApi.post(`/covers/likes/${Id}`);
+      setIsLiked(!isLiked);
       if (res) {
         console.log(res);
-        setIsPurchase(isPurchased + 1);
       }
     } else {
       alert("로그인 하세요");
@@ -126,8 +127,8 @@ function SeriesHeader({
                   postSeriesLike(Number(coverId));
                 }}
               >
-                {SeriesData.isLiked && <AiFillHeart size={25} />}
-                {!SeriesData.isLiked && <AiOutlineHeart size={25} />}
+                {isLiked && <AiFillHeart size={25} />}
+                {!isLiked && <AiOutlineHeart size={25} />}
               </LikeBtn>
             )}
           </SeriesText>
