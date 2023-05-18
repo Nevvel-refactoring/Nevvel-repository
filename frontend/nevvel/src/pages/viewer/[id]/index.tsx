@@ -64,7 +64,7 @@ function viewer(props: { userDTO: string }) {
   const scrollElement = scrollRef.current as HTMLDivElement;
   const [currentScroll, setCurrentScroll] = useState(0);
   const nowTextBlock = useAtomValue(numAtom);
-  const [EpisodeData, setEpisodeData] = useState<episodeViewer>();
+  const [EpisodeData, setEpisodeData] = useState<episodeViewer>(Dummy_Episode);
   const [imageEvent, setImageEvent] = useState<string>("");
   const [audioEvent, setAudioEvent] = useState<string>("");
   const [viewerColor, setViewerColor] = useState<string>("");
@@ -180,8 +180,8 @@ function viewer(props: { userDTO: string }) {
           setTotalAudio(EpisodeData.contents[0].event[1].assetUrl)
         }
       } else{
-        if (EpisodeData.contents[tabNumber].event.length !== 0) {
-          const events = EpisodeData.contents[tabNumber].event;
+        if (EpisodeData.contents[tabNumber] && EpisodeData.contents[tabNumber].event && EpisodeData.contents[tabNumber].event.length !== 0) {
+          const events = EpisodeData.contents[tabNumber]?.event;
           for (const event of events) {
             if (event.type === "IMAGE") {
               console.log("이미지당");
@@ -244,7 +244,7 @@ function viewer(props: { userDTO: string }) {
   };
 
   const countHandler = () => {
-    if (EpisodeData) {
+    if (EpisodeData &&writeMode===false) {
       const contentLength = EpisodeData.contents.length;
       console.log(contentLength, "contentLength");
       if (tabNumber <= contentLength - 1) {
@@ -301,7 +301,7 @@ function viewer(props: { userDTO: string }) {
             }
           <MainWrapper totalImage={totalImage}
                 writeMode={writeMode} onClick={ClickHandler}>
-            {eventCatch ? <Img src={imageEvent} alt="Logo" /> : null}
+            {eventCatch ? <Img onClick={countHandler} src={imageEvent} alt="Logo" /> : null}
             {writeMode ? (
               <MainContainer totalImage={totalImage} writeMode={writeMode}>
                 <ViewerPageMain
