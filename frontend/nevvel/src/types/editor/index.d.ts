@@ -11,6 +11,17 @@ declare module "editor" {
     contents: content[];
   }
 
+  export interface postEpisode {
+    coverId: number;
+    statusType: string;
+    point: number;
+    title: string;
+    contents: content[];
+    reservation:boolean;
+    reservationTime:string;
+  }
+
+
   export interface content {
     idx: number;
     context: string;

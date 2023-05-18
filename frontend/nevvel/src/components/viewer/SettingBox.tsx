@@ -1,4 +1,4 @@
-import { mobile, tabletH } from "@/src/util/Mixin";
+import { bigMobile, mobile, tabletH } from "@/src/util/Mixin";
 import React, { useEffect } from "react";
 import styled from "styled-components";
 import { AiFillCaretLeft, AiFillCaretRight } from "react-icons/ai";
@@ -168,15 +168,27 @@ const BoxContainer = styled.div<{viewerColor:string}>`
   border-radius: 1rem;
   z-index: 100000;
   padding: 1rem;
-  background-color:${(props)=>props.viewerColor};
+  background-color:${(props)=>props.viewerColor ?(props.viewerColor):("#fefefe")};
   color:${(props)=>props.viewerColor =="#1a1a1a" ? ("#fefefe"):("#1a1a1a")};
   ${tabletH} {
     top: 50%;
     left: 55%;
   }
+  ${bigMobile}{
+    width: 100%;
+    height: 15rem;
+    top: 60vh;
+    left: 0;
+    box-shadow: none;
+    border-radius:0px
+  }
   ${mobile} {
-    top: 55%;
-    left: 30%;
+    width: 100%;
+    height: 15rem;
+    top: 60vh;
+    left: 0;
+    box-shadow: none;
+    border-radius:0px
   }
 `;
 

@@ -80,7 +80,7 @@ const AssetList = styled.div`
   justify-content: flex-start;
   padding: 1rem;
   padding-top: 2rem;
-  overflow: auto;
+  overflow: scroll;
   position: relative;
 `;
 const AssetItem = styled.button`

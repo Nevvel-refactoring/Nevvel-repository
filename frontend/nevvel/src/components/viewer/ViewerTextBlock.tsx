@@ -23,9 +23,8 @@ function ViewerTextBlock({
   return (
     <>
       {content.idx <= tabNumber && (
-        <TextBlock viewerColor={viewerColor} interval={interval}>
-          {content.context}
-        </TextBlock>
+        <TextBlock viewerColor={viewerColor} interval={interval}
+        dangerouslySetInnerHTML={{ __html: content.context }}/>
       )}
     </>
   );

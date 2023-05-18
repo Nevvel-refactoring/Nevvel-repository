@@ -3,7 +3,7 @@ import { episodeViewer, content } from "viewer";
 import styled from "styled-components";
 import ViewerTextBlock from "../ViewerTextBlock";
 import { event } from "viewer";
-import { mobile } from "@/src/util/Mixin";
+import { bigMobile, mobile } from "@/src/util/Mixin";
 
 type viwerMainProps = {
   viewerColor:string;
@@ -64,7 +64,7 @@ const Container = styled.div<{
   font-family: ${(props) => `${props.fontStyle}`};
   padding: ${(props) => props.whiteSpace * 3}%;
   font-size: ${(props) => props.fontSize * 4}px;
-  ${mobile} {
+  ${bigMobile} {
     font-size: ${(props) =>
        props.fontSize == 3 ? 16 : props.fontSize * 5.5}px;
   }

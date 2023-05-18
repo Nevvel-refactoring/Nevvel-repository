@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { episodeViewer } from "viewer";
 import styled from "styled-components";
-import { mobile } from "@/src/util/Mixin";
+import { bigMobile, mobile } from "@/src/util/Mixin";
 import ViewerPageTextBlock from "../ViewerPageTextBlock";
 
 type viewerPageMainProps = {
@@ -54,7 +54,7 @@ const Container = styled.div<{
   font-family: ${(props) => `${props.fontStyle}`};
   padding: ${(props) => props.whiteSpace * 3}%;
   font-size: ${(props) => props.fontSize * 4}px;
-  ${mobile} {
+  ${bigMobile} {
     font-size: ${(props) =>
       props.fontSize == 3 ? 16 : props.fontSize * 5.5}px;
   }

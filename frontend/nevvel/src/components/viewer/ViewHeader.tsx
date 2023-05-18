@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { episodeViewer } from "viewer";
+import { episodeViewer, newEpisodeViewer } from "viewer";
 import { episode } from "editor";
 import {
   AiFillCaretLeft,
@@ -13,16 +13,21 @@ import { useRouter } from "next/dist/client/router";
 import { mobile, tabletH } from "@/src/util/Mixin";
 import springApi from "@/src/api";
 import { Modal } from "../common/Modal";
+import { userInfoAtom, loginAtom } from "@/src/store/Login";
+import { useAtomValue } from "jotai";
 
 type ViewHeaderProps = {
   id: string | string[] | undefined;
   EpisodeData: episodeViewer;
+  headerEpisodeData: newEpisodeViewer | undefined;
 };
 
-function ViewHeader({ EpisodeData, id }: ViewHeaderProps) {
+function ViewHeader({ EpisodeData, id, headerEpisodeData }: ViewHeaderProps) {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleteData, setDeleteData] = useState<episode>();
   const router = useRouter();
+  const userInfo = useAtomValue(userInfoAtom);
+  const loginStatus = useAtomValue(loginAtom);
   const putViewerData = async (Id: number) => {
     // console.log(putEpisodeData)
     // // try {
@@ -37,7 +42,11 @@ function ViewHeader({ EpisodeData, id }: ViewHeaderProps) {
     //     console.log(res);
     router.push({
       pathname: "/editor/[id]/[eid]",
-      query: { id: EpisodeData.coverId, eid: id, title:EpisodeData.coverTitle },
+      query: {
+        id: EpisodeData.coverId,
+        eid: id,
+        title: EpisodeData.coverTitle,
+      },
     });
     //   }
     // }
@@ -84,21 +93,47 @@ function ViewHeader({ EpisodeData, id }: ViewHeaderProps) {
     // setPostedEpisodeId(320);
   };
 
+  const moveSeries = (e: string) => {
+    if (e == "prev") {
+      router.push({
+        pathname: "/viewer/[id]",
+        query: { id: headerEpisodeData?.prevEpisodeId },
+      });
+    } else if (e == "next") {
+      router.push({
+        pathname: "/viewer/[id]",
+        query: { id: headerEpisodeData?.nextEpisodeId },
+      });
+    }
+  };
+
   return (
     <>
       <HeaderTopContainer>
-          <AiFillCaretLeft size={24} />
+        <AiFillCaretLeft
+          className="left"
+          size={24}
+          onClick={() => moveSeries("prev")}
+        />
         <EpisodeTitleContainer>
-            <AiOutlineHome onClick={clickHandler} size={24} />
+          <AiOutlineHome className="home" onClick={clickHandler} size={24} />
           <EpisodeTitle>{EpisodeData.title}</EpisodeTitle>
-          <Btn onClick={editHandler}>
-            <FiEdit size={18} />
-          </Btn>
-          <Btn onClick={deleteModalHandler}>
-            <BsFillTrashFill size={18} />
-          </Btn>
+          {loginStatus && headerEpisodeData?.writerId === userInfo?.id && (
+            <>
+              <Btn onClick={editHandler}>
+                <FiEdit size={18} />
+              </Btn>
+              <Btn onClick={deleteModalHandler}>
+                <BsFillTrashFill size={18} />
+              </Btn>
+            </>
+          )}
         </EpisodeTitleContainer>
-          <AiFillCaretRight size={24} />
+        <AiFillCaretRight
+          className="right"
+          size={24}
+          onClick={() => moveSeries("next")}
+        />
       </HeaderTopContainer>
       <ProgressBar />
       {deleteModalOpen && (
@@ -126,6 +161,11 @@ const HeaderTopContainer = styled.div`
   justify-content: space-between;
   text-align: center;
   align-items: center;
+  ${tabletH}{
+    .left,.right{
+      display: none;
+    }
+  }
   ${mobile} {
     width: 80%;
     justify-content: center;
@@ -140,7 +180,10 @@ const EpisodeTitleContainer = styled.div`
   text-align: center;
   align-items: center;
   ${tabletH} {
-    width: 60%;
+    width: 100%;
+    .home{
+      display: none;
+    }
   }
   ${mobile} {
     width: 80%;
@@ -152,7 +195,8 @@ const EpisodeTitle = styled.div`
   overflow: hidden;
   width: 100%;
   ${tabletH} {
-    width: 60%;
+    width: 100%;
+    
   }
   ${mobile} {
     width: 100%;
@@ -176,6 +220,10 @@ const MoveBtn = styled.button`
   ${mobile} {
     display: none;
   }
+`;
+
+const Space = styled.div`
+  width: 24px;
 `;
 
 export default ViewHeader;

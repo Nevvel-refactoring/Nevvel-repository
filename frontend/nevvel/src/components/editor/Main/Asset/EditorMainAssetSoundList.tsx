@@ -76,7 +76,7 @@ const AssetList = styled.div`
 `;
 const AssetItem = styled.div`
   color: ${({ theme }) => theme.color.text1};
-  padding: 0.2rem;
+  margin: 0.2rem;
   display: flex;
   flex-direction: column;
   align-items: center;

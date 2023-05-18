@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { episode } from "editor";
+import { newEpisodeViewer } from "viewer";
 import {
   AiFillCaretLeft,
   AiFillCaretRight,
@@ -13,15 +14,19 @@ import { useRouter } from "next/dist/client/router";
 import { mobile, tabletH } from "@/src/util/Mixin";
 import springApi from "@/src/api";
 import { Modal } from "../common/Modal";
+import { userInfoAtom, loginAtom } from "@/src/store/Login";
+import { useAtomValue } from "jotai";
 
 type ViewerMobileBottomProps = {
   id: string | string[] | undefined;
   EpisodeData: episode;
   setSettingBox: React.Dispatch<React.SetStateAction<boolean>>;
   settingBox: boolean;
+  headerEpisodeData: newEpisodeViewer | undefined;
 };
 
 function ViewerMobileBottom({
+  headerEpisodeData,
   EpisodeData,
   id,
   setSettingBox,
@@ -29,6 +34,8 @@ function ViewerMobileBottom({
 }: ViewerMobileBottomProps) {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleteData, setDeleteData] = useState<episode>();
+  const userInfo = useAtomValue(userInfoAtom);
+  const loginStatus = useAtomValue(loginAtom);
   const router = useRouter();
   const putEpisodeData = {
     coverId: EpisodeData.coverId,
@@ -99,25 +106,51 @@ function ViewerMobileBottom({
     // setPostedEpisodeId(320);
   };
 
+  const moveSeries = (e: string) => {
+    if (e == "prev") {
+      router.push({
+        pathname: "/viewer/[id]",
+        query: { id: headerEpisodeData?.prevEpisodeId },
+      });
+    } else if (e == "next") {
+      router.push({
+        pathname: "/viewer/[id]",
+        query: { id: headerEpisodeData?.nextEpisodeId },
+      });
+    }
+  };
+
   return (
     <>
       <HeaderTopContainer>
         <Btn>
-          <AiFillCaretLeft size={24} />
+          <AiFillCaretLeft
+            className="left"
+            size={24}
+            onClick={() => moveSeries("prev")}
+          />
         </Btn>
         <Btn>
-          <AiFillCaretRight size={24} />
+          <AiFillCaretRight
+            className="right"
+            size={24}
+            onClick={() => moveSeries("next")}
+          />
         </Btn>
         <AiOutlineHome onClick={clickHandler} size={24} />
-        <Btn onClick={editHandler}>
-          <FiEdit size={18} />
-        </Btn>
-        <Btn onClick={deleteModalHandler}>
-          <BsFillTrashFill size={18} />
-        </Btn>
-        <Btn onClick={() => setSettingBox(!settingBox)}>
-          <AiFillSetting size={18} />
-        </Btn>
+        {loginStatus && headerEpisodeData?.writerId === userInfo?.id && (
+          <>
+            <Btn onClick={editHandler}>
+              <FiEdit size={18} />
+            </Btn>
+            <Btn onClick={deleteModalHandler}>
+              <BsFillTrashFill size={18} />
+            </Btn>
+          </>
+        )}
+            <Btn onClick={() => setSettingBox(!settingBox)}>
+              <AiFillSetting size={18} />
+            </Btn>
       </HeaderTopContainer>
       {deleteModalOpen && (
         <Modal

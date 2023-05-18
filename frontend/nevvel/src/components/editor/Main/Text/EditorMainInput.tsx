@@ -35,9 +35,7 @@ function EditorMainInput({
   }, [nextId]);
 
   useEffect(() => {
-
-      setNextId(episode.contents.length + 1);
-
+    setNextId(episode.contents.length + 1);
   }, [episode]);
 
   useEffect(() => {

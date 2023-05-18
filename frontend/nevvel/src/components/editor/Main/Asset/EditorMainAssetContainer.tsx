@@ -26,15 +26,18 @@ function EditorMainAssetContainer({
 }: EditorMainAssetContainerProps) {
   const [assetOpen, setAssetOpen] = useAtom(assetOpenAtom);
   const [assetStore, setAssetStore] = useState<Asset[]>([])
-
+  const [assetType, setAssetType] = useState<"IMAGE"|"AUDIO">("IMAGE")
   useEffect(()=>{
     getAssetStoreData();
   },[])
+  useEffect(()=>{
+    getAssetStoreData();
+  },[assetType])
 
   const getAssetStoreData = async () => {
     try{
       const res = await springApi.get(
-        "assets?assettype=IMAGE&tags=공포,호러,귀신,슬픔,pixabay,아이콘,로고,끔찍함,심약자주의,인간젠킨스,한국,qqq,디장고,쥰쥰모닝,쥰모닝&pageNum=1&searchtype=NOT_PURCHASED&sort=createdDateTime"
+        `assets?assettype=${assetType}&pageNum=1&searchtype=NOT_PURCHASED&sort=createdDateTime`
       );
       if (res) {
         console.log(res);
@@ -53,6 +56,8 @@ function EditorMainAssetContainer({
       getAssetStoreData();
     }
   },[axiosReloader])
+
+
 
   return (
     <AssetContainer>
@@ -85,7 +90,7 @@ function EditorMainAssetContainer({
           />
         )}
       </AssetStoreContainer>
-      <AssetStoreContainer>{assetOpen === 3 && <EditorMainAssetTotalList assetStore={assetStore} setAxiosReloaer={setAxiosReloaer} />}</AssetStoreContainer>
+      <AssetStoreContainer>{assetOpen === 3 && <EditorMainAssetTotalList assetType={assetType} setAssetType={setAssetType} assetStore={assetStore} setAxiosReloaer={setAxiosReloaer} />}</AssetStoreContainer>
     </AssetContainer>
   );
 }
@@ -96,10 +101,12 @@ const AssetContainer = styled.div`
   color: ${({ theme }) => theme.color.background};
   height: 100vh;
   width: 20vw;
-
   position: fixed;
   ${mobile} {
+    top:70vh;
     position: relative;
+    width: 100vw;
+    height: 30vh;
   }
 `;
 const AssetStoreTitle = styled.div`

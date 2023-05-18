@@ -56,7 +56,7 @@ const DarkModeBtn = styled.button`
   height: 3rem;
   box-shadow: 0rem 0rem 0.5rem ${({ theme }) => theme.color.text1};
   color: ${({ theme }) => theme.color.text1};
-  z-index: 100;
+  z-index: 50;
   ${mobile} {
     left: 80%;
   }

@@ -10,8 +10,8 @@ import { GetStaticPaths, GetStaticProps } from "next";
 import springApi from "@/src/api";
 import { AiFillSetting } from "react-icons/ai";
 
-import { mobile, tabletH } from "@/src/util/Mixin";
-import { episodeViewer } from "viewer";
+import { bigMobile, mobile, tabletH } from "@/src/util/Mixin";
+import { episodeViewer,newEpisodeViewer } from "viewer";
 
 import ViewHeader from "../../../components/viewer/ViewHeader";
 import ViewerTabMain from "../../../components/viewer/Main/ViewerTabMain";
@@ -45,6 +45,7 @@ function viewer() {
   const [imageEvent, setImageEvent] = useState<string>("");
   const [audioEvent, setAudioEvent] = useState<string>("");
   const [viewerColor, setViewerColor] = useState<string>("");
+  const [headerEpisodeData, setHeaderEpisodeData] = useState<newEpisodeViewer>()
 
   useEffect(() => {
     console.log(viewerColor);
@@ -57,6 +58,7 @@ function viewer() {
       if (res) {
         console.log(res);
         setEpisodeData(res.data);
+        setHeaderEpisodeData(res.data);
       }
     } catch (error) {
       console.log(error);
@@ -194,26 +196,51 @@ function viewer() {
     }
   };
 
+  const ClickHandler = () => {
+    setHeaderToggle(false);
+    setSettingBox(false);
+  };
+
+  const handleKeyDown = (event: KeyboardEvent) => {
+    if (event.code === "Space") {
+      event.preventDefault();
+      if (EpisodeData) {
+        const contentLength = EpisodeData.contents.length;
+        console.log(contentLength, "contentLength");
+        if (tabNumber <= contentLength - 1) {
+          setTabNumber(tabNumber + 1);
+        } else if (tabNumber === contentLength) {
+          console.log("마지막 입니다. ");
+        }
+        console.log(tabNumber);
+      }
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [tabNumber]);
+
   return (
     <>
       {EpisodeData && (
         <ViewerWrapper viewerColor={viewerColor}>
           <HeaderContainer onClick={() => clickhandler("head")}>
             {headerToggle && EpisodeData ? (
-              <ViewHeader id={id} EpisodeData={EpisodeData} />
+              <ViewHeader id={id} EpisodeData={EpisodeData} headerEpisodeData={headerEpisodeData}/>
             ) : null}
           </HeaderContainer>
 
-          <MainWrapper onClick={() => setHeaderToggle(false)}>
-            {eventCatch ? (
-              <ImageEvent>
-                <img src={imageEvent} alt="Logo" />
-              </ImageEvent>
-            ) : null}
+          <MainWrapper onClick={ClickHandler}>
+            {eventCatch ? <Img src={imageEvent} alt="Logo" /> : null}
             {writeMode ? (
               <MainContainer writeMode={writeMode}>
                 <ViewerPageMain
-                viewerColor={viewerColor}
+                  viewerColor={viewerColor}
                   EpisodeData={EpisodeData}
                   fontSize={fontSize}
                   fontStyle={fontStyle}
@@ -231,7 +258,7 @@ function viewer() {
                   <div>{EpisodeData.title}</div>
                 ) : (
                   <ViewerTabMain
-                  viewerColor={viewerColor}
+                    viewerColor={viewerColor}
                     fontSize={fontSize}
                     fontStyle={fontStyle}
                     whiteSpace={whiteSpace}
@@ -271,6 +298,7 @@ function viewer() {
                 EpisodeData={EpisodeData}
                 setSettingBox={setSettingBox}
                 settingBox={settingBox}
+                headerEpisodeData={headerEpisodeData}
               />
             ) : null}
           </BottomContainer>
@@ -280,8 +308,33 @@ function viewer() {
   );
 }
 
+const Img = styled.img`
+  object-fit: cover;
+  position: fixed;
+  opacity: 0.7;
+  left: 30%;
+  z-index: 1;
+  width: 40%;
+  height: 100%;
+  ${tabletH} {
+    left: 20%;
+    width: 60%;
+    height: 70%;
+  }
+  ${bigMobile} {
+    left: 0;
+    width: 100%;
+    height: 70%;
+  }
+  ${mobile} {
+    left: 0;
+    width: 100%;
+    height: 70%;
+  }
+`;
+
 const ViewerWrapper = styled.div<{ viewerColor: string }>`
-  background-color:${(props)=>props.viewerColor};
+  background-color: ${(props) => props.viewerColor};
   display: flex;
   flex-direction: column;
   height: 100vh;
@@ -289,7 +342,7 @@ const ViewerWrapper = styled.div<{ viewerColor: string }>`
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  color:${(props)=>props.viewerColor =="#1a1a1a" ? ("#fefefe"):("#1a1a1a")};
+  color: ${(props) => (props.viewerColor == "#1a1a1a" ? "#fefefe" : "#1a1a1a")};
   ${mobile} {
     font-size: 16px;
   }
@@ -312,7 +365,7 @@ const BottomContainer = styled.div`
   align-items: center;
   width: 100%;
   height: 15vh;
-  ${tabletH}{
+  ${tabletH} {
     visibility: visible;
   }
 `;
@@ -334,6 +387,11 @@ const MainContainer = styled.div<{ writeMode: boolean }>`
     margin-left: 20%;
     margin-right: 20%;
   }
+  ${bigMobile}{
+    margin-left: 5%;
+    margin-right: 5%;
+  }
+
   ${mobile} {
     margin-left: 5%;
     margin-right: 5%;
@@ -371,7 +429,7 @@ const SettingBtn = styled.button`
   top: 80%;
   left: 90%;
   color: ${({ theme }) => theme.color.text1};
-  ${tabletH}{
+  ${tabletH} {
     display: none;
   }
   ${mobile} {

@@ -7,7 +7,20 @@ declare module "viewer" {
         point: number;
         title: string;
         contents: content[];
+        
     };
+    export interface newEpisodeViewer{
+        coverId: number;
+        coverTitle:string;
+        statusType: string;
+        episodeId:number;
+        point: number;
+        title: string;
+        nextEpisodeId:number;
+        prevEpisodeId:number;
+        writerId:number;
+        contents: content[];
+    }
     export interface content {
         idx: number;
         context: string;
