@@ -16,7 +16,7 @@ interface Props {
 interface CoverEdit {
   title: string;
   description: string;
-  genreId: number | null;
+  genreId: number | undefined;
 }
 
 interface Genre {
@@ -96,7 +96,7 @@ function CreateNewNovel({ setModalOpen }: Props) {
   const [jsonDatas, setJasonDatas] = useState<CoverEdit>({
     title: "",
     description: "",
-    genreId: null,
+    genreId: undefined,
   });
 
   useEffect(() => {
@@ -105,7 +105,7 @@ function CreateNewNovel({ setModalOpen }: Props) {
       title: title,
       description: description,
       // 장르 선택 모달 추가
-      genreId: 0,
+      genreId: genre,
     });
   }, [image, title, description, genre]);
 

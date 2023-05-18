@@ -57,9 +57,7 @@ function LikedNovel() {
   // 로그아웃 상태인 경우 메인페이지로 리다이렉트
   // 로그인 상태인 경우 axios 요청
   const router = useRouter();
-  const [likedNovel, setLikedNovel] = useState<Novel | undefined>(
-    undefined
-  );
+  const [likedNovel, setLikedNovel] = useState<Novel | undefined>(undefined);
   useEffect(() => {
     const getLikedCovers = async () => {
       const res = await NewvelApi.likesCovers();
@@ -69,7 +67,7 @@ function LikedNovel() {
     // if (!loginStatus) {
     //   router.push({ pathname: "/" });
     // } else {
-        getLikedCovers();
+    getLikedCovers();
     // }
   }, []);
 
@@ -138,4 +136,7 @@ const ImageWrapper = styled.div`
   opacity: 0.3;
 `;
 
-const NovelExists = styled.div``;
+const NovelExists = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+`;

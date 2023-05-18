@@ -265,7 +265,10 @@ const EmptyDiv = styled.div`
   text-align: center;
 `;
 
-const NovelDiv = styled.div``;
+const NovelDiv = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+`;
 
 const UploadedNovelDiv = styled.div``;
 

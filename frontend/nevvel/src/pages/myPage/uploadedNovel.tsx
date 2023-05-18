@@ -70,7 +70,7 @@ function UploadedNovel() {
     // if (!loginStatus) {
     //   router.push({ pathname: "/" });
     // } else {
-      getUploadedCovers();
+    getUploadedCovers();
     // }
   }, []);
 
@@ -139,4 +139,7 @@ const ImageWrapper = styled.div`
   opacity: 0.3;
 `;
 
-const NovelExists = styled.div``;
+const NovelExists = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+`;

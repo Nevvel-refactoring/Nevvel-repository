@@ -69,7 +69,7 @@ function PurchasedNovel() {
     // if (!loginStatus) {
     //   router.push({ pathname: "/" });
     // } else {
-      getPurchasedCovers();
+    getPurchasedCovers();
     // }
   }, []);
 
@@ -138,4 +138,7 @@ const ImageWrapper = styled.div`
   opacity: 0.3;
 `;
 
-const NovelExists = styled.div``;
+const NovelExists = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+`;
