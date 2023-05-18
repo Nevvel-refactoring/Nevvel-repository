@@ -178,7 +178,7 @@ public class CoverServiceImpl implements CoverService {
             page.getContent().stream().map(coverPurchasedDto -> {
                 coverPurchasedDto.setThumbnail(
                     coverPurchasedDto.getThumbnail() == null ?
-                        defaultImage.getImageByGenreName(coverPurchasedDto.getGenre().getName())
+                        defaultImage.getImageByGenreName(coverPurchasedDto.getGenre())
                         : coverPurchasedDto.getThumbnail());
                 return coverPurchasedDto;
             }).collect(Collectors.toList());
