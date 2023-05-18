@@ -14,6 +14,7 @@ type TagData = {
 type TagDataProp = {
   tagData : TagData[]
   setTagModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setAddedTag: React.Dispatch<React.SetStateAction<string>>;
 }
 
 function TagAddModal(props : TagDataProp) {
@@ -21,7 +22,7 @@ function TagAddModal(props : TagDataProp) {
   // 저장된 태그 외 입력하는 태그도 추가할지 결정하는 트리거
   const AddTagTrigger = false
 
-  const [selectTag, setSelectTag] = useState<string[]>([])
+  const [selectTag, setSelectTag] = useState<string[]>(["&tags="])
 
   const AddTag = (newSelectTag:string) => {
     // 이미 있는건지 체크 후
@@ -34,7 +35,8 @@ function TagAddModal(props : TagDataProp) {
   }
 
   const SubmitAddTag = () => {
-
+    props.setAddedTag(`${selectTag.join(',')}`)
+    props.setTagModalOpen(false)
   }
 
   const CloseAddTagModal = () => {

@@ -36,10 +36,15 @@ function assetstore({ content }: any) {
   const [reaxiosTrigger, setReaxiosTrigger] = useState<boolean>(false)
   
   // 이미지/사운드 필터
-  const [imgAudTrigger, setImgAudTrigger] = useState<string>("IMAGE&")
+  const [imgAudTrigger, setImgAudTrigger] = useState<string>("IMAGE")
+
+
+  // 태그모달로 추가하는 태그
+  const [addedTag, setAddedTag] = useState<string>("")
 
   // 태그필터
-  const [appliedTags, setAppliedTags] = useState<string>("")
+  const [appliedTags, setAppliedTags] = useState<string>(`${addedTag}`)
+
 
   // 페이지네이션
   const [paginationNum, setPaginationNum] = useState<number>(1)
@@ -48,11 +53,12 @@ function assetstore({ content }: any) {
   const [popNewTrigger, setPopNewTrigger] = useState<string>("downloadCount,desc")
 
   // 필터 정보를 받아서 axios할 쿼리스트링 구성해주기
-  const queryString = `/assets?assettype=${imgAudTrigger}${appliedTags}page=${paginationNum}&searchtype=ALL&sort=${popNewTrigger}`
+  const queryString = `/assets?assettype=${imgAudTrigger}${appliedTags}&page=${paginationNum}&searchtype=ALL&sort=${popNewTrigger}`
 
   useEffect(() => {
     console.log(queryString)
   },[queryString])
+
   // Modal Open trigger
   const [modalOpen, setModalOpen] = useState<boolean>(false);
 
@@ -99,12 +105,14 @@ function assetstore({ content }: any) {
   // 이미지/사운드 버튼 스위치
 
   const SwitchtoAud = async() => {
-    await setImgAudTrigger("AUDIO&")
+    await setImgAudTrigger("AUDIO")
+    await setPopNewTrigger("downloadCount,desc")
     setReaxiosTrigger(true)
   }
 
   const SwitchtoImg = async() => {
-    await setImgAudTrigger("IMAGE&")
+    await setImgAudTrigger("IMAGE")
+    await setPopNewTrigger("downloadCount,desc")
     setReaxiosTrigger(true)
   }
 
@@ -154,7 +162,7 @@ function assetstore({ content }: any) {
       </TagRowDiv>
       <SwitchZone>
         {
-          (imgAudTrigger === "IMAGE&") ?
+          (imgAudTrigger === "IMAGE") ?
           <ImgAudSwitchDiv>
             <ClickImgSwitchBtn>
               <BiImage size="30px" />
@@ -176,7 +184,7 @@ function assetstore({ content }: any) {
         {
           (popNewTrigger === "downloadCount,desc")?
           <SwitchDiv>
-            <PopNewSwitchBtn>인기순</PopNewSwitchBtn>
+            <ClickPopNewSwitchBtn>인기순</ClickPopNewSwitchBtn>
             <p>|</p>
             <PopNewSwitchBtn onClick={SwitchtoNew}>최신순</PopNewSwitchBtn>
           </SwitchDiv>
@@ -184,7 +192,7 @@ function assetstore({ content }: any) {
           <SwitchDiv>
           <PopNewSwitchBtn onClick={SwitchtoPop}>인기순</PopNewSwitchBtn>
           <p>|</p>
-          <PopNewSwitchBtn>최신순</PopNewSwitchBtn>
+          <ClickPopNewSwitchBtn>최신순</ClickPopNewSwitchBtn>
         </SwitchDiv>
         }
       </SwitchZone>
@@ -242,6 +250,7 @@ function assetstore({ content }: any) {
               <TagAddModal
                 tagData={tagData}
                 setTagModalOpen={setTagModalOpen}
+                setAddedTag={setAddedTag}
               />
             }
           />
@@ -461,6 +470,14 @@ const PopNewSwitchBtn = styled.button`
   width: 4rem;
   height: 2rem;
   font-size: 1.2rem;
+  /* border: 0.1rem solid black; */
+`
+
+const ClickPopNewSwitchBtn = styled.button`
+  color : #8385ff;
+  width: 4rem;
+  height: 2rem;
+  font-size: 1.3rem;
   /* border: 0.1rem solid black; */
 `
 
