@@ -57,13 +57,21 @@ function SeriesHeader({
   const clickHandler = (e: string) => {
     if (loginStatus) {
       if (e === "first") {
-        router.push({
-          pathname: `/viewer/${SeriesData.episodes[0].id}`,
-        });
+        if (SeriesData.episodes[0].isPurchased) {
+          router.push({
+            pathname: `/viewer/${SeriesData.episodes[0].id}`,
+          });
+        } else {
+          alert("해당 회차를 먼저 구매해주세요");
+        }
       } else if (e === "continue") {
-        router.push({
-          pathname: `/viewer/${readId}`,
-        });
+        if (SeriesData.episodes[readId].isPurchased) {
+          router.push({
+            pathname: `/viewer/${readId}`,
+          });
+        } else {
+          alert("해당 회차를 먼저 구매해주세요");
+        }
       }
     } else {
       alert("로그인 하세요");
