@@ -112,5 +112,16 @@ public class AssetController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
+    @GetMapping("/own")
+    @Operation(summary = "구매한 에셋 보기", description = "<strong>내가 구매한 에셋</strong>을 반환 합니다.")
+    public ResponseEntity<Page<AssetSearchDto>> ownAssets(@RequestParam(value = "assettype", required = false) AssetType assetType,
+                                                         @AuthenticationPrincipal CustomUserDetails customUserDetails,
+                                                         Pageable pageable) {
+
+        Page<AssetSearchDto> result = assetService.getOwnAssets(assetType, customUserDetails.getMember(), pageable);
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
 
 }
