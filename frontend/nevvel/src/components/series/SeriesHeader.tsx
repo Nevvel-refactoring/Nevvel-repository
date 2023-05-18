@@ -47,7 +47,7 @@ function SeriesHeader({
     for (let i = 0; i < SeriesData.episodes.length; i++) {
       if (SeriesData.episodes[i].id === nextEpisode) {
         if (i + 1 < SeriesData.episodes.length) {
-          setNextEpisode(SeriesData.episodes[i + 1].id);
+          setNextEpisode(i + 1);
         } else {
           setNextEpisode(null);
         }
