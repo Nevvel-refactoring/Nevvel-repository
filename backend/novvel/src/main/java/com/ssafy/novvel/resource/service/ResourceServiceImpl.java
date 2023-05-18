@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -24,7 +25,8 @@ public class ResourceServiceImpl implements ResourceService {
 
     private final S3Service s3Service;
     private final ResourceRepository resourceRepository;
-
+    static final int newWidth = 150;
+    static final int newHeight = 150;
 
     @Override
     public Resource saveFile(MultipartFile multipartFile) throws IOException {
@@ -57,22 +59,26 @@ public class ResourceServiceImpl implements ResourceService {
                 case ".jpg":
                 case ".jpeg":
                     mid = convertToPng(file);
-                    thumbnail = convertResolutionPng(mid, 200, 200);
-                    resourceEntity = new Resource(file.getName(), true);
+                    thumbnail = convertResolutionPng(mid, newWidth, newHeight);
+                    resourceEntity = new Resource(file.getName(), fileNamePrefix + file.getName(),
+                            fileNamePrefix + thumbnail.getName(), true);
                     break;
                 case ".png":
-                    thumbnail = convertResolutionPng(file, 200, 200);
-                    resourceEntity = new Resource(file.getName(), true);
+                    thumbnail = convertResolutionPng(file, newWidth, newHeight);
+                    resourceEntity = new Resource(file.getName(), fileNamePrefix + file.getName(),
+                            fileNamePrefix + thumbnail.getName(), true);
                     break;
                 case ".gif":
                     mid = makeThumbnailFromGif(file);
-                    thumbnail = convertResolutionPng(mid, 200, 200);
-                    resourceEntity = new Resource(file.getName(), true);
+                    thumbnail = convertResolutionPng(mid, newWidth, newHeight);
+                    resourceEntity = new Resource(file.getName(), fileNamePrefix + file.getName(),
+                            fileNamePrefix + thumbnail.getName(), true);
                     break;
 
                 case ".mp3":
                 case ".wma":
-                    resourceEntity = new Resource(file.getName(), false);
+                case ".wav":
+                    resourceEntity = new Resource(file.getName(), fileNamePrefix + file.getName(), false);
                     break;
                 default:
                     throw new NotSupportFormatException();
@@ -98,18 +104,7 @@ public class ResourceServiceImpl implements ResourceService {
         return resourceEntity;
     }
 
-    @Override
-    public String findOriginByFileName(String fileName) {
-        return null;
-    }
-
-    @Override
-    public String findThumbnailByFileName(String fileName) {
-        return null;
-    }
-
-
-    public File makeThumbnailFromGif(File file) throws IOException {
+    private File makeThumbnailFromGif(File file) throws IOException {
 
         log.info("makeThumbnailFromGif: {}", file.getName());
 
@@ -130,8 +125,7 @@ public class ResourceServiceImpl implements ResourceService {
 
     }
 
-    @Override
-    public File convertToPng(File file) throws IOException {
+    private File convertToPng(File file) throws IOException {
         File inputFile = file;
         String fileName = getFineName(file);
         log.info("convertToPng: {}", fileName);
@@ -141,8 +135,7 @@ public class ResourceServiceImpl implements ResourceService {
         return outputFile;
     }
 
-    @Override
-    public File convertToJpg(File file) throws IOException {
+    private File convertToJpg(File file) throws IOException {
         File inputFile = file;
         String fileName = getFineName(file);
         log.info("convertToPng: {}", fileName);
@@ -153,20 +146,30 @@ public class ResourceServiceImpl implements ResourceService {
     }
 
 
-    @Override
-    public File convertResolutionPng(File file, int newWidth, int newHeight) throws IOException {
+    private File convertResolutionPng(File file, Integer inputWidth, Integer inputHeight) throws IOException {
         File inputFile = file;
         String fileName = getFineName(file);
         File outputFile = new File(fileName + "_resolution.png");
 
         BufferedImage inputImage = ImageIO.read(inputFile);
-//        int width = inputImage.getWidth();
-//        int height = inputImage.getHeight();
+        int width = inputImage.getWidth();
+        int height = inputImage.getHeight();
+        int resultWidth, resultHeight;
+
+        if (width >= height) {
+            resultWidth = (int) (width / (height / (double) newWidth));
+            resultHeight = newHeight;
+        } else {
+            resultWidth = newWidth;
+            resultHeight = (int) (height / (width / (double) newHeight));
+        }
 
 
         // 새로운 BufferedImage 객체를 생성합니다.
-        BufferedImage outputImage = new BufferedImage(newWidth, newHeight, inputImage.getType());
-
+//        BufferedImage outputImage = new BufferedImage(inputWidth, newHeight, inputImage.getType());
+        BufferedImage outputImage = new BufferedImage(resultWidth, resultHeight, inputImage.getType());
+        log.info("origin resolution: w: {}, h: {}", width, height);
+        log.info("new resolution: w: {}, h: {}", resultWidth, resultHeight);
         // Graphics2D 객체를 가져옵니다.
         Graphics2D g2d = outputImage.createGraphics();
 
@@ -174,7 +177,7 @@ public class ResourceServiceImpl implements ResourceService {
         g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 
         // 새로운 해상도로 이미지를 그립니다.
-        g2d.drawImage(inputImage, 0, 0, newWidth, newHeight, null);
+        g2d.drawImage(inputImage, 0, 0, resultWidth, resultHeight, null);
 
         // Graphics2D 객체를 해제합니다.
         g2d.dispose();

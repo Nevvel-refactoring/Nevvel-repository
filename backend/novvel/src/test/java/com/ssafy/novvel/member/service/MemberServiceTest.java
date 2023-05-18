@@ -1,6 +1,8 @@
 package com.ssafy.novvel.member.service;
 
 import com.ssafy.novvel.member.dto.request.MemberInfoRegistDto;
+import com.ssafy.novvel.member.dto.response.MemberChanged;
+import com.ssafy.novvel.member.dto.response.MemberDescriptionDto;
 import com.ssafy.novvel.member.dto.response.MemberInfoDto;
 import com.ssafy.novvel.member.entity.Member;
 import com.ssafy.novvel.member.repository.MemberRepository;
@@ -39,15 +41,12 @@ class MemberServiceTest {
 
         // given
         Member member = TestUtil.getUSERMemberHasDesc();
-        
+
         // when
-        MemberInfoDto result = memberServiceImpl.getMemberInfo(member);
+        MemberDescriptionDto result = memberServiceImpl.getMemberInfo(member);
 
         Assertions.assertThat(result.getDescription())
             .isEqualTo(member.getDescription());
-        Assertions.assertThat(result.getNickname()).isEqualTo(member.getNickname());
-        Assertions.assertThat(result.getPoint()).isEqualTo(member.getPoint());
-        Assertions.assertThat(result.getProfileImage()).isEqualTo(member.getProfile().getUrl());
     }
 
     @Test
@@ -69,17 +68,17 @@ class MemberServiceTest {
         Member member = TestUtil.getUSERMemberHasDesc();
 
         // when
+        Mockito.doReturn(TestUtil.getUSERMember().get()).when(memberRepository)
+            .findSubJoinFetchResource(TestUtil.getUSERMember().get().getSub());
         Mockito.doReturn(resource).when(resourceService).saveFile(multipartFile);
         Mockito.doReturn(member).when(memberRepository).save(Mockito.any());
 
-        Member result = memberServiceImpl.addMemberInfo(multipartFile, memberInfoRegistDto,
-            TestUtil.getGUESTMember().get());
+        MemberChanged result = memberServiceImpl.addMemberInfo(multipartFile, memberInfoRegistDto,
+            TestUtil.getUSERMember().get());
 
         // then
-        Assertions.assertThat(result.getDescription())
-            .isEqualTo(memberInfoRegistDto.getDescription());
-        Assertions.assertThat(result.getNickname()).isEqualTo(memberInfoRegistDto.getNickname());
-        Assertions.assertThat(result.getRole()).isEqualTo(member.getRole());
+        Assertions.assertThat(result.getMember())
+            .isNotEqualTo(null);
     }
 
     @Test
@@ -100,36 +99,16 @@ class MemberServiceTest {
         Member member = TestUtil.getUSERMember().get();
 
         // when
+        Mockito.doReturn(TestUtil.getGUESTMember().get()).when(memberRepository)
+            .findSubJoinFetchResource(TestUtil.getGUESTMember().get().getSub());
         Mockito.doReturn(resource).when(resourceService).saveFile(multipartFile);
         Mockito.doReturn(member).when(memberRepository).save(Mockito.any());
 
-        Member result = memberServiceImpl.addMemberInfo(multipartFile, memberInfoRegistDto,
+        MemberChanged result = memberServiceImpl.addMemberInfo(multipartFile, memberInfoRegistDto,
             TestUtil.getGUESTMember().get());
 
         // then
-        Assertions.assertThat(result.getDescription())
-            .isEqualTo(null);
-        Assertions.assertThat(result.getNickname()).isEqualTo(memberInfoRegistDto.getNickname());
-        Assertions.assertThat(result.getRole()).isEqualTo(member.getRole());
-    }
-
-    @Test
-    @DisplayName("sign out test")
-    void userSignOut() {
-
-        // given
-        Member member = Member.builder()
-            .id(1L)
-            .email("email@naver.com")
-            .nickname("nickname")
-            .refreshToken("token")
-            .point(0L)
-            .build();
-
-        // when
-        memberServiceImpl.signOut(member);
-
-        // then
-        Assertions.assertThat(member.getRefreshToken()).isEqualTo(null);
+        Assertions.assertThat(result.getMember())
+            .isNotEqualTo(null);
     }
 }

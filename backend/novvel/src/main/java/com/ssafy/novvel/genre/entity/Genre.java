@@ -1,5 +1,6 @@
 package com.ssafy.novvel.genre.entity;
 
+import com.ssafy.novvel.genre.dto.GenreDto;
 import lombok.*;
 
 import javax.persistence.Entity;
@@ -22,5 +23,7 @@ public class Genre {
     @NotNull
     private String name;
 
-
+    public GenreDto toDto() {
+        return new GenreDto(this.getId(), this.getName());
+    }
 }

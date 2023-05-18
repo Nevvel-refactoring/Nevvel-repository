@@ -17,4 +17,6 @@ public class MemberInfoRegistDto {
 
     @Size(max=500)
     private String description;
+
+    private Boolean isDefaultImage;
 }

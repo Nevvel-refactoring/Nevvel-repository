@@ -12,8 +12,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 @ExtendWith(MockitoExtension.class)
 class ResourceServiceTest {
@@ -42,7 +45,7 @@ class ResourceServiceTest {
 
         //when
         Mockito.doReturn(expect).when(resourceRepository).save(Mockito.any());
-        Mockito.doReturn("urlPath").when(s3Service).uploadFile(Mockito.any(),Mockito.any());
+        Mockito.doReturn("urlPath").when(s3Service).uploadFile(Mockito.any(), Mockito.any());
 //        resourceService = new ResourceServiceImpl(awsProxyService, resourceRepository);
 
         //then
@@ -70,7 +73,7 @@ class ResourceServiceTest {
 
         //when
         Mockito.doReturn(expect).when(resourceRepository).save(Mockito.any());
-        Mockito.doReturn("urlPath").when(s3Service).uploadFile(Mockito.any(),Mockito.any());
+        Mockito.doReturn("urlPath").when(s3Service).uploadFile(Mockito.any(), Mockito.any());
 //        resourceService = new ResourceServiceImpl(awsProxyService, resourceRepository);
 
         //then
@@ -98,7 +101,7 @@ class ResourceServiceTest {
 
         //when
         Mockito.doReturn(expect).when(resourceRepository).save(Mockito.any());
-        Mockito.doReturn("urlPath").when(s3Service).uploadFile(Mockito.any(),Mockito.any());
+        Mockito.doReturn("urlPath").when(s3Service).uploadFile(Mockito.any(), Mockito.any());
 //        resourceService = new ResourceServiceImpl(awsProxyService, resourceRepository);
 
         //then
@@ -113,9 +116,12 @@ class ResourceServiceTest {
     @Test
 //    @Disabled
     @DisplayName("get gif thumbnail img")
-    void makeThumbnailFromGifTest() throws IOException {
+    void makeThumbnailFromGifTest() throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
         File file = new File("src/test/resources/test.gif");
-        File result = resourceService.makeThumbnailFromGif(file);
+        Method makeThumbnailFromGifMethod = ResourceServiceImpl.class.getDeclaredMethod("makeThumbnailFromGif", File.class);
+        makeThumbnailFromGifMethod.setAccessible(true);
+        File result = (File) makeThumbnailFromGifMethod.invoke(resourceService, file);
+        Assertions.assertThat(result.getName()).isEqualTo("test_thumbnail.gif");
         result.delete();
 
     }
@@ -123,9 +129,11 @@ class ResourceServiceTest {
     @Test
 //    @Disabled
     @DisplayName("convert gif to png")
-    void convertGifToPngTest() throws IOException {
+    void convertGifToPngTest() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         File file = new File("src/test/resources/test_thumbnail.gif");
-        File result = resourceService.convertToPng(file);
+        Method makeThumbnailFromGifMethod = ResourceServiceImpl.class.getDeclaredMethod("convertToPng", File.class);
+        makeThumbnailFromGifMethod.setAccessible(true);
+        File result = (File) makeThumbnailFromGifMethod.invoke(resourceService, file);
         result.delete();
 
     }
@@ -133,9 +141,11 @@ class ResourceServiceTest {
     @Test
 //    @Disabled
     @DisplayName("convert gif to jpg")
-    void convertGifToJpgTest() throws IOException {
+    void convertGifToJpgTest() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         File file = new File("src/test/resources/test_thumbnail.gif");
-        File result = resourceService.convertToJpg(file);
+        Method makeThumbnailFromGifMethod = ResourceServiceImpl.class.getDeclaredMethod("convertToJpg", File.class);
+        makeThumbnailFromGifMethod.setAccessible(true);
+        File result = (File) makeThumbnailFromGifMethod.invoke(resourceService, file);
         result.delete();
 
     }
@@ -143,20 +153,36 @@ class ResourceServiceTest {
     @Test
 //    @Disabled
     @DisplayName("convert jpg to png")
-    void convertJpgToPngTest() throws IOException {
+    void convertJpgToPngTest() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         File file = new File("src/test/resources/test.jpg");
-        File result = resourceService.convertToJpg(file);
+        Method makeThumbnailFromGifMethod = ResourceServiceImpl.class.getDeclaredMethod("convertToPng", File.class);
+        makeThumbnailFromGifMethod.setAccessible(true);
+        File result = (File) makeThumbnailFromGifMethod.invoke(resourceService, file);
         result.delete();
 
     }
 
     @Test
 //    @Disabled
-    @DisplayName("convert Resolution Png")
-    void convertResolutionPngTest() throws IOException {
-        File file = new File("src/test/resources/test_thumbnail.png");
-        File result = resourceService.convertResolutionPng(file, 200, 200);
+    @DisplayName("convert Height Resolution Png")
+    void convertResolutionPngHeightTest() throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
+        File file = new File("src/test/resources/p.png");
+        Method makeThumbnailFromGifMethod =
+                ResourceServiceImpl.class.getDeclaredMethod("convertResolutionPng", File.class, Integer.class, Integer.class);
+        makeThumbnailFromGifMethod.setAccessible(true);
+        File result = (File) makeThumbnailFromGifMethod.invoke(resourceService, file, 200, 200);
         result.delete();
     }
 
+    @Test
+//    @Disabled
+    @DisplayName("convert Width Resolution Png")
+    void convertResolutionPngWidthTest() throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
+        File file = new File("src/test/resources/p2.png");
+        Method makeThumbnailFromGifMethod =
+                ResourceServiceImpl.class.getDeclaredMethod("convertResolutionPng", File.class, Integer.class, Integer.class);
+        makeThumbnailFromGifMethod.setAccessible(true);
+        File result = (File) makeThumbnailFromGifMethod.invoke(resourceService, file, 200, 200);
+        result.delete();
+    }
 }
