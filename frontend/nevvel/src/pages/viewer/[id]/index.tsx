@@ -46,7 +46,9 @@ function viewer() {
   const [audioEvent, setAudioEvent] = useState<string>("");
   const [viewerColor, setViewerColor] = useState<string>("");
   const [headerEpisodeData, setHeaderEpisodeData] = useState<newEpisodeViewer>()
-
+  const [totalImage, setTotalImage] = useState<string>("")
+  const [totalAudio, setTotalAudio] =useState<string>("")
+  const [backgroundPlay, setBackgroundPlay] =useState(false);
   useEffect(() => {
     console.log(viewerColor);
   }, [viewerColor]);
@@ -85,18 +87,29 @@ function viewer() {
     // console 찍었을때 content 젤 마지막 index 값이 나오고 현재 스크롤 마지막 값이 나옴..
     if (EpisodeData) {
       if (nowTextBlock !== EpisodeData.contents.length) {
-        if (EpisodeData.contents[nowTextBlock].event.length !== 0) {
-          const events = EpisodeData.contents[nowTextBlock].event;
-          for (const event of events) {
-            if (event.type === "IMAGE") {
-              // console.log("이미지당");
-              setEventCatch(true);
-              setImageEvent(event.assetUrl);
-            }
-            if (event.type === "AUDIO") {
-              // console.log("소리당");
-              setAudioEventCatch(true);
-              setAudioEvent(event.assetUrl);
+        if(EpisodeData.contents[nowTextBlock].idx ==0){
+          if( EpisodeData.contents[0].event.length ===1 &&EpisodeData.contents[0].event[0].type ==="IMAGE"){
+            setTotalImage(EpisodeData.contents[0].event[0].assetUrl)
+          }else if(EpisodeData.contents[0].event.length ===1 &&EpisodeData.contents[0].event[0].type ==="AUDIO"){
+            setTotalAudio(EpisodeData.contents[0].event[0].assetUrl)
+              }else if(EpisodeData.contents[0].event.length ===2){
+            setTotalImage(EpisodeData.contents[0].event[0].assetUrl)
+            setTotalAudio(EpisodeData.contents[0].event[1].assetUrl)
+          }
+        }else{
+          if (EpisodeData.contents[nowTextBlock].event.length !== 0) {
+            const events = EpisodeData.contents[nowTextBlock].event;
+            for (const event of events) {
+              if (event.type === "IMAGE") {
+                // console.log("이미지당");
+                setEventCatch(true);
+                setImageEvent(event.assetUrl);
+              }
+              if (event.type === "AUDIO") {
+                // console.log("소리당");
+                setAudioEventCatch(true);
+                setAudioEvent(event.assetUrl);
+              }
             }
           }
         }
@@ -119,24 +132,46 @@ function viewer() {
     }
   }, [tabNumber]);
 
+  useEffect(()=>{
+    console.log(ImageEvent)
+  },[ImageEvent])
+
+  useEffect(()=>{
+    if(totalAudio){
+      setBackgroundPlay(true)
+    }
+  },[totalAudio])
+
   useEffect(() => {
+    // tab.ver
     if (EpisodeData) {
-      if (EpisodeData.contents[tabNumber - 1].event.length !== 0) {
-        const events = EpisodeData.contents[tabNumber - 1].event;
-        for (const event of events) {
-          if (event.type === "IMAGE") {
-            console.log("이미지당");
-            setEventCatch(true);
-            setImageEvent(event.assetUrl);
-          }
-          if (event.type === "AUDIO") {
-            console.log("소리당");
-            setAudioEventCatch(true);
-            setAudioEvent(event.assetUrl);
+      if(EpisodeData.contents[0].idx === 0){
+        if( EpisodeData.contents[0].event.length ===1 &&EpisodeData.contents[0].event[0].type ==="IMAGE"){
+          setTotalImage(EpisodeData.contents[0].event[0].assetUrl)
+        }else if(EpisodeData.contents[0].event.length ===1 &&EpisodeData.contents[0].event[0].type ==="AUDIO"){
+          setTotalAudio(EpisodeData.contents[0].event[0].assetUrl)
+            }else if(EpisodeData.contents[0].event.length ===2){
+          setTotalImage(EpisodeData.contents[0].event[0].assetUrl)
+          setTotalAudio(EpisodeData.contents[0].event[1].assetUrl)
+        }
+      } else{
+        if (EpisodeData.contents[tabNumber].event.length !== 0) {
+          const events = EpisodeData.contents[tabNumber].event;
+          for (const event of events) {
+            if (event.type === "IMAGE") {
+              console.log("이미지당");
+              setEventCatch(true);
+              setImageEvent(event.assetUrl);
+            }
+            if (event.type === "AUDIO") {
+              console.log("소리당");
+              setAudioEventCatch(true);
+              setAudioEvent(event.assetUrl);
+            }
           }
         }
       }
-    }
+      }
     return () => {
       if (eventCatch) {
         setEventCatch(false);
@@ -234,11 +269,16 @@ function viewer() {
               <ViewHeader id={id} EpisodeData={EpisodeData} headerEpisodeData={headerEpisodeData}/>
             ) : null}
           </HeaderContainer>
-
-          <MainWrapper onClick={ClickHandler}>
+          {backgroundPlay && <AudioContainer>
+            <AudioPlayer viewerColor={viewerColor} src={`${totalAudio}`} controls loop  />
+            BGM
+            </AudioContainer>
+            }
+          <MainWrapper totalImage={totalImage}
+                writeMode={writeMode} onClick={ClickHandler}>
             {eventCatch ? <Img src={imageEvent} alt="Logo" /> : null}
             {writeMode ? (
-              <MainContainer writeMode={writeMode}>
+              <MainContainer totalImage={totalImage} writeMode={writeMode}>
                 <ViewerPageMain
                   viewerColor={viewerColor}
                   EpisodeData={EpisodeData}
@@ -250,13 +290,11 @@ function viewer() {
               </MainContainer>
             ) : (
               <MainContainer
+              totalImage={totalImage}
                 writeMode={writeMode}
                 ref={scrollRef}
                 onClick={countHandler}
               >
-                {tabNumber === 0 ? (
-                  <div>{EpisodeData.title}</div>
-                ) : (
                   <ViewerTabMain
                     viewerColor={viewerColor}
                     fontSize={fontSize}
@@ -267,7 +305,6 @@ function viewer() {
                     tabNumber={tabNumber}
                     setEventCatch={setEventCatch}
                   />
-                )}
               </MainContainer>
             )}
           </MainWrapper>
@@ -291,6 +328,7 @@ function viewer() {
             </>
           ) : null}
           {audioEventCatch && <audio ref={audioRef} src={`${audioEvent}`} />}
+          
           <BottomContainer onClick={() => clickhandler("head")}>
             {headerToggle && EpisodeData ? (
               <ViewerMobileBottom
@@ -370,16 +408,19 @@ const BottomContainer = styled.div`
   }
 `;
 
-const MainWrapper = styled.div`
+const MainWrapper = styled.div<{ writeMode: boolean, totalImage:string }>`
   height: 80vh;
+  background-image: url(${(props)=>props.totalImage});
+  background-size: 60%;
 `;
 
-const MainContainer = styled.div<{ writeMode: boolean }>`
+const MainContainer = styled.div<{ writeMode: boolean, totalImage:string }>`
   height: ${(props) => (props.writeMode ? 50 : 70)}vh;
   margin-left: 30%;
   margin-right: 30%;
   overflow-y: scroll;
-
+  /* background-image: url(${(props)=>props.totalImage}); */
+  background-size: cover;
   ::-webkit-scrollbar {
     display: none;
   }
@@ -395,6 +436,7 @@ const MainContainer = styled.div<{ writeMode: boolean }>`
   ${mobile} {
     margin-left: 5%;
     margin-right: 5%;
+
   }
   /* border: 1px solid black; */
 `;
@@ -437,5 +479,75 @@ const SettingBtn = styled.button`
     display: none;
   }
 `;
+
+const AudioPlayer = styled.audio<{ viewerColor: string }>`
+  /* 기본적인 스타일링 */
+  background-color: ${(props) => props.viewerColor};
+  width: 12rem;
+  margin-bottom: 10px;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  color:${(props) => props.viewerColor};
+
+  /* 컨트롤러 스타일링 */
+  &::-webkit-media-controls-panel {
+    display: flex;
+    background-color: ${(props) => props.viewerColor};
+  }
+
+  /* 재생 및 정지 버튼 스타일링 */
+  &::-webkit-media-controls-play-button,
+  &::-webkit-media-controls-pause-button {
+    background-color: #fff;
+    color: #333;
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    margin-right: 8px;
+    cursor: pointer;
+    outline: none;
+  }
+
+  /* 타임라인 스타일링 */
+  &::-webkit-media-controls-timeline {
+    /* flex: 1;
+    height: 4px;
+    background-color: #ccc;
+    border-radius: 2px;
+    overflow: hidden; */
+  }
+
+  /* 타임라인 재생 상태 스타일링 */
+  &::-webkit-media-controls-current-time-display::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background-color: transparent;
+  }
+
+  /* 타임라인 채우기 스타일링 */
+  &::-webkit-media-controls-timeline::-webkit-media-controls-timeline-container {
+    background-color: transparent;
+    height: 1%;
+  }
+
+  /* 볼륨 슬라이더 숨김 */
+  &::-webkit-media-controls-volume-slider {
+    display: none;
+  }
+`;
+
+const AudioContainer = styled.div`
+  display: inline-flex;
+  flex-direction: row-reverse;
+  width: 100%;
+  align-items: center;
+
+`
+
+
 
 export default viewer;
