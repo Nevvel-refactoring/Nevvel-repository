@@ -85,7 +85,6 @@ export default function Home(props: {
   novels: Novel;
   assets: Asset[];
 }) {
-  console.log(props.novels)
   // console.log(props.userDTO);
   const userDTO = props.userDTO === "" ? "" : JSON.parse(props.userDTO);
   const newUserInfo =

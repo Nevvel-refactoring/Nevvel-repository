@@ -1,4 +1,5 @@
 import springApi, { NewvelApi } from "@/src/api";
+import Router from "next/router";
 import React, {
   Dispatch,
   SetStateAction,
@@ -155,32 +156,29 @@ function CreateNewNovel({ setModalOpen }: Props) {
         {image ? (
           <ImgUploadBtn src={URL.createObjectURL(image)} alt="Selected image" />
         ) : (
-          ""
-          //   <ImgUploadBtn src={Info.thumbnail} alt="UnUploadImgBtn" />
+          <SelectImgDiv>
+            <RelativeP>클릭하여 선택</RelativeP>
+          </SelectImgDiv>
         )}
-        {!image && <RelativeP>클릭하여 변경</RelativeP>}
+        {/* {!image && <RelativeP>클릭하여 선택</RelativeP>} */}
       </ImgUploadLabel>
       {image ? <ImgDelBtn onClick={DeleteImg}>변경 표지 삭제</ImgDelBtn> : null}
       <SelectDiv>
-        {/* selectBox로 장르 추가 */}
-        {/* <RadioDiv
-          active={coverStatusType === "SERIALIZED" ? true : false}
-          onClick={() => setCoverStatusType("SERIALIZED")}
-        > */}
-        <label htmlFor="genre">장르 선택</label>
+        <SelectGenreDiv>
+          <SelectGenreLabel htmlFor="genre">장르</SelectGenreLabel>
+        </SelectGenreDiv>
         <SelectGenre
           name="genre"
           id="genre"
           value={genre}
           onChange={genreChangeHandler}
         >
-          {genres?.map((genre) => (
+          {genres?.slice(1).map((genre) => (
             <OptionGenre key={genre.id} value={genre.id}>
               {genre.name}
             </OptionGenre>
           ))}
         </SelectGenre>
-        {/* </RadioDiv> */}
       </SelectDiv>
       <DesP>제목</DesP>
       <CoverTitle
@@ -236,7 +234,7 @@ const DesP = styled.p`
 
 const SelectDiv = styled.div`
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
 `;
 
 const ModalSubmitBtn = styled.button`
@@ -280,7 +278,19 @@ const RadioDiv = styled.div<{ active: boolean }>`
   }
 `;
 
-const SelectGenre = styled.select``;
+const SelectGenreDiv = styled.div`
+  align-self: flex-start;
+`;
+
+const SelectGenreLabel = styled.label`
+  font-size: 10px;
+  color: ${({ theme }) => theme.color.hover};
+`;
+
+const SelectGenre = styled.select`
+  width: 150px;
+  margin-bottom: 1rem;
+`;
 
 const OptionGenre = styled.option``;
 
@@ -293,6 +303,15 @@ const ImgUploadBtn = styled.img`
   }
 `;
 
+const SelectImgDiv = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 148px;
+  height: 222px;
+  background-color: #e6e6e6;
+`;
+
 const ImgUploadLabel = styled.label`
   /* border: 0.15rem solid #4D4D4D;
   border-radius: 1.5rem; */
@@ -303,17 +322,17 @@ const ImgUploadLabel = styled.label`
   &:hover {
     cursor: pointer;
   }
-  position: relative;
+  /* position: relative; */
 `;
 
-const RelativeP = styled.p`
-  position: absolute;
+const RelativeP = styled.div`
   font-size: 13px;
   font-weight: 800;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: white;
+  text-align: center;
+  color: ${({ theme }) => theme.color.hover};
+  &:hover {
+    color: ${({ theme }) => theme.color.point};
+  }
   /* mix-blend-mode: difference; */
 `;
 

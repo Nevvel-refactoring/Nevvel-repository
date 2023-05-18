@@ -237,8 +237,8 @@ const NovelWrapper = styled.div`
 `;
 
 const TitleWrapper = styled.div`
-  font-size: 20px;
-  font-weight: 800;
+  display: flex;
+  align-items: center;
 `;
 
 const NovelTitle = styled.div`
