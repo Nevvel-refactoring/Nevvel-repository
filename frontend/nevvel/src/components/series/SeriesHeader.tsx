@@ -58,13 +58,11 @@ function SeriesHeader({
     if (loginStatus) {
       if (e === "first") {
         router.push({
-          pathname: "/viewer/[id]",
-          query: { id: SeriesData.episodes[0].id },
+          pathname: `/viewer/${SeriesData.episodes[0].id}`,
         });
       } else if (e === "continue") {
         router.push({
-          pathname: "/viewer/[id]",
-          query: { id: readId },
+          pathname: `/viewer/${readId}`,
         });
       }
     } else {
