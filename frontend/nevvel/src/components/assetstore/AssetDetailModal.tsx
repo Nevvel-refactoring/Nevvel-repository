@@ -8,6 +8,10 @@ import DoneBuyAsset from "./DoneBuyAsset";
 
 import DummyEpisode from "./DummyEpisodeforMiri.json";
 
+import { useAtomValue } from "jotai";
+import { loginAtom, userInfoAtom } from "@/src/store/Login";
+
+
 interface AssetTag {
   id: number;
   tagName: string;
@@ -44,6 +48,12 @@ function AssetDetailModal({
   modalStarter,
   setAxiosReloaer,
 }: ModalDataProps) {
+
+  // 유저 인증정보
+  const ifLogIn = useAtomValue(loginAtom)
+  const whoLogin = useAtomValue(userInfoAtom)
+  console.log(whoLogin?.id)
+
   // 오디오 재생
   const audioRef = useRef<any>(null);
 
@@ -177,11 +187,28 @@ function AssetDetailModal({
               </DetailInfoP>
               <br />
               <br />
-              {buyBtnChanger ? (
-                <UnModalBtn>구매완료</UnModalBtn>
-              ) : (
-                <ModalBtn onClick={OpenModalonModal}>구매</ModalBtn>
-              )}
+              {
+                ifLogIn === true ?
+                (
+                  (
+                    whoLogin?.id === openModalData.uploader.id ?
+                    <UnModalBtn>구매완료</UnModalBtn>
+                    :
+                    (
+                      buyBtnChanger ?
+                      (
+                        <UnModalBtn>구매완료</UnModalBtn>
+                      )
+                      :
+                      (
+                        <ModalBtn onClick={OpenModalonModal}>구매</ModalBtn>
+                      )
+                    )
+                  )
+                )
+                :
+                null
+              }
             </ColDiv>
           </RowDiv>
         </ColDiv>
