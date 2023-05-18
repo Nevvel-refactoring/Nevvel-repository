@@ -14,7 +14,6 @@ public class WithMockCustomUserSecurityContextFactory implements WithSecurityCon
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         Member member = Member.builder()
                 .sub(withMockCustomUser.sub())
-                .id(1L)
                 .email("test@google.com")
                 .point(100L)
                 .nickname(withMockCustomUser.username())
