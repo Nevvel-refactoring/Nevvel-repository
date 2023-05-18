@@ -18,7 +18,7 @@ declare module "viewer" {
         title: string;
         nextEpisodeId:number;
         prevEpisodeId:number;
-        writerId:number;
+        wirterId:number;
         contents: content[];
     }
     export interface content {

@@ -32,7 +32,7 @@ function index() {
   const getAssetImgData = async () => {
     try {
       const res = await springApi.get(
-        "assets/purchased-on?assettype=IMAGE&page=1&size=20&sort=createdDateTime"
+        "assets/purchased-on?assettype=IMAGE"
       );
       if (res) {
         console.log(res);
@@ -47,7 +47,7 @@ function index() {
   const getAssetAudioData = async () => {
     try {
       const res = await springApi.get(
-        "assets/purchased-on?assettype=AUDIO&page=1&size=20&sort=createdDateTime"
+        "assets/purchased-on?assettype=AUDIO"
       );
       if (res) {
         console.log(res);
