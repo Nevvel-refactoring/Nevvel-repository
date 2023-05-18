@@ -14,8 +14,6 @@ type SeriesEditProps = {
   setModalOpen2: Dispatch<SetStateAction<boolean>>;
   setAfterEdit: Dispatch<SetStateAction<number>>;
   afterEdit: number;
-  isEdited: boolean;
-  setIsEdited: Dispatch<SetStateAction<boolean>>;
 };
 
 interface CoverEdit {
@@ -31,8 +29,6 @@ function SeriesEdit({
   setModalOpen2,
   setAfterEdit,
   afterEdit,
-  isEdited,
-  setIsEdited,
 }: SeriesEditProps) {
   const [image, setImage] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -48,7 +44,6 @@ function SeriesEdit({
         if (extension && allowedExtensions.includes(extension)) {
           setImage(files[0]);
           setIsDefaultImage(false);
-          setIsEdited(true);
         } else {
           alert("지원되지 않는 파일 확장자입니다.");
         }
