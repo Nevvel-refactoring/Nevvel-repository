@@ -51,22 +51,15 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
   const [toggle, setToggle] = useState(false);
   const [assetOpen, setAssetOpen] = useAtom(assetOpenAtom);
   const [nowTextBlock, setNowTextBlock] = useAtom(nowTextBlockAtom);
-  const totalEventValue = useAtomValue(totalEventAtom);
+  const [totalEvent,setTotalEvent] = useAtom(totalEventAtom);
   const totalEventCheckValue = useAtomValue(totalEventCheckAtom);
   const ImageAssetValue = useAtomValue(ImageAssetAtom);
   const AudioAssetValue = useAtomValue(AudioAssetAtom);
   const [imageUrl, setImageUrl] = useState<number>();
   const [AudioUrl, setAudioUrl] = useState<number>();
 
-  useEffect(()=>{
-    console.log(ImageAssetValue)
-    console.log(AudioAssetValue)
-    console.log(imageUrl)
-    console.log(AudioUrl)
-  })
-
   useEffect(() => {
-    console.log(totalEventValue);
+    console.log(totalEvent);
   }, [totalEventCheckValue]);
 
   useEffect(() => {
@@ -135,8 +128,8 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
       if (episode.statusType == "TEMPORARY") {
         setEpisode({ ...episode, statusType: "PUBLISHED" });
       }
-      if (totalEventValue.event.length !== 0) {
-        episode.contents.unshift(totalEventValue);
+      if (totalEvent.event.length !== 0) {
+        episode.contents.unshift(totalEvent);
       }
       setPostModalOpen(true);
       setPostEpisode(episode);
@@ -452,31 +445,31 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
     }
   };
 
-  useEffect(() => {
-    if (totalEventValue && totalEventValue.event.length !== 0) {
-      if (totalEventValue.event.length===1&&totalEventValue.event[0].type === "IMAGE") {
-        console.log(totalEventValue.event[0].assetId,"이미지만")
-        const ImagefindIndex = ImageAssetValue.findIndex(
-          (el) => el.id == totalEventValue.event[0].assetId
-        );
-        setImageUrl(ImagefindIndex);
-      } else if (totalEventValue.event.length===1&&totalEventValue.event[0].type === "AUDI0") {
-        const AudiofindIndex = AudioAssetValue.findIndex(
-          (el) => el.id == totalEventValue.event[0].assetId
-        );
-        setAudioUrl(AudiofindIndex);
-      } else if (totalEventValue.event.length === 2) {
-        const ImagefindIndex = ImageAssetValue.findIndex(
-          (el) => el.id == totalEventValue.event[0].assetId
-        );
-        setImageUrl(ImagefindIndex);
-        const AudiofindIndex = AudioAssetValue.findIndex(
-          (el) => el.id == totalEventValue.event[1].assetId
-        );
-        setAudioUrl(AudiofindIndex);
-      }
-    }
-  });
+  // useEffect(() => {
+  //   if (totalEvent && totalEvent.event.length !== 0) {
+  //     if (totalEvent.event.length===1&&totalEvent.event[0].type === "IMAGE") {
+  //       console.log(totalEvent.event[0].assetId,"이미지만")
+  //       const ImagefindIndex = ImageAssetValue.findIndex(
+  //         (el) => el.id == totalEvent.event[0].assetId
+  //       );
+  //       setImageUrl(ImagefindIndex);
+  //     } else if (totalEvent.event.length===1&&totalEvent.event[0].type === "AUDI0") {
+  //       const AudiofindIndex = AudioAssetValue.findIndex(
+  //         (el) => el.id == totalEvent.event[0].assetId
+  //       );
+  //       setAudioUrl(AudiofindIndex);
+  //     } else if (totalEvent.event.length === 2) {
+  //       const ImagefindIndex = ImageAssetValue.findIndex(
+  //         (el) => el.id == totalEvent.event[0].assetId
+  //       );
+  //       setImageUrl(ImagefindIndex);
+  //       const AudiofindIndex = AudioAssetValue.findIndex(
+  //         (el) => el.id == totalEvent.event[1].assetId
+  //       );
+  //       setAudioUrl(AudiofindIndex);
+  //     }
+  //   }
+  // },[totalEventAtom]);
 
   return (
     <Wrapper>
@@ -500,18 +493,18 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
           placeholder="에피소드 명을 입력하세요"
         />
       <TotalAssetButtonContainer>
-          {totalEventValue.event.length == 0 ||
-          (totalEventValue.event.length == 1 &&
-            totalEventValue.event[0].type === "AUDIO") ? (
+          {totalEvent.event.length == 0 ||
+          (totalEvent.event.length == 1 &&
+            totalEvent.event[0].type === "AUDIO") ? (
               <AssetButton onClick={() => AssetHandler(1)}>
             <BiImageAdd className="image" size="24" />
         </AssetButton>
           ) : (
             <>{imageUrl && <Img src={ImageAssetValue[imageUrl]?.thumbnail} alt="썸네일" />}</>
           )}
-          {totalEventValue.event.length == 0 ||
-          (totalEventValue.event.length == 1 &&
-            totalEventValue.event[0].type === "IMAGE") ? (
+          {totalEvent.event.length == 0 ||
+          (totalEvent.event.length == 1 &&
+            totalEvent.event[0].type === "IMAGE") ? (
               <AssetButton onClick={() => AssetHandler(2)}>
             <AiOutlineSound className="sound" size="24" />
         </AssetButton>
