@@ -174,7 +174,7 @@ function AudUpload(props:assetstoreProps) {
   
   return(
     <ColDiv>
-      <p>사운드 에셋 업로드</p>
+      <Title>사운드 에셋 업로드</Title>
       {/* 사운드 파일 업로딩 */}
       <RowDiv>
 
@@ -186,7 +186,7 @@ function AudUpload(props:assetstoreProps) {
         <ColDiv>
           <RowDiv>
             <AssetInfoTextDiv2>
-              <p>음원 파일</p>
+              <SubTitle>음원 파일</SubTitle>
             </AssetInfoTextDiv2>
             <AudUploadBtnDiv>
               {
@@ -225,7 +225,7 @@ function AudUpload(props:assetstoreProps) {
           }
           </AudUploadLabel>
           <AssetInfoTextDiv1>
-            <p>제목</p>
+            <SubTitle>제목</SubTitle>
           </AssetInfoTextDiv1>
           <AssetInfoInput1
             placeholder="에셋 제목을 입력해주세요."
@@ -233,7 +233,7 @@ function AudUpload(props:assetstoreProps) {
           />
 
           <AssetInfoTextDiv1>
-            <p>설명</p>
+            <SubTitle>설명</SubTitle>
           </AssetInfoTextDiv1>
           <AssetInfoInput2
             placeholder="에셋 설명을 입력해주세요."
@@ -243,7 +243,7 @@ function AudUpload(props:assetstoreProps) {
           <RowDivPriceTag>
             <ColDiv>
               <AssetInfoTextDiv2>
-                <p>가격</p>
+                <SubTitle>가격</SubTitle>
               </AssetInfoTextDiv2>
               <AssetInfoInput3
                 placeholder="에셋 가격을 입력해주세요."
@@ -252,7 +252,7 @@ function AudUpload(props:assetstoreProps) {
             </ColDiv>
             <ColDiv>
               <AssetInfoTextDiv2>
-                <p>&nbsp;&nbsp;태그</p>
+                <SubTitle>&nbsp;&nbsp;태그</SubTitle>
               </AssetInfoTextDiv2>
               <TagSearchBar
                 selectTag={selectTag}
@@ -273,8 +273,7 @@ function AudUpload(props:assetstoreProps) {
           </RowDivPriceTag>
         </ColDiv>
       </RowDiv>
-      
-      <RowDiv>
+      <RowDiv className="BtnContainer">
         {/* 제출버튼 */}
         {
           (audio&&title&&description&&price&&selectTag[0])?
@@ -295,6 +294,10 @@ const RowDiv = styled.div`
   flex-direction: row;
   justify-content: space-around;
   margin-top: 1rem;
+  &.BtnContainer {
+    margin-top: 0;
+    margin-bottom: 1rem;
+  }
 `
 
 const RowDivPriceTag = styled.div`
@@ -307,8 +310,18 @@ const ColDiv = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  font-size: 17px;
 `
 
+const Title = styled.div`
+  font-size: 24px;
+  font-weight: 800;
+`
+const SubTitle =styled.div`
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 0.2rem;
+`
 const AudUploadLabel = styled.label`
   width: 30rem;
   height: 4rem;
@@ -415,11 +428,14 @@ const AssetInfoInput1 = styled.input`
   color: ${({ theme }) => theme.color.button};
   width: 30rem;
   height: 2.5rem;
-  border: 0.15rem solid #4D4D4D;
+  border: 1px solid ${({ theme }) => theme.color.opacityText3};
   border-radius: 0.6rem;
   :focus{
-    border: 0.15rem solid #4D4D4D;
-    box-shadow: 0.1rem 0.1rem 0.6rem;
+    border: 2px solid ${({ theme }) => theme.color.opacityText3};
+    box-shadow: 0px 0px 6px gray;
+  }
+  ::placeholder{
+    padding-left: 1rem;
   }
 `
 
@@ -428,11 +444,14 @@ const AssetInfoInput2 = styled.input`
   color: ${({ theme }) => theme.color.button};
   width: 30rem;
   height: 5rem;
-  border: 0.15rem solid #4D4D4D;
+  border: 1px solid ${({ theme }) => theme.color.opacityText3};
   border-radius: 0.8rem;
   :focus{
-    border: 0.15rem solid #4D4D4D;
-    box-shadow: 0.1rem 0.1rem 0.6rem;
+    border: 2px solid ${({ theme }) => theme.color.opacityText3};
+    box-shadow: 0px 0px 6px gray;
+  }
+  ::placeholder{
+    padding-left: 1rem;
   }
 `
 
@@ -441,12 +460,15 @@ const AssetInfoInput3 = styled.input`
   color: ${({ theme }) => theme.color.button};
   width: 14rem;
   height: 2.5rem;
-  border: 0.15rem solid #4D4D4D;
+  border: 1px solid ${({ theme }) => theme.color.opacityText3};
   border-radius: 0.6rem;
   margin-right: 1.5rem;
   :focus{
-    border: 0.15rem solid #4D4D4D;
-    box-shadow: 0.1rem 0.1rem 0.6rem;
+    border: 2px solid ${({ theme }) => theme.color.opacityText3};
+    box-shadow: 0px 0px 6px gray;
+  }
+  ::placeholder{
+    padding-left: 1rem;
   }
 `
 
@@ -471,7 +493,7 @@ const CardInfo2Div = styled.div`
   height: 2rem;
   border-radius: 0.5rem;
   /* box-shadow: 0.5rem 0.5rem 0.2rem; */
-  border: 0.15rem inset black;
+  border: 1px solid ${({ theme }) => theme.color.opacityText3};
   /* text-align: center; */
   display: flex;
   align-items: center;
@@ -484,21 +506,21 @@ const CardInfo2Div = styled.div`
 const ModalCloseBtn = styled.button`
   background-color: ${({ theme }) => theme.color.button};
   color: ${({ theme }) => theme.color.buttonText};
-  width: 12rem;
+  width: 8rem;
   height: 3rem;
-  border: 0.1rem solid black;
+  border: 1px solid ${({ theme }) => theme.color.opacityText3};
   border-radius: 0.5rem;
-  font-size: 1.5rem;
+  font-size: 17px;
   margin-left: 0.5rem;
 `
 const ModalSubmitBtn = styled.button`
   background-color: ${({ theme }) => theme.color.button};
   color: ${({ theme }) => theme.color.buttonText};
-  width: 12rem;
+  width: 8rem;
   height: 3rem;
-  border: 0.1rem solid black;
+  border: 1px solid ${({ theme }) => theme.color.opacityText3};
   border-radius: 0.5rem;
-  font-size: 1.5rem;
+  font-size: 17px;
   margin-right: 0.5rem;
   &:hover{
     background-color: #8385FF;
@@ -508,10 +530,10 @@ const ModalSubmitBtn = styled.button`
 const ModalSubmitBtn_Un = styled.button`
   background-color: #B3B3B3;
   color: #ffffff;
-  width: 12rem;
+  width: 8rem;
   height: 3rem;
-  border: 0.1rem solid black;
+  border: 1px solid ${({ theme }) => theme.color.opacityText3};
   border-radius: 0.5rem;
-  font-size: 1.5rem;
+  font-size: 17px;
   margin-right: 0.5rem
 `

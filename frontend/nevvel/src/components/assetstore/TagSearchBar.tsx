@@ -116,7 +116,7 @@ function TagSearchBar(props:ImageUploadProps){
                   <ResultLi
                     TagInputWidth={props.TagInputWidth}
                     onClick={() => handleAdd(result)}>
-                    <p>{result}</p>
+                    <Text>{result}</Text>
                   </ResultLi>
                 ))
               }
@@ -136,17 +136,23 @@ const AssetInfoInputDiv = styled.div<TagInputWidthProps>`
   height: 2.5rem;
   z-index: 999;
 `
+const Text= styled.div`
+  font-size: 17px;
+`
 
 const AssetInfoInput1 = styled.input<TagInputWidthProps>`
   background-color: ${({ theme }) => theme.color.background};
   color: ${({ theme }) => theme.color.button};
   width: ${props => `${props.TagInputWidth}`};
   height: 2.5rem;
-  border: 0.15rem solid #4D4D4D;
+  border: 1px solid ${({ theme }) => theme.color.opacityText3};
   border-radius: 0.6rem;
   :focus{
-    border: 0.15rem solid #4D4D4D;
-    box-shadow: 0.1rem 0.1rem 0.6rem;
+    border: 2px solid ${({ theme }) => theme.color.opacityText3};
+    box-shadow: 0px 0px 6px gray;
+  }
+  ::placeholder{
+    padding-left: 0.5rem;
   }
 `
 
@@ -154,9 +160,11 @@ const ResultDiv = styled.div<TagInputWidthProps>`
   width: ${props => `${props.TagInputWidth}`};
   background-color: ${({ theme }) => theme.color.background};
   height: auto;
-  border: 0.15rem solid #4D4D4D;
+  border: 2px solid ${({ theme }) => theme.color.opacityText3};
+  border-top:none;
   border-radius: 0.6rem;
   background-color: white;
+  font-size:17px;
 `
 
 const ResultUl = styled.ul<TagInputWidthProps>`

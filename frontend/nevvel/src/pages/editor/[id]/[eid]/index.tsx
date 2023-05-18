@@ -54,7 +54,7 @@ function index(props: { userDTO: string }) {
   const getAssetImgData = async () => {
     try {
       const res = await springApi.get(
-        "assets/purchased-on?assettype=IMAGE"
+        "assets/own?assettype=IMAGE"
       );
       if (res) {
         console.log(res);
@@ -69,7 +69,7 @@ function index(props: { userDTO: string }) {
   const getAssetAudioData = async () => {
     try {
       const res = await springApi.get(
-        "assets/purchased-on?assettype=AUDIO"
+        "assets/own?assettype=AUDIO"
       );
       if (res) {
         console.log(res);

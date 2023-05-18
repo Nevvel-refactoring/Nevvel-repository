@@ -140,7 +140,7 @@ function assetstore({ content }: any) {
           <SearchBarInput placeholder="에셋명을 입력하세요" />
           {/* 추후 키워드 검색 axios 연결해야함 */}
           <Link href="/assetstore/assetstore">
-            <AiOutlineSearch />
+            <AiOutlineSearch className="btn" />
           </Link>
         </SearchBar>
         <WriteBtn onClick={AssetUpload}>에셋 업로드</WriteBtn>
@@ -165,19 +165,19 @@ function assetstore({ content }: any) {
           (imgAudTrigger === "IMAGE") ?
           <ImgAudSwitchDiv>
             <ClickImgSwitchBtn>
-              <BiImage size="30px" />
+              <BiImage size="24px" />
             </ClickImgSwitchBtn>
             <AudSwitchBtn onClick={SwitchtoAud}>
-              <AiOutlineSound size="25px" />
+              <AiOutlineSound size="24px" />
             </AudSwitchBtn>
           </ImgAudSwitchDiv>
           :
           <ImgAudSwitchDiv>
             <ImgSwitchBtn onClick={SwitchtoImg}>
-              <BiImage size="25px" />
+              <BiImage size="24px" />
             </ImgSwitchBtn>
             <ClickAudSwitchBtn>
-              <AiOutlineSound size="30px" />
+              <AiOutlineSound size="24px" />
             </ClickAudSwitchBtn>
           </ImgAudSwitchDiv>
         }
@@ -317,6 +317,10 @@ const SearchBar = styled.div`
   width: 24rem;
   height: 3rem;
 
+  .btn{
+    color:#666666
+  }
+
   ${tabletH} {
     width: 18rem;
   }
@@ -331,10 +335,9 @@ const SearchBarInput = styled.input`
 const WriteBtn = styled.button`
   background-color: ${({ theme }) => theme.color.button};
   color: ${({ theme }) => theme.color.buttonText};
-  width: 8rem;
-  height: 3rem;
+  width: 6rem;
+  height: 2.5rem;
   border-radius: 1rem;
-  font-size: 1.2rem;
   /* margin-left: 2rem; */
   &:hover{
     background-color: #8385ff;
@@ -362,8 +365,7 @@ const CardInfo2Div = styled.div`
   width: auto;
   height: 2rem;
   border-radius: 0.5rem;
-  box-shadow: 0.05rem 0.05rem;
-  border: 0.15rem solid #8385ff;
+  border: 2px solid ${({ theme }) => theme.color.hover};
   /* text-align: center; */
   display: flex;
   align-items: center;
@@ -407,6 +409,7 @@ const SwitchZone = styled.div`
   width: 87%;
   display: flex;
   justify-content: space-between;
+  align-items: flex-end;
   margin-top: 2rem;
 `
 
@@ -424,9 +427,9 @@ const SwitchDiv = styled.div`
 
 // 이미지/오디오 스위치
 const ImgAudSwitchDiv = styled.div`
-  width: 10.2rem;
-  height: 3.5rem;
-  border: 0.15rem solid #4D4D4D;
+  width: 8rem;
+  height: 2.5rem;
+  border: 1px solid ${({ theme }) => theme.color.opacityText3};
   border-radius: 0.5rem;
   display: flex;
   margin-left: 1rem;
@@ -444,8 +447,8 @@ const ImgSwitchBtn = styled.button`
 const ClickImgSwitchBtn = styled.button`
   width: 5rem;
   height: 100%;
-  border-right: 0.1rem solid #4D4D4D;
-  background-color: #8385ff;
+  border: 1px solid ${({ theme }) => theme.color.opacityText3};
+  background-color:${({ theme }) => theme.color.hover};
   border-radius: 0.3rem 0 0 0.3rem;
 `
 const AudSwitchBtn = styled.button`
@@ -458,8 +461,8 @@ const AudSwitchBtn = styled.button`
 const ClickAudSwitchBtn = styled.button`
   width: 5rem;
   height: 100%;
-  border-left: 0.1rem solid #4D4D4D;
-  background-color: #8385ff;
+  border: 1px solid ${({ theme }) => theme.color.opacityText3};
+  background-color: ${({ theme }) => theme.color.hover};
   border-radius: 0 0.3rem 0.3rem 0;
 `
 
@@ -469,7 +472,7 @@ const PopNewSwitchBtn = styled.button`
   color : ${({ theme }) => theme.color.button};
   width: 4rem;
   height: 2rem;
-  font-size: 1.2rem;
+  font-weight: 500;
   /* border: 0.1rem solid black; */
 `
 
@@ -477,7 +480,7 @@ const ClickPopNewSwitchBtn = styled.button`
   color : #8385ff;
   width: 4rem;
   height: 2rem;
-  font-size: 1.3rem;
+  font-weight: 700;
   /* border: 0.1rem solid black; */
 `
 

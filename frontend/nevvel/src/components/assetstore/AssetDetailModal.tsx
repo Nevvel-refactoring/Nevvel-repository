@@ -11,7 +11,6 @@ import DummyEpisode from "./DummyEpisodeforMiri.json";
 import { useAtomValue } from "jotai";
 import { loginAtom, userInfoAtom } from "@/src/store/Login";
 
-
 interface AssetTag {
   id: number;
   tagName: string;
@@ -48,11 +47,10 @@ function AssetDetailModal({
   modalStarter,
   setAxiosReloaer,
 }: ModalDataProps) {
-
   // 유저 인증정보
-  const ifLogIn = useAtomValue(loginAtom)
-  const whoLogin = useAtomValue(userInfoAtom)
-  console.log(whoLogin?.id)
+  const ifLogIn = useAtomValue(loginAtom);
+  const whoLogin = useAtomValue(userInfoAtom);
+  console.log(whoLogin?.id);
 
   // 오디오 재생
   const audioRef = useRef<any>(null);
@@ -143,8 +141,10 @@ function AssetDetailModal({
         ) : (
           <ThumbnailImg src={openModalData.url} alt="image" />
         )}
-        <ColDiv>
-          <DetailInfoP>{openModalData.title}</DetailInfoP>
+        <ColDiv className="header">
+          <DetailInfoP className="title">
+            {openModalData.title}
+          </DetailInfoP>
           <br />
 
           <RowDiv>
@@ -167,55 +167,42 @@ function AssetDetailModal({
                 } */}
               </TagRowDiv>
               <br />
-              <RowDiv>
-                <UploaderImg
-                  src={openModalData.uploader.profileImage}
-                  alt="profileimg"
-                />
-                <DetailInfoP>
-                  &nbsp;&nbsp;{openModalData.uploader.nickname}
+              <RowDiv className="name">
+                {openModalData.uploader.profileImage ? (
+                  <UploaderImg
+                    src={openModalData.uploader.profileImage}
+                    alt="profileimg"
+                  />
+                ) : null}
+                <DetailInfoP className="name">
+                  {openModalData.uploader.nickname}
                 </DetailInfoP>
               </RowDiv>
-            </ColDiv>
-
-            <ColDiv>
-              <DetailInfoP>가격 : {openModalData.price} Point</DetailInfoP>
-              <br />
-              <br />
-              <DetailInfoP>
-                다운로드 수 : {openModalData.downloadCount}
+              <DetailInfoP className="point">
+                가격 :<Text>{openModalData.price} Point</Text>
               </DetailInfoP>
               <br />
               <br />
-              {
-                ifLogIn === true ?
-                (
-                  (
-                    whoLogin?.id === openModalData.uploader.id ?
-                    <UnModalBtn>구매완료</UnModalBtn>
-                    :
-                    (
-                      buyBtnChanger ?
-                      (
-                        <UnModalBtn>구매완료</UnModalBtn>
-                      )
-                      :
-                      (
-                        <ModalBtn onClick={OpenModalonModal}>구매</ModalBtn>
-                      )
-                    )
-                  )
+              <DetailInfoP>
+                다운로드 수 :<Text>{openModalData.downloadCount}</Text>
+              </DetailInfoP>
+              <br />
+              <br />
+              {ifLogIn === true ? (
+                whoLogin?.id === openModalData.uploader.id ? (
+                  <UnModalBtn>구매완료</UnModalBtn>
+                ) : buyBtnChanger ? (
+                  <UnModalBtn>구매완료</UnModalBtn>
+                ) : (
+                  <ModalBtn onClick={OpenModalonModal}>구매</ModalBtn>
                 )
-                :
-                null
-              }
+              ) : null}
             </ColDiv>
           </RowDiv>
         </ColDiv>
       </RowDiv>
-      <hr />
-      <DetailInfoP>&nbsp;&nbsp;미리보기</DetailInfoP>
-      <hr />
+      <DetailInfoP className="preview">&nbsp;&nbsp;미리보기</DetailInfoP>
+
       {/* 미리보기 영역 클릭하면 미리보기 트리거가 0->1->2->0으로 순회 */}
       <MiriDiv onClick={MiriOperate}>
         {/* 미리보기 트리거 1됐을때 나타나는 에셋 */}
@@ -255,8 +242,9 @@ function AssetDetailModal({
             })
           : null}
       </MiriDiv>
-
-      <ModalBtn onClick={CloseAssetDetail}>닫기</ModalBtn>
+      <ModalBtnContainer>
+        <ModalBtn onClick={CloseAssetDetail}>닫기</ModalBtn>
+      </ModalBtnContainer>
 
       {/* 여기부터 모달온 모달 */}
       {modalonModalOpen ? (
@@ -297,12 +285,17 @@ const AllDiv = styled.div`
   height: 41rem;
   overflow-y: scroll;
   padding-left: 1rem;
+  font-size: 17px;
 `;
 
 const RowDiv = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-around;
+
+  &.name {
+    justify-content: space-between;
+  }
 `;
 const ColDiv = styled.div`
   display: flex;
@@ -310,11 +303,13 @@ const ColDiv = styled.div`
   align-items: flex-start;
   margin-top: 1rem;
   margin-bottom: 1rem;
+  &.header {
+    margin-right: 5rem;
+  }
 `;
 
 const TagRowDiv = styled.div`
   width: 15rem;
-  height: 2.5rem;
   display: flex;
   flex-direction: row;
   justify-content: left;
@@ -330,13 +325,29 @@ const ThumbnailImg = styled.img`
 
 const UploaderImg = styled.img`
   width: 3rem;
-  height: 2.5rem;
+  height: 2rem;
   border-radius: 1rem;
 `;
 const DetailInfoP = styled.p`
   /* margin-top: 0.5rem;
   margin-bottom: 1rem; */
   color: ${({ theme }) => theme.color.text1};
+  font-weight: 700;
+  &.title {
+    font-size: 20px;
+    font-weight: 800;
+  }
+  &.point {
+    padding-top: 1.5rem;
+  }
+  &.preview {
+    padding-top: 1rem;
+    border-top: 1px solid ${({ theme }) => theme.color.opacityText3};
+    border-bottom: 1px solid ${({ theme }) => theme.color.opacityText3};
+    padding-bottom: 1rem;
+    margin-left: 1rem;
+    width: 95%;
+  }
 `;
 
 // 에셋카드 재활용
@@ -347,32 +358,38 @@ const CardInfo2Div = styled.div`
   height: 2rem;
   border-radius: 0.5rem;
   /* box-shadow: 0.5rem 0.5rem 0.2rem; */
-  border: 0.15rem inset black;
+  border: 1px solid ${({ theme }) => theme.color.opacityText3};
   /* text-align: center; */
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-left: 0.5rem;
+  margin-right: 0.5rem;
   font-size: 1rem;
 `;
 
 const MiriDiv = styled.div`
   width: 45rem;
   min-height: 45rem;
-  border: 0.1rem solid #4d4d4d;
+  box-shadow: 0px 0px 1px gray;
   border-radius: 1rem;
   margin-top: 1rem;
   margin-bottom: 1rem;
   margin-left: 1.5rem;
   position: relative;
+  display: flex;
+  flex-direction: column;
 `;
 
 const MiriClickDiv = styled.div``;
 
 const MiriPDiv = styled.div`
   padding: 1rem;
-  font-size: 1.4rem;
+  padding-left: 10rem;
+  font-size: 14px;
   position: relative;
+  mix-blend-mode: difference;
+  color: white;
+  font-weight: 200;
   /* z-index: 999; */
 `;
 
@@ -399,15 +416,20 @@ const MiriImg = styled.img`
   object-fit: contain;
 `;
 
+const ModalBtnContainer = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
 const ModalBtn = styled.button`
   background-color: ${({ theme }) => theme.color.button};
   color: ${({ theme }) => theme.color.buttonText};
-  width: 12rem;
+  width: 8rem;
   height: 3rem;
   border: 0.1rem solid black;
   border-radius: 0.5rem;
-  font-size: 1.5rem;
-  /* margin-left: 0.5rem; */
+  font-size: 17px;
+  margin-right: 2.5rem;
   margin-top: 1rem;
   margin-bottom: 1rem;
 `;
@@ -426,4 +448,9 @@ const UnModalBtn = styled.button`
   &:hover {
     cursor: default;
   }
+`;
+
+const Text = styled.span`
+margin: 1rem;
+  font-weight: 300;
 `;
