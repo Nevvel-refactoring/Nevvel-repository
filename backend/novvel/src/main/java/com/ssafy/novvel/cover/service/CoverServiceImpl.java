@@ -107,10 +107,14 @@ public class CoverServiceImpl implements CoverService {
             new CoverWriter(cover.getMember().getId(), cover.getMember().getNickname()));
 
         ReadEpisode readEpisode = null;
+        Boolean isLiked = Boolean.FALSE;
         if (member != null) {
             readEpisode = readEpisodeRepository.findFirstByMember_IdAndEpisode_Cover_IdOrderByLastModifyedDateTimeDesc(
                 member.getId(), coverId);
+            isLiked = likedCoverRepository.findByMember_IdAndCover_Id(member.getId(), coverId).isPresent();
         }
+        coverInfoAndEpisodesDto.setIsLiked(isLiked);
+
         Long lastReadEpisodeId = null;
         if (readEpisode != null) {
             lastReadEpisodeId = readEpisode.getEpisode().getId();

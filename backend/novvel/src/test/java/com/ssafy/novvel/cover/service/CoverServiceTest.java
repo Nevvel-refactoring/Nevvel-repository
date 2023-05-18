@@ -8,6 +8,7 @@ import com.ssafy.novvel.cover.dto.EpisodeInfoDto;
 import com.ssafy.novvel.cover.entity.Cover;
 import com.ssafy.novvel.cover.entity.CoverStatusType;
 import com.ssafy.novvel.cover.repository.CoverRepository;
+import com.ssafy.novvel.cover.repository.LikedCoverRepository;
 import com.ssafy.novvel.cover.util.DefaultImage;
 import com.ssafy.novvel.episode.repository.ReadEpisodeRepository;
 import com.ssafy.novvel.exception.NotYourAuthorizationException;
@@ -58,6 +59,9 @@ class CoverServiceTest {
 
     @Mock
     ResourceRepository resourceRepository;
+
+    @Mock
+    LikedCoverRepository likedCoverRepository;
 
 //    @Mock
 //    DefaultImage defaultImage;
@@ -126,6 +130,8 @@ class CoverServiceTest {
         // when
         Mockito.doReturn(given).when(coverRepository).findCoverById(1L);
         Mockito.doReturn(list).when(coverRepository).findEpisodesInfoDto(given, member);
+        Mockito.doReturn(Optional.empty()).when(likedCoverRepository)
+            .findByMember_IdAndCover_Id(member.getId(), 1L);
         CoverInfoAndEpisodesDto result = coverService.getAllEpisodes(1L, member);
 
         // then
@@ -135,6 +141,7 @@ class CoverServiceTest {
         Assertions.assertThat(result.getEpisodes().size()).isEqualTo(expect.getEpisodes().size());
         Assertions.assertThat(result.getEpisodes().get(0).getIsPurchased()).isEqualTo(true);
         Assertions.assertThat(result.getEpisodes().get(1).getIsPurchased()).isEqualTo(false);
+        Assertions.assertThat(result.getIsLiked()).isEqualTo(false);
     }
 
     @Test
@@ -155,7 +162,8 @@ class CoverServiceTest {
         Long memberId = 1L;
 
         // when
-        Mockito.doThrow(new NullPointerException()).when(coverRepository).findCoverById(Mockito.any());
+        Mockito.doThrow(new NullPointerException()).when(coverRepository)
+            .findCoverById(Mockito.any());
 
         // then
         Assertions.assertThatThrownBy(
@@ -182,16 +190,16 @@ class CoverServiceTest {
         Genre genre = Genre.builder().id(1L).build();
 
         Cover given = Cover.builder()
-                .id(1L)
-                .coverStatusType(CoverStatusType.SERIALIZED).genre(genre)
-                .likes(0L)
-                .member(TestUtil.getMember())
-                .resource(TestUtil.getMemberProfile())
-                .title(coverModifyDto.getTitle())
-                .description(coverModifyDto.getDescription())
-                .firstPublishDate(LocalDate.of(2023, 4, 17))
-                .lastPublishDate(LocalDate.of(2023, 4, 17))
-                .build();
+            .id(1L)
+            .coverStatusType(CoverStatusType.SERIALIZED).genre(genre)
+            .likes(0L)
+            .member(TestUtil.getMember())
+            .resource(TestUtil.getMemberProfile())
+            .title(coverModifyDto.getTitle())
+            .description(coverModifyDto.getDescription())
+            .firstPublishDate(LocalDate.of(2023, 4, 17))
+            .lastPublishDate(LocalDate.of(2023, 4, 17))
+            .build();
 
         // when
         Mockito.doReturn(given).when(coverRepository).findCoverById(Mockito.any());
@@ -232,17 +240,17 @@ class CoverServiceTest {
         Genre genre = Genre.builder().id(1L).build();
 
         Cover given = Cover.builder()
-                .id(1L)
-                .coverStatusType(CoverStatusType.SERIALIZED)
-                .genre(Genre.builder().id(2L).build())
-                .resource(null)
-                .likes(0L)
-                .member(TestUtil.getMember())
-                .title("test")
-                .description("test")
-                .firstPublishDate(LocalDate.of(2023, 4, 17))
-                .lastPublishDate(LocalDate.of(2023, 4, 17))
-                .build();
+            .id(1L)
+            .coverStatusType(CoverStatusType.SERIALIZED)
+            .genre(Genre.builder().id(2L).build())
+            .resource(null)
+            .likes(0L)
+            .member(TestUtil.getMember())
+            .title("test")
+            .description("test")
+            .firstPublishDate(LocalDate.of(2023, 4, 17))
+            .lastPublishDate(LocalDate.of(2023, 4, 17))
+            .build();
 
         Cover newCover = Cover.builder()
             .id(1L)
@@ -290,17 +298,17 @@ class CoverServiceTest {
         Genre genre = Genre.builder().id(1L).build();
 
         Cover given = Cover.builder()
-                .id(1L)
-                .coverStatusType(CoverStatusType.SERIALIZED)
-                .genre(genre)
-                .resource(oldResource)
-                .likes(0L)
-                .member(TestUtil.getMember())
-                .title("test")
-                .description("test")
-                .firstPublishDate(LocalDate.of(2023, 4, 17))
-                .lastPublishDate(LocalDate.of(2023, 4, 17))
-                .build();
+            .id(1L)
+            .coverStatusType(CoverStatusType.SERIALIZED)
+            .genre(genre)
+            .resource(oldResource)
+            .likes(0L)
+            .member(TestUtil.getMember())
+            .title("test")
+            .description("test")
+            .firstPublishDate(LocalDate.of(2023, 4, 17))
+            .lastPublishDate(LocalDate.of(2023, 4, 17))
+            .build();
 
         Cover newCover = Cover.builder()
             .id(1L)

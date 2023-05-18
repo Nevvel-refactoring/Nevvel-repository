@@ -35,4 +35,6 @@ public class CoverInfoAndEpisodesDto {
 
     private Long views;
     private Long likes;
+
+    private Boolean isLiked;
 }
