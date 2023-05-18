@@ -117,7 +117,7 @@ class CoverServiceTest {
 
         CoverInfoAndEpisodesDto expect = CoverInfoAndEpisodesDto.builder()
             .episodes(list)
-            .genre(given.getGenre().getName())
+            .genre(given.getGenre().toDto())
             .title(given.getTitle())
             .writer(new CoverWriter(given.getMember().getId(),
                 given.getMember().getNickname()))
@@ -131,7 +131,7 @@ class CoverServiceTest {
         // then
         Assertions.assertThat(result.getTitle()).isEqualTo(expect.getTitle());
         Assertions.assertThat(result.getDescription()).isEqualTo(expect.getDescription());
-        Assertions.assertThat(result.getGenre()).isEqualTo(expect.getGenre());
+        Assertions.assertThat(result.getGenre().getId()).isEqualTo(expect.getGenre().getId());
         Assertions.assertThat(result.getEpisodes().size()).isEqualTo(expect.getEpisodes().size());
         Assertions.assertThat(result.getEpisodes().get(0).getIsPurchased()).isEqualTo(true);
         Assertions.assertThat(result.getEpisodes().get(1).getIsPurchased()).isEqualTo(false);
