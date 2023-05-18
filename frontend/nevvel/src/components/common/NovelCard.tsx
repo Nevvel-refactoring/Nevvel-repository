@@ -9,8 +9,8 @@ interface Novel {
   writerId: number;
   genre: string;
   thumbnail: string;
-  isUploaded?: boolean;
-  isNew?: boolean;
+  isUploaded: boolean;
+  isNew: boolean;
 }
 
 function NovelCard(props: Novel) {

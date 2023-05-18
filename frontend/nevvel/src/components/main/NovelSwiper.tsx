@@ -104,6 +104,8 @@ function NovelSwiper(props: { content: Novel }) {
                 writerId={novel.writer.id}
                 genre={novel.genre}
                 thumbnail={novel.thumbnail}
+                isUploaded={novel.isUploaded}
+                isNew={novel.isNew}
               />
             </SwiperSlide>
           );

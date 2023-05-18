@@ -69,7 +69,7 @@ function index(props: { seriesData: cover }) {
 }
 
 export async function getStaticPaths() {
-  const res = await axios.get("http://k8d1061.p.ssafy.io/api/covers");
+  const res = await axios.get("https://k8d1061.p.ssafy.io/api/covers");
   const series = await res.data;
 
   const paths = series.content.map((serie: Content) => ({
@@ -85,7 +85,7 @@ export async function getStaticProps(context: GetStaticPropsContext) {
   const seriesId = context.params?.id ?? "";
 
   const res = await axios.get(
-    `http://k8d1061.p.ssafy.io/api/covers/${seriesId}`
+    `https://k8d1061.p.ssafy.io/api/covers/${seriesId}`
   );
   const seriesData = res.data;
 
