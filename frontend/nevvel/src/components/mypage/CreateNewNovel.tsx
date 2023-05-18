@@ -64,14 +64,14 @@ function CreateNewNovel({ setModalOpen }: Props) {
   const [title, setTitle] = useState<string>("");
 
   const onChangeTitle = (e: React.FormEvent<HTMLInputElement>) => {
-    setTitle(e.currentTarget.value.trim());
+    setTitle(e.currentTarget.value);
   };
 
   // 설명 저장
   const [description, setdecription] = useState<string>("");
 
   const onChangeDescription = (e: React.FormEvent<HTMLTextAreaElement>) => {
-    setdecription(e.currentTarget.value.trim());
+    setdecription(e.currentTarget.value);
   };
 
   // 장르 목록 가져오기
