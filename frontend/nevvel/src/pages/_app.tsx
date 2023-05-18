@@ -8,6 +8,7 @@ import "../assets/fonts/font.css";
 import Layout from "../components/layout/Layout";
 import type { AppProps } from "next/app";
 import DarkModeToggle from "../components/common/DarkModeToggle";
+import CustomRouter from "../components/common/CustomRouter";
 
 // export const themeAtom = atom<"light" | "dark">("light");
 
@@ -34,10 +35,12 @@ function App({ Component, pageProps }: AppProps) {
     <Provider>
       <ThemeProvider theme={theme === "light" ? lightTheme : darkTheme}>
         <GlobalStyle />
-        <DarkModeToggle setTheme={setTheme} theme={theme} />
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
+        <CustomRouter>
+          <DarkModeToggle setTheme={setTheme} theme={theme} />
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </CustomRouter>
       </ThemeProvider>
     </Provider>
   );

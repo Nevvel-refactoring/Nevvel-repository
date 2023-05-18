@@ -120,7 +120,7 @@ function CreateNewNovel({ setModalOpen }: Props) {
       }
       // formData.append('assetRegistDto', JSON.stringify(jsonDatas))
       formData.append(
-        "coverModifyDto",
+        "coverRegisterDto",
         new Blob([JSON.stringify(jsonDatas)], { type: "application/json" })
       );
 
@@ -135,6 +135,7 @@ function CreateNewNovel({ setModalOpen }: Props) {
         })
         .catch((err) => {
           console.log("에러남 error");
+          console.log(err);
         });
     } catch (error) {
       alert("업로드 과정에서 문제가 발생하였습니다.");
