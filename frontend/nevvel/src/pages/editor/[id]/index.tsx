@@ -12,9 +12,28 @@ import DummyAssetData_image from "@/src/components/assetstore/DummyAssetData_Ima
 import { useAtom } from "jotai";
 import { cover } from "series";
 import { userInfoAtom, loginAtom } from "@/src/store/Login";
-import { useAtomValue } from "jotai";
+import { NextPageContext } from "next";
 
-function index() {
+function index(props: { userDTO: string }) {
+  const userDTO = props.userDTO === "" ? "" : JSON.parse(props.userDTO);
+  const newUserInfo =
+    userDTO === ""
+      ? undefined
+      : {
+          id: userDTO.id,
+          nickname: userDTO.nickname,
+          profileImage: userDTO.profileImage,
+          point: userDTO.point,
+        };
+
+  // 쿠키 상태 관리
+  const [loginStatus, setLoginStatus] = useAtom(loginAtom);
+  const [userInfoStatus, setUserInfoStatus] = useAtom(userInfoAtom);
+  useEffect(() => {
+    setLoginStatus(userDTO === "" ? false : true);
+    setUserInfoStatus(newUserInfo);
+  }, []);
+
   const router = useRouter();
   const id = router.query.id;
   const [episode, setEpisode] = useState<episode>({
@@ -32,8 +51,6 @@ function index() {
 
   const [assetImageData, setAssetImageData] = useAtom(ImageAssetAtom);
   const [assetAudioData, setAssetAudioData] = useAtom(AudioAssetAtom);
-  const userInfo = useAtomValue(userInfoAtom);
-  const loginStatus = useAtomValue(loginAtom);
 
   // // cover 정보 받아오기
   // const getSeriesData = async (id: number) => {
@@ -53,7 +70,7 @@ function index() {
 
   useEffect(() => {
     // if (coverData) {
-    //   if (coverData.writer.id !== userInfo?.id) {
+    //   if (coverData.writer.id !== userInfoStatus?.id) {
     //     router.push(
     //       {
     //         pathname: "/404",
@@ -119,6 +136,28 @@ function index() {
     </Wrapper>
   );
 }
+
+// 쿠키 확인
+export async function getServerSideProps({ req }: NextPageContext) {
+  const cookies =
+    req && req.headers && req.headers.cookie ? req.headers.cookie : "";
+  const cookie = decodeURIComponent(cookies);
+  // 쿠키를 ; 기준으로 나누어 그 중 userDto가 존재하는지 확인
+  const parts = cookie.split("; ");
+  let userDTOcookie = "";
+  for (let i = 0; i < parts.length; i++) {
+    if (parts[i].startsWith("userDto=")) {
+      userDTOcookie = parts[i].substring("userDto=".length);
+      break;
+    }
+  }
+  return {
+    props: {
+      userDTO: userDTOcookie,
+    },
+  };
+}
+
 const Wrapper = styled.div`
   background-color: ${({ theme }) => theme.color.background};
   display: flex;
