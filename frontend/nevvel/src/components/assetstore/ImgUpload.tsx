@@ -246,12 +246,12 @@ function ImgUpload(props:assetstoreProps) {
     
   return(
     <ColDiv>
-      <p>이미지 에셋 업로드</p>
+      <Title>이미지 에셋 업로드</Title>
       {/* 이미지 파일 업로딩 */}
       <RowDiv>
         <ColDiv>
           <AssetInfoTextDiv>
-            <p>이미지 파일</p>
+            <SubTitle>이미지 파일</SubTitle>
           </AssetInfoTextDiv>
           <ImgUploadLabel>
             <ImgUploadInput
@@ -281,7 +281,7 @@ function ImgUpload(props:assetstoreProps) {
 
         <ColDiv>
           <AssetInfoTextDiv>
-            <p>제목</p>
+            <SubTitle>제목</SubTitle>
           </AssetInfoTextDiv>
           <AssetInfoInput1
             placeholder="에셋 제목을 입력해주세요."
@@ -289,7 +289,7 @@ function ImgUpload(props:assetstoreProps) {
           />
 
           <AssetInfoTextDiv>
-            <p>설명</p>
+            <SubTitle>설명</SubTitle>
           </AssetInfoTextDiv>
           <AssetInfoInput2
             placeholder="에셋 설명을 입력해주세요."
@@ -297,7 +297,7 @@ function ImgUpload(props:assetstoreProps) {
           />
 
           <AssetInfoTextDiv>
-            <p>가격</p>
+            <SubTitle>가격</SubTitle>
           </AssetInfoTextDiv>
           <AssetInfoInput1
             placeholder="에셋 가격을 입력해주세요."
@@ -375,7 +375,7 @@ const ImgUploadLabel = styled.label`
   height: 15rem;
   margin-right: 1rem;
   margin-left: 0.5rem;
-  /* border: 0.15rem solid #4D4D4D;
+  /*border: 1px solid ${({ theme }) => theme.color.opacityText3};
   border-radius: 1.5rem; */
   display: flex;
   align-items: center;
@@ -393,16 +393,28 @@ const ImgUploadBtn = styled.img`
   width: 15rem;
   height: 15rem;
   object-fit: contain;
-  border: 0.15rem solid #4D4D4D;
+ border: 1px solid ${({ theme }) => theme.color.opacityText3};
   border-radius: 1.5rem;
   /* float: left; */
-  :focus{
-    border: 0.15rem solid #4D4D4D;
-    box-shadow: 0.1rem 0.1rem 0.6rem;
+ :focus{
+    border: 2px solid ${({ theme }) => theme.color.opacityText3};
+    box-shadow: 0px 0px 6px gray;
+  }
+  ::placeholder{
+    padding-left: 1rem;
   }
   &:hover {
     box-shadow: 0.1rem 0.1rem 0.5rem;
   }
+`
+const Title = styled.div`
+  font-size: 24px;
+  font-weight: 800;
+`
+const SubTitle =styled.div`
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 0.2rem;
 `
 
 const ImageUploadTitle = styled.p`
@@ -427,11 +439,14 @@ const AssetInfoInput1 = styled.input`
   color: ${({ theme }) => theme.color.button};
   width: 15rem;
   height: 2.5rem;
-  border: 0.15rem solid #4D4D4D;
+ border: 1px solid ${({ theme }) => theme.color.opacityText3};
   border-radius: 0.6rem;
-  :focus{
-    border: 0.15rem solid #4D4D4D;
-    box-shadow: 0.1rem 0.1rem 0.6rem;
+ :focus{
+    border: 2px solid ${({ theme }) => theme.color.opacityText3};
+    box-shadow: 0px 0px 6px gray;
+  }
+  ::placeholder{
+    padding-left: 1rem;
   }
 `
 
@@ -440,11 +455,14 @@ const AssetInfoInput2 = styled.input`
   color: ${({ theme }) => theme.color.button};
   width: 15rem;
   height: 7.5rem;
-  border: 0.15rem solid #4D4D4D;
+ border: 1px solid ${({ theme }) => theme.color.opacityText3};
   border-radius: 0.8rem;
-  :focus{
-    border: 0.15rem solid #4D4D4D;
-    box-shadow: 0.1rem 0.1rem 0.6rem;
+ :focus{
+    border: 2px solid ${({ theme }) => theme.color.opacityText3};
+    box-shadow: 0px 0px 6px gray;
+  }
+  ::placeholder{
+    padding-left: 1rem;
   }
 `
 
@@ -494,19 +512,19 @@ const CardInfo2Div = styled.div`
 const ModalCloseBtn = styled.button`
   background-color: ${({ theme }) => theme.color.button};
   color: ${({ theme }) => theme.color.buttonText};
-  width: 12rem;
+  width: 8rem;
   height: 3rem;
-  border: 0.1rem solid black;
+  border: 1px solid ${({ theme }) => theme.color.opacityText3};
   border-radius: 0.5rem;
-  font-size: 1.5rem;
+  font-size: 17px;
   margin-left: 0.5rem;
-`
+  `
 const ModalSubmitBtn = styled.button`
   background-color: ${({ theme }) => theme.color.button};
   color: ${({ theme }) => theme.color.buttonText};
   width: 12rem;
   height: 3rem;
-  border: 0.1rem solid black;
+  border: 1px solid ${({ theme }) => theme.color.opacityText3};
   border-radius: 0.5rem;
   font-size: 1.5rem;
   margin-right: 0.5rem;
@@ -518,9 +536,9 @@ const ModalSubmitBtn = styled.button`
 const ModalSubmitBtn_Un = styled.button`
   background-color: #B3B3B3;
   color: #ffffff;
-  width: 12rem;
+  width: 8rem;
   height: 3rem;
-  border: 0.1rem solid black;
+  border: 1px solid ${({ theme }) => theme.color.opacityText3};
   border-radius: 0.5rem;
   font-size: 1.5rem;
   margin-right: 0.5rem

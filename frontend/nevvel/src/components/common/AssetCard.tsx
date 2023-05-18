@@ -200,7 +200,8 @@ const CardInfo1 = styled.p`
   text-overflow: ellipsis;
   white-space: nowrap;
   margin-top: 5%;
-  font-size: 150%;
+  font-size: 17px;
+  font-weight: 700;
   text-align: center;
   /* margin-left: 2.5%; */
   /* margin-right: 2.5%; */
@@ -214,7 +215,8 @@ const CardInfo2 = styled.p`
   padding-left: 0.3rem;
   padding-right: 0.3rem;
   margin-top: 5%;
-  font-size: 90%;
+  font-size: 12px;
+  font-weight: 400;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -225,10 +227,10 @@ const CardInfo2Div = styled.div`
   background-color: ${({ theme }) => theme.color.buttonText};
   color: black;
   width: auto;
-  height: 1.8rem;
+  height: 1.5rem;
   border-radius: 0.5rem;
   /* box-shadow: 0.5rem 0.5rem 0.2rem; */
-  border: 0.1rem inset black;
+  border: 1px solid ${({theme})=>theme.color.opacityText3};
   /* text-align: center; */
   display: flex;
   align-items: center;
@@ -238,6 +240,7 @@ const CardInfo2Div = styled.div`
 
 const RowDiv = styled.div`
   display: flex;
+  justify-content: center;
   width: 13rem;
   /* white-space: w; */
 `

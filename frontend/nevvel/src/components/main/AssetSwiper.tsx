@@ -41,15 +41,12 @@ interface Asset {
   uploader: AssetUploader;
 }
 
-
 interface AssetSwiperProps {
   content: Asset[];
   setAxiosReloaer: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 function AssetSwiper(props: AssetSwiperProps) {
-
-
   // 에셋 10개 받아오기
   const assetSwiperData = props.content.slice(0, 10);
 
@@ -85,10 +82,10 @@ function AssetSwiper(props: AssetSwiperProps) {
 
   return (
     <Wrapper>
-      <Swiper
+      <StyledSwiper
         // install Swiper modules
         modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
-        spaceBetween={0}
+        spaceBetween={20}
         slidesPerView={1}
         breakpoints={{
           500: {
@@ -97,10 +94,10 @@ function AssetSwiper(props: AssetSwiperProps) {
           750: {
             slidesPerView: 3,
           },
-          1000: {
+          1250: {
             slidesPerView: 4,
           },
-          1250: {
+          1440: {
             slidesPerView: 5,
           },
         }}
@@ -113,7 +110,7 @@ function AssetSwiper(props: AssetSwiperProps) {
       >
         {assetSwiperData.map((AssetData) => {
           return (
-            <SwiperSlide key={AssetData.id}>
+            <SwiperSlide className="swiper_slide" key={AssetData.id}>
               <AssetCard
                 AssetData={AssetData}
                 id={AssetData.id}
@@ -130,7 +127,7 @@ function AssetSwiper(props: AssetSwiperProps) {
             </SwiperSlide>
           );
         })}
-      </Swiper>
+      </StyledSwiper>
       {/* 여기부터 모달 */}
       {modalOpen ? (
         <Modal
@@ -154,13 +151,18 @@ function AssetSwiper(props: AssetSwiperProps) {
 
 export default AssetSwiper;
 
+const StyledSwiper = styled(Swiper)`
+  width: 100%;
+
+`;
+
 const Wrapper = styled.div`
   background-color: ${({ theme }) => theme.color.background};
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
   /* flex-direction: column; */
-  width: 100%;
+  width: 100vw;
   height: 45%;
   padding-top: 1%;
   padding-bottom: 1%;
