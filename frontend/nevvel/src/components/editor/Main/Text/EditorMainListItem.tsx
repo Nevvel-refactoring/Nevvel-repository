@@ -389,7 +389,7 @@ const PlusButton = styled.button`
 `;
 
 const TextBlock = styled.div`
-  width: 100%;
+  width: 85%;
   border-radius: 10px;
   background-color: ${({ theme }) => theme.color.editor};
   padding: 1rem;
