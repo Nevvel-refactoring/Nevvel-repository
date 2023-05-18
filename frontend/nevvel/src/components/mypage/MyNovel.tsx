@@ -5,6 +5,8 @@ import { NewvelApi } from "@/src/api";
 import { userInfoAtom } from "@/src/store/Login";
 import { useAtomValue } from "jotai";
 import SemiTitle from "./SemiTitle";
+import { Modal } from "../common/Modal";
+import CreateNewNovel from "../mypage/CreateNewNovel";
 import styled from "styled-components";
 import NovelCard from "../common/NovelCard";
 
@@ -131,9 +133,18 @@ function MyNovel() {
     setLikedNovel5(likedNovel?.content?.slice(0, 5));
   }, [likedNovel]);
 
+  // 새 소설 생성하기
+  const [modalOpen, setModalOpen] = useState(false);
+  const newNovelHandler = () => {
+    setModalOpen(true);
+  };
+
   return (
     <NovelWrapper>
-      <TitleWrapper>웹소설</TitleWrapper>
+      <TitleWrapper>
+        <NovelTitle>웹소설</NovelTitle>
+        <NewNovel onClick={newNovelHandler}>새 소설 생성하기</NewNovel>
+      </TitleWrapper>
       <NovelContent>
         <SemiTitle title="작성한 소설" more={uploadedMore} />
         <UploadedNovelDiv>
@@ -206,6 +217,15 @@ function MyNovel() {
           )}
         </LikedNovelDiv>
       </NovelContent>
+      {modalOpen && (
+        <Modal
+          modal={modalOpen}
+          setModal={setModalOpen}
+          width="300"
+          height="500"
+          element={<CreateNewNovel setModalOpen={setModalOpen} />}
+        />
+      )}
     </NovelWrapper>
   );
 }
@@ -219,6 +239,19 @@ const NovelWrapper = styled.div`
 const TitleWrapper = styled.div`
   font-size: 20px;
   font-weight: 800;
+`;
+
+const NovelTitle = styled.div`
+  font-size: 20px;
+  font-weight: 800;
+`;
+
+const NewNovel = styled.div`
+  margin-left: 2rem;
+  cursor: pointer;
+  &:hover {
+    color: #8385ff;
+  }
 `;
 
 const NovelContent = styled.div`
