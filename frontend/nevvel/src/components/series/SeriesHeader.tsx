@@ -41,6 +41,20 @@ function SeriesHeader({
   const userInfo = useAtomValue(userInfoAtom);
   const loginStatus = useAtomValue(loginAtom);
 
+  // 다음 에피소드 id값 가져오기
+  const [nextEpisode, setNextEpisode] = useState<null | number>(readId);
+  useEffect(() => {
+    for (let i = 0; i < SeriesData.episodes.length; i++) {
+      if (SeriesData.episodes[i].id === nextEpisode) {
+        if (i + 1 < SeriesData.episodes.length) {
+          setNextEpisode(SeriesData.episodes[i + 1].id);
+        } else {
+          setNextEpisode(null);
+        }
+      }
+    }
+  }, [readId]);
+
   // cover 좋아요하기
   const postSeriesLike = async (Id: number) => {
     if (loginStatus) {
@@ -65,10 +79,15 @@ function SeriesHeader({
           alert("해당 회차를 먼저 구매해주세요");
         }
       } else if (e === "continue") {
-        if (SeriesData.episodes[readId].isPurchased) {
+        if (
+          nextEpisode !== null &&
+          SeriesData.episodes[nextEpisode].isPurchased
+        ) {
           router.push({
             pathname: `/viewer/${readId}`,
           });
+        } else if (nextEpisode === null) {
+          alert("마지막 회차입니다");
         } else {
           alert("해당 회차를 먼저 구매해주세요");
         }
