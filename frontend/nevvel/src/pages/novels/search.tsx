@@ -2,6 +2,8 @@ import styled from "styled-components";
 import { useState, useEffect } from "react";
 import noveldata from "../../components/main/DummyNovelData.json";
 import NovelCard from "@/src/components/common/NovelCard";
+import { NewvelApi } from "@/src/api";
+import axios from "axios";
 
 interface Novel {
   content: {
@@ -48,8 +50,14 @@ function SearchNovel(props: { word: string }) {
   const [novels, setNovels] = useState<Novel | undefined>(undefined);
 
   useEffect(() => {
-    setNovels(noveldata);
-  }, [novels]);
+    const getSearchNovel = async () => {
+      const res = await axios.get("https://k8d1061.p.ssafy.io/api/covers", {
+        params: { keyword: props.word },
+      });
+      setNovels(res.data);
+    };
+    getSearchNovel();
+  }, [props.word]);
 
   return (
     <Wrapper>
