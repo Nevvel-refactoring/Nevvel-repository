@@ -58,6 +58,7 @@ function GenreNovel(props: {
 
   // url으로 입력해서 들어오는 경우
   const router = useRouter();
+  const sort = router.query.sort
   useEffect(() => {
     if (query.genre == undefined || query.genre == "") {
       router.push(
@@ -115,7 +116,8 @@ function GenreNovel(props: {
         {query.pageNum}
         <hr /> */}
         <SortWrapper>
-          <SortContent
+          <SortContent sort={sort}
+          className="like"
             onClick={() => {
               sortHandler("like");
             }}
@@ -123,7 +125,8 @@ function GenreNovel(props: {
             인기순
           </SortContent>
           |
-          <SortContent
+          <SortContent sort={sort}
+            className="hit"
             onClick={() => {
               sortHandler("hit");
             }}
@@ -131,7 +134,8 @@ function GenreNovel(props: {
             조회순
           </SortContent>
           |
-          <SortContent
+          <SortContent sort={sort}
+          className="date"
             onClick={() => {
               sortHandler("date");
             }}
@@ -291,9 +295,18 @@ const SortWrapper = styled.div`
   margin-top: 1rem;
 `;
 
-const SortContent = styled.span`
+const SortContent = styled.span<{sort: string | string[] | undefined}>`
   font-size: 13.5px;
   padding-left: 1rem;
   padding-right: 1rem;
   cursor: pointer;
+  &.like{
+    font-weight: ${(props)=>props.sort=="like"&&(700)};
+  }
+  &.hit{
+    font-weight: ${(props)=>props.sort=="hit"&&(700)};
+  }
+  &.date{
+    font-weight: ${(props)=>props.sort=="date"&&(700)};
+  }
 `;
