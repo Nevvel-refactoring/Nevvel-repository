@@ -38,8 +38,8 @@ const SemiTitleWrapper = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-top: 2%;
-  padding-left: 8%;
-  padding-right: 12%;
+  padding-left: 2%;
+  padding-right: 5%;
 `;
 
 const SemiTitle = styled.div`
