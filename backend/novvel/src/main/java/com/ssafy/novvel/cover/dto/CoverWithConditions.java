@@ -20,7 +20,7 @@ public class CoverWithConditions {
     private String title;
     private CoverStatusType status;
     private String thumbnail;
-    private GenreDto genre;
+    private String genre;
     private CoverWriter writer;
     private Boolean isUploaded;
     private Boolean isNew;
@@ -35,7 +35,7 @@ public class CoverWithConditions {
         this.title = title;
         this.status = status;
         this.thumbnail = thumbnail;
-        this.genre = genre.toDto();
+        this.genre = genre.getName();
         this.views = views;
         this.writer = new CoverWriter(writerId, writerNickname);
         this.isUploaded = isUploaded;

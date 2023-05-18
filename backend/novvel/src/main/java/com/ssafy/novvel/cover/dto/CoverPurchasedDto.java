@@ -18,7 +18,7 @@ public class CoverPurchasedDto {
     private Long id;
     private String title;
     private String thumbnail;
-    private GenreDto genre;
+    private String genre;
     private CoverWriter writer;
     private Long views;
     private Long likes;
@@ -28,7 +28,7 @@ public class CoverPurchasedDto {
         this.id = cover.getId();
         this.title = cover.getTitle();
         this.thumbnail = thumbnail;
-        this.genre = genre.toDto();
+        this.genre = genre.getName();
         this.writer = new CoverWriter(memberId, memberNickname);
         this.views = cover.getViewCount();
         this.likes = cover.getLikes();
