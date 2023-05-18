@@ -50,7 +50,7 @@ function AssetDetailModal({
   // 유저 인증정보
   const ifLogIn = useAtomValue(loginAtom);
   const whoLogin = useAtomValue(userInfoAtom);
-  console.log(whoLogin?.id);
+  // console.log(whoLogin?.id);
 
   // 오디오 재생
   const audioRef = useRef<any>(null);

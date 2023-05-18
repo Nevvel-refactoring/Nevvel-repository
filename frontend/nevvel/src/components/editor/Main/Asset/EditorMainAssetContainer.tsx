@@ -40,7 +40,7 @@ function EditorMainAssetContainer({
         `assets?assettype=${assetType}&pageNum=1&searchtype=NOT_PURCHASED&sort=createdDateTime`
       );
       if (res) {
-        console.log(res);
+        // console.log(res);
         setAssetStore(res.data.content);
         setAxiosReloaer(false)
     }}catch(error){

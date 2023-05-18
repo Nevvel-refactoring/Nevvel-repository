@@ -114,7 +114,7 @@ function SeriesEdit({
     const formData = new FormData();
 
     try {
-      console.log(image, title, description, coverStatusType, isDefaultImage);
+      // console.log(image, title, description, coverStatusType, isDefaultImage);
       // 제출버튼 누르면 formdata에 데이터 집어넣기
       if (image) {
         formData.append("file", image);
@@ -132,10 +132,10 @@ function SeriesEdit({
           },
         })
         .then((res) => {
-          console.log(res);
+          // console.log(res);
         })
         .catch((err) => {
-          console.log("에러남 error");
+          // console.log("에러남 error");
         });
     } catch (error) {
       alert("업로드 과정에서 문제가 발생하였습니다.");

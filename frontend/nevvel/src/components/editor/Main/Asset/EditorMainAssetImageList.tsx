@@ -29,11 +29,11 @@ function EditorMainAssetImageList({
   const [totalEventCheck, setTotalEventCheck] = useAtom(totalEventCheckAtom);
 
   useEffect(() => {
-    console.log(assetData);
+    // console.log(assetData);
   }, [assetData]);
 
   useEffect(() => {
-    console.log(contents);
+    // console.log(contents);
   }, [contents]);
 
   // 에셋 수정 삭제 기능도 구현해야함!

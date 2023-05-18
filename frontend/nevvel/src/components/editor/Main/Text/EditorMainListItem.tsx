@@ -52,7 +52,7 @@ function EditorMainListItem({
   useEffect(() => {
     // 텍스트에 style 적용한 경우
     return (()=>{
-      console.log("text",text)
+      // console.log("text",text)
       setContents(contents.map((el) => {
         if (el.idx === idx) {
           return { ...el, context: text };

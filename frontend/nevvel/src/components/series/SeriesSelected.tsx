@@ -40,10 +40,10 @@ function SeriesSelected({
         episodes: episodeList,
       });
       if (res.status === 201) {
-        console.log(res);
+        // console.log(res);
         setTimeout(function () {
           setIsPurchase(isPurchased + 1);
-          console.log("결제함");
+          // console.log("결제함");
         }, 1000);
       } else if (res.status === 200) {
         if (confirm("포인트가 부족합니다. 충전하러 가시겠습니까?")) {
@@ -62,7 +62,7 @@ function SeriesSelected({
           newEpList.push(episode.id);
         }
       });
-      console.log(newEpList);
+      // console.log(newEpList);
       setEpisodeList(newEpList);
     } else {
       setEpisodeList([]);

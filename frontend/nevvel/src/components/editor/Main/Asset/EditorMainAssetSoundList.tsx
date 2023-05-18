@@ -28,7 +28,7 @@ function EditorMainAssetSoundList({
   const [totalEventCheck, setTotalEventCheck] = useAtom(totalEventCheckAtom);
 
   useEffect(() => {
-    console.log(contents);
+    // console.log(contents);
   }, [contents]);
 
   const ClickHandler = (asset: Asset) => {

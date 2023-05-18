@@ -40,7 +40,7 @@ function EditorMainList({
   const [reLocation, setRelocation] = useState<content[]>([]);
 
   useEffect(() => {
-    console.log("mainlist", eid);
+    // console.log("mainlist", eid);
   }, []);
 
   useEffect(() => {
@@ -55,7 +55,7 @@ function EditorMainList({
   }, [deleted]);
 
   useEffect(()=>{
-    console.log(deleted,"deleted")
+    // console.log(deleted,"deleted")
   },[])
 
   useEffect(() => {
@@ -70,7 +70,7 @@ function EditorMainList({
   }, [contents]);
   const relocationHandler = () => {
     if (contents[contents.length - 1]?.idx != contents.length) {
-      console.log("여기 안들어온건가");
+      // console.log("여기 안들어온건가");
       contents.map((content, index) => {
         reLocation.push({
           idx: index + 1,

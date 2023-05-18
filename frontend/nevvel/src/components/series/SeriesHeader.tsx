@@ -55,9 +55,9 @@ function SeriesHeader({
     }
   }, [readId]);
 
-  console.log(SeriesData);
-  console.log(readId);
-  console.log(nextEpisode);
+  // console.log(SeriesData);
+  // console.log(readId);
+  // console.log(nextEpisode);
 
   // cover 좋아요하기
   const postSeriesLike = async (Id: number) => {
@@ -65,7 +65,7 @@ function SeriesHeader({
       const res = await springApi.post(`/covers/likes/${Id}`);
       setIsLiked(!isLiked);
       if (res) {
-        console.log(res);
+        // console.log(res);
       }
     } else {
       alert("로그인 하세요");
