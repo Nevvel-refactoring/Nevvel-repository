@@ -55,6 +55,10 @@ function SeriesHeader({
     }
   }, [readId]);
 
+  console.log(SeriesData);
+  console.log(readId);
+  console.log(nextEpisode);
+
   // cover 좋아요하기
   const postSeriesLike = async (Id: number) => {
     if (loginStatus) {
@@ -84,7 +88,7 @@ function SeriesHeader({
           SeriesData.episodes[nextEpisode].isPurchased
         ) {
           router.push({
-            pathname: `/viewer/${readId}`,
+            pathname: `/viewer/${nextEpisode}`,
           });
         } else if (nextEpisode === null) {
           alert("마지막 회차입니다");
