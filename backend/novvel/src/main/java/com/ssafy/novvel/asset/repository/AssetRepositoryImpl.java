@@ -240,6 +240,8 @@ public class AssetRepositoryImpl implements AssetReposiotryCustom {
                         memberAsset.member.eq(member),
                         checkAssetType(assetType, memberAsset.asset)
                 )
+                .join(memberAsset.asset.resource)
+                .fetchJoin()
                 .orderBy(ORDERS.stream().toArray(OrderSpecifier[]::new))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
