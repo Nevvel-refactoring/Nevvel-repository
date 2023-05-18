@@ -4,13 +4,12 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.ssafy.novvel.resource.entity.Resource;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.io.File;
-import java.io.IOException;
 
 @Service
 @RequiredArgsConstructor
@@ -35,8 +34,13 @@ public class S3ServiceImpl implements S3Service {
 
     @Override
     @Transactional
-    public void deleteFile(String fileName) {
-        DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(this.bucket, fileName);
+    public void deleteFile(Resource resource) {
+        DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(this.bucket, resource.getChangedName());
         amazonS3Client.deleteObject(deleteObjectRequest);
+        if (resource.getThumbnailUrl() != null) {
+            DeleteObjectRequest deleteThumbnailObjectRequest = new DeleteObjectRequest(this.bucket, resource.getThumbnailName());
+            amazonS3Client.deleteObject(deleteThumbnailObjectRequest);
+        }
+
     }
 }

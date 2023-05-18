@@ -3,6 +3,7 @@ package com.ssafy.novvel.config.security.filter;
 import com.ssafy.novvel.member.entity.Member;
 import com.ssafy.novvel.member.repository.MemberRepository;
 import com.ssafy.novvel.util.token.CustomUserDetails;
+import com.ssafy.novvel.util.token.UserDtoUtils;
 import com.ssafy.novvel.util.token.jwt.JWTProvider;
 import io.jsonwebtoken.ExpiredJwtException;
 import java.io.IOException;
@@ -12,6 +13,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,16 +25,20 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 
     private final JWTProvider jwtProvider;
     private final MemberRepository memberRepository;
-
+    private final UserDtoUtils userDtoUtils;
     public JwtAuthenticationProcessingFilter(JWTProvider jwtProvider,
-        MemberRepository memberRepository) {
+        MemberRepository memberRepository, UserDtoUtils userDtoUtils) {
         this.jwtProvider = jwtProvider;
         this.memberRepository = memberRepository;
+        this.userDtoUtils = userDtoUtils;
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
-        FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, @NotNull HttpServletResponse response,
+        @NotNull FilterChain filterChain) throws ServletException, IOException {
+
+        log.info(request.getRequestURI());
+        log.info(request.getMethod());
 
         String accessToken = null;
         String refreshToken = null;
@@ -58,9 +64,11 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
                     response.setStatus(HttpStatus.UNAUTHORIZED.value());
                     response.addCookie(
                         jwtProvider.createEmptyCookie(JWTProvider.getAccessToken()));
+                    response.addCookie(userDtoUtils.removeUserDtoCookie());
                 }
             } catch (RuntimeException e) {
                 response.setStatus(HttpStatus.UNAUTHORIZED.value());
+                removeAllCookie(response);
             }
         } else {
             if(refreshToken != null) {
@@ -78,7 +86,10 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
     private void checkReissueAccessToken(HttpServletResponse response, String refreshToken) {
         memberRepository.findByRefreshToken(refreshToken).ifPresentOrElse(member -> {
             if (this.checkRefreshToken(member.getRefreshToken())) {
-                response.addCookie(jwtProvider.createAccessToken(member.getSub()));
+
+                final Cookie accessToken = jwtProvider.createAccessToken(member.getSub());
+                response.addCookie(accessToken);
+                response.addCookie(userDtoUtils.createUserDtoCookie(member, accessToken.getMaxAge()));
             } else {
 
                 removeAllCookie(response);
@@ -93,6 +104,9 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
             jwtProvider.createEmptyCookie(JWTProvider.getAccessToken()));
         response.addCookie(
             jwtProvider.createEmptyCookie(JWTProvider.getRefreshToken()));
+        response.addCookie(
+            userDtoUtils.removeUserDtoCookie()
+        );
     }
 
     private void setAuthentication(Member member) {

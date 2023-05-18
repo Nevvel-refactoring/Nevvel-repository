@@ -1,5 +1,6 @@
 package com.ssafy.novvel.resource.service;
 
+import com.ssafy.novvel.resource.entity.Resource;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
@@ -38,7 +39,7 @@ public class S3ProxyServiceImpl implements S3Service {
     }
 
     @Override
-    public void deleteFile(String fileName) {
+    public void deleteFile(Resource resource) {
 
     }
 }
