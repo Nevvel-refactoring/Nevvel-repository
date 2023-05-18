@@ -20,9 +20,11 @@ type ViewHeaderProps = {
   id: string | string[] | undefined;
   EpisodeData: episodeViewer;
   headerEpisodeData: newEpisodeViewer | undefined;
+  setTotalImage:React.Dispatch<React.SetStateAction<string>>;
+  setTotalAudio: React.Dispatch<React.SetStateAction<string>>
 };
 
-function ViewHeader({ EpisodeData, id, headerEpisodeData }: ViewHeaderProps) {
+function ViewHeader({ EpisodeData, id, headerEpisodeData,setTotalImage,setTotalAudio }: ViewHeaderProps) {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleteData, setDeleteData] = useState<episode>();
   const router = useRouter();
@@ -95,11 +97,15 @@ function ViewHeader({ EpisodeData, id, headerEpisodeData }: ViewHeaderProps) {
 
   const moveSeries = (e: string) => {
     if (e == "prev") {
+      setTotalImage("")
+      setTotalAudio("")
       router.push({
         pathname: "/viewer/[id]",
         query: { id: headerEpisodeData?.prevEpisodeId },
       });
     } else if (e == "next") {
+      setTotalImage("")
+      setTotalAudio("")
       router.push({
         pathname: "/viewer/[id]",
         query: { id: headerEpisodeData?.nextEpisodeId },
@@ -226,4 +232,10 @@ const Space = styled.div`
   width: 24px;
 `;
 
+const postModalContainer = styled.div`
+  
+`
+const postModalheader = styled.div`
+  
+`
 export default ViewHeader;

@@ -41,7 +41,7 @@ function viewer() {
   const scrollElement = scrollRef.current as HTMLDivElement;
   const [currentScroll, setCurrentScroll] = useState(0);
   const nowTextBlock = useAtomValue(numAtom);
-  const [EpisodeData, setEpisodeData] = useState<episodeViewer>(Dummy_Episode);
+  const [EpisodeData, setEpisodeData] = useState<episodeViewer>();
   const [imageEvent, setImageEvent] = useState<string>("");
   const [audioEvent, setAudioEvent] = useState<string>("");
   const [viewerColor, setViewerColor] = useState<string>("");
@@ -137,8 +137,10 @@ function viewer() {
   },[ImageEvent])
 
   useEffect(()=>{
-    if(totalAudio){
+    if(totalAudio!==""){
       setBackgroundPlay(true)
+    }else{
+      setBackgroundPlay(false)
     }
   },[totalAudio])
 
@@ -266,10 +268,10 @@ function viewer() {
         <ViewerWrapper viewerColor={viewerColor}>
           <HeaderContainer onClick={() => clickhandler("head")}>
             {headerToggle && EpisodeData ? (
-              <ViewHeader id={id} EpisodeData={EpisodeData} headerEpisodeData={headerEpisodeData}/>
+              <ViewHeader setTotalImage={setTotalImage} setTotalAudio={setTotalImage} id={id} EpisodeData={EpisodeData} headerEpisodeData={headerEpisodeData}/>
             ) : null}
           </HeaderContainer>
-          {backgroundPlay && <AudioContainer>
+          {backgroundPlay===true && <AudioContainer>
             <AudioPlayer viewerColor={viewerColor} src={`${totalAudio}`} controls loop  />
             BGM
             </AudioContainer>
@@ -337,6 +339,7 @@ function viewer() {
                 setSettingBox={setSettingBox}
                 settingBox={settingBox}
                 headerEpisodeData={headerEpisodeData}
+                setTotalImage={setTotalImage} setTotalAudio={setTotalImage}
               />
             ) : null}
           </BottomContainer>
@@ -410,8 +413,11 @@ const BottomContainer = styled.div`
 
 const MainWrapper = styled.div<{ writeMode: boolean, totalImage:string }>`
   height: 80vh;
-  background-image: url(${(props)=>props.totalImage});
-  background-size: 60%;
+  ${bigMobile}{
+    background-image: url(${(props)=>props.totalImage});
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
 `;
 
 const MainContainer = styled.div<{ writeMode: boolean, totalImage:string }>`
@@ -419,7 +425,7 @@ const MainContainer = styled.div<{ writeMode: boolean, totalImage:string }>`
   margin-left: 30%;
   margin-right: 30%;
   overflow-y: scroll;
-  /* background-image: url(${(props)=>props.totalImage}); */
+  background-image: url(${(props)=>props.totalImage});
   background-size: cover;
   ::-webkit-scrollbar {
     display: none;
@@ -431,11 +437,13 @@ const MainContainer = styled.div<{ writeMode: boolean, totalImage:string }>`
   ${bigMobile}{
     margin-left: 5%;
     margin-right: 5%;
+    background-image:none;
   }
 
   ${mobile} {
     margin-left: 5%;
     margin-right: 5%;
+    background-image:none;
 
   }
   /* border: 1px solid black; */

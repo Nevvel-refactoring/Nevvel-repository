@@ -23,6 +23,8 @@ type ViewerMobileBottomProps = {
   setSettingBox: React.Dispatch<React.SetStateAction<boolean>>;
   settingBox: boolean;
   headerEpisodeData: newEpisodeViewer | undefined;
+  setTotalImage:React.Dispatch<React.SetStateAction<string>>;
+  setTotalAudio: React.Dispatch<React.SetStateAction<string>>
 };
 
 function ViewerMobileBottom({
@@ -31,6 +33,8 @@ function ViewerMobileBottom({
   id,
   setSettingBox,
   settingBox,
+  setTotalImage,
+  setTotalAudio
 }: ViewerMobileBottomProps) {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleteData, setDeleteData] = useState<episode>();
@@ -108,11 +112,15 @@ function ViewerMobileBottom({
 
   const moveSeries = (e: string) => {
     if (e == "prev") {
+      setTotalImage("")
+      setTotalAudio("")
       router.push({
         pathname: "/viewer/[id]",
         query: { id: headerEpisodeData?.prevEpisodeId },
       });
     } else if (e == "next") {
+      setTotalImage("")
+      setTotalAudio("")
       router.push({
         pathname: "/viewer/[id]",
         query: { id: headerEpisodeData?.nextEpisodeId },
