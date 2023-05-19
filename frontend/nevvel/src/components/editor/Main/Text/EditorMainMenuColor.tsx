@@ -12,6 +12,7 @@ function EditorMainMenuColor({ setText }: EditorMainMenuColorProps) {
       const range = selection.getRangeAt(0);
       const selectedText = range.toString();
       const formattedText = `<span style="color:${color}">${selectedText}</span>`;
+      setText(formattedText)
       range.deleteContents();
       range.insertNode(
         document.createRange().createContextualFragment(formattedText)

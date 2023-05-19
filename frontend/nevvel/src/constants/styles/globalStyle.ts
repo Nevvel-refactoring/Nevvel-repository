@@ -11,6 +11,11 @@ export const GlobalStyle = createGlobalStyle`
     margin: 0px auto;
     -webkit-text-size-adjust: none;
     font-family: Pretendard;
+    -webkit-user-select: none;
+    -webkit-user-drag: none;
+    -moz-user-select: none;
+    -ms-use-select: none;
+    user-select: none;
     }
     a {
     color: inherit;

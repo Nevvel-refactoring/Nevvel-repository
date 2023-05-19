@@ -1,28 +1,39 @@
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { json } from "stream/consumers";
 import styled from "styled-components";
 
 interface Props {
   id: number;
   name: string;
   nav: string;
+  pageNum: number;
+  canClick: boolean;
 }
 
-function GenreList({ id, name, nav }: Props) {
+function GenreList({ id, name, nav, pageNum, canClick }: Props) {
   const router = useRouter();
-
+  const [genre, setgenre] =useState<string>("전체")
+  const [genreCheck, setGenreCheck] = useState(false)
+  const genreName = router.query.name
+  
   const genreSelectHandler = () => {
-    router.push(
-      {
-        pathname: `/novels/${nav}`,
-        query: { genre: id, sort: "like", name: name },
-      },
-      `/novels/${nav}`
-    );
+    if (canClick) {
+      router.push(
+        {
+          pathname: `/novels/${nav}`,
+          query: { genre: id, sort: "like", name: name, pageNum: pageNum },
+        }
+        // `/novels/${nav}`
+        );
+        setgenre(`${name}`)
+        setGenreCheck(!genreCheck)
+    }
   };
 
   return (
     <GenreWrapper>
-      <GenreName type="button" value={name} onClick={genreSelectHandler} />
+      <GenreName type="button" value={name} genreName={genreName} onClick={genreSelectHandler} />
     </GenreWrapper>
   );
 }
@@ -33,10 +44,10 @@ const GenreWrapper = styled.div`
   display: flex;
 `;
 
-const GenreName = styled.input`
+const GenreName = styled.input<{ genreName:string| string | string[] | undefined,value:string}>`
   background-color: ${({ theme }) => theme.color.subNavbar};
   border: none;
-  color: ${({ theme }) => theme.color.text2};
+  color: ${(props)=>props.genreName === props.value ?(({theme})=>(theme.color.point)):(({theme})=>(theme.color.text2))  };
   font-size: 16px;
   justify-content: center;
   :hover {

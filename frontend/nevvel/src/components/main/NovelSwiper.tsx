@@ -1,8 +1,7 @@
-import { useState, useEffect } from "react";
 import styled from "styled-components";
 
 // import Swiper core and required modules
-import { Navigation, Pagination, Scrollbar, A11y } from "swiper";
+import { Navigation, Pagination, Scrollbar, A11y, Autoplay } from "swiper";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 
@@ -13,7 +12,7 @@ import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 
 import NovelCard from "../common/NovelCard";
-import noveldata from "./DummyNovelData.json";
+import { mobile, tabletH } from "@/src/util/Mixin";
 
 interface Novel {
   content: {
@@ -22,7 +21,7 @@ interface Novel {
     status: string;
     thumbnail: string;
     genre: string;
-    writter: {
+    writer: {
       id: number;
       nickname: string;
     };
@@ -56,36 +55,57 @@ interface Novel {
   empty: boolean;
 }
 
-function NovelSwiper() {
-  const [novelData, setNovelData] = useState<Novel | undefined>(undefined);
+function NovelSwiper(props: { content: Novel }) {
+  // 소설 10개 받아오기
+  const novelSwiperData = props.content?.content.slice(0, 10);
 
-  // axios로 데이터 get받아오기, 현재는 더미데이터
-  useEffect(() => {
-    setNovelData(noveldata);
-    // console.log(novelData)
-  }, [novelData]);
+  // swiper height 설정
+  const swiperStyle = {
+    height: "25rem",
+  };
 
   return (
     <Wrapper>
       <Swiper
+        // style
+        style={swiperStyle}
         // install Swiper modules
-        modules={[Navigation, Pagination, Scrollbar, A11y]}
-        spaceBetween={0}
-        slidesPerView={5}
+        modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
+        spaceBetween={60}
+        slidesPerView={2}
+        breakpoints={{
+          500: {
+            slidesPerView: 2,
+          },
+          750: {
+            slidesPerView: 3,
+          },
+          1000: {
+            slidesPerView: 4,
+          },
+          1250: {
+            slidesPerView: 5,
+          },
+        }}
         navigation
         pagination={{ clickable: true }}
+        autoplay={{ delay: 3000 }}
         // scrollbar={{ draggable: true }}
         // onSwiper={(swiper) => console.log(swiper)}
         // onSlideChange={() => console.log("slide change")}
       >
-        {novelData?.content.map((novel, index: number) => {
+        {novelSwiperData.map((novel) => {
           return (
-            <SwiperSlide key={index}>
+            <SwiperSlide key={novel.id}>
               <NovelCard
-                key={index}
                 id={novel.id}
                 title={novel.title}
+                writer={novel.writer.nickname}
+                writerId={novel.writer.id}
+                genre={novel.genre}
                 thumbnail={novel.thumbnail}
+                isUploaded={novel.isUploaded}
+                isNew={novel.isNew}
               />
             </SwiperSlide>
           );
@@ -104,9 +124,17 @@ const Wrapper = styled.div`
   flex-wrap: wrap;
   /* flex-direction: column; */
   width: 100%;
-  height: 45%;
+  /* height: 100%; */
   padding-top: 1%;
   padding-bottom: 1%;
-  padding-left: 7%;
-  padding-right: 7%;
+  padding-left: 10%;
+  padding-right: 12%;
+  ${tabletH} {
+    padding-left: 7%;
+    padding-right: 8%;
+  }
+  ${mobile} {
+    padding-left: 3%;
+    padding-right: 3.2%;
+  }
 `;

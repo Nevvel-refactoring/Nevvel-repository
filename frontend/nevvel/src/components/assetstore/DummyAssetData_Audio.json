@@ -8,10 +8,12 @@
       "url": "http://commondatastorage.googleapis.com/codeskulptor-assets/week7-brrring.m4a",
       "price": 0,
       "downloadCount": 11200,
+      "isAvailable": true,
       "tags": [
         {
           "id": 0,
-          "name": "장르0"
+          "tagName": "장르0",
+          "useCount" : 0
         }
       ],
       "uploader": {
@@ -28,14 +30,17 @@
       "url": "http://commondatastorage.googleapis.com/codeskulptor-assets/Evillaugh.ogg",
       "price": 1000,
       "downloadCount": 100,
+      "isAvailable": false,
       "tags": [
         {
           "id": 0,
-          "name": "장르0"
+          "tagName": "장르0",
+          "useCount" : 0
         },
         {
           "id": 1,
-          "name": "장르1"
+          "tagName": "장르1",
+          "useCount" : 0
         }
       ],
       "uploader": {
@@ -52,18 +57,22 @@
       "url": "http://commondatastorage.googleapis.com/codeskulptor-demos/riceracer_assets/fx/engine-9.ogg",
       "price": 2000,
       "downloadCount": 200,
+      "isAvailable": false,
       "tags": [
         {
           "id": 0,
-          "name": "장르0"
+          "tagName": "장르0",
+          "useCount" : 0
         },
         {
           "id": 1,
-          "name": "장르1"
+          "tagName": "장르1",
+          "useCount" : 0
         },
         {
           "id": 2,
-          "name": "장르2"
+          "tagName": "장르2",
+          "useCount" : 0
         }
       ],
       "uploader": {
@@ -80,10 +89,12 @@
       "url": "http://commondatastorage.googleapis.com/codeskulptor-assets/sounddogs/thrust.ogg",
       "price": 3000,
       "downloadCount": 300,
+      "isAvailable": true,
       "tags": [
         {
           "id": 3,
-          "name": "장르3"
+          "tagName": "장르3",
+          "useCount" : 0
         }
       ],
       "uploader": {
@@ -100,14 +111,17 @@
       "url": "http://codeskulptor-demos.commondatastorage.googleapis.com/descent/Zombie.mp3",
       "price": 4000,
       "downloadCount": 400,
+      "isAvailable": true,
       "tags": [
         {
           "id": 3,
-          "name": "장르3"
+          "tagName": "장르3",
+          "useCount" : 0
         },
         {
           "id": 4,
-          "name": "장르4"
+          "tagName": "장르4",
+          "useCount" : 0
         }
       ],
       "uploader": {
@@ -124,18 +138,22 @@
       "url": "http://codeskulptor-demos.commondatastorage.googleapis.com/descent/gotitem.mp3",
       "price": 5000,
       "downloadCount": 500,
+      "isAvailable": true,
       "tags": [
         {
           "id": 3,
-          "name": "장르3"
+          "tagName": "장르3",
+          "useCount" : 0
         },
         {
           "id": 4,
-          "name": "장르4"
+          "tagName": "장르4",
+          "useCount" : 0
         },
         {
           "id": 5,
-          "name": "장르5"
+          "tagName": "장르5",
+          "useCount" : 0
         }
       ],
       "uploader": {
@@ -152,10 +170,12 @@
       "url": "https://rpg.hamsterrepublic.com/wiki-images/7/72/Metal_Hit.ogg",
       "price": 4000,
       "downloadCount": 400,
+      "isAvailable": true,
       "tags": [
         {
           "id": 6,
-          "name": "장르6"
+          "tagName": "장르6",
+          "useCount" : 0
         }
       ],
       "uploader": {
@@ -172,14 +192,17 @@
       "url": "https://rpg.hamsterrepublic.com/wiki-images/d/d7/Oddbounce.ogg",
       "price": 3000,
       "downloadCount": 300,
+      "isAvailable": true,
       "tags": [
         {
           "id": 6,
-          "name": "장르6"
+          "tagName": "장르6",
+          "useCount" : 0
         },
         {
           "id": 7,
-          "name": "장르7"
+          "tagName": "장르7",
+          "useCount" : 0
         }
       ],
       "uploader": {
@@ -196,18 +219,22 @@
       "url": "http://codeskulptor-demos.commondatastorage.googleapis.com/descent/background%20music.mp3",
       "price": 2000,
       "downloadCount": 200,
+      "isAvailable": true,
       "tags": [
         {
           "id": 6,
-          "name": "장르6"
+          "tagName": "장르6",
+          "useCount" : 0
         },
         {
           "id": 7,
-          "name": "장르7"
+          "tagName": "장르7",
+          "useCount" : 0
         },
         {
           "id": 8,
-          "name": "장르8"
+          "tagName": "장르8",
+          "useCount" : 0
         }
       ],
       "uploader": {
@@ -224,10 +251,12 @@
       "url": "http://commondatastorage.googleapis.com/codeskulptor-demos/pyman_assets/theygotcha.ogg",
       "price": 1000,
       "downloadCount": 100,
+      "isAvailable": true,
       "tags": [
         {
           "id": 9,
-          "name": "장르9"
+          "tagName": "장르9",
+          "useCount" : 0
         }
       ],
       "uploader": {
