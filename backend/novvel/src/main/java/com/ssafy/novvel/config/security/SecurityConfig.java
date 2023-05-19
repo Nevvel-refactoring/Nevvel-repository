@@ -4,7 +4,9 @@ import com.ssafy.novvel.config.security.filter.JwtAuthenticationProcessingFilter
 import com.ssafy.novvel.member.repository.MemberRepository;
 import com.ssafy.novvel.util.token.UserDtoUtils;
 import com.ssafy.novvel.util.token.jwt.JWTProvider;
+
 import java.util.Arrays;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,11 +40,11 @@ public class SecurityConfig {
     private final LogoutSuccessHandler logoutSuccessHandler;
 
     public SecurityConfig(
-        AuthenticationSuccessHandler OAuth2LoginSuccessHandler,
-        OAuth2UserService<OidcUserRequest, OidcUser> oidcUserService,
-        JWTProvider jwtProvider,
-        UserDtoUtils userDtoUtils, MemberRepository memberRepository,
-        LogoutSuccessHandler logoutSuccessHandler) {
+            AuthenticationSuccessHandler OAuth2LoginSuccessHandler,
+            OAuth2UserService<OidcUserRequest, OidcUser> oidcUserService,
+            JWTProvider jwtProvider,
+            UserDtoUtils userDtoUtils, MemberRepository memberRepository,
+            LogoutSuccessHandler logoutSuccessHandler) {
         this.OAuth2LoginSuccessHandler = OAuth2LoginSuccessHandler;
         this.oidcUserService = oidcUserService;
         this.jwtProvider = jwtProvider;
@@ -55,8 +57,15 @@ public class SecurityConfig {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowedOrigins(
-            Arrays.asList("http://k8d1061.p.ssafy.io", "http://k8d106.p.ssafy.io:3000", "https://k8d106.p.ssafy.io",
-                    "http://localhost:3000", "http://localhost"));
+                Arrays.asList(
+                        "http://k8d1061.p.ssafy.io",
+                        "https://k8d1061.p.ssafy.io",
+                        "http://k8d106.p.ssafy.io:3000",
+                        "https://k8d106.p.ssafy.io:3000",
+                        "http://k8d106.p.ssafy.io",
+                        "https://k8d106.p.ssafy.io",
+                        "http://localhost:3000",
+                        "http://localhost"));
         corsConfiguration.addAllowedMethod("*");
         corsConfiguration.addAllowedHeader("*");
         corsConfiguration.setAllowCredentials(true);
@@ -71,38 +80,38 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .csrf().disable()
-            .cors()
-            .and()
-            .authorizeHttpRequests(authorize -> authorize
-                .antMatchers(HttpMethod.GET,
-                        "/default/**",
-                        "/covers",
-                        "/covers/*",
-                        "/covers/uploader/*",
-                        "/genres",
-                        "/assets",
-                        "/assets/search",
-                        "/assets/uploader/**",
-                        "/tags/search",
-                        "/tags"
-                ).permitAll()
-                .anyRequest().authenticated()
-            )
-            .oauth2Login(oauth2 -> oauth2
-                .userInfoEndpoint(userInfo -> userInfo
-                    .oidcUserService(oidcUserService)
+                .csrf().disable()
+                .cors()
+                .and()
+                .authorizeHttpRequests(authorize -> authorize
+                        .antMatchers(HttpMethod.GET,
+                                "/default/**",
+                                "/covers",
+                                "/covers/*",
+                                "/covers/uploader/*",
+                                "/genres",
+                                "/assets",
+                                "/assets/search",
+                                "/assets/uploader/**",
+                                "/tags/search",
+                                "/tags"
+                        ).permitAll()
+                        .anyRequest().authenticated()
                 )
-                .successHandler(OAuth2LoginSuccessHandler)
-            )
-            .logout(logout -> logout
-                .logoutUrl("/users/signout")
-                .deleteCookies(JWTProvider.getAccessToken(), JWTProvider.getRefreshToken())
-                .logoutSuccessHandler(logoutSuccessHandler)
-            )
-            .addFilterBefore(new JwtAuthenticationProcessingFilter(jwtProvider, memberRepository,
-                    userDtoUtils),
-                LogoutFilter.class);
+                .oauth2Login(oauth2 -> oauth2
+                        .userInfoEndpoint(userInfo -> userInfo
+                                .oidcUserService(oidcUserService)
+                        )
+                        .successHandler(OAuth2LoginSuccessHandler)
+                )
+                .logout(logout -> logout
+                        .logoutUrl("/users/signout")
+                        .deleteCookies(JWTProvider.getAccessToken(), JWTProvider.getRefreshToken())
+                        .logoutSuccessHandler(logoutSuccessHandler)
+                )
+                .addFilterBefore(new JwtAuthenticationProcessingFilter(jwtProvider, memberRepository,
+                                userDtoUtils),
+                        LogoutFilter.class);
 
         //todo 에러발생시 처리 로직 수정 필요
         http.exceptionHandling()

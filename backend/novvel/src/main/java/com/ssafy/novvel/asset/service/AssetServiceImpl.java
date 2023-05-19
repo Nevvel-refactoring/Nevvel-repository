@@ -204,6 +204,12 @@ public class AssetServiceImpl implements AssetService {
         );
     }
 
+    @Override
+    public Page<AssetSearchDto> getOwnAssets(AssetType assetType, Member member, Pageable pageable) {
+
+        return assetRepository.searchOwnAssets(assetType, member, pageable);
+    }
+
     //각 에셋에 태그목록을 추가
     private List<AssetSearchDto> findTags(List<Asset> assets, List<AssetSearchDto> assetSearchDtos) {
         List<AssetTag> assetTags = assetTagRepository.findByAssetIn(assets);

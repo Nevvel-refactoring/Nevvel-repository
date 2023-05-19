@@ -4,6 +4,7 @@ import com.querydsl.core.Tuple;
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
@@ -12,6 +13,7 @@ import com.ssafy.novvel.asset.dto.AssetFilterDto;
 import com.ssafy.novvel.asset.dto.AssetSearchDto;
 import com.ssafy.novvel.asset.dto.AssetSearchReqKeywordTagDto;
 import com.ssafy.novvel.asset.dto.SearchType;
+import com.ssafy.novvel.asset.entity.Asset;
 import com.ssafy.novvel.asset.entity.AssetType;
 import com.ssafy.novvel.asset.entity.QAsset;
 import com.ssafy.novvel.member.entity.Member;
@@ -216,6 +218,64 @@ public class AssetRepositoryImpl implements AssetReposiotryCustom {
                 count
         );
         return result;
+    }
+
+    @Override
+    @Transactional
+    public Page<AssetSearchDto> searchOwnAssets(AssetType assetType, Member member, Pageable pageable) {
+        em.merge(member);
+
+        JPAQueryFactory queryFactory = new JPAQueryFactory(em);
+        JPAQueryFactory countQueryFactory = new JPAQueryFactory(em);
+
+        List<OrderSpecifier> ORDERS = getAllOrderSpecifiers(pageable);
+
+        QAsset qAsset = asset;
+        QMemberAsset qMemberAsset = memberAsset;
+
+        List<Asset> assets = queryFactory
+                .selectDistinct(memberAsset.asset)
+                .from(memberAsset)
+                .where(
+                        memberAsset.member.eq(member),
+                        checkAssetType(assetType, memberAsset.asset)
+                )
+                .join(memberAsset.asset.resource)
+                .fetchJoin()
+                .orderBy(ORDERS.stream().toArray(OrderSpecifier[]::new))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        Long count = countQueryFactory
+                .selectDistinct(memberAsset.asset.count())
+                .from(memberAsset)
+                .where(
+                        memberAsset.member.eq(member),
+                        checkAssetType(assetType, memberAsset.asset)
+                )
+                .fetchOne();
+
+        Page<AssetSearchDto> result = new PageImpl<>(
+                assets.stream()
+                        .map(asset -> {
+                            AssetSearchDto assetSearchDto = new AssetSearchDto(asset);
+                            assetSearchDto.setIsAvailable(true);
+                            return assetSearchDto;
+                        })
+                        .collect(Collectors.toList())
+                , pageable,
+                count
+        );
+        return result;
+    }
+
+    private Predicate checkAssetType(AssetType assetType, QAsset qAsset) {
+        if (assetType == null) {
+            return null;
+        }
+
+        return qAsset.type.eq(assetType);
     }
 
 
