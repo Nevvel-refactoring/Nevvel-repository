@@ -148,7 +148,7 @@ function Purchase(props: { userDTO: string }) {
     try {
       const res = await springApi.post("/point-charge", pointChargeDto);
       if (res.status === 200) {
-        console.log(res);
+        // console.log(res);
         router.push("/myPage");
       }
     } catch (error) {
