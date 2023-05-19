@@ -10,4 +10,5 @@ import java.util.Optional;
 public interface LikedCoverRepository extends JpaRepository<LikedCover, CoverMemberID>, LikedCoverCustomRepository {
     Optional<LikedCover> findByMemberAndCoverId(Member member, Long coverId);
 
+    Optional<LikedCover> findByMember_IdAndCover_Id(Long memberId, Long coverId);
 }

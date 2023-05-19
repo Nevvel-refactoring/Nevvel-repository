@@ -2,6 +2,7 @@ package com.ssafy.novvel.cover.controller;
 
 
 import com.ssafy.novvel.cover.dto.*;
+import com.ssafy.novvel.cover.entity.Cover;
 import com.ssafy.novvel.cover.service.CoverService;
 import com.ssafy.novvel.resource.entity.Resource;
 import com.ssafy.novvel.resource.service.S3Service;
@@ -42,12 +43,12 @@ public class CoverController {
 
     @PostMapping()
     @Operation(summary = "소설(표지) 등록", description = "소설(표지)를 <strong>등록</strong> 합니다.")
-    public ResponseEntity<?> registerCover(@RequestPart(value = "file", required = false) MultipartFile file,
+    public ResponseEntity<Long> registerCover(@RequestPart(value = "file", required = false) MultipartFile file,
                                            @RequestPart(value = "coverRegisterDto") CoverRegisterDto coverRegisterDto,
                                            @AuthenticationPrincipal CustomUserDetails customUserDetails) throws IOException {
 
-        coverService.registerCover(file, coverRegisterDto, customUserDetails.getMember());
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        Cover cover = coverService.registerCover(file, coverRegisterDto, customUserDetails.getMember());
+        return new ResponseEntity<>(cover.getId(), HttpStatus.CREATED);
     }
 
     @GetMapping("/{cover-num}")

@@ -35,5 +35,7 @@ public interface AssetService {
 
     Page<AssetSearchDto> searchMyAssets(AssetType assetType, Member member, Pageable pageable);
 
+    Page<AssetSearchDto> getOwnAssets(AssetType assetType, Member member, Pageable pageable);
+
 
 }
