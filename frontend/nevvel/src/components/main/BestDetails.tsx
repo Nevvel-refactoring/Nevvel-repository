@@ -42,6 +42,7 @@ const BestTitle = styled.div`
   /* font-size: 24px; */
   font-size: 1.5rem;
   font-weight: 800;
+  padding-top: 1rem;
 `;
 
 const ViewMore = styled.div`

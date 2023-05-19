@@ -6,8 +6,8 @@ import axios from "axios";
 // }
 
 const springApi = axios.create({
-  baseURL: "http://k8d1061.p.ssafy.io/api"
-  // baseURL: "http://k8d106.p.ssafy.io:8080/api"
+  baseURL: "https://k8d1061.p.ssafy.io/api"
+  // baseURL: "https://k8d106.p.ssafy.io:8080/api"
 })
 
 export default springApi
@@ -24,7 +24,7 @@ export const NewvelApi = {
 
   // 소셜 로그인
   logIn: () =>
-    springApi.get("/users/http://k8d106.p.ssafy.io"),
+    springApi.get("https://k8d1061.p.ssafy.io/api/oauth2/authorization/kakao"),
   // 로그인 api 이게 맞나요...??
 
   // 에피소드 판매지수 높은 순 인기작가
@@ -65,7 +65,7 @@ export const NewvelApi = {
 
   // DB에 있는 전체 장르 목록 조회
   allGenres: () =>
-    springApi.get("/genre"),
+    springApi.get("/genres"),
 
 
   // tags

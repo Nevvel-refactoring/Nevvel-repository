@@ -3,6 +3,12 @@ import styled from "styled-components";
 import DummyTagData from './DummyTagData.json'
 import { NewvelApi } from "@/src/api";
 
+type TagData = {
+  id: number;
+  tagName: string;
+  useCount: number;
+};
+
 type TagInputWidthProps = {
   TagInputWidth?: string;
 }
@@ -11,6 +17,7 @@ type ImageUploadProps = {
   selectTag: string[];
   AddTag: (newSelectTag:string) => void;
   TagInputWidth? : string;
+  AddTagTrigger : boolean
 }
 
 function TagSearchBar(props:ImageUploadProps){
@@ -24,7 +31,19 @@ function TagSearchBar(props:ImageUploadProps){
   // },[])
 
   // axios후 태그 리스트 만들기
-  const [tagLIst, setTagLIst] = useState<string[]>(DummyTagData.content.map((tag) => tag.tagName))
+  const [tagLIst, setTagLIst] = useState<string[]>([])
+
+  useEffect(() => {
+    const getTagData = async () => {
+      const res = await NewvelApi.tagsList();
+      const TagObjtoList = await (res.data.content).map((obj:TagData) => (obj.tagName))
+      setTagLIst(TagObjtoList);
+      // console.log(res)
+    };
+    getTagData();
+  }, []);
+
+
   
   // useEffect(() => {
   //   // console.log(DummyTagData.content.length)
@@ -64,6 +83,16 @@ function TagSearchBar(props:ImageUploadProps){
     setKeyword("")
   }
 
+  // 자동완성에 없는 경우 엔터 치면 새로운 태그 생성
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter' && props.AddTagTrigger === true){
+      if (keyword) {
+        props.AddTag(keyword.trim())
+      }
+    }
+    // setKeyword("")
+  }
+
 
   return(
     <AssetInfoInputDiv
@@ -71,8 +100,10 @@ function TagSearchBar(props:ImageUploadProps){
     >
       <AssetInfoInput1
         TagInputWidth={props.TagInputWidth}
-        placeholder="에셋 태그를 입력하고 선택해주세요."
+        placeholder="에셋 태그를 입력해주세요.(최대 8글자)"
         onChange={onChangeKeyword}
+        onKeyDown={handleKeyDown}
+        maxLength={8}
        />
        {
         keyword?
@@ -85,7 +116,7 @@ function TagSearchBar(props:ImageUploadProps){
                   <ResultLi
                     TagInputWidth={props.TagInputWidth}
                     onClick={() => handleAdd(result)}>
-                    <p>{result}</p>
+                    <Text>{result}</Text>
                   </ResultLi>
                 ))
               }
@@ -105,28 +136,48 @@ const AssetInfoInputDiv = styled.div<TagInputWidthProps>`
   height: 2.5rem;
   z-index: 999;
 `
+const Text= styled.div`
+  font-size: 17px;
+`
 
 const AssetInfoInput1 = styled.input<TagInputWidthProps>`
+  background-color: ${({ theme }) => theme.color.background};
+  color: ${({ theme }) => theme.color.button};
   width: ${props => `${props.TagInputWidth}`};
   height: 2.5rem;
-  border: 0.15rem solid #4D4D4D;
+  border: 1px solid ${({ theme }) => theme.color.opacityText3};
   border-radius: 0.6rem;
+  :focus{
+    border: 2px solid ${({ theme }) => theme.color.opacityText3};
+    box-shadow: 0px 0px 6px gray;
+  }
+  ::placeholder{
+    padding-left: 0.5rem;
+  }
 `
 
 const ResultDiv = styled.div<TagInputWidthProps>`
   width: ${props => `${props.TagInputWidth}`};
+  background-color: ${({ theme }) => theme.color.background};
   height: auto;
-  border: 0.15rem solid #4D4D4D;
+  border: 2px solid ${({ theme }) => theme.color.opacityText3};
+  border-top:none;
   border-radius: 0.6rem;
   background-color: white;
+  font-size:17px;
 `
 
-const ResultUl = styled.ul`
+const ResultUl = styled.ul<TagInputWidthProps>`
+  background-color: ${({ theme }) => theme.color.background};
+  border: none;
+  border-radius: 0.4rem;
   margin: 0rem;
   padding: 0.25rem;
 `
 
 const ResultLi = styled.li<TagInputWidthProps>`
+  background-color: ${({ theme }) => theme.color.background};
+  color: ${({ theme }) => theme.color.button};
   width: ${props => `${props.TagInputWidth}`};
   height: 2rem;
   font-size: 1.5rem;

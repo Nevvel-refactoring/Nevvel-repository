@@ -12,8 +12,8 @@ import springApi from "@/src/api";
 type assetstoreProps = {
   modalOpen: boolean;
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-};
-
+  setAfterUpload: React.Dispatch<React.SetStateAction<boolean>>;
+}
 // type TagType = {
 //   tagName: string,
 // }
@@ -22,7 +22,7 @@ type ImgType = {
   type: string,
   title: string,
   description: string,
-  price: number,
+  point: number|null,
   tags: string[],
 }
 
@@ -33,10 +33,24 @@ function ImgUpload(props:assetstoreProps) {
   const [image, setImage] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const allowedExtensions = ['jpg', 'jpeg', 'png', 'gif',];
+
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files && files.length > 0) {
-      setImage(files[0]);
+      const fileName = files[0].name;
+      if (fileName) {
+        const extension = fileName.split('.').pop()?.toLowerCase();
+        if (extension && allowedExtensions.includes(extension)){
+          setImage(files[0]);
+        } else {
+          alert("지원되지 않는 파일 확장자입니다.")
+        }
+      } else {
+        alert("오류가 발생하였습니다")
+      }
+    } else {
+      alert("오류가 발생하였습니다")
     }
     // console.log(image)
   };
@@ -72,15 +86,19 @@ function ImgUpload(props:assetstoreProps) {
   }
 
   // 가격저장
-  const [price, setPrice] = useState<number>(0)
+  const [price, setPrice] = useState<number|null>(null)
 
   const onChangePrice = (e: React.ChangeEvent<HTMLInputElement>) => {
     const pricevalue = parseInt(e.target.value);
-    setPrice(isNaN(pricevalue) ? 0 : pricevalue);
+    setPrice(isNaN(pricevalue) ? null : pricevalue);
   }
 
 
   // 태그 저장
+
+  // 저장된 태그 외 입력하는 태그도 추가할지 결정하는 트리거
+  const AddTagTrigger = true
+
   const [selectTag, setSelectTag] = useState<string[]>([])
 
   const AddTag = (newSelectTag:string) => {
@@ -98,7 +116,7 @@ function ImgUpload(props:assetstoreProps) {
     type: "",
     title: "",
     description: "",
-    price: 0,
+    point: null,
     tags: [""],
   })
 
@@ -106,75 +124,113 @@ function ImgUpload(props:assetstoreProps) {
   // 제출버튼
   
   // // 제출버튼으로 모달 위의 모달 열기
-  const [modalonModalOpen, setModalonModalOpen] = useState<boolean>(false)
+  // const [modalonModalOpen, setModalonModalOpen] = useState<boolean>(false)
 
   // formData 정의
-  const [formData, setFormData] = useState(new FormData());
+  // const [formData, setFormData] = useState(new FormData());
+
+  useEffect(() => {
+    // jsonDatas에 json 집어넣기
+    setJasonDatas({
+      type: "IMAGE",
+      title: title,
+      description: description,
+      point: price,
+      tags: selectTag,
+    })
+  },[image, title, description, price, selectTag])
   
   const SubmitAsset = async () => {
+
+    const formData = new FormData()
+
     try{
       // 들어오는지 테스트
-      console.log(image, title, description, price, selectTag)
+      // console.log(image, title, description, price, selectTag)
 
       // 태그 리스트 객체화
       // const tagOjectList = selectTag.map((tag) => ({ tagName : tag }))
       
-      // jsonDatas에 json 집어넣기
-      setJasonDatas({
-        type: "IMAGE",
-        title: title,
-        description: description,
-        price: price,
-        tags: selectTag,
-      })
       
       // 제출버튼 누르면 formdata에 데이터 집어넣기
       if (image) {
         formData.append('file', image)
-        formData.append('assetRegistDto', new Blob([JSON.stringify(jsonDatas)], { type: "application/json" }))
       }
+      // formData.append('assetRegistDto', JSON.stringify(jsonDatas))
+      formData.append('assetRegistDto', new Blob([JSON.stringify(jsonDatas)], {type: "application/json"}))
       
       // 데이터 집어넣어진 다음 모달 열기
-      setModalonModalOpen(true)
-      console.log(formData)
+      // setModalonModalOpen(true)
+
+      // console.log(formData)
+
+      // console.log('엑시오스 아직 비활성화', axiosTrigger)
+
+      await springApi.post("/assets", formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then(res => {
+        // console.log(res)
+      }).catch(err => {
+        console.log("에러남 error")
+      })
       
     }
     catch (error) {
       alert('업로드 과정에서 문제가 발생하였습니다.')
     }
+
+    props.setModalOpen(false)
+    props.setAfterUpload(true)
   }
 
-  // 모달에서 제출 버튼 누르면 시그널 받아서 axios
-  const [axiosTrigger, setAxiosTrigger] = useState<boolean|null>(null)
+  // useEffect(()=>{
+  //   console.log(jsonDatas)
+  
+  // },[jsonDatas])
 
-  useEffect(() => {
-    springApi.post("/assets", formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      }
-    }).then(res => {
-      console.log(res.data)
-    }).catch(err => {
-      console.log("error")
-    })
-    setAxiosTrigger(null)
-  },[axiosTrigger])
+  
+  // 모달에서 제출 버튼 누르면 시그널 받아서 axios
+  // const [axiosTrigger, setAxiosTrigger] = useState<boolean|null>(null)
+
+  // useEffect(() => {
+  //   if (axiosTrigger) {
+  //     console.log('엑시오스 활성화',axiosTrigger)
+  //     springApi.post("/assets", formData, {
+  //       headers: {
+  //         'Content-Type': 'multipart/form-data'
+  //       }
+  //     }).then(res => {
+  //       console.log(res)
+  //     }).catch(err => {
+  //       console.log("에러남 error")
+  //     })
+  //     setAxiosTrigger(null)
+  //   }
+  // },[axiosTrigger])
 
   // 모달에서 취소버튼 누르면 모달 닫으면서 formdata 초기화
-  const [formDataClear, setFormDataClear] = useState<boolean|null>(null)
+  // const [formDataClear, setFormDataClear] = useState<boolean|null>(null)
 
-  useEffect(() => {
-    setFormData(new FormData())
-    setFormDataClear(null)
-  },[formDataClear])
+  // useEffect(() => {
+  //   setJasonDatas({
+  //     type: "",
+  //     title: "",
+  //     description: "",
+  //     point: 0,
+  //     tags: [""],
+  //   })
+  //   setFormDataClear(null)
+  // },[formDataClear])
 
   // 제출버튼 비활성화
   const UnsubmitAsset = () => {
     alert("에셋 정보를 모두 입력해주세요.")
     
     // 테스트 끝나면 이거 지우기
-    console.log(formData)
-    setModalonModalOpen(true)
+    // console.log(formData)
+    // setModalonModalOpen(true)
   }
   
   
@@ -190,12 +246,12 @@ function ImgUpload(props:assetstoreProps) {
     
   return(
     <ColDiv>
-      <p>이미지 에셋 업로드</p>
+      <Title>이미지 에셋 업로드</Title>
       {/* 이미지 파일 업로딩 */}
       <RowDiv>
         <ColDiv>
           <AssetInfoTextDiv>
-            <p>이미지 파일</p>
+            <SubTitle>이미지 파일</SubTitle>
           </AssetInfoTextDiv>
           <ImgUploadLabel>
             <ImgUploadInput
@@ -225,7 +281,7 @@ function ImgUpload(props:assetstoreProps) {
 
         <ColDiv>
           <AssetInfoTextDiv>
-            <p>제목</p>
+            <SubTitle>제목</SubTitle>
           </AssetInfoTextDiv>
           <AssetInfoInput1
             placeholder="에셋 제목을 입력해주세요."
@@ -233,7 +289,7 @@ function ImgUpload(props:assetstoreProps) {
           />
 
           <AssetInfoTextDiv>
-            <p>설명</p>
+            <SubTitle>설명</SubTitle>
           </AssetInfoTextDiv>
           <AssetInfoInput2
             placeholder="에셋 설명을 입력해주세요."
@@ -241,7 +297,7 @@ function ImgUpload(props:assetstoreProps) {
           />
 
           <AssetInfoTextDiv>
-            <p>가격</p>
+            <SubTitle>가격</SubTitle>
           </AssetInfoTextDiv>
           <AssetInfoInput1
             placeholder="에셋 가격을 입력해주세요."
@@ -255,6 +311,7 @@ function ImgUpload(props:assetstoreProps) {
             selectTag={selectTag}
             AddTag={AddTag}
             TagInputWidth={"15rem"}
+            AddTagTrigger={AddTagTrigger}
           />
           <TagRowDiv>
             {
@@ -280,7 +337,7 @@ function ImgUpload(props:assetstoreProps) {
       </RowDiv>
 
       {/* 여기부터 모달온 모달 */}
-      {modalonModalOpen ? (
+      {/* {modalonModalOpen ? (
         <ModalonModal
           modal={modalonModalOpen}
           width="500"
@@ -294,7 +351,7 @@ function ImgUpload(props:assetstoreProps) {
           }
           setModalonModalOpen={setModalonModalOpen}
         />
-      ) : null}
+      ) : null} */}
     </ColDiv>
   )
 }
@@ -318,7 +375,7 @@ const ImgUploadLabel = styled.label`
   height: 15rem;
   margin-right: 1rem;
   margin-left: 0.5rem;
-  /* border: 0.15rem solid #4D4D4D;
+  /*border: 1px solid ${({ theme }) => theme.color.opacityText3};
   border-radius: 1.5rem; */
   display: flex;
   align-items: center;
@@ -336,12 +393,28 @@ const ImgUploadBtn = styled.img`
   width: 15rem;
   height: 15rem;
   object-fit: contain;
-  border: 0.15rem solid #4D4D4D;
+ border: 1px solid ${({ theme }) => theme.color.opacityText3};
   border-radius: 1.5rem;
   /* float: left; */
+ :focus{
+    border: 2px solid ${({ theme }) => theme.color.opacityText3};
+    box-shadow: 0px 0px 6px gray;
+  }
+  ::placeholder{
+    padding-left: 1rem;
+  }
   &:hover {
     box-shadow: 0.1rem 0.1rem 0.5rem;
   }
+`
+const Title = styled.div`
+  font-size: 24px;
+  font-weight: 800;
+`
+const SubTitle =styled.div`
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 0.2rem;
 `
 
 const ImageUploadTitle = styled.p`
@@ -362,17 +435,35 @@ const AssetInfoTextDiv =styled.div`
 `
 
 const AssetInfoInput1 = styled.input`
+  background-color: ${({ theme }) => theme.color.background};
+  color: ${({ theme }) => theme.color.button};
   width: 15rem;
   height: 2.5rem;
-  border: 0.15rem solid #4D4D4D;
+ border: 1px solid ${({ theme }) => theme.color.opacityText3};
   border-radius: 0.6rem;
+ :focus{
+    border: 2px solid ${({ theme }) => theme.color.opacityText3};
+    box-shadow: 0px 0px 6px gray;
+  }
+  ::placeholder{
+    padding-left: 1rem;
+  }
 `
 
 const AssetInfoInput2 = styled.input`
+  background-color: ${({ theme }) => theme.color.background};
+  color: ${({ theme }) => theme.color.button};
   width: 15rem;
   height: 7.5rem;
-  border: 0.15rem solid #4D4D4D;
+ border: 1px solid ${({ theme }) => theme.color.opacityText3};
   border-radius: 0.8rem;
+ :focus{
+    border: 2px solid ${({ theme }) => theme.color.opacityText3};
+    box-shadow: 0px 0px 6px gray;
+  }
+  ::placeholder{
+    padding-left: 1rem;
+  }
 `
 
 const ImgDelBtn = styled.button`
@@ -389,18 +480,22 @@ const ImgDelBtn = styled.button`
 
 const TagRowDiv = styled.div`
   width: 15rem;
-  height: 2.5rem;
+  height: 3rem;
   display: flex;
   flex-direction: row;
-  justify-content: left;
+  justify-content: flex-start;
+  /* align-items: center; */
   margin-top: 0.5rem;
+  flex-wrap: wrap;
 `
 
 // 에셋카드 재활용
 const CardInfo2Div = styled.div`
   background-color: white;
   color: black;
-  width: 4rem;
+  /* width: 4rem; */
+  padding-left: 0.15rem;
+  padding-right: 0.15rem;
   height: 2rem;
   border-radius: 0.5rem;
   /* box-shadow: 0.5rem 0.5rem 0.2rem; */
@@ -411,24 +506,25 @@ const CardInfo2Div = styled.div`
   justify-content: center;
   margin-left: 0.5rem;
   font-size: 1rem;
+  margin-top: 0.2rem;
 `
 
 const ModalCloseBtn = styled.button`
   background-color: ${({ theme }) => theme.color.button};
   color: ${({ theme }) => theme.color.buttonText};
-  width: 12rem;
+  width: 8rem;
   height: 3rem;
-  border: 0.1rem solid black;
+  border: 1px solid ${({ theme }) => theme.color.opacityText3};
   border-radius: 0.5rem;
-  font-size: 1.5rem;
+  font-size: 17px;
   margin-left: 0.5rem;
-`
+  `
 const ModalSubmitBtn = styled.button`
   background-color: ${({ theme }) => theme.color.button};
   color: ${({ theme }) => theme.color.buttonText};
   width: 12rem;
   height: 3rem;
-  border: 0.1rem solid black;
+  border: 1px solid ${({ theme }) => theme.color.opacityText3};
   border-radius: 0.5rem;
   font-size: 1.5rem;
   margin-right: 0.5rem;
@@ -440,9 +536,9 @@ const ModalSubmitBtn = styled.button`
 const ModalSubmitBtn_Un = styled.button`
   background-color: #B3B3B3;
   color: #ffffff;
-  width: 12rem;
+  width: 8rem;
   height: 3rem;
-  border: 0.1rem solid black;
+  border: 1px solid ${({ theme }) => theme.color.opacityText3};
   border-radius: 0.5rem;
   font-size: 1.5rem;
   margin-right: 0.5rem

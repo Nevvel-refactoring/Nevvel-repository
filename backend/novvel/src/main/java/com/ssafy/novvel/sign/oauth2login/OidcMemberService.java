@@ -65,7 +65,7 @@ public class OidcMemberService implements OAuth2UserService<OidcUserRequest, Oid
                 .sub(sub)
                 .email(email)
                 .nickname(sub)
-                .description("자기소개를 입력해주세요")
+                .description("소설과 에셋을 자유롭게 등록해 보세요")
                 .role("ROLE_USER")
                 .refreshToken(refreshToken)
                 .point(0L)

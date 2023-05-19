@@ -12,7 +12,8 @@
       "tags": [
         {
           "id": 0,
-          "name": "장르0"
+          "tagName": "장르0",
+          "useCount" : 0
         }
       ],
       "uploader": {
@@ -33,11 +34,13 @@
       "tags": [
         {
           "id": 0,
-          "name": "장르0"
+          "tagName": "장르0",
+          "useCount" : 0
         },
         {
           "id": 1,
-          "name": "장르1"
+          "tagName": "장르1",
+          "useCount" : 0
         }
       ],
       "uploader": {
@@ -58,15 +61,18 @@
       "tags": [
         {
           "id": 0,
-          "name": "장르0"
+          "tagName": "장르0",
+          "useCount" : 0
         },
         {
           "id": 1,
-          "name": "장르1"
+          "tagName": "장르1",
+          "useCount" : 0
         },
         {
           "id": 2,
-          "name": "장르2"
+          "tagName": "장르2",
+          "useCount" : 0
         }
       ],
       "uploader": {
@@ -87,7 +93,8 @@
       "tags": [
         {
           "id": 3,
-          "name": "장르3"
+          "tagName": "장르3",
+          "useCount" : 0
         }
       ],
       "uploader": {
@@ -108,11 +115,13 @@
       "tags": [
         {
           "id": 3,
-          "name": "장르3"
+          "tagName": "장르3",
+          "useCount" : 0
         },
         {
           "id": 4,
-          "name": "장르4"
+          "tagName": "장르4",
+          "useCount" : 0
         }
       ],
       "uploader": {
@@ -133,15 +142,18 @@
       "tags": [
         {
           "id": 3,
-          "name": "장르3"
+          "tagName": "장르3",
+          "useCount" : 0
         },
         {
           "id": 4,
-          "name": "장르4"
+          "tagName": "장르4",
+          "useCount" : 0
         },
         {
           "id": 5,
-          "name": "장르5"
+          "tagName": "장르5",
+          "useCount" : 0
         }
       ],
       "uploader": {
@@ -162,7 +174,8 @@
       "tags": [
         {
           "id": 6,
-          "name": "장르6"
+          "tagName": "장르6",
+          "useCount" : 0
         }
       ],
       "uploader": {
@@ -183,11 +196,13 @@
       "tags": [
         {
           "id": 6,
-          "name": "장르6"
+          "tagName": "장르6",
+          "useCount" : 0
         },
         {
           "id": 7,
-          "name": "장르7"
+          "tagName": "장르7",
+          "useCount" : 0
         }
       ],
       "uploader": {
@@ -208,15 +223,18 @@
       "tags": [
         {
           "id": 6,
-          "name": "장르6"
+          "tagName": "장르6",
+          "useCount" : 0
         },
         {
           "id": 7,
-          "name": "장르7"
+          "tagName": "장르7",
+          "useCount" : 0
         },
         {
           "id": 8,
-          "name": "장르8"
+          "tagName": "장르8",
+          "useCount" : 0
         }
       ],
       "uploader": {
@@ -237,7 +255,8 @@
       "tags": [
         {
           "id": 9,
-          "name": "장르9"
+          "tagName": "장르9",
+          "useCount" : 0
         }
       ],
       "uploader": {

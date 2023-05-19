@@ -1,17 +1,23 @@
 import React, { useState, useEffect } from "react";
 import ViewerTabMain from "../../viewer/Main/ViewerTabMain";
+import { episodeViewer } from "viewer";
 import { episode } from "editor";
 import styled from "styled-components";
+import {useRouter} from 'next/router'
+import EditorPreviewTab from "../EditorPreviewTab";
 
 type EditorPreviewProps = {
   postEpisode: episode;
 };
 
 function EditorPreview({ postEpisode }: EditorPreviewProps) {
+  const router = useRouter();
+  const id = router.query.id
   const [tabNumber, setTabNumber] = useState(0); // tab mode 일 때 사용
   const [eventCatch, setEventCatch] = useState(false); // tab mode 일때 이벤트 있는 경우 사용
-  console.log("여기");
-  console.log(postEpisode, "postEpisode");
+
+  // console.log("여기");
+  // console.log(postEpisode, "postEpisode");
 
   useEffect(() => {
     if (postEpisode.contents) {
@@ -22,10 +28,10 @@ function EditorPreview({ postEpisode }: EditorPreviewProps) {
         const events = postEpisode.contents[tabNumber]?.event;
         for (const event of events) {
           if (event.type === "IMAGE") {
-            console.log("이미지당");
+            // console.log("이미지당");
             setEventCatch(true);
           } else {
-            console.log("소리당");
+            // console.log("소리당");
           }
         }
       }
@@ -39,14 +45,14 @@ function EditorPreview({ postEpisode }: EditorPreviewProps) {
 
   const countHandler = () => {
     const contentLength = postEpisode.contents.length;
-    console.log();
-    console.log("이거 댐?");
+    // console.log();
+    // console.log("이거 댐?");
     if (tabNumber <= contentLength - 1) {
       setTabNumber(tabNumber + 1);
     } else if (tabNumber === contentLength - 1) {
-      console.log("마지막 입니다. ");
+      // console.log("마지막 입니다. ");
     }
-    console.log(tabNumber);
+    // console.log(tabNumber);
   };
 
   return (
@@ -54,10 +60,10 @@ function EditorPreview({ postEpisode }: EditorPreviewProps) {
       <PreviewHeader>미리보기</PreviewHeader>
       <PreviewMain>
         {postEpisode.contents.length !== 0 ? (
-          <ViewerTabMain
+          <EditorPreviewTab
             EpisodeData={postEpisode}
             tabNumber={tabNumber}
-            setEventCatch={setEventCatch} fontSize={4} whiteSpace={1} interval={3} fontStyle={""}          />
+             fontSize={4} whiteSpace={1} interval={3} fontStyle={""}/>
         ) : (<>미리보기 할 내용이 존재하지 않습니다.</>)}
       </PreviewMain>
     </PreviewWrapper>
@@ -70,13 +76,20 @@ const PreviewWrapper = styled.div`
 `;
 const PreviewHeader = styled.div`
   width: 100%;
-  border-bottom: 1px solid ${({ theme }) => theme.color.text1};
+  border-bottom: 1px solid ${({ theme }) => theme.color.opacityText3};
+  padding-bottom: 1rem;
+  padding-top: 1rem;
+  font-size:14px;
+  display: flex;
+  justify-content: center;
 `;
 
 const PreviewMain = styled.div`
-  margin-top: 10%;
+  margin-top: 5%;
   width: 60vh;
   height: 70vh;
-  overflow: scroll;
+  ::-webkit-scrollbar {
+    display: none; 
+  }
 `;
 export default EditorPreview;

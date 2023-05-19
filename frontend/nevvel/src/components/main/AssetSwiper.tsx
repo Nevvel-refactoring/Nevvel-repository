@@ -12,17 +12,14 @@ import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 
 import AssetCard from "../common/AssetCard";
-import imgdata from "../assetstore/DummyAssetData_Image.json";
-import sounddata from "../assetstore/DummyAssetData_Audio.json";
 
 import { Modal } from "../common/Modal";
 import AssetDetailModal from "../assetstore/AssetDetailModal";
 
-
-
 interface AssetTag {
   id: number;
-  name: string;
+  tagName: string;
+  useCount: number;
 }
 
 interface AssetUploader {
@@ -39,66 +36,69 @@ interface Asset {
   url: string;
   price: number;
   downloadCount: number;
-  isAvailable : boolean,
+  isAvailable: boolean;
   tags: Array<AssetTag>;
   uploader: AssetUploader;
 }
 
-function AssetSwiper() {
-  const [AssetData, setAssetData] = useState<Array<Asset>>([]);
+interface AssetSwiperProps {
+  content: Asset[];
+  setAxiosReloaer: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
-  // axios로 데이터 get받아오기, 현재는 더미데이터
-  useEffect(() => {
-    // setAssetData(imgdata.content);
-    setAssetData(imgdata.content);
-  }, []);
+function AssetSwiper(props: AssetSwiperProps) {
+  // 에셋 10개 받아오기
+  const assetSwiperData = props.content.slice(0, 10);
 
   // 에셋 디테일 모달 오픈 트리거
   const [modalOpen, setModalOpen] = useState<boolean>(false);
 
   // 에셋 디테일로 열리는 에셋의 key값
-  const[openModalData, setOpenModalData] = useState<Asset>({
+  const [openModalData, setOpenModalData] = useState<Asset>({
     id: 0,
     title: "",
     type: "",
-    thumbnail : "",
+    thumbnail: "",
     url: "",
-    price : 0,
-    downloadCount : 0,
-    isAvailable : false,
-    tags: [{
-      id : 0,
-      name : "",
-    }],
-    uploader : {
-      id : 0,
-      nickname : "",
-      profileImage : "",
-    }
-  })
+    price: 0,
+    downloadCount: 0,
+    isAvailable: false,
+    tags: [
+      {
+        id: 0,
+        tagName: "",
+        useCount: 0,
+      },
+    ],
+    uploader: {
+      id: 0,
+      nickname: "",
+      profileImage: "",
+    },
+  });
 
   // 모달의 모달이 어떻게 나올지 결정해주는 인자
-  const [modalStarter, setModalStarter] = useState<boolean>(true)
+  const [modalStarter, setModalStarter] = useState<boolean>(true);
 
   return (
     <Wrapper>
-      <Swiper
+      <StyledSwiper
         // install Swiper modules
         modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
-        spaceBetween={0}
+        spaceBetween={20}
         slidesPerView={1}
         breakpoints={{
-          500:{
-            slidesPerView: 2
+          500: {
+            slidesPerView: 2,
           },
-          750:{
-            slidesPerView: 3
+          750: {
+            slidesPerView: 3,
           },
-          1000:{
-            slidesPerView: 4
+          1250: {
+            slidesPerView: 4,
           },
-          1250:{
-            slidesPerView: 5
+          1440: {
+            slidesPerView: 5,
           },
         }}
         navigation
@@ -108,9 +108,9 @@ function AssetSwiper() {
         // onSwiper={(swiper) => console.log(swiper)}
         // onSlideChange={() => console.log("slide change")}
       >
-        {AssetData.map((AssetData) => {
+        {assetSwiperData.map((AssetData) => {
           return (
-            <SwiperSlide key={AssetData.id}>
+            <SwiperSlide className="swiper_slide" key={AssetData.id}>
               <AssetCard
                 AssetData={AssetData}
                 id={AssetData.id}
@@ -119,7 +119,6 @@ function AssetSwiper() {
                 thumbnail={AssetData.thumbnail}
                 url={AssetData.url}
                 tags={AssetData.tags}
-
                 setModalOpen={setModalOpen}
                 setOpenModalData={setOpenModalData}
                 // price={AssetData.price}
@@ -128,7 +127,7 @@ function AssetSwiper() {
             </SwiperSlide>
           );
         })}
-      </Swiper>
+      </StyledSwiper>
       {/* 여기부터 모달 */}
       {modalOpen ? (
         <Modal
@@ -141,7 +140,8 @@ function AssetSwiper() {
               openModalData={openModalData}
               setModalOpen={setModalOpen}
               modalStarter={modalStarter}
-          />
+              setAxiosReloaer={props.setAxiosReloaer}
+            />
           }
         />
       ) : null}
@@ -151,13 +151,18 @@ function AssetSwiper() {
 
 export default AssetSwiper;
 
+const StyledSwiper = styled(Swiper)`
+  width: 100%;
+
+`;
+
 const Wrapper = styled.div`
   background-color: ${({ theme }) => theme.color.background};
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
   /* flex-direction: column; */
-  width: 100%;
+  width: 100vw;
   height: 45%;
   padding-top: 1%;
   padding-bottom: 1%;

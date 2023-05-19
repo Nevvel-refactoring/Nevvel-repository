@@ -2,12 +2,23 @@ import React, { useEffect } from "react";
 import { useState, useRef } from "react";
 import styled from "styled-components";
 import TagSearchBar from "./TagSearchBar";
+import springApi from "@/src/api";
 
 
 type assetstoreProps = {
   modalOpen: boolean;
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setAfterUpload: React.Dispatch<React.SetStateAction<boolean>>;
 };
+
+type AudType = {
+  type: string,
+  title: string,
+  description: string,
+  point: number,
+  tags: string[],
+}
+
 
 function AudUpload(props:assetstoreProps) {
 
@@ -16,10 +27,24 @@ function AudUpload(props:assetstoreProps) {
   const [audio, setAudio] = useState<File | null>(null);
   const audioRef = useRef<HTMLAudioElement>(null);
 
+  const allowedExtensions = ['wav', 'wma', 'mp3',];
+
   const handleAudioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files && files.length > 0) {
-      setAudio(files[0]);
+      const fileName = files[0].name;
+      if (fileName) {
+        const extension = fileName.split('.').pop()?.toLowerCase();
+        if (extension && allowedExtensions.includes(extension)){
+          setAudio(files[0]);
+        } else {
+          alert("지원되지 않는 파일 확장자입니다.")
+        }
+      } else {
+        alert("오류가 발생하였습니다")
+      }
+    } else {
+      alert("오류가 발생하였습니다")
     }
   };
 
@@ -63,6 +88,10 @@ function AudUpload(props:assetstoreProps) {
 
 
   // 태그 저장
+
+  // 저장된 태그 외 입력하는 태그도 추가할지 결정하는 트리거
+  const AddTagTrigger = true
+
   const [selectTag, setSelectTag] = useState<string[]>([])
 
   const AddTag = (newSelectTag:string) => {
@@ -75,30 +104,77 @@ function AudUpload(props:assetstoreProps) {
   }
 
 
-  // 제출버튼 트리거
-  const [submitBtnTrigger, setSubmitBtnTrigger] = useState(0)
+  // 전체 JsonData
+  const [jsonDatas, setJasonDatas] = useState<AudType>({
+    type: "",
+    title: "",
+    description: "",
+    point: 0,
+    tags: [""],
+  })
 
+  useEffect(() => {
+    // jsonDatas에 json 집어넣기
+    setJasonDatas({
+      type: "AUDIO",
+      title: title,
+      description: description,
+      point: price,
+      tags: selectTag,
+    })
+  },[Audio, title, description, price, selectTag])
+
+  
+  // 제출버튼
+  const SubmitAsset = async () => {
+    // axios통신하기
+    const formData = new FormData()
+
+    try{
+      // 들어오는지 테스트
+      // console.log(audio, title, description, price, selectTag) 
+      
+      // 제출버튼 누르면 formdata에 데이터 집어넣기
+      if (audio) {
+        formData.append('file', audio)
+      }
+      // formData.append('assetRegistDto', JSON.stringify(jsonDatas))
+      formData.append('assetRegistDto', new Blob([JSON.stringify(jsonDatas)], {type: "application/json"}))
+      
+
+      await springApi.post("/assets", formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then(res => {
+        // console.log(res)
+      }).catch(err => {
+        console.log("에러남 error")
+      })
+      
+    }
+    catch (error) {
+      alert('업로드 과정에서 문제가 발생하였습니다.')
+    }
+
+    props.setModalOpen(false)
+    props.setAfterUpload(true)
+    
+  }
+  
+  // 제출버튼 비활성화
+  const UnsubmitAsset = () => {
+    alert("에셋을 등록해주세요.")
+  }
+  
   // 닫기 버튼
   const CloseAssetUpload = () => {
     props.setModalOpen(false)
   }
-
-  // 제출버튼
-  const SubmitAsset = () => {
-    // axios통신하기
-    console.log(audio, title, description, price, selectTag)
-  }
-
-  // 제출버튼 비활성화
-  const UnsubmitAsset = () => {
-    alert("에셋을 등록해주세요.")
-    // setSubmitBtnTrigger(1)
-  }
-
-
+  
   return(
     <ColDiv>
-      <p>사운드 에셋 업로드</p>
+      <Title>사운드 에셋 업로드</Title>
       {/* 사운드 파일 업로딩 */}
       <RowDiv>
 
@@ -110,7 +186,7 @@ function AudUpload(props:assetstoreProps) {
         <ColDiv>
           <RowDiv>
             <AssetInfoTextDiv2>
-              <p>음원 파일</p>
+              <SubTitle>음원 파일</SubTitle>
             </AssetInfoTextDiv2>
             <AudUploadBtnDiv>
               {
@@ -134,7 +210,7 @@ function AudUpload(props:assetstoreProps) {
           <AudUploadLabel>
           <AudUploadInput
             type="file"
-            accept="audio/*"
+            accept=".wav, .wma, .mp3"
             onChange={handleAudioChange}
           />
           {
@@ -143,12 +219,13 @@ function AudUpload(props:assetstoreProps) {
             // <p>Selected audio: {audio.name}</p>
             :
             <AudUnloadDiv>
-              <p>이곳을 클릭해서 음원파일을 업로드 해주세요 (20MB 이하)</p>
+              <p>이곳을 클릭해서 음원파일을 업로드 해주세요</p>
+              <p>(40MB 이하의 .wav / .wma / .mp3 파일)</p>
             </AudUnloadDiv>
           }
           </AudUploadLabel>
           <AssetInfoTextDiv1>
-            <p>제목</p>
+            <SubTitle>제목</SubTitle>
           </AssetInfoTextDiv1>
           <AssetInfoInput1
             placeholder="에셋 제목을 입력해주세요."
@@ -156,7 +233,7 @@ function AudUpload(props:assetstoreProps) {
           />
 
           <AssetInfoTextDiv1>
-            <p>설명</p>
+            <SubTitle>설명</SubTitle>
           </AssetInfoTextDiv1>
           <AssetInfoInput2
             placeholder="에셋 설명을 입력해주세요."
@@ -166,7 +243,7 @@ function AudUpload(props:assetstoreProps) {
           <RowDivPriceTag>
             <ColDiv>
               <AssetInfoTextDiv2>
-                <p>가격</p>
+                <SubTitle>가격</SubTitle>
               </AssetInfoTextDiv2>
               <AssetInfoInput3
                 placeholder="에셋 가격을 입력해주세요."
@@ -175,12 +252,13 @@ function AudUpload(props:assetstoreProps) {
             </ColDiv>
             <ColDiv>
               <AssetInfoTextDiv2>
-                <p>&nbsp;&nbsp;태그</p>
+                <SubTitle>&nbsp;&nbsp;태그</SubTitle>
               </AssetInfoTextDiv2>
               <TagSearchBar
                 selectTag={selectTag}
                 AddTag={AddTag}
                 TagInputWidth={"14rem"}
+                AddTagTrigger={AddTagTrigger}
               />
               <TagRowDiv>
                 {
@@ -195,8 +273,7 @@ function AudUpload(props:assetstoreProps) {
           </RowDivPriceTag>
         </ColDiv>
       </RowDiv>
-      
-      <RowDiv>
+      <RowDiv className="BtnContainer">
         {/* 제출버튼 */}
         {
           (audio&&title&&description&&price&&selectTag[0])?
@@ -217,6 +294,10 @@ const RowDiv = styled.div`
   flex-direction: row;
   justify-content: space-around;
   margin-top: 1rem;
+  &.BtnContainer {
+    margin-top: 0;
+    margin-bottom: 1rem;
+  }
 `
 
 const RowDivPriceTag = styled.div`
@@ -229,8 +310,18 @@ const ColDiv = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  font-size: 17px;
 `
 
+const Title = styled.div`
+  font-size: 24px;
+  font-weight: 800;
+`
+const SubTitle =styled.div`
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 0.2rem;
+`
 const AudUploadLabel = styled.label`
   width: 30rem;
   height: 4rem;
@@ -244,6 +335,7 @@ const AudUploadLabel = styled.label`
   justify-content: center;
   &:hover{
     cursor: pointer;
+    box-shadow: 0.1rem 0.1rem 0.5rem;
   }
 `
 
@@ -285,8 +377,9 @@ const AudUnloadDiv = styled.div`
   height: 3rem;
   /* border: 0.2rem dotted #4D4D4D; */
   border-radius: 0.5rem;
-  font-size: 1rem;
+  font-size: 1.2rem;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 `
@@ -331,73 +424,103 @@ const AssetInfoTextDiv2 = styled.div`
 `
 
 const AssetInfoInput1 = styled.input`
+  background-color: ${({ theme }) => theme.color.background};
+  color: ${({ theme }) => theme.color.button};
   width: 30rem;
   height: 2.5rem;
-  border: 0.15rem solid #4D4D4D;
+  border: 1px solid ${({ theme }) => theme.color.opacityText3};
   border-radius: 0.6rem;
+  :focus{
+    border: 2px solid ${({ theme }) => theme.color.opacityText3};
+    box-shadow: 0px 0px 6px gray;
+  }
+  ::placeholder{
+    padding-left: 1rem;
+  }
 `
 
 const AssetInfoInput2 = styled.input`
+  background-color: ${({ theme }) => theme.color.background};
+  color: ${({ theme }) => theme.color.button};
   width: 30rem;
   height: 5rem;
-  border: 0.15rem solid #4D4D4D;
+  border: 1px solid ${({ theme }) => theme.color.opacityText3};
   border-radius: 0.8rem;
+  :focus{
+    border: 2px solid ${({ theme }) => theme.color.opacityText3};
+    box-shadow: 0px 0px 6px gray;
+  }
+  ::placeholder{
+    padding-left: 1rem;
+  }
 `
 
 const AssetInfoInput3 = styled.input`
+  background-color: ${({ theme }) => theme.color.background};
+  color: ${({ theme }) => theme.color.button};
   width: 14rem;
   height: 2.5rem;
-  border: 0.15rem solid #4D4D4D;
+  border: 1px solid ${({ theme }) => theme.color.opacityText3};
   border-radius: 0.6rem;
   margin-right: 1.5rem;
+  :focus{
+    border: 2px solid ${({ theme }) => theme.color.opacityText3};
+    box-shadow: 0px 0px 6px gray;
+  }
+  ::placeholder{
+    padding-left: 1rem;
+  }
 `
 
 
 const TagRowDiv = styled.div`
-  width: 14rem;
-  height: 4rem;
+  width: 15rem;
+  height: 6rem;
   display: flex;
   flex-direction: row;
-  justify-content: left;
+  justify-content: flex-start;
   margin-top: 0.5rem;
-  white-space: nowrap;
+  flex-wrap: wrap;
 `
 
 // 에셋카드 재활용
 const CardInfo2Div = styled.div`
   background-color: white;
   color: black;
-  width: 4rem;
+  /* width: 4rem; */
+  padding-left: 0.15rem;
+  padding-right: 0.15rem;
   height: 2rem;
   border-radius: 0.5rem;
   /* box-shadow: 0.5rem 0.5rem 0.2rem; */
-  border: 0.15rem inset black;
+  border: 1px solid ${({ theme }) => theme.color.opacityText3};
   /* text-align: center; */
   display: flex;
   align-items: center;
   justify-content: center;
   margin-left: 0.5rem;
   font-size: 1rem;
+  margin-top: 0.2rem;
 `
 
 const ModalCloseBtn = styled.button`
   background-color: ${({ theme }) => theme.color.button};
   color: ${({ theme }) => theme.color.buttonText};
-  width: 12rem;
+  width: 8rem;
   height: 3rem;
-  border: 0.1rem solid black;
+  border: 1px solid ${({ theme }) => theme.color.opacityText3};
   border-radius: 0.5rem;
-  font-size: 1.5rem;
+  font-size: 17px;
   margin-left: 0.5rem;
 `
 const ModalSubmitBtn = styled.button`
   background-color: ${({ theme }) => theme.color.button};
   color: ${({ theme }) => theme.color.buttonText};
-  width: 12rem;
+  width: 8rem;
   height: 3rem;
-  border: 0.1rem solid black;
+  border: 1px solid ${({ theme }) => theme.color.opacityText3};
   border-radius: 0.5rem;
-  font-size: 1.5rem;
+  font-size: 17px;
   margin-right: 0.5rem;
   &:hover{
     background-color: #8385FF;
@@ -407,10 +530,10 @@ const ModalSubmitBtn = styled.button`
 const ModalSubmitBtn_Un = styled.button`
   background-color: #B3B3B3;
   color: #ffffff;
-  width: 12rem;
+  width: 8rem;
   height: 3rem;
-  border: 0.1rem solid black;
+  border: 1px solid ${({ theme }) => theme.color.opacityText3};
   border-radius: 0.5rem;
-  font-size: 1.5rem;
+  font-size: 17px;
   margin-right: 0.5rem
 `

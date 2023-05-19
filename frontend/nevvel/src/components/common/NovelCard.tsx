@@ -1,6 +1,6 @@
 import Image from "next/image";
+import { useRouter } from "next/dist/client/router";
 import styled from "styled-components";
-import unupload from "../../../public/UnUploadImgBtn.png";
 
 interface Novel {
   id: number;
@@ -9,15 +9,29 @@ interface Novel {
   writerId: number;
   genre: string;
   thumbnail: string;
+  isUploaded: boolean;
+  isNew: boolean;
 }
 
 function NovelCard(props: Novel) {
   // console.log(props);
+  // const isUploaded = props.isUploaded;
+
+  const router = useRouter();
+  const novelDetailHandler = () => {
+    router.push({ pathname: `/series/${props.id}` });
+  };
 
   return (
-    <Wrapper>
+    <Wrapper onClick={novelDetailHandler}>
       {/* <Image src={props.thumbnail} alt="thumbnail" width={25} height={25} /> */}
-      <Image src={props.thumbnail} alt="thumbnail" width={148} height={222} />
+      <ImgDiv>
+        <StatusSpan>
+          {props.isUploaded && <UpdateNovel id="up">UP</UpdateNovel>}
+          {props.isNew && <NewNovel id="new">신작</NewNovel>}
+        </StatusSpan>
+        <Image src={props.thumbnail} alt="thumbnail" width={148} height={222} />
+      </ImgDiv>
       <NovelDesc>
         <NovelTitleDiv>
           <NovelTitle>{props.title}</NovelTitle>
@@ -57,20 +71,64 @@ const NovelTitleDiv = styled.div`
 `;
 
 const NovelTitle = styled.div`
-  padding-top: 1rem;
-  font-size: 18px;
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 180%;
   text-align: center;
-  height: 3.25rem;
   overflow: hidden;
+  width: 13rem;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 `;
 
 const NovelWriter = styled.div`
-  padding-top: 1rem;
-  font-size: 14px;
+  font-size: 12px;
   text-align: center;
 `;
 
 const NovelGenre = styled.div`
-  padding-top: 1rem;
+  margin: 0.5rem;
+  padding: 0.5rem;
+  display: flex;
   text-align: center;
+  align-items: center;
+  background-color: ${({ theme }) => theme.color.searchBar};
+  opacity: 70%;
+  color: ${({ theme }) => theme.color.text3};
+  justify-content: center;
+  border-radius: 0.5rem;
+  font-size: 10px;
+  height: 1.5rem;
+`;
+
+const ImgDiv = styled.div`
+  position: relative;
+  display: flex;
+`;
+
+const NewNovel = styled.span`
+  color: white;
+  font-size: 8px;
+  font-weight: 700;
+  /* background-color: ${({ theme }) => theme.color.point}; */
+  padding: 2px;
+  margin: 2px;
+  border-radius: 3px;
+  background-color: ${({ theme }) => theme.color.newSpan};
+`;
+
+const UpdateNovel = styled.span`
+  color: white;
+  font-size: 8px;
+  font-weight: 700;
+  /* background-color: ${({ theme }) => theme.color.point}; */
+  padding: 2px;
+  margin: 2px;
+  border-radius: 3px;
+  background-color: ${({ theme }) => theme.color.upSpan};
+`;
+
+const StatusSpan = styled.span`
+  position: absolute;
+  margin: 3px;
 `;
