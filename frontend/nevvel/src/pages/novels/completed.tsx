@@ -1,44 +1,119 @@
 import NovelNav from "@/src/components/main/NovelNav";
+import NovelPagination from "@/src/components/common/NovelPagination";
 import { useRouter } from "next/dist/client/router";
 import { useEffect } from "react";
 import styled from "styled-components";
+import axios from "axios";
+import Image from "next/image";
+import nevvel_m_dark from "../../assets/img/nevvel_m_dark.png";
+import NovelCard from "@/src/components/common/NovelCard";
 
-function CompletedNovel() {
+interface Novel {
+  content: {
+    id: number;
+    title: string;
+    status: string;
+    thumbnail: string;
+    genre: string;
+    writer: {
+      id: number;
+      nickname: string;
+    };
+    isUploaded: boolean;
+    isNew: boolean;
+  }[];
+  pageable: {
+    sort: {
+      sorted: boolean;
+      unsorted: boolean;
+      empty: boolean;
+    };
+    pageSize: number;
+    pageNumber: number;
+    offset: number;
+    paged: boolean;
+    unpaged: boolean;
+  };
+  totalPages: number;
+  totalElements: number;
+  last: boolean;
+  number: number;
+  sort: {
+    sorted: boolean;
+    unsorted: boolean;
+    empty: boolean;
+  };
+  size: number;
+  numberOfElements: number;
+  first: boolean;
+  empty: boolean;
+}
+
+function CompletedNovel(props: {
+  content: Novel;
+  url: { genre: number; sort: string; name: string; pageNum: number };
+}) {
+  // console.log(props);
   const { query } = useRouter();
 
-  // nav바 클릭 시 세부 장르명을 받아오기 힘들기 때문에
-  // 세부 장르를 전체로 하는 router 다시 보내기
+  // url으로 입력해서 들어오는 경우
   const router = useRouter();
-  if (query.name == undefined) {
-    useEffect(() => {
+  useEffect(() => {
+    if (query.genre == undefined || query.genre == "") {
       router.push(
         {
           pathname: `/novels/completed`,
-          query: { genre: query.genre, sort: query.sort, name: "전체" },
-        },
-        `/novels/completed`
+          query: { genre: 1, sort: "like", name: "전체", pageNum: 1 },
+        }
+        // `/novels/completed`
       );
-    }, [query]);
-  }
+    }
+  }, [query]);
+
+  // nav바 클릭 시 세부 장르명을 받아오기 힘들기 때문에
+  // 세부 장르를 전체로 하는 router 다시 보내기
+  useEffect(() => {
+    if (query.name == undefined || query.name == "") {
+      router.push(
+        {
+          pathname: `/novels/completed`,
+          query: {
+            genre: query.genre,
+            sort: query.sort,
+            name: "전체",
+            pageNum: 1,
+          },
+        }
+        // `/novels/completed`
+      );
+    }
+  }, [query]);
 
   // 정렬 기준 선택 시 반영
   const sortHandler = (params: string) => {
     router.push(
       {
         pathname: `/novels/completed`,
-        query: { genre: query.genre, sort: params, name: query.name },
-      },
-      `/novels/completed`
+        query: {
+          genre: query.genre,
+          sort: params,
+          name: query.name,
+          pageNum: 1,
+        },
+      }
+      // `/novels/completed`
     );
   };
 
   return (
     <Wrapper>
-      <NovelNav nav="completed" />
+      <NovelNav nav="completed" pageNum={props.url.pageNum} />
       <NovelTop>
         {query.name}
-        {query.genre}
+        {/* {query.genre}
         {query.sort}
+        {query.pageNum}
+        <hr /> */}
         <SortWrapper>
           <SortContent
             onClick={() => {
@@ -65,8 +140,110 @@ function CompletedNovel() {
           </SortContent>
         </SortWrapper>
       </NovelTop>
+      {props?.content?.empty ? (
+        <NovelEmptyWrapper>
+          <ImageWrapper>
+            <Image
+              src={nevvel_m_dark}
+              alt="일치하는 검색결과가 없습니다."
+              width={300}
+              height={300}
+            />
+          </ImageWrapper>
+          <NovelEmpty>일치하는 검색결과가 없습니다.</NovelEmpty>
+        </NovelEmptyWrapper>
+      ) : (
+        <NovelExists>
+          {props?.content?.content?.map((novel, index: number) => {
+            return (
+              <NovelCard
+                key={index}
+                id={novel.id}
+                title={novel.title}
+                writer={novel.writer.nickname}
+                writerId={novel.writer.id}
+                genre={novel.genre}
+                thumbnail={novel.thumbnail}
+                isUploaded={novel.isUploaded}
+                isNew={novel.isNew}
+              />
+            );
+          })}
+        </NovelExists>
+      )}
+      {props?.content?.empty ? (
+        ""
+      ) : (
+        <NovelPagination
+          nav="completed"
+          name={props.url.name}
+          genre={props.url.genre}
+          sort={props.url.sort}
+          pageNum={props.url.pageNum}
+          totalPage={props?.content?.totalPages}
+        />
+      )}
     </Wrapper>
   );
+}
+
+export async function getServerSideProps(context: {
+  query: {
+    genre: number | undefined | string;
+    sort: string | undefined;
+    name: string | undefined;
+    pageNum: number | undefined | string;
+  };
+}) {
+  // genre
+  let genre = 1;
+  if (context.query.genre == undefined || context.query.genre == "") {
+    genre = 1;
+  } else {
+    genre = Number(context.query.genre);
+  }
+  // sort
+  let sort = "like";
+  if (context.query.sort == undefined || context.query.sort == "") {
+    sort = "like";
+  } else {
+    sort = context.query.sort;
+  }
+  // name
+  let name = "전체";
+  if (context.query.name == undefined || context.query.name == "") {
+    name = "전체";
+  } else {
+    name = context.query.name;
+  }
+  // pageNum
+  let pageNum = 1;
+  if (context.query.pageNum == undefined || context.query.pageNum == "") {
+    pageNum = 1;
+  } else {
+    pageNum = Number(context.query.pageNum);
+  }
+  try {
+    const res = await axios.get("https://k8d1061.p.ssafy.io/api/covers", {
+      params: {
+        sorttype: sort,
+        page: pageNum,
+        status: "FINISHED",
+        genre: genre,
+      },
+    });
+    return {
+      props: {
+        content: res.data,
+        url: { genre: genre, sort: sort, name: name, pageNum: pageNum },
+      },
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      props: { content: "에러남" },
+    };
+  }
 }
 
 export default CompletedNovel;
@@ -77,14 +254,46 @@ const NovelTop = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-left: 2rem;
-  margin-right: 2rem;
+  margin-left: 10%;
+  margin-right: 10%;
   margin-top: 1rem;
 `;
 
-const SortWrapper = styled.div``;
+const NovelExists = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-left: 10%;
+  margin-right: 10%;
+  margin-top: 1rem;
+`;
+
+const NovelEmptyWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
+
+const NovelEmpty = styled.div`
+  position: absolute;
+  margin-top: 5rem;
+  font-size: 20px;
+  font-weight: 800;
+`;
+
+const ImageWrapper = styled.div`
+  margin-top: 5rem;
+  opacity: 0.3;
+`;
+
+const SortWrapper = styled.div`
+  margin-top: 1rem;
+`;
 
 const SortContent = styled.span`
+  font-size: 13.5px;
   padding-left: 1rem;
   padding-right: 1rem;
+  cursor: pointer;
 `;

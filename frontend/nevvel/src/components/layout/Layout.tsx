@@ -1,23 +1,29 @@
-import React,{useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Navigation from "./Navigation";
-import { useRouter } from 'next/router';
+import { useRouter } from "next/router";
+import Footer from "../common/Footer";
 
 function Layout(props: { children: React.ReactNode }) {
   const router = useRouter();
-  const [hidden, setHidden] =useState(true);
+  const [hidden, setHidden] = useState(true);
 
-  useEffect(()=>{
-    if(router.pathname ==='/viewer/[id]'||router.pathname ==='/editor/[id]'){
-      setHidden(false)
+  useEffect(() => {
+    if (
+      router.pathname === "/viewer/[id]" ||
+      router.pathname === "/editor/[id]" ||
+      router.pathname === "/editor/[id]/[eid]"
+    ) {
+      setHidden(false);
+    } else {
+      setHidden(true);
     }
-  },[router])
+  }, [router]);
   return (
     <Wrapper>
-      {hidden ? (
-        <Navigation />
-      ):(null)}
+      {hidden ? <Navigation /> : null}
       <div>{props.children}</div>
+      {hidden ? <Footer /> : null}
     </Wrapper>
   );
 }
@@ -25,8 +31,8 @@ function Layout(props: { children: React.ReactNode }) {
 const Wrapper = styled.div`
   padding: 0;
   margin: 0;
-  height: 100vh;
-  width: 100wh;
+  height: auto;
+  width: 100vw;
   background-color: ${({ theme }) => theme.color.background};
   color: ${({ theme }) => theme.color.text1};
 `;

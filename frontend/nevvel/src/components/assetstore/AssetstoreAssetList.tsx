@@ -4,10 +4,16 @@ import AssetCard from "../common/AssetCard";
 import imgdata from "./DummyAssetData_Image.json"
 import sounddata from "./DummyAssetData_Audio.json"
 
+import { Modal } from "../common/Modal";
+import AssetDetailModal from "./AssetDetailModal";
+
+import springApi from "@/src/api";
+
 
 interface AssetTag {
   id : number,
-  name : string,
+  tagName : string,
+  useCount : number
 }
 
 interface AssetUploader {
@@ -24,53 +30,154 @@ interface Asset {
   url: string,
   price : number,
   downloadCount : number,
+  isAvailable : boolean,
   tags: Array<AssetTag>,
   uploader : AssetUploader
 }
 
-function AssetstoreAssetList() {
+interface AssetstorePorps {
+  afterUpload : boolean;
+  setAfterUpload : React.Dispatch<React.SetStateAction<boolean>>;
+  reaxiosTrigger : boolean;
+  setReaxiosTrigger : React.Dispatch<React.SetStateAction<boolean>>;
+  queryString : string;
+}
+
+function AssetstoreAssetList(props : AssetstorePorps) {
 
   const [AssetData, setAssetData] = useState<Array<Asset>>([]);
 
-  // axios로 데이터 get받아오기, 현재는 더미데이터
+  const [axiosURI, setAxiosURI] = useState<string>("/assets?assettype=IMAGE&page=1&searchtype=ALL&sort=downloadCount,desc")
+
+  const [uritoAxios, setUritoAxios] = useState<boolean>(false)
+
   useEffect(() => {
-    // setAssetData(imgdata.content);
-    setAssetData(imgdata.content);
+    if (props.reaxiosTrigger === true){
+      setAxiosURI(props.queryString)
+      props.setReaxiosTrigger(false)
+      setUritoAxios(true)
+    }
+  },[props.reaxiosTrigger])
+
+
+  // axios로 데이터 get받아오기
+  useEffect(() => {
+    const getAssetList = async() => {
+      const res = await springApi.get(`${axiosURI}`)
+      // console.log(res.data.content)
+      setAssetData(res.data.content)
+    }
+    getAssetList()
   },[])
-  // console.log('이건데', AssetData)
 
-  const changeImg = () => {
-    setAssetData(imgdata.content)
-  }
-  const changeSound = () => {
-    setAssetData(sounddata.content)
-  }
+  // reaxios로 데이터 get 받아오기
+  useEffect(() => {
+    const getAssetList = async() => {
+      const res = await springApi.get(`${axiosURI}`)
+      // console.log(res.data.content)
+      setAssetData(res.data.content)
+      setUritoAxios(false)
+    }
+    if (uritoAxios === true){
+      getAssetList()
+    }
+  },[uritoAxios])
 
+
+  // axios reloader
+
+  const[axiosReloader, setAxiosReloaer] = useState<boolean>(false)
+
+  useEffect(() => {
+    const getAssetList = async() => {
+      const res = await springApi.get(`/assets?assettype=IMAGE&pageNum=1&searchtype=ALL&sort =downloadCount`)
+      // console.log(res.data.content)
+      setAssetData(res.data.content)
+      setAxiosReloaer(false)
+      props.setAfterUpload(false)
+    }
+    if (axiosReloader === true) {
+      getAssetList()
+    }
+    if (axiosReloader === true){
+      getAssetList()
+    }
+  },[axiosReloader, props.afterUpload])  
+
+
+
+  // 에셋 디테일 모달 오픈 트리거
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+
+  // 에셋 디테일로 열리는 에셋의 데이터
+  const[openModalData, setOpenModalData] = useState<Asset>({
+    id: 0,
+    title: "",
+    type: "",
+    thumbnail : "",
+    url: "",
+    price : 0,
+    downloadCount : 0,
+    isAvailable : false,
+    tags: [{
+      id : 0,
+      tagName : "",
+      useCount : 0
+    }],
+    uploader : {
+      id : 0,
+      nickname : "",
+      profileImage : "",
+    }
+  })
+
+
+  
+  // 모달의 모달이 어떻게 나올지 결정해주는 인자
+  const [modalStarter, setModalStarter] = useState<boolean>(true)
 
   return(
     <div>
-      <div>
-        {/* 이미지 데이터/사운드 데이터 스위치 버튼 */}
-        <button onClick={changeImg}>이미지</button>
-        <button onClick={changeSound}>사운드</button>
-      </div>
       <Wrapper>
         {
-          AssetData.map((AssetData, index:number) => {
+          AssetData.map((AssetData) => {
             return (
               <AssetCard
-                key={index}
+                AssetData={AssetData}
+                key={AssetData.id}
                 id={AssetData.id}
                 title={AssetData.title}
                 type={AssetData.type}
                 thumbnail={AssetData.thumbnail}
                 url={AssetData.url}
                 tags={AssetData.tags}
+
+                setModalOpen={setModalOpen}
+                setOpenModalData={setOpenModalData}
+                // price={AssetData.price}
+                // uploader={AssetData.uploader}
               />
             )
           })
         }
       </Wrapper>
+      {/* 여기부터 모달 */}
+      {modalOpen ? (
+        <Modal
+          modal={modalOpen}
+          setModal={setModalOpen}
+          width="800"
+          height="700"
+          element={
+            <AssetDetailModal
+              openModalData={openModalData}
+              setModalOpen={setModalOpen}
+              modalStarter={modalStarter}
+              setAxiosReloaer={setAxiosReloaer}              
+            />
+          }
+        />
+      ) : null}
     </div>
   )
 }

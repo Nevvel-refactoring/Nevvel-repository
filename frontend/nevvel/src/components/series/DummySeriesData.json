@@ -1,0 +1,45 @@
+{
+    "coverId": 1,
+    "title": "나폴리탄 괴담",
+    "thumbnail": "사진",
+    "status": "string",
+    "description": "나폴리탄 괴담을 아시나요? 하하하 ",
+    "genre": "호러",
+    "isLiked": false,
+    "writter": {
+      "id": 1,
+      "nickname": "머하시준",
+      "profileImg": "사진"
+    },
+    "views": 1000,
+    "likes": 100,
+    "episodes": [
+      {
+        "id": 1,
+        "title": "호텔스타라이트의 규칙",
+        "views": 10,
+        "isPurchased": true,
+        "isRead": true,
+        "point":0,
+        "uploadedDateTime": "2023-05-11T10:30:00"
+      },
+      {
+        "id": 2,
+        "title": "바다거북 스프",
+        "views": 10,
+        "isPurchased": false,
+        "isRead": false,
+        "point":100,
+        "uploadedDateTime": "2023-05-11T10:30:00"
+      },
+      {
+        "id": 3,
+        "title": "박물관의 규칙",
+        "views": 10,
+        "isPurchased": false,
+        "isRead": false,
+        "point":100,
+        "uploadedDateTime": "2023-05-11T10:30:00"
+      }
+    ]
+  }
