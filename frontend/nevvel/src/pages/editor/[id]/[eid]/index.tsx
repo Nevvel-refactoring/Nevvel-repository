@@ -57,7 +57,7 @@ function index(props: { userDTO: string }) {
         "assets/own?assettype=IMAGE"
       );
       if (res) {
-        console.log(res);
+        // console.log(res);
         setAssetImageData(res.data.content);
       }
     } catch (error) {
@@ -72,7 +72,7 @@ function index(props: { userDTO: string }) {
         "assets/own?assettype=AUDIO"
       );
       if (res) {
-        console.log(res);
+        // console.log(res);
         setAssetAudioData(res.data.content);
       }
     } catch (error) {
@@ -91,7 +91,7 @@ function index(props: { userDTO: string }) {
     try{
       const res = await springApi.get(`/episodes/${EID}`);
       if (res) {
-        console.log(res);
+        // console.log(res);
         setEpisode(res.data);
       }
     }catch(error){
@@ -100,10 +100,10 @@ function index(props: { userDTO: string }) {
   };
 
   useEffect(() => {
-    console.log(eid);
+    // console.log(eid);
     if (eid) {
       const EID = Number(eid);
-      console.log("router", EID);
+      // console.log("router", EID);
       getViewerData(EID);
 
       // } else {

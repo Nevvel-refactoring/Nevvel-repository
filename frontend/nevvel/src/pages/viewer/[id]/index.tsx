@@ -73,7 +73,7 @@ function viewer(props: { userDTO: string }) {
   const [totalAudio, setTotalAudio] =useState<string>("")
   const [backgroundPlay, setBackgroundPlay] =useState(false);
   useEffect(() => {
-    console.log(viewerColor);
+    // console.log(viewerColor);
   }, [viewerColor]);
 
   // 소설 받아오기 페이지
@@ -81,7 +81,7 @@ function viewer(props: { userDTO: string }) {
     try {
       const res = await springApi.get(`/episodes/${Id}`);
       if (res) {
-        console.log(res);
+        // console.log(res);
         setEpisodeData(res.data);
         setHeaderEpisodeData(res.data);
       }
@@ -91,10 +91,10 @@ function viewer(props: { userDTO: string }) {
   };
 
   useEffect(() => {
-    console.log(id);
+    // console.log(id);
     if (id) {
       const Id = Number(id);
-      console.log("router", Id);
+      // console.log("router", Id);
       getViewerData(Id);
       // } else {
       //   setEpisodeData(Dummy_Episode);
@@ -103,7 +103,7 @@ function viewer(props: { userDTO: string }) {
   }, [id]);
 
   useEffect(() => {
-    console.log(EpisodeData);
+    // console.log(EpisodeData);
   }, [EpisodeData]);
 
   useEffect(() => {
@@ -146,7 +146,7 @@ function viewer(props: { userDTO: string }) {
         setAudioEventCatch(false);
       }
     };
-    console.log(nowTextBlock);
+    // console.log(nowTextBlock);
   }, [nowTextBlock]);
 
   useEffect(() => {
@@ -156,7 +156,7 @@ function viewer(props: { userDTO: string }) {
   }, [tabNumber]);
 
   useEffect(()=>{
-    console.log(ImageEvent)
+    // console.log(ImageEvent)
   },[ImageEvent])
 
   useEffect(()=>{
@@ -184,12 +184,12 @@ function viewer(props: { userDTO: string }) {
           const events = EpisodeData.contents[tabNumber]?.event;
           for (const event of events) {
             if (event.type === "IMAGE") {
-              console.log("이미지당");
+              // console.log("이미지당");
               setEventCatch(true);
               setImageEvent(event.assetUrl);
             }
             if (event.type === "AUDIO") {
-              console.log("소리당");
+              // console.log("소리당");
               setAudioEventCatch(true);
               setAudioEvent(event.assetUrl);
             }
@@ -217,7 +217,7 @@ function viewer(props: { userDTO: string }) {
     if (EpisodeData) {
       const contents = EpisodeData.contents;
       for (const content of contents) {
-        console.log(content);
+        // console.log(content);
       }
     }
   }, [audioEventCatch]);
@@ -234,7 +234,7 @@ function viewer(props: { userDTO: string }) {
   }, [writeMode]);
 
   const clickhandler = (e: string) => {
-    console.log(e);
+    // console.log(e);
     if (e === "head") {
       setHeaderToggle(true);
     } else if (e === "block") {
@@ -246,13 +246,13 @@ function viewer(props: { userDTO: string }) {
   const countHandler = () => {
     if (EpisodeData &&writeMode===false) {
       const contentLength = EpisodeData.contents.length;
-      console.log(contentLength, "contentLength");
+      // console.log(contentLength, "contentLength");
       if (tabNumber <= contentLength - 1) {
         setTabNumber(tabNumber + 1);
       } else if (tabNumber === contentLength) {
-        console.log("마지막 입니다. ");
+        // console.log("마지막 입니다. ");
       }
-      console.log(tabNumber);
+      // console.log(tabNumber);
     }
   };
 
@@ -266,13 +266,13 @@ function viewer(props: { userDTO: string }) {
       event.preventDefault();
       if (EpisodeData) {
         const contentLength = EpisodeData.contents.length;
-        console.log(contentLength, "contentLength");
+        // console.log(contentLength, "contentLength");
         if (tabNumber <= contentLength - 1) {
           setTabNumber(tabNumber + 1);
         } else if (tabNumber === contentLength) {
-          console.log("마지막 입니다. ");
+          // console.log("마지막 입니다. ");
         }
-        console.log(tabNumber);
+        // console.log(tabNumber);
       }
     }
   };

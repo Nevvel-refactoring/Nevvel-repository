@@ -56,7 +56,7 @@ function assetstore({ content }: any) {
   const queryString = `/assets?assettype=${imgAudTrigger}${appliedTags}&page=${paginationNum}&searchtype=ALL&sort=${popNewTrigger}`
 
   useEffect(() => {
-    console.log(queryString)
+    // console.log(queryString)
   },[queryString])
 
   // Modal Open trigger

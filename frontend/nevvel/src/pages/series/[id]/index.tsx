@@ -58,13 +58,13 @@ function index(props: { userDTO: string }) {
   const getSeriesData = async (Id: number) => {
     const res = await springApi.get(`/covers/${Id}`);
     if (res) {
-      console.log(res);
+      // console.log(res);
       setSeriesData(res.data);
     }
   };
 
   useEffect(() => {
-    console.log(id);
+    // console.log(id);
     if (id) {
       const Id = Number(id);
       getSeriesData(Id);

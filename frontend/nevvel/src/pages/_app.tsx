@@ -28,7 +28,7 @@ function App({ Component, pageProps }: AppProps) {
 
   const toggleTheme = () => {
     setTheme(theme === "light" ? "dark" : "light");
-    console.log(theme);
+    // console.log(theme);
   };
 
   return (
