@@ -108,7 +108,7 @@ function AssetCard({
               // hovertrigger에 따라 트리거가 오디오 on/off
               <CardImg1 src="https://cdn4.iconfinder.com/data/icons/proglyphs-multimedia/512/Volume_Off-512.png" alt="썸네일" onMouseOver={AudTriggerOn} />
               :
-              <CardImg1 src={thumbnail} alt="썸네일" onMouseLeave={AudTriggerOff} />
+              <CardImg1 src="https://cuonet.com/data/editor/2004/000439686d43a1bcc52639fa05f7f68e_1585906399_453.gif" alt="썸네일" onMouseLeave={AudTriggerOff} />
             )
             :
             // type이 AUDIO가 아니면 (IMAGE), 이미지 트리거

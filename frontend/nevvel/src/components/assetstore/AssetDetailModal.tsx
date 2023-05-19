@@ -134,7 +134,7 @@ function AssetDetailModal({
           ) : (
             <ThumbnailImg
               onClick={AudioOff}
-              src={openModalData.thumbnail}
+              src="https://cuonet.com/data/editor/2004/000439686d43a1bcc52639fa05f7f68e_1585906399_453.gif"
               alt="thumbnail"
             />
           )
