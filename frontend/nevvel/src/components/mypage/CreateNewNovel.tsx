@@ -87,7 +87,7 @@ function CreateNewNovel({ setModalOpen }: Props) {
   }, []);
 
   // 장르 아이디 저장
-  const [genre, setGenre] = useState<number | undefined>(undefined);
+  const [genre, setGenre] = useState<number>(1);
 
   const genreChangeHandler = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setGenre(Number(event.target.value));
