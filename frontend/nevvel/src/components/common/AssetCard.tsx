@@ -5,7 +5,8 @@ import { Modal } from "@/src/components/common/Modal";
 
 interface AssetTag {
   id : number,
-  name : string,
+  tagName : string,
+  useCount : number
 }
 
 interface AssetUploader {
@@ -107,7 +108,7 @@ function AssetCard({
               // hovertrigger에 따라 트리거가 오디오 on/off
               <CardImg1 src="https://cdn4.iconfinder.com/data/icons/proglyphs-multimedia/512/Volume_Off-512.png" alt="썸네일" onMouseOver={AudTriggerOn} />
               :
-              <CardImg1 src={thumbnail} alt="썸네일" onMouseLeave={AudTriggerOff} />
+              <CardImg1 src="https://cuonet.com/data/editor/2004/000439686d43a1bcc52639fa05f7f68e_1585906399_453.gif" alt="썸네일" onMouseLeave={AudTriggerOff} />
             )
             :
             // type이 AUDIO가 아니면 (IMAGE), 이미지 트리거
@@ -126,7 +127,7 @@ function AssetCard({
               tags.slice(0,3).map((tag) => {
                 return (
                   <CardInfo2Div key={tag.id}>
-                    <CardInfo2>#{tag.name}</CardInfo2>
+                    <CardInfo2>#{tag.tagName}</CardInfo2>
                   </CardInfo2Div>
                 )
               })
@@ -199,7 +200,8 @@ const CardInfo1 = styled.p`
   text-overflow: ellipsis;
   white-space: nowrap;
   margin-top: 5%;
-  font-size: 150%;
+  font-size: 17px;
+  font-weight: 700;
   text-align: center;
   /* margin-left: 2.5%; */
   /* margin-right: 2.5%; */
@@ -207,24 +209,28 @@ const CardInfo1 = styled.p`
 
 const CardInfo2 = styled.p`
   color: ${({ theme }) => theme.color.text1};
+  display: flex;
+  justify-content: left;
+  /* max-width: 3.6rem; */
+  padding-left: 0.3rem;
+  padding-right: 0.3rem;
+  margin-top: 5%;
+  font-size: 12px;
+  font-weight: 400;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  margin-top: 5%;
-  font-size: 100%;
-  display: flex;
-  justify-content: left;
   /* margin-left: 10%; */
 `
 
 const CardInfo2Div = styled.div`
   background-color: ${({ theme }) => theme.color.buttonText};
   color: black;
-  width: 4rem;
-  height: 2rem;
+  width: auto;
+  height: 1.5rem;
   border-radius: 0.5rem;
   /* box-shadow: 0.5rem 0.5rem 0.2rem; */
-  border: 0.15rem inset black;
+  border: 1px solid ${({theme})=>theme.color.opacityText3};
   /* text-align: center; */
   display: flex;
   align-items: center;
@@ -234,4 +240,7 @@ const CardInfo2Div = styled.div`
 
 const RowDiv = styled.div`
   display: flex;
+  justify-content: center;
+  width: 13rem;
+  /* white-space: w; */
 `

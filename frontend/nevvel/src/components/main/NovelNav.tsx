@@ -1,9 +1,16 @@
 import GenreList from "./GenreList";
 import styled from "styled-components";
+import { useState, useEffect, useRef } from "react";
+import { NewvelApi } from "@/src/api";
 
 interface Nav {
   nav: string;
   pageNum: number;
+}
+
+interface Genre {
+  id: number;
+  name: string;
 }
 
 function NovelNav({ nav, pageNum }: Nav) {
@@ -20,10 +27,65 @@ function NovelNav({ nav, pageNum }: Nav) {
     { id: 10, name: "자유" },
   ];
 
+  const [genres, setGenres] = useState<Genre[] | undefined>(undefined);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [isDrag, setIsDrag] = useState<boolean>(false);
+  const [canClick, setCanClick] = useState<boolean>(true);
+  const [startX, setStartX] = useState<number>(0);
+
+  const scrollElement = scrollRef.current as HTMLDivElement;
+
+  const onDragStart = (e: React.MouseEvent<HTMLElement>) => {
+    setIsDrag(true);
+    setStartX(e.pageX);
+  };
+
+  const onDragLeave = () => {
+    setIsDrag(false);
+    setTimeout(() => setCanClick(true), 50); // 약간의 시간차가 있어야 클릭과 드래그를 구분 가능
+  };
+
+  const onDragEnd = () => {
+    setIsDrag(false);
+    setTimeout(() => setCanClick(true), 50); // 약간의 시간차가 있어야 클릭과 드래그를 구분 가능
+  };
+
+  const onDragMove = (e: React.MouseEvent<HTMLElement>) => {
+    if (isDrag) {
+      setCanClick(false); // 드래그에 있어야 일반 클릭과 드래그를 true false 나누어 처리 가능
+      e.preventDefault();
+      scrollElement.scrollLeft += startX - e.pageX;
+      setStartX(e.pageX);
+    }
+  };
+
+  useEffect(() => {
+    const getGenres = async () => {
+      const res = await NewvelApi.allGenres();
+      setGenres(res.data.genres);
+      // console.log(res.data.genres);
+    };
+    getGenres();
+  }, []);
+
   return (
-    <Wrapper>
-      {dummy_genres.map((genre) => (
-        <GenreList key={genre.id} id={genre.id} name={genre.name} nav={nav} pageNum={pageNum} />
+    <Wrapper
+      ref={scrollRef}
+      onMouseDown={onDragStart}
+      onMouseMove={onDragMove}
+      onMouseUp={onDragEnd}
+      onMouseLeave={onDragLeave}
+    >
+      {/* {genres} */}
+      {genres?.map((genre) => (
+        <GenreList
+          key={genre.id}
+          id={genre.id}
+          name={genre.name}
+          nav={nav}
+          pageNum={pageNum}
+          canClick={canClick}
+        />
       ))}
     </Wrapper>
   );
@@ -38,4 +100,18 @@ const Wrapper = styled.div`
   padding-left: 3%;
   padding-right: 3%;
   height: 3.125rem;
+  overflow: hidden;
+  white-space: nowrap;
+  overflow-x: auto;
+  /* 앱에서 스와이프 */
+  -webkit-overflow-scrolling: touch;
+
+  /* IE, Edge 및 Firefox에서 스크롤바 숨김 */
+  -ms-overflow-style: none; /* IE, Edge */
+  scrollbar-width: none; /* Firefox */
+
+  /* Chrome, Safari 및 Opera에서 스크롤바 숨김 */
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;

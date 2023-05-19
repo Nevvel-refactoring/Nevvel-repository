@@ -1,8 +1,12 @@
 import springApi from "@/src/api";
 import RadioInput from "@/src/components/common/RadioInput";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { loginAtom, userInfoAtom } from "@/src/store/Login";
+import { useAtom } from "jotai";
 import styled from "styled-components";
+
+import { NextPageContext } from "next";
 
 export interface RequestPayAdditionalParams {
   digital?: boolean;
@@ -68,9 +72,9 @@ export interface RequestPayResponse extends RequestPayAdditionalResponse {
 
 export type RequestPayResponseCallback = (response: RequestPayResponse) => void;
 
-interface PurchaseData {
-  impUid: string | null;
-  midUid: string;
+export interface PurchaseData {
+  impNum: string | string[] | undefined | null;
+  midNum: string | string[] | undefined;
 }
 
 export interface Iamport {
@@ -87,9 +91,35 @@ declare global {
   }
 }
 
-function Purchase() {
+function Purchase(props: { userDTO: string }) {
+  const userDTO = props.userDTO === "" ? "" : JSON.parse(props.userDTO);
+  const newUserInfo =
+    userDTO === ""
+      ? undefined
+      : {
+          id: userDTO.id,
+          nickname: userDTO.nickname,
+          profileImage: userDTO.profileImage,
+          point: userDTO.point,
+        };
+
+  // 쿠키 상태 관리
+  const [loginStatus, setLoginStatus] = useAtom(loginAtom);
+  const [userInfoStatus, setUserInfoStatus] = useAtom(userInfoAtom);
+  useEffect(() => {
+    setLoginStatus(userDTO === "" ? false : true);
+    setUserInfoStatus(newUserInfo);
+  }, []);
+
+  // 로그아웃 상태인 경우 메인페이지로 리다이렉트
+  const router = useRouter()
+  // useEffect(() => {
+  //   if (!loginStatus) {
+  //     router.push({ pathname: "/" });
+  //   }
+  // }, []);
+
   const [amount, setAmount] = useState<number>(1000);
-  const router = useRouter();
 
   const money = [
     {
@@ -114,9 +144,16 @@ function Purchase() {
     },
   ];
 
-  const postHandler = async (purchasData: PurchaseData) => {
-    const res = await springApi.post("/purchasing", purchasData);
-    console.log(res);
+  const postHandler = async (pointChargeDto: PurchaseData) => {
+    try {
+      const res = await springApi.post("/point-charge", pointChargeDto);
+      if (res.status === 200) {
+        // console.log(res);
+        router.push("/myPage");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const onClickPayment = () => {
@@ -136,7 +173,7 @@ function Purchase() {
       // buyer_email: "example@example", // 구매자 이메일(사용자 정보 저장 가능해지면 수정)
       //   buyer_addr: "신사동 661-16", // 구매자 주소
       //   buyer_postcode: "06018", // 구매자 우편번호
-      m_redirect_url: "http://k8d1061.p.ssafy.io/profile/purchased", // 예: https://www.my-service.com/payments/complete
+      m_redirect_url: "https://k8d1061.p.ssafy.io/myPage/purchased", // 예: https://www.my-service.com/payments/complete
     };
     IMP.request_pay(data, callback);
   };
@@ -145,13 +182,11 @@ function Purchase() {
     const { success, error_msg, merchant_uid, imp_uid } = response;
 
     if (success) {
-      console.log(success, merchant_uid, imp_uid);
-      const data = {
-        impUid: imp_uid,
-        midUid: merchant_uid,
-      };
-      postHandler(data);
-      router.push("/profile");
+      // console.log(success, merchant_uid, imp_uid);
+      postHandler({
+        impNum: imp_uid,
+        midNum: merchant_uid,
+      });
       //   axios.post(우리링크, amout, user 정보 넣어서 보내기)
       alert("결제 성공");
     } else {
@@ -185,6 +220,27 @@ function Purchase() {
       </CenterDiv>
     </Wrapper>
   );
+}
+
+// 쿠키 확인
+export async function getServerSideProps({ req }: NextPageContext) {
+  const cookies =
+    req && req.headers && req.headers.cookie ? req.headers.cookie : "";
+  const cookie = decodeURIComponent(cookies);
+  // 쿠키를 ; 기준으로 나누어 그 중 userDto가 존재하는지 확인
+  const parts = cookie.split("; ");
+  let userDTOcookie = "";
+  for (let i = 0; i < parts.length; i++) {
+    if (parts[i].startsWith("userDto=")) {
+      userDTOcookie = parts[i].substring("userDto=".length);
+      break;
+    }
+  }
+  return {
+    props: {
+      userDTO: userDTOcookie,
+    },
+  };
 }
 
 export default Purchase;

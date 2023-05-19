@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import styled from "styled-components";
 
 // import Swiper core and required modules
@@ -13,9 +12,7 @@ import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 
 import NovelCard from "../common/NovelCard";
-import noveldata from "./DummyNovelData.json";
-
-import { useRouter } from "next/router";
+import { mobile, tabletH } from "@/src/util/Mixin";
 
 interface Novel {
   content: {
@@ -58,23 +55,9 @@ interface Novel {
   empty: boolean;
 }
 
-function NovelSwiper() {
-  const router = useRouter();
-  const [novelData, setNovelData] = useState<Novel | undefined>(undefined);
-
-  // axios로 데이터 get받아오기, 현재는 더미데이터
-  useEffect(() => {
-    setNovelData(noveldata);
-    // console.log(novelData)
-  }, [novelData]);
-
-  const clickHandler = () => {
-    router.push({
-      pathname: "series/[id]",
-      query: { id: 1 },
-      // 나중에 novel.id로 수정하시면 될 것 같습니다!
-    });
-  };
+function NovelSwiper(props: { content: Novel }) {
+  // 소설 10개 받아오기
+  const novelSwiperData = props.content?.content.slice(0, 10);
 
   // swiper height 설정
   const swiperStyle = {
@@ -88,8 +71,8 @@ function NovelSwiper() {
         style={swiperStyle}
         // install Swiper modules
         modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
-        spaceBetween={0}
-        slidesPerView={1}
+        spaceBetween={60}
+        slidesPerView={2}
         breakpoints={{
           500: {
             slidesPerView: 2,
@@ -111,9 +94,9 @@ function NovelSwiper() {
         // onSwiper={(swiper) => console.log(swiper)}
         // onSlideChange={() => console.log("slide change")}
       >
-        {novelData?.content.map((novel, index: number) => {
+        {novelSwiperData.map((novel) => {
           return (
-            <SwiperSlide key={index} onClick={clickHandler}>
+            <SwiperSlide key={novel.id}>
               <NovelCard
                 id={novel.id}
                 title={novel.title}
@@ -121,6 +104,8 @@ function NovelSwiper() {
                 writerId={novel.writer.id}
                 genre={novel.genre}
                 thumbnail={novel.thumbnail}
+                isUploaded={novel.isUploaded}
+                isNew={novel.isNew}
               />
             </SwiperSlide>
           );
@@ -144,4 +129,12 @@ const Wrapper = styled.div`
   padding-bottom: 1%;
   padding-left: 10%;
   padding-right: 12%;
+  ${tabletH} {
+    padding-left: 7%;
+    padding-right: 8%;
+  }
+  ${mobile} {
+    padding-left: 3%;
+    padding-right: 3.2%;
+  }
 `;

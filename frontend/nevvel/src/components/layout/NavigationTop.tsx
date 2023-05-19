@@ -3,12 +3,17 @@ import Link from "next/link";
 import { useRouter } from "next/dist/client/router";
 import { AiOutlineSearch } from "react-icons/ai";
 import styled from "styled-components";
-import { loginAtom } from "@/src/store/Login";
+import { loginAtom, userInfoAtom } from "@/src/store/Login";
 import { useAtomValue } from "jotai";
+import { MyPageModal } from "./MyPageModal";
 import { tabletH } from "../../util/Mixin";
 import { mobile } from "../../util/Mixin";
 
-function NavigationTop() {
+interface Props {
+  onClickTop: () => void;
+}
+
+function NavigationTop(props: Props) {
   const [word, setWord] = useState<string>("");
 
   const searchWordHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -16,7 +21,7 @@ function NavigationTop() {
   };
 
   const loginStatus = useAtomValue(loginAtom);
-  // console.log(loginStatus);
+  const userInfoStatus = useAtomValue(userInfoAtom);
 
   const router = useRouter();
   // 검색창에 키보드 입력 시
@@ -37,6 +42,7 @@ function NavigationTop() {
         },
       });
       setWord("");
+      props.onClickTop();
     }
     // 아닌 경우 (실시간 요청 보내는 경우 사용)
     // else {}
@@ -52,6 +58,23 @@ function NavigationTop() {
       },
     });
     setWord("");
+    props.onClickTop();
+  };
+
+  // 프로필 클릭 시 모달
+  const [modalStatus, setModalStatus] = useState(false);
+  const modalOpenHandler = () => {
+    setModalStatus(true);
+  };
+
+  // 로그인 시 소설 배경색 없애기
+  const loginHandler = () => {
+    props.onClickTop();
+  };
+
+  // 프로필 클릭 시 소설 배경색 없애기
+  const clickProfileHandler = () => {
+    props.onClickTop();
   };
 
   return (
@@ -64,28 +87,42 @@ function NavigationTop() {
           placeholder="작품명, 작가명을 입력하세요"
         />
         <SearchIcon>
-          <AiOutlineSearch onClick={clickResultHandler} />
+          <AiOutlineSearch onClick={clickResultHandler} color="#666666"/>
         </SearchIcon>
       </SearchBar>
       {loginStatus ? (
         <Profile loginStatus={loginStatus}>
           <MyPage>
-            <Link href="/myPage">마이페이지</Link>
+            <ImageDiv onClick={modalOpenHandler}>
+              <Img src={userInfoStatus?.profileImage} alt="profileImage" />
+            </ImageDiv>
+            {modalStatus ? (
+              <MyPageModal
+                modal={modalStatus}
+                setModal={setModalStatus}
+                width="100"
+                height="70"
+                onClickProfile={clickProfileHandler}
+              />
+            ) : (
+              ""
+            )}
           </MyPage>
         </Profile>
       ) : (
         <Profile loginStatus={loginStatus}>
-          <SignIn>
-            <Link href="/login">회원가입</Link>
-          </SignIn>
           <LogIn>
-            <Link href="/login">로그인</Link>
+            <Link href="/login" onClick={loginHandler}>
+              로그인
+            </Link>
           </LogIn>
         </Profile>
       )}
     </Wrapper>
   );
 }
+
+export default NavigationTop;
 
 const Wrapper = styled.div`
   display: flex;
@@ -113,7 +150,12 @@ const SearchBar = styled.div`
   height: 1.7rem;
 
   ${tabletH} {
-    width: 18rem;
+    width: 16rem;
+  }
+  ${mobile} {
+    width: 12rem;
+    padding-left: 6px;
+    padding-right: 6px;
   }
 `;
 
@@ -121,6 +163,13 @@ const SearchBarInput = styled.input`
   background-color: ${({ theme }) => theme.color.searchBar};
   border: none;
   width: 23rem;
+  ${tabletH} {
+    width: 12rem;
+  }
+  ${mobile} {
+    width: 8rem;
+    font-size: 12px;
+  }
 `;
 
 const SearchIcon = styled.div`
@@ -130,9 +179,9 @@ const SearchIcon = styled.div`
 const Profile = styled.div<{ loginStatus: boolean }>`
   color: ${({ theme }) => theme.color.text1};
   display: flex;
-  margin-right: ${({ loginStatus }) => (loginStatus ? "" : "5rem")};
+  margin-right: 5rem;
   width: 10rem;
-  justify-content: space-between;
+  justify-content: center;
 
   ${tabletH} {
     font-size: 14px;
@@ -140,14 +189,26 @@ const Profile = styled.div<{ loginStatus: boolean }>`
   }
 `;
 
-const SignIn = styled.div`
-  font-size: 13.5px;
-`;
-
 const LogIn = styled.div`
   font-size: 13.5px;
 `;
 
-const MyPage = styled.div``;
+const MyPage = styled.div`
+  z-index: 3;
+`;
 
-export default NavigationTop;
+const ImageDiv = styled.div`
+  /* border: 1px solid ${({ theme }) => theme.color.text1}; */
+  border-radius: 100rem;
+  object-fit: cover;
+  margin-top: 2rem;
+  cursor: pointer;
+  z-index: 3;
+`;
+
+const Img = styled.img`
+  width: 30px;
+  height: 30px;
+  border-radius: 100rem;
+  z-index: -1;
+`;

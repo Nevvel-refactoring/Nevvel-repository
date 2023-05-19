@@ -1,3 +1,4 @@
+import { mobile } from "@/src/util/Mixin";
 import { Dispatch, SetStateAction, useState } from "react";
 import styled from "styled-components";
 
@@ -46,6 +47,12 @@ const Container = styled.div<{ width: string; height: string }>`
   align-items: center;
   font-size: 24px;
   /* overflow-y: scroll; */
+  /* ${mobile}{
+    left: calc(50vw - ${(props) => props.width}px / 4);
+    top: calc(50vh - ${(props) => props.height}px / 4);
+    width: calc(${(props) => props.width}px /2);
+    height:calc(${(props) => props.height}px/2);
+  } */
 `;
 
 const ExitWrapper = styled.button`
