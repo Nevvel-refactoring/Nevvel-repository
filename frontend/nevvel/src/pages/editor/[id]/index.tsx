@@ -88,7 +88,7 @@ function index(props: { userDTO: string }) {
         "assets/own?assettype=IMAGE"
       );
       if (res) {
-        console.log(res);
+        // console.log(res);
         setAssetImageData(res.data.content);
       }
     } catch (error) {
@@ -103,7 +103,7 @@ function index(props: { userDTO: string }) {
         "assets/own?assettype=AUDIO"
       );
       if (res) {
-        console.log(res);
+        // console.log(res);
         setAssetAudioData(res.data.content);
       }
     } catch (error) {
@@ -113,7 +113,7 @@ function index(props: { userDTO: string }) {
   };
 
   useEffect(() => {
-    console.log(id, "id1");
+    // console.log(id, "id1");
     getAssetImgData();
     getAssetAudioData();
     // setAssetData(DummyAssetData_image.content)

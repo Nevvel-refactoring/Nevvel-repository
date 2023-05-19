@@ -127,7 +127,7 @@ export default function Home(props: {
         "assets/purchased-on?assettype=IMAGE&page=1&size=10&sort=createdDateTime"
       );
       if (res) {
-        console.log(res);
+        // console.log(res);
         setAssetImageData(res.data.content);
       }
     } catch (error) {
@@ -142,7 +142,7 @@ export default function Home(props: {
         "assets/purchased-on?assettype=AUDIO&page=1&size=10&sort=createdDateTime"
       );
       if (res) {
-        console.log(res);
+        // console.log(res);
         setAssetAudioData(res.data.content);
       }
     } catch (error) {
