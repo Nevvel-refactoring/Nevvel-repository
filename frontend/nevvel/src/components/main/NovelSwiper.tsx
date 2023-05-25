@@ -51,8 +51,6 @@ function NovelSwiper(props: { content: Novel }) {
         pagination={{ clickable: true }}
         autoplay={{ delay: 3000 }}
         // scrollbar={{ draggable: true }}
-        // onSwiper={(swiper) => console.log(swiper)}
-        // onSlideChange={() => console.log("slide change")}
       >
         {novelSwiperData.map((novel) => {
           return (
@@ -82,9 +80,7 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  /* flex-direction: column; */
   width: 100%;
-  /* height: 100%; */
   padding-top: 1%;
   padding-bottom: 1%;
   padding-left: 10%;
