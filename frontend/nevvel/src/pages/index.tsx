@@ -13,47 +13,7 @@ import DummyAssetData_image from "@/src/components/assetstore/DummyAssetData_Ima
 import { ImageAssetAtom, AudioAssetAtom } from "@/src/store/EditorAssetStore";
 import React from "react";
 import { useState } from "react";
-
-interface Novel {
-  content: {
-    id: number;
-    title: string;
-    status: string;
-    thumbnail: string;
-    genre: string;
-    writer: {
-      id: number;
-      nickname: string;
-    };
-    isUploaded: boolean;
-    isNew: boolean;
-  }[];
-  pageable: {
-    sort: {
-      sorted: boolean;
-      unsorted: boolean;
-      empty: boolean;
-    };
-    pageSize: number;
-    pageNumber: number;
-    offset: number;
-    paged: boolean;
-    unpaged: boolean;
-  };
-  totalPages: number;
-  totalElements: number;
-  last: boolean;
-  number: number;
-  sort: {
-    sorted: boolean;
-    unsorted: boolean;
-    empty: boolean;
-  };
-  size: number;
-  numberOfElements: number;
-  first: boolean;
-  empty: boolean;
-}
+import { Novel } from "novel"
 
 interface AssetTag {
   id: number;
@@ -85,7 +45,6 @@ export default function Home(props: {
   novels: Novel;
   assets: Asset[];
 }) {
-  // console.log(props.userDTO);
   const userDTO = props.userDTO === "" ? "" : JSON.parse(props.userDTO);
   const newUserInfo =
     userDTO === ""
@@ -94,15 +53,8 @@ export default function Home(props: {
           id: userDTO.id,
           nickname: userDTO.nickname,
           profileImage: userDTO.profileImage,
-          // description: userDTO.description,
           point: userDTO.point,
         };
-  // console.log(userDTO);
-  // console.log(userDTO.id);
-  // console.log(userDTO.nickname);
-  // console.log(userDTO.profileImage);
-  // console.log(userDTO.description);
-  // console.log(userDTO.point);
 
   // 쿠키 상태 관리
   const [loginStatus, setLoginStatus] = useAtom(loginAtom);
@@ -127,7 +79,6 @@ export default function Home(props: {
         "assets/purchased-on?assettype=IMAGE&page=1&size=10&sort=createdDateTime"
       );
       if (res) {
-        // console.log(res);
         setAssetImageData(res.data.content);
       }
     } catch (error) {
@@ -142,7 +93,6 @@ export default function Home(props: {
         "assets/purchased-on?assettype=AUDIO&page=1&size=10&sort=createdDateTime"
       );
       if (res) {
-        // console.log(res);
         setAssetAudioData(res.data.content);
       }
     } catch (error) {
@@ -151,17 +101,14 @@ export default function Home(props: {
     }
   };
 
-  // console.log(loginStatus);
-  // console.log(userInfoStatus);
-
-  const[axiosReloader, setAxiosReloaer] = useState<boolean>(false)
+  const [axiosReloader, setAxiosReloaer] = useState<boolean>(false);
 
   useEffect(() => {
-    if (axiosReloader === true){
-      setAxiosReloaer(false)
-      location.reload()
+    if (axiosReloader === true) {
+      setAxiosReloaer(false);
+      location.reload();
     }
-  },[axiosReloader])
+  }, [axiosReloader]);
 
   return (
     <HomeWrapper>

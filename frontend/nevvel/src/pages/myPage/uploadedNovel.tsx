@@ -3,7 +3,6 @@ import { useRouter } from "next/router";
 import { loginAtom, userInfoAtom } from "@/src/store/Login";
 import { useAtom } from "jotai";
 import NovelCard from "@/src/components/common/NovelCard";
-import axios from "axios";
 import springApi from "@/src/api";
 import Image from "next/image";
 import nevvel_m_dark from "../../assets/img/nevvel_m_dark.png";
@@ -32,7 +31,7 @@ function UploadedNovel(props: { userDTO: string }) {
     setUserInfoStatus(newUserInfo);
   }, []);
 
-  // 로그아웃 상태인 경우 메인페이지로 리다이렉트
+  // 로그아웃 상태인 경우 메인페이지로 리다이렉트 (예정)
   // 로그인 상태인 경우 axios 요청
   const router = useRouter();
   const [uploadedNovel, setUploadedNovel] = useState<Novel | undefined>(
@@ -41,14 +40,9 @@ function UploadedNovel(props: { userDTO: string }) {
   useEffect(() => {
     const getUploadedCovers = async () => {
       const res = await springApi.get(`/covers/uploader/${userInfoStatus?.id}`);
-      // console.log(res.data);
       setUploadedNovel(res.data);
     };
-    // if (!loginStatus) {
-    //   router.push({ pathname: "/" });
-    // } else {
     getUploadedCovers();
-    // }
   }, []);
 
   return (

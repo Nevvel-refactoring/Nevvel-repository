@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 import springApi from "@/src/api";
 import { NewvelApi } from "@/src/api";
 import { userInfoAtom } from "@/src/store/Login";
@@ -25,9 +24,7 @@ function MyNovel() {
   useEffect(() => {
     const getUploadedCovers = async () => {
       const res = await springApi.get(`/covers/uploader/${userInfoStatus?.id}`);
-      // console.log(res.data);
       setUploadedNovel(res.data);
-      // console.log(res.data.empty);
       if (res.data.empty) {
         setUploadedMore("");
       } else {
@@ -39,7 +36,6 @@ function MyNovel() {
   // 작성한 소설 5개 받아오기
   useEffect(() => {
     setUploadedNovel5(uploadedNovel?.content?.slice(0, 5));
-    // console.log(uploadedNovel?.content?.slice(0, 5));
   }, [uploadedNovel]);
 
   // 구매한 소설
@@ -53,7 +49,6 @@ function MyNovel() {
   useEffect(() => {
     const getPurchasedCovers = async () => {
       const res = await NewvelApi.purchasedCovers();
-      // console.log(res.data);
       setPurchasedNovel(res.data);
       if (res.data.empty) {
         setPurchasedMore("");
@@ -77,7 +72,6 @@ function MyNovel() {
   useEffect(() => {
     const getLikedCovers = async () => {
       const res = await NewvelApi.likesCovers();
-      // console.log(res.data);
       setLikedNovel(res.data);
       if (res.data.empty) {
         setLikedMore("");
