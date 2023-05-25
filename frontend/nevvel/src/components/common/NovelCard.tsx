@@ -1,19 +1,9 @@
 import Image from "next/image";
 import { useRouter } from "next/dist/client/router";
 import styled from "styled-components";
+import { NovelCardType } from "novel";
 
-interface Novel {
-  id: number;
-  title: string;
-  writer: string;
-  writerId: number;
-  genre: string;
-  thumbnail: string;
-  isUploaded: boolean;
-  isNew: boolean;
-}
-
-function NovelCard(props: Novel) {
+function NovelCard(props: NovelCardType) {
   // console.log(props);
   // const isUploaded = props.isUploaded;
 

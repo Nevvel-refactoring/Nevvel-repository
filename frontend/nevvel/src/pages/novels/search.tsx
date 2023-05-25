@@ -4,47 +4,7 @@ import noveldata from "../../components/main/DummyNovelData.json";
 import NovelCard from "@/src/components/common/NovelCard";
 import { NewvelApi } from "@/src/api";
 import axios from "axios";
-
-interface Novel {
-  content: {
-    id: number;
-    title: string;
-    status: string;
-    thumbnail: string;
-    genre: string;
-    writer: {
-      id: number;
-      nickname: string;
-    };
-    isUploaded: boolean;
-    isNew: boolean;
-  }[];
-  pageable: {
-    sort: {
-      sorted: boolean;
-      unsorted: boolean;
-      empty: boolean;
-    };
-    pageSize: number;
-    pageNumber: number;
-    offset: number;
-    paged: boolean;
-    unpaged: boolean;
-  };
-  totalPages: number;
-  totalElements: number;
-  last: boolean;
-  number: number;
-  sort: {
-    sorted: boolean;
-    unsorted: boolean;
-    empty: boolean;
-  };
-  size: number;
-  numberOfElements: number;
-  first: boolean;
-  empty: boolean;
-}
+import { Novel } from "novel"
 
 function SearchNovel(props: { word: string }) {
   const [novels, setNovels] = useState<Novel | undefined>(undefined);

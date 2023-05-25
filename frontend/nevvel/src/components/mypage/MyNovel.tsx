@@ -10,48 +10,7 @@ import CreateNewNovel from "../mypage/CreateNewNovel";
 import styled from "styled-components";
 import NovelCard from "../common/NovelCard";
 
-interface Content {
-  id: number;
-  title: string;
-  status: string;
-  thumbnail: string;
-  genre: string;
-  writer: {
-    id: number;
-    nickname: string;
-  };
-  isUploaded: boolean;
-  isNew: boolean;
-}
-
-interface Novel {
-  content: Content[];
-  pageable: {
-    sort: {
-      sorted: boolean;
-      unsorted: boolean;
-      empty: boolean;
-    };
-    pageSize: number;
-    pageNumber: number;
-    offset: number;
-    paged: boolean;
-    unpaged: boolean;
-  };
-  totalPages: number;
-  totalElements: number;
-  last: boolean;
-  number: number;
-  sort: {
-    sorted: boolean;
-    unsorted: boolean;
-    empty: boolean;
-  };
-  size: number;
-  numberOfElements: number;
-  first: boolean;
-  empty: boolean;
-}
+import { Novel, Content } from "novel";
 
 function MyNovel() {
   // 작성한 소설

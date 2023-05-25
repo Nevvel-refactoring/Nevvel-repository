@@ -5,15 +5,7 @@ import Image from "next/image";
 import backward from "../../assets/img/backward.png";
 import forward from "../../assets/img/forward.png";
 import styled from "styled-components";
-
-interface Novel {
-  nav: string;
-  name: string;
-  genre: number | string;
-  sort: string;
-  pageNum: number | string;
-  totalPage: number;
-}
+import { NovelPage } from "novel";
 
 function NovelPagination({
   nav,
@@ -22,7 +14,7 @@ function NovelPagination({
   sort,
   pageNum,
   totalPage,
-}: Novel) {
+}: NovelPage) {
   const router = useRouter();
 
   const [pagination, setPagination] = useState(1);
