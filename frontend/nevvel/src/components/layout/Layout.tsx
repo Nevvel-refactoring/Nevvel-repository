@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import Navigation from "./Navigation";
 import { useRouter } from "next/router";
+
+import Navigation from "./Navigation";
 import Footer from "../common/Footer";
 
 function Layout(props: { children: React.ReactNode }) {

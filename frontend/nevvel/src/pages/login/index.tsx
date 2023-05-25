@@ -1,13 +1,13 @@
 import { useEffect } from "react";
 import { useRouter } from "next/dist/client/router";
 import Image from "next/image";
-import nevvel_m_dark from "../../assets/img/nevvel_m_dark.png";
-import kakao_login from "../../assets/img/kakao_login_medium_narrow.png";
+import { useAtom } from "jotai";
+import { NextPageContext } from "next";
 import styled from "styled-components";
 
-import { useAtom } from "jotai";
 import { userInfoAtom, loginAtom } from "@/src/store/Login";
-import { NextPageContext } from "next";
+import nevvel_m_dark from "../../assets/img/nevvel_m_dark.png";
+import kakao_login from "../../assets/img/kakao_login_medium_narrow.png";
 
 function Login(props: { userDTO: string }) {
   const userDTO = props.userDTO === "" ? "" : JSON.parse(props.userDTO);

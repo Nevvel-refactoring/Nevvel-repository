@@ -1,7 +1,8 @@
 import { useState } from "react";
+import styled from "styled-components";
+
 import NavigationTop from "./NavigationTop";
 import NavigationBottom from "./NavigationBottom";
-import styled from "styled-components";
 
 function Navigation() {
   const [clickNull, setClickNull] = useState(false);
