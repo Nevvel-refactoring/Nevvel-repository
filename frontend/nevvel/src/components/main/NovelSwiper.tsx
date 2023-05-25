@@ -13,47 +13,7 @@ import "swiper/css/scrollbar";
 
 import NovelCard from "../common/NovelCard";
 import { mobile, tabletH } from "@/src/util/Mixin";
-
-interface Novel {
-  content: {
-    id: number;
-    title: string;
-    status: string;
-    thumbnail: string;
-    genre: string;
-    writer: {
-      id: number;
-      nickname: string;
-    };
-    isUploaded: boolean;
-    isNew: boolean;
-  }[];
-  pageable: {
-    sort: {
-      sorted: boolean;
-      unsorted: boolean;
-      empty: boolean;
-    };
-    pageSize: number;
-    pageNumber: number;
-    offset: number;
-    paged: boolean;
-    unpaged: boolean;
-  };
-  totalPages: number;
-  totalElements: number;
-  last: boolean;
-  number: number;
-  sort: {
-    sorted: boolean;
-    unsorted: boolean;
-    empty: boolean;
-  };
-  size: number;
-  numberOfElements: number;
-  first: boolean;
-  empty: boolean;
-}
+import { Novel } from "novel";
 
 function NovelSwiper(props: { content: Novel }) {
   // 소설 10개 받아오기

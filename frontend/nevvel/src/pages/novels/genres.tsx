@@ -7,47 +7,7 @@ import axios from "axios";
 import Image from "next/image";
 import nevvel_m_dark from "../../assets/img/nevvel_m_dark.png";
 import NovelCard from "@/src/components/common/NovelCard";
-
-interface Novel {
-  content: {
-    id: number;
-    title: string;
-    status: string;
-    thumbnail: string;
-    genre: string;
-    writer: {
-      id: number;
-      nickname: string;
-    };
-    isUploaded: boolean;
-    isNew: boolean;
-  }[];
-  pageable: {
-    sort: {
-      sorted: boolean;
-      unsorted: boolean;
-      empty: boolean;
-    };
-    pageSize: number;
-    pageNumber: number;
-    offset: number;
-    paged: boolean;
-    unpaged: boolean;
-  };
-  totalPages: number;
-  totalElements: number;
-  last: boolean;
-  number: number;
-  sort: {
-    sorted: boolean;
-    unsorted: boolean;
-    empty: boolean;
-  };
-  size: number;
-  numberOfElements: number;
-  first: boolean;
-  empty: boolean;
-}
+import { Novel } from "novel"
 
 function GenreNovel(props: {
   content: Novel;
