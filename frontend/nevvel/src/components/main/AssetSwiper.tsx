@@ -105,8 +105,6 @@ function AssetSwiper(props: AssetSwiperProps) {
         pagination={{ clickable: true }}
         autoplay={{ delay: 3000 }}
         // scrollbar={{ draggable: true }}
-        // onSwiper={(swiper) => console.log(swiper)}
-        // onSlideChange={() => console.log("slide change")}
       >
         {assetSwiperData.map((AssetData) => {
           return (
@@ -121,8 +119,6 @@ function AssetSwiper(props: AssetSwiperProps) {
                 tags={AssetData.tags}
                 setModalOpen={setModalOpen}
                 setOpenModalData={setOpenModalData}
-                // price={AssetData.price}
-                // uploader={AssetData.uploader}
               />
             </SwiperSlide>
           );
@@ -161,7 +157,6 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  /* flex-direction: column; */
   width: 100vw;
   height: 45%;
   padding-top: 1%;

@@ -5,8 +5,7 @@ import { useAtom } from "jotai";
 import AssetCard from "@/src/components/common/AssetCard";
 import { Modal } from "../../components/common/Modal";
 import AssetDetailModal from "../../components/assetstore/AssetDetailModal";
-import axios from "axios";
-import springApi, { NewvelApi } from "@/src/api";
+import springApi from "@/src/api";
 import Image from "next/image";
 import nevvel_m_dark from "../../assets/img/nevvel_m_dark.png";
 import styled from "styled-components";
@@ -83,7 +82,7 @@ function UploadedAsset(props: { userDTO: string }) {
     setUserInfoStatus(newUserInfo);
   }, []);
 
-  // 로그아웃 상태인 경우 메인페이지로 리다이렉트
+  // 로그아웃 상태인 경우 메인페이지로 리다이렉트 (예정)
   // 로그인 상태인 경우 axios 요청
   const router = useRouter();
   const [uploadedAsset, setUploadedAsset] = useState<Asset | undefined>(
@@ -91,15 +90,10 @@ function UploadedAsset(props: { userDTO: string }) {
   );
   useEffect(() => {
     const getUploadedAssets = async () => {
-      const res = await springApi.get(`/assets/uploader/${userInfoStatus?.id}`)
-      // console.log(res.data);
+      const res = await springApi.get(`/assets/uploader/${userInfoStatus?.id}`);
       setUploadedAsset(res.data);
     };
-    // if (!loginStatus) {
-    //   router.push({ pathname: "/" });
-    // } else {
-        getUploadedAssets();
-    // }
+    getUploadedAssets();
   }, []);
 
   // 에셋 디테일 모달 오픈 트리거

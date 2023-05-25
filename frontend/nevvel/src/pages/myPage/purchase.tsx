@@ -111,13 +111,8 @@ function Purchase(props: { userDTO: string }) {
     setUserInfoStatus(newUserInfo);
   }, []);
 
-  // 로그아웃 상태인 경우 메인페이지로 리다이렉트
-  const router = useRouter()
-  // useEffect(() => {
-  //   if (!loginStatus) {
-  //     router.push({ pathname: "/" });
-  //   }
-  // }, []);
+  // 로그아웃 상태인 경우 메인페이지로 리다이렉트 (예정)
+  const router = useRouter();
 
   const [amount, setAmount] = useState<number>(1000);
 
@@ -148,7 +143,6 @@ function Purchase(props: { userDTO: string }) {
     try {
       const res = await springApi.post("/point-charge", pointChargeDto);
       if (res.status === 200) {
-        // console.log(res);
         router.push("/myPage");
       }
     } catch (error) {
