@@ -1,11 +1,13 @@
 import { useState } from "react";
-import Pagination from "./Pagination";
 import { useRouter } from "next/dist/client/router";
 import Image from "next/image";
+import styled from "styled-components";
+
+import { NovelPage } from "novel";
+
+import Pagination from "./Pagination";
 import backward from "../../assets/img/backward.png";
 import forward from "../../assets/img/forward.png";
-import styled from "styled-components";
-import { NovelPage } from "novel";
 
 function NovelPagination({
   nav,

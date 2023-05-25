@@ -1,15 +1,16 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import { loginAtom, userInfoAtom } from "@/src/store/Login";
 import { useAtom } from "jotai";
-import NovelCard from "@/src/components/common/NovelCard";
-import { NewvelApi } from "@/src/api";
 import Image from "next/image";
-import nevvel_m_dark from "../../assets/img/nevvel_m_dark.png";
+import { NextPageContext } from "next";
 import styled from "styled-components";
 
-import { NextPageContext } from "next";
 import { Novel } from "novel";
+import { loginAtom, userInfoAtom } from "@/src/store/Login";
+import { NewvelApi } from "@/src/api";
+
+import NovelCard from "@/src/components/common/NovelCard";
+import nevvel_m_dark from "../../assets/img/nevvel_m_dark.png";
 
 function LikedNovel(props: { userDTO: string }) {
   const userDTO = props.userDTO === "" ? "" : JSON.parse(props.userDTO);

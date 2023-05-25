@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 import { useRouter } from "next/router";
-import { loginAtom, userInfoAtom } from "@/src/store/Login";
 import { useAtom } from "jotai";
-import MyProfile from "@/src/components/mypage/MyProfile";
 import styled from "styled-components";
-
 import { NextPageContext } from "next";
+
+import { loginAtom, userInfoAtom } from "@/src/store/Login";
+import MyProfile from "@/src/components/mypage/MyProfile";
 
 function EditMyProfile(props: { userDTO: string }) {
   const userDTO = props.userDTO === "" ? "" : JSON.parse(props.userDTO);

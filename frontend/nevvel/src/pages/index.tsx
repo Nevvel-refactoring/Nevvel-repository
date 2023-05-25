@@ -1,19 +1,19 @@
+import React, { useState, useEffect } from "react";
 import { NextPageContext } from "next";
-import { loginAtom, userInfoAtom } from "../store/Login";
+import axios from "axios";
 import { useAtom } from "jotai";
-import { useEffect } from "react";
+import styled from "styled-components";
+
+import springApi from "@/src/api";
+import { Novel } from "novel"
+import { loginAtom, userInfoAtom } from "../store/Login";
+import { ImageAssetAtom, AudioAssetAtom } from "@/src/store/EditorAssetStore";
+
 import NovelSwiper from "../components/main/NovelSwiper";
 import BestDetails from "../components/main/BestDetails";
 import AssetSwiper from "../components/main/AssetSwiper";
-import axios from "axios";
-import styled from "styled-components";
-import springApi from "@/src/api";
 import DummyAssetData_audio from "@/src/components/assetstore/DummyAssetData_Audio.json";
 import DummyAssetData_image from "@/src/components/assetstore/DummyAssetData_Image.json";
-import { ImageAssetAtom, AudioAssetAtom } from "@/src/store/EditorAssetStore";
-import React from "react";
-import { useState } from "react";
-import { Novel } from "novel"
 
 interface AssetTag {
   id: number;

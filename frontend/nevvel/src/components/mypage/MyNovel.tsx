@@ -1,15 +1,16 @@
 import { useState, useEffect } from "react";
+import { useAtomValue } from "jotai";
+import styled from "styled-components";
+
 import springApi from "@/src/api";
 import { NewvelApi } from "@/src/api";
 import { userInfoAtom } from "@/src/store/Login";
-import { useAtomValue } from "jotai";
+import { Novel, Content } from "novel";
+
 import SemiTitle from "./SemiTitle";
 import { Modal } from "../common/Modal";
 import CreateNewNovel from "../mypage/CreateNewNovel";
-import styled from "styled-components";
 import NovelCard from "../common/NovelCard";
-
-import { Novel, Content } from "novel";
 
 function MyNovel() {
   // 작성한 소설

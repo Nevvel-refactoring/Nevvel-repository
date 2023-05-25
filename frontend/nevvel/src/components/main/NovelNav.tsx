@@ -1,7 +1,9 @@
-import GenreList from "./GenreList";
-import styled from "styled-components";
 import { useState, useEffect, useRef } from "react";
+import styled from "styled-components";
+
 import { NewvelApi } from "@/src/api";
+
+import GenreList from "./GenreList";
 
 interface Nav {
   nav: string;
