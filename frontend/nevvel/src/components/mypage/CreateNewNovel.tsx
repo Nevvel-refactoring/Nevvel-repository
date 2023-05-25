@@ -1,5 +1,3 @@
-import springApi, { NewvelApi } from "@/src/api";
-import { useRouter } from "next/router";
 import React, {
   Dispatch,
   SetStateAction,
@@ -7,7 +5,10 @@ import React, {
   useRef,
   useState,
 } from "react";
+import { useRouter } from "next/router";
 import styled from "styled-components";
+
+import springApi, { NewvelApi } from "@/src/api";
 
 interface Props {
   setModalOpen: Dispatch<SetStateAction<boolean>>;

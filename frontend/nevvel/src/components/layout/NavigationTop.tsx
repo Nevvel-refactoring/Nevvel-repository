@@ -3,11 +3,13 @@ import Link from "next/link";
 import { useRouter } from "next/dist/client/router";
 import { AiOutlineSearch } from "react-icons/ai";
 import styled from "styled-components";
-import { loginAtom, userInfoAtom } from "@/src/store/Login";
 import { useAtomValue } from "jotai";
-import { MyPageModal } from "./MyPageModal";
+
+import { loginAtom, userInfoAtom } from "@/src/store/Login";
 import { tabletH } from "../../util/Mixin";
 import { mobile } from "../../util/Mixin";
+
+import { MyPageModal } from "./MyPageModal";
 
 interface Props {
   onClickTop: () => void;
@@ -80,7 +82,7 @@ function NavigationTop(props: Props) {
           placeholder="작품명, 작가명을 입력하세요"
         />
         <SearchIcon>
-          <AiOutlineSearch onClick={clickResultHandler} color="#666666"/>
+          <AiOutlineSearch onClick={clickResultHandler} color="#666666" />
         </SearchIcon>
       </SearchBar>
       {loginStatus ? (
