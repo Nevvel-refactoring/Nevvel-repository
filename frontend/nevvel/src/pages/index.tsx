@@ -17,7 +17,47 @@ import DummyAssetData_image from "@/src/components/assetstore/DummyAssetData_Ima
 import { ImageAssetAtom, AudioAssetAtom } from "@/src/store/EditorAssetStore";
 import React from "react";
 import { useState } from "react";
-import { Novel } from "novel"
+
+interface Novel {
+  content: {
+    id: number;
+    title: string;
+    status: string;
+    thumbnail: string;
+    genre: string;
+    writer: {
+      id: number;
+      nickname: string;
+    };
+    isUploaded: boolean;
+    isNew: boolean;
+  }[];
+  pageable: {
+    sort: {
+      sorted: boolean;
+      unsorted: boolean;
+      empty: boolean;
+    };
+    pageSize: number;
+    pageNumber: number;
+    offset: number;
+    paged: boolean;
+    unpaged: boolean;
+  };
+  totalPages: number;
+  totalElements: number;
+  last: boolean;
+  number: number;
+  sort: {
+    sorted: boolean;
+    unsorted: boolean;
+    empty: boolean;
+  };
+  size: number;
+  numberOfElements: number;
+  first: boolean;
+  empty: boolean;
+}
 
 interface AssetTag {
   id: number;

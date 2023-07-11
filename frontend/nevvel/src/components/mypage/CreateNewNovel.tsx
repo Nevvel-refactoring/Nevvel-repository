@@ -5,6 +5,7 @@ import React, {
   useRef,
   useState,
 } from "react";
+import { cover } from "series";
 import styled from "styled-components";
 
 import springApi, { NewvelApi } from "@/src/api";

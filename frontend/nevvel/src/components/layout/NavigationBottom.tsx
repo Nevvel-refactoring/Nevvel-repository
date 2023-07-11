@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 import nevvel_light from "../../assets/img/nevvel_light.png";
 import nevvel_dark from "../../assets/img/nevvel_dark.png";
+import nevvel_m_light from "../../assets/img/nevvel_m_light.png";
 import nevvel_m_dark from "../../assets/img/nevvel_m_dark.png";
 import styled from "styled-components";
 

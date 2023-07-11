@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { useAtom } from "jotai";
 import NovelCard from "@/src/components/common/NovelCard";
+import axios from "axios";
 import { NewvelApi } from "@/src/api";
 import Image from "next/image";
 import { NextPageContext } from "next";

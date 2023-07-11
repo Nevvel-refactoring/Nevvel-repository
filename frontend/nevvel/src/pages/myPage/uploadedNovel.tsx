@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 import { useAtom } from "jotai";
 import NovelCard from "@/src/components/common/NovelCard";
+import axios from "axios";
 import springApi from "@/src/api";
 import Image from "next/image";
 import nevvel_m_dark from "../../assets/img/nevvel_m_dark.png";

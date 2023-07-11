@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import axios from "axios";
 import springApi from "@/src/api";
 import { NewvelApi } from "@/src/api";
 import { userInfoAtom } from "@/src/store/Login";

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import noveldata from "../../components/main/DummyNovelData.json";
 import NovelCard from "@/src/components/common/NovelCard";
 import { NewvelApi } from "@/src/api";
 import axios from "axios";

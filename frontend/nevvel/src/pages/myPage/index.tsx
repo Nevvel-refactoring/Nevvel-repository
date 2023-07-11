@@ -1,5 +1,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/router";
+import springApi from "@/src/api";
+import { NewvelApi } from "@/src/api";
 import MyProfile from "@/src/components/mypage/MyProfile";
 import MyPoint from "@/src/components/mypage/MyPoint";
 import MyNovel from "@/src/components/mypage/MyNovel";
