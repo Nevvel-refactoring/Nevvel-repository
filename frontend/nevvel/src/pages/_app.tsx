@@ -1,10 +1,9 @@
-import { useState } from "react";
-import type { AppProps } from "next/app";
 import { Provider } from "jotai";
+import { useState } from "react";
 import { ThemeProvider } from "styled-components";
 import { lightTheme, darkTheme } from "../constants/styles/theme";
 import { GlobalStyle } from "../constants/styles/globalStyle";
-
+import "../assets/fonts/font.css";
 import Layout from "../components/layout/Layout";
 import type { AppProps } from "next/app";
 import DarkModeToggle from "../components/common/DarkModeToggle";

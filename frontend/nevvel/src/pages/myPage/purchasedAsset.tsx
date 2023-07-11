@@ -5,6 +5,8 @@ import { useAtom } from "jotai";
 import AssetCard from "@/src/components/common/AssetCard";
 import { Modal } from "../../components/common/Modal";
 import AssetDetailModal from "../../components/assetstore/AssetDetailModal";
+import { NewvelApi } from "@/src/api";
+import Image from "next/image";
 import nevvel_m_dark from "../../assets/img/nevvel_m_dark.png";
 import styled from "styled-components";
 

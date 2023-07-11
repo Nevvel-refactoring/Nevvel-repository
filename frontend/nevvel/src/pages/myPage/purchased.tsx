@@ -1,7 +1,6 @@
-import React, { useEffect } from "react";
-import { NextPageContext } from "next";
+import springApi from "@/src/api";
 import { useRouter } from "next/router";
-import { useAtom } from "jotai";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { PurchaseData } from "./purchase";
 import { loginAtom, userInfoAtom } from "@/src/store/Login";

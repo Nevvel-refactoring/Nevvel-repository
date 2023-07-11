@@ -1,9 +1,5 @@
 import { useEffect } from "react";
 import { useRouter } from "next/router";
-import { useAtom } from "jotai";
-import styled from "styled-components";
-import { NextPageContext } from "next";
-
 import MyProfile from "@/src/components/mypage/MyProfile";
 import MyPoint from "@/src/components/mypage/MyPoint";
 import MyNovel from "@/src/components/mypage/MyNovel";

@@ -10,6 +10,10 @@ import styled from "styled-components";
 import springApi from "@/src/api";
 import DummyAssetData_audio from "@/src/components/assetstore/DummyAssetData_Audio.json";
 import DummyAssetData_image from "@/src/components/assetstore/DummyAssetData_Image.json";
+import { ImageAssetAtom, AudioAssetAtom } from "@/src/store/EditorAssetStore";
+import React from "react";
+import { useState } from "react";
+import { Novel } from "novel"
 
 interface AssetTag {
   id: number;

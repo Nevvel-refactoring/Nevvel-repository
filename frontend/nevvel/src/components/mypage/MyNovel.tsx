@@ -1,7 +1,4 @@
 import { useState, useEffect } from "react";
-import { useAtomValue } from "jotai";
-import styled from "styled-components";
-
 import springApi from "@/src/api";
 import { NewvelApi } from "@/src/api";
 import { userInfoAtom } from "@/src/store/Login";
