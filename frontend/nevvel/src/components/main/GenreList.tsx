@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { json } from "stream/consumers";
 import styled from "styled-components";
 
 interface Props {

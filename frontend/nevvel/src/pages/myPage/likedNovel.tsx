@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { useAtom } from "jotai";
+import NovelCard from "@/src/components/common/NovelCard";
+import { NewvelApi } from "@/src/api";
 import Image from "next/image";
 import { NextPageContext } from "next";
 import styled from "styled-components";
@@ -32,16 +34,21 @@ function LikedNovel(props: { userDTO: string }) {
     setUserInfoStatus(newUserInfo);
   }, []);
 
-  // 로그아웃 상태인 경우 메인페이지로 리다이렉트 (예정)
+  // 로그아웃 상태인 경우 메인페이지로 리다이렉트
   // 로그인 상태인 경우 axios 요청
   const router = useRouter();
   const [likedNovel, setLikedNovel] = useState<Novel | undefined>(undefined);
   useEffect(() => {
     const getLikedCovers = async () => {
       const res = await NewvelApi.likesCovers();
+      // console.log(res.data);
       setLikedNovel(res.data);
     };
+    // if (!loginStatus) {
+    //   router.push({ pathname: "/" });
+    // } else {
     getLikedCovers();
+    // }
   }, []);
 
   return (

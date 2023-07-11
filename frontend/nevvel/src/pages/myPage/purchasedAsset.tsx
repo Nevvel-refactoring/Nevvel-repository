@@ -11,6 +11,8 @@ import { NewvelApi } from "@/src/api";
 import AssetCard from "@/src/components/common/AssetCard";
 import { Modal } from "../../components/common/Modal";
 import AssetDetailModal from "../../components/assetstore/AssetDetailModal";
+import { NewvelApi } from "@/src/api";
+import Image from "next/image";
 import nevvel_m_dark from "../../assets/img/nevvel_m_dark.png";
 
 interface Content {
@@ -83,7 +85,7 @@ function purchasedAsset(props: { userDTO: string }) {
     setUserInfoStatus(newUserInfo);
   }, []);
 
-  // 로그아웃 상태인 경우 메인페이지로 리다이렉트 (예정)
+  // 로그아웃 상태인 경우 메인페이지로 리다이렉트
   // 로그인 상태인 경우 axios 요청
   const router = useRouter();
   const [purchasedAsset, setPurchasedAsset] = useState<Asset | undefined>(
@@ -92,9 +94,14 @@ function purchasedAsset(props: { userDTO: string }) {
   useEffect(() => {
     const getPurchasedAssets = async () => {
       const res = await NewvelApi.purchasedAssets();
+      // console.log(res.data);
       setPurchasedAsset(res.data);
     };
+    // if (!loginStatus) {
+    //   router.push({ pathname: "/" });
+    // } else {
     getPurchasedAssets();
+    // }
   }, []);
 
   // 에셋 디테일 모달 오픈 트리거

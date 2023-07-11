@@ -15,6 +15,7 @@ function MyProfile() {
   useEffect(() => {
     const getUserData = async () => {
       const res = await NewvelApi.profileInfo();
+      // console.log(res.data.description);
       setUserDescription(res.data.description);
     };
     getUserData();
@@ -52,6 +53,7 @@ const ProfileContent = styled.div`
 `;
 
 const ProfileImgDiv = styled.div`
+  /* border: 1px solid ${({ theme }) => theme.color.text1}; */
   border-radius: 100rem;
   object-fit: cover;
   width: 128px;

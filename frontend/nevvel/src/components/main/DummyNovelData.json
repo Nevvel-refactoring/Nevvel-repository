@@ -1,0 +1,146 @@
+{
+  "content": [
+    {
+      "id": 1,
+      "title": "가나다",
+      "status": "FINISHED",
+      "thumbnail": "https://nevvel.s3.ap-northeast-2.amazonaws.com/files/2023-05-12091aa6d7-ed58-47da-ad6c-f021c4283947-%EB%94%94%EC%9E%A5%EA%B3%A0_resolution.png",
+      "genre": "무협",
+      "writer": {
+        "id": 8,
+        "nickname": "가나다 작가"
+      },
+      "isUploaded": true,
+      "isNew": false
+    },
+    {
+      "id": 3,
+      "title": "오늘의 타로는 어떨까요",
+      "status": "DELETED",
+      "thumbnail": "https://nevvel.s3.ap-northeast-2.amazonaws.com/files/2023-05-12091aa6d7-ed58-47da-ad6c-f021c4283947-%EB%94%94%EC%9E%A5%EA%B3%A0_resolution.png",
+      "genre": "로맨스",
+      "writer": {
+        "id": 2,
+        "nickname": "타로버블티"
+      },
+      "isUploaded": false,
+      "isNew": false
+    },
+    {
+      "id": 5,
+      "title": "D106 화이팅",
+      "status": "SERIALIZED",
+      "thumbnail": "https://nevvel.s3.ap-northeast-2.amazonaws.com/files/2023-05-12091aa6d7-ed58-47da-ad6c-f021c4283947-%EB%94%94%EC%9E%A5%EA%B3%A0_resolution.png",
+      "genre": "모험",
+      "writer": {
+        "id": 106,
+        "nickname": "장고는과연장고라고발음할까"
+      },
+      "isUploaded": true,
+      "isNew": true
+    },
+    {
+      "id": 7,
+      "title": "가나다라",
+      "status": "SERIALIZED",
+      "thumbnail": "https://nevvel.s3.ap-northeast-2.amazonaws.com/files/2023-05-12091aa6d7-ed58-47da-ad6c-f021c4283947-%EB%94%94%EC%9E%A5%EA%B3%A0_resolution.png",
+      "genre": "로맨스 판타지",
+      "writer": {
+        "id": 8,
+        "nickname": "가나다라 작가"
+      },
+      "isUploaded": true,
+      "isNew": false
+    },
+    {
+      "id": 9,
+      "title": "오늘의 타로밀크티는 어떨까요",
+      "status": "DELETED",
+      "thumbnail": "https://nevvel.s3.ap-northeast-2.amazonaws.com/files/2023-05-12091aa6d7-ed58-47da-ad6c-f021c4283947-%EB%94%94%EC%9E%A5%EA%B3%A0_resolution.png",
+      "genre": "현대 판타지",
+      "writer": {
+        "id": 2,
+        "nickname": "타로버블티"
+      },
+      "isUploaded": false,
+      "isNew": false
+    },
+    {
+      "id": 11,
+      "title": "D106 화이팅팅팅",
+      "status": "SERIALIZED",
+      "thumbnail": "https://nevvel.s3.ap-northeast-2.amazonaws.com/files/2023-05-12091aa6d7-ed58-47da-ad6c-f021c4283947-%EB%94%94%EC%9E%A5%EA%B3%A0_resolution.png",
+      "genre": "자유",
+      "writer": {
+        "id": 106,
+        "nickname": "오늘은 누가 음료를 살까"
+      },
+      "isUploaded": true,
+      "isNew": true
+    },
+    {
+      "id": 13,
+      "title": "가나다나가",
+      "status": "SERIALIZED",
+      "thumbnail": "https://nevvel.s3.ap-northeast-2.amazonaws.com/files/2023-05-12091aa6d7-ed58-47da-ad6c-f021c4283947-%EB%94%94%EC%9E%A5%EA%B3%A0_resolution.png",
+      "genre": "판타지",
+      "writer": {
+        "id": 8,
+        "nickname": "판타지 아님 작가"
+      },
+      "isUploaded": true,
+      "isNew": false
+    },
+    {
+      "id": 15,
+      "title": "오늘의 타피오카펄은 어떨까요",
+      "status": "DELETED",
+      "thumbnail": "https://nevvel.s3.ap-northeast-2.amazonaws.com/files/2023-05-12091aa6d7-ed58-47da-ad6c-f021c4283947-%EB%94%94%EC%9E%A5%EA%B3%A0_resolution.png",
+      "genre": "라이트노벨",
+      "writer": {
+        "id": 2,
+        "nickname": "라이트타로"
+      },
+      "isUploaded": false,
+      "isNew": false
+    },
+    {
+      "id": 17,
+      "title": "D106 자율 화이팅",
+      "status": "SERIALIZED",
+      "thumbnail": "https://nevvel.s3.ap-northeast-2.amazonaws.com/files/2023-05-12091aa6d7-ed58-47da-ad6c-f021c4283947-%EB%94%94%EC%9E%A5%EA%B3%A0_resolution.png",
+      "genre": "호러/미스터리",
+      "writer": {
+        "id": 106,
+        "nickname": "닉네임"
+      },
+      "isUploaded": true,
+      "isNew": true
+    }
+  ],
+  "pageable": {
+    "sort": {
+      "sorted": false,
+      "unsorted": true,
+      "empty": true
+    },
+    "pageSize": 5,
+    "pageNumber": 0,
+    "offset": 0,
+    "paged": true,
+    "unpaged": false
+  },
+  "totalPages": 20,
+  "totalElements": 100,
+  "last": false,
+  "number": 0,
+  "sort": {
+    "sorted": false,
+    "unsorted": true,
+    "empty": true
+  },
+  "size": 5,
+  "numberOfElements": 5,
+  "first": true,
+  "empty": false
+}

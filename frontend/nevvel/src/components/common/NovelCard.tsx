@@ -5,6 +5,8 @@ import styled from "styled-components";
 import { NovelCardType } from "novel";
 
 function NovelCard(props: NovelCardType) {
+  // console.log(props);
+  // const isUploaded = props.isUploaded;
 
   const router = useRouter();
   const novelDetailHandler = () => {
@@ -13,6 +15,7 @@ function NovelCard(props: NovelCardType) {
 
   return (
     <Wrapper onClick={novelDetailHandler}>
+      {/* <Image src={props.thumbnail} alt="thumbnail" width={25} height={25} /> */}
       <ImgDiv>
         <StatusSpan>
           {props.isUploaded && <UpdateNovel id="up">UP</UpdateNovel>}
@@ -36,6 +39,7 @@ export default NovelCard;
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
+  /* justify-content: center; */
   align-items: center;
   width: 13rem;
   height: 21rem;
@@ -97,6 +101,7 @@ const NewNovel = styled.span`
   color: white;
   font-size: 8px;
   font-weight: 700;
+  /* background-color: ${({ theme }) => theme.color.point}; */
   padding: 2px;
   margin: 2px;
   border-radius: 3px;
@@ -107,6 +112,7 @@ const UpdateNovel = styled.span`
   color: white;
   font-size: 8px;
   font-weight: 700;
+  /* background-color: ${({ theme }) => theme.color.point}; */
   padding: 2px;
   margin: 2px;
   border-radius: 3px;

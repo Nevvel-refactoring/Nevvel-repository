@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import NovelCard from "@/src/components/common/NovelCard";
+import { NewvelApi } from "@/src/api";
 import axios from "axios";
 import styled from "styled-components";
 

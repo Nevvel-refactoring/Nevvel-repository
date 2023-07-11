@@ -16,6 +16,18 @@ interface Genre {
 }
 
 function NovelNav({ nav, pageNum }: Nav) {
+  const dummy_genres = [
+    { id: 1, name: "전체" },
+    { id: 2, name: "로맨스" },
+    { id: 3, name: "로맨스 판타지" },
+    { id: 4, name: "판타지" },
+    { id: 5, name: "현대 판타지" },
+    { id: 6, name: "무협" },
+    { id: 7, name: "호러/미스터리" },
+    { id: 8, name: "라이트노벨" },
+    { id: 9, name: "BL" },
+    { id: 10, name: "자유" },
+  ];
 
   const [genres, setGenres] = useState<Genre[] | undefined>(undefined);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -53,6 +65,7 @@ function NovelNav({ nav, pageNum }: Nav) {
     const getGenres = async () => {
       const res = await NewvelApi.allGenres();
       setGenres(res.data.genres);
+      // console.log(res.data.genres);
     };
     getGenres();
   }, []);
@@ -65,6 +78,7 @@ function NovelNav({ nav, pageNum }: Nav) {
       onMouseUp={onDragEnd}
       onMouseLeave={onDragLeave}
     >
+      {/* {genres} */}
       {genres?.map((genre) => (
         <GenreList
           key={genre.id}

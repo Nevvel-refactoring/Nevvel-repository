@@ -5,7 +5,6 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { useRouter } from "next/router";
 import styled from "styled-components";
 
 import springApi, { NewvelApi } from "@/src/api";
@@ -48,6 +47,7 @@ function CreateNewNovel({ setModalOpen }: Props) {
     } else {
       alert("오류가 발생하였습니다");
     }
+    // console.log(image)
   };
 
   // 이미지 파일 삭제
@@ -56,6 +56,7 @@ function CreateNewNovel({ setModalOpen }: Props) {
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
+    // console.log(image)
   };
 
   // 제목 저장
@@ -79,6 +80,7 @@ function CreateNewNovel({ setModalOpen }: Props) {
     const getGenres = async () => {
       const res = await NewvelApi.allGenres();
       setGenres(res.data.genres);
+      // console.log(res.data.genres);
     };
     getGenres();
   }, []);
@@ -112,10 +114,12 @@ function CreateNewNovel({ setModalOpen }: Props) {
     const formData = new FormData();
 
     try {
+      // console.log(image, title, description, genre);
       // 제출버튼 누르면 formdata에 데이터 집어넣기
       if (image) {
         formData.append("file", image);
       }
+      // formData.append('assetRegistDto', JSON.stringify(jsonDatas))
       formData.append(
         "coverRegisterDto",
         new Blob([JSON.stringify(jsonDatas)], { type: "application/json" })
@@ -128,9 +132,11 @@ function CreateNewNovel({ setModalOpen }: Props) {
           },
         })
         .then((res) => {
+          // console.log(res.data);
           router.push({ pathname: `/series/${res.data}` });
         })
         .catch((err) => {
+          // console.log("에러남 error");
           console.log(err);
         });
     } catch (error) {
@@ -155,6 +161,7 @@ function CreateNewNovel({ setModalOpen }: Props) {
             <RelativeP>클릭하여 선택</RelativeP>
           </SelectImgDiv>
         )}
+        {/* {!image && <RelativeP>클릭하여 선택</RelativeP>} */}
       </ImgUploadLabel>
       {image ? <ImgDelBtn onClick={DeleteImg}>변경 표지 삭제</ImgDelBtn> : null}
       <SelectDiv>
@@ -246,6 +253,32 @@ const ModalSubmitBtn = styled.button`
   }
 `;
 
+const RadioDiv = styled.div<{ active: boolean }>`
+  input[type="radio"] {
+    display: none;
+  }
+  background: ${({ active, theme }) => {
+    if (active) {
+      return theme.color.hover;
+    }
+  }};
+  margin: 0.5rem;
+  width: 60px;
+  border: 1.5px solid;
+  border-radius: 2px;
+  border-color: ${({ theme }) => theme.color.hover};
+  :hover {
+    color: ${({ theme }) => theme.color.point};
+  }
+  padding: 5px;
+  cursor: pointer;
+  text-align: center;
+  font-size: 14px;
+  span {
+    cursor: pointer;
+  }
+`;
+
 const SelectGenreDiv = styled.div`
   align-self: flex-start;
 `;
@@ -281,6 +314,8 @@ const SelectImgDiv = styled.div`
 `;
 
 const ImgUploadLabel = styled.label`
+  /* border: 0.15rem solid #4D4D4D;
+  border-radius: 1.5rem; */
   margin-top: 1rem;
   margin-bottom: 0.5rem;
   display: flex;
@@ -288,6 +323,7 @@ const ImgUploadLabel = styled.label`
   &:hover {
     cursor: pointer;
   }
+  /* position: relative; */
 `;
 
 const RelativeP = styled.div`
@@ -298,10 +334,12 @@ const RelativeP = styled.div`
   &:hover {
     color: ${({ theme }) => theme.color.point};
   }
+  /* mix-blend-mode: difference; */
 `;
 
 const ImgUploadInput = styled.input`
   display: none;
+  /* float: left; */
 `;
 
 const ImgDelBtn = styled.button`

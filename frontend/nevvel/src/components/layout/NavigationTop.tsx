@@ -30,6 +30,11 @@ function NavigationTop(props: Props) {
   const keyboardResultHandler = (
     event: React.KeyboardEvent<HTMLInputElement>
   ) => {
+    // 빈 값인 경우 return
+    // 네이버 시리즈는 따로 처리하지 않아 처리하지 않음
+    // if (word.trim().length === 0) {
+    //   return;
+    // }
     // Enter 키를 입력한 경우
     if (event.key === "Enter") {
       router.push({
@@ -41,6 +46,8 @@ function NavigationTop(props: Props) {
       setWord("");
       props.onClickTop();
     }
+    // 아닌 경우 (실시간 요청 보내는 경우 사용)
+    // else {}
   };
   // 돋보기 클릭 시
   const clickResultHandler = (
@@ -193,6 +200,7 @@ const MyPage = styled.div`
 `;
 
 const ImageDiv = styled.div`
+  /* border: 1px solid ${({ theme }) => theme.color.text1}; */
   border-radius: 100rem;
   object-fit: cover;
   margin-top: 2rem;

@@ -3,6 +3,10 @@ import { NextPageContext } from "next";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import { useAtom } from "jotai";
+import NovelCard from "@/src/components/common/NovelCard";
+import { NewvelApi } from "@/src/api";
+import Image from "next/image";
+import nevvel_m_dark from "../../assets/img/nevvel_m_dark.png";
 import styled from "styled-components";
 
 import { NewvelApi } from "@/src/api";
@@ -32,7 +36,7 @@ function PurchasedNovel(props: { userDTO: string }) {
     setUserInfoStatus(newUserInfo);
   }, []);
 
-  // 로그아웃 상태인 경우 메인페이지로 리다이렉트 (예정)
+  // 로그아웃 상태인 경우 메인페이지로 리다이렉트
   // 로그인 상태인 경우 axios 요청
   const router = useRouter();
   const [purchasedNovel, setPurchasedNovel] = useState<Novel | undefined>(
@@ -41,9 +45,14 @@ function PurchasedNovel(props: { userDTO: string }) {
   useEffect(() => {
     const getPurchasedCovers = async () => {
       const res = await NewvelApi.purchasedCovers();
+      // console.log(res.data);
       setPurchasedNovel(res.data);
     };
+    // if (!loginStatus) {
+    //   router.push({ pathname: "/" });
+    // } else {
     getPurchasedCovers();
+    // }
   }, []);
 
   return (

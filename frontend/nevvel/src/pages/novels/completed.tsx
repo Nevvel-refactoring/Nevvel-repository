@@ -15,6 +15,7 @@ function CompletedNovel(props: {
   content: Novel;
   url: { genre: number; sort: string; name: string; pageNum: number };
 }) {
+  // console.log(props);
   const { query } = useRouter();
 
   // url으로 입력해서 들어오는 경우
@@ -71,6 +72,10 @@ function CompletedNovel(props: {
       <NovelNav nav="completed" pageNum={props.url.pageNum} />
       <NovelTop>
         {query.name}
+        {/* {query.genre}
+        {query.sort}
+        {query.pageNum}
+        <hr /> */}
         <SortWrapper>
           <SortContent
             onClick={() => {

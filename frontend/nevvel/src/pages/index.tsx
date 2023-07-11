@@ -14,6 +14,10 @@ import BestDetails from "../components/main/BestDetails";
 import AssetSwiper from "../components/main/AssetSwiper";
 import DummyAssetData_audio from "@/src/components/assetstore/DummyAssetData_Audio.json";
 import DummyAssetData_image from "@/src/components/assetstore/DummyAssetData_Image.json";
+import { ImageAssetAtom, AudioAssetAtom } from "@/src/store/EditorAssetStore";
+import React from "react";
+import { useState } from "react";
+import { Novel } from "novel"
 
 interface AssetTag {
   id: number;
@@ -45,6 +49,7 @@ export default function Home(props: {
   novels: Novel;
   assets: Asset[];
 }) {
+  // console.log(props.userDTO);
   const userDTO = props.userDTO === "" ? "" : JSON.parse(props.userDTO);
   const newUserInfo =
     userDTO === ""
@@ -53,8 +58,15 @@ export default function Home(props: {
           id: userDTO.id,
           nickname: userDTO.nickname,
           profileImage: userDTO.profileImage,
+          // description: userDTO.description,
           point: userDTO.point,
         };
+  // console.log(userDTO);
+  // console.log(userDTO.id);
+  // console.log(userDTO.nickname);
+  // console.log(userDTO.profileImage);
+  // console.log(userDTO.description);
+  // console.log(userDTO.point);
 
   // 쿠키 상태 관리
   const [loginStatus, setLoginStatus] = useAtom(loginAtom);
@@ -79,6 +91,7 @@ export default function Home(props: {
         "assets/purchased-on?assettype=IMAGE&page=1&size=10&sort=createdDateTime"
       );
       if (res) {
+        // console.log(res);
         setAssetImageData(res.data.content);
       }
     } catch (error) {
@@ -93,6 +106,7 @@ export default function Home(props: {
         "assets/purchased-on?assettype=AUDIO&page=1&size=10&sort=createdDateTime"
       );
       if (res) {
+        // console.log(res);
         setAssetAudioData(res.data.content);
       }
     } catch (error) {
@@ -101,14 +115,17 @@ export default function Home(props: {
     }
   };
 
-  const [axiosReloader, setAxiosReloaer] = useState<boolean>(false);
+  // console.log(loginStatus);
+  // console.log(userInfoStatus);
+
+  const[axiosReloader, setAxiosReloaer] = useState<boolean>(false)
 
   useEffect(() => {
-    if (axiosReloader === true) {
-      setAxiosReloaer(false);
-      location.reload();
+    if (axiosReloader === true){
+      setAxiosReloaer(false)
+      location.reload()
     }
-  }, [axiosReloader]);
+  },[axiosReloader])
 
   return (
     <HomeWrapper>

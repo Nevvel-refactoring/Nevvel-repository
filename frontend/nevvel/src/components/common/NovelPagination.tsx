@@ -23,7 +23,9 @@ function NovelPagination({
   const [divPagination, setDivPagiNation] = useState(1);
 
   // 페이지 마지막번호
+  // const lastPageNumber = noveldata.totalPages;
   const lastPageNumber = totalPage;
+  // console.log(lastPageNumber);
 
   // 페이지 번호를 담은 배열
   let pageArray = new Array();
@@ -38,6 +40,7 @@ function NovelPagination({
   // 페이지 버튼을 클릭 시 페이지네이션을 업데이트하는 함수
   const onClickHandler = (num: number) => {
     setPagination(num);
+    // console.log(num)
     router.push({
       pathname: `/novels/${nav}`,
       query: { genre: genre, sort: sort, name: name, pageNum: num },

@@ -1,7 +1,6 @@
-import React, { useEffect } from "react";
-import { NextPageContext } from "next";
+import springApi from "@/src/api";
 import { useRouter } from "next/router";
-import { useAtom } from "jotai";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 
 import springApi from "@/src/api";
@@ -29,8 +28,13 @@ function purchased(props: { userDTO: string }) {
     setUserInfoStatus(newUserInfo);
   }, []);
 
-  // 로그아웃 상태인 경우 메인페이지로 리다이렉트 (예정)
+  // 로그아웃 상태인 경우 메인페이지로 리다이렉트
   const router = useRouter();
+  // useEffect(() => {
+  //   if (!loginStatus) {
+  //     router.push({ pathname: "/" });
+  //   }
+  // }, []);
 
   const { query } = useRouter();
 
@@ -38,6 +42,7 @@ function purchased(props: { userDTO: string }) {
     try {
       const res = await springApi.post("/point-charge", pointChargeDto);
       if (res.status === 200) {
+        // console.log(res);
         router.push("/myPage");
       }
     } catch (error) {
@@ -53,6 +58,8 @@ function purchased(props: { userDTO: string }) {
         impNum: impNum,
         midNum: midNum,
       });
+      // console.log(impNum, midNum);
+      // router.push("/profile");
     } else if (query.imp_success === "false") {
       router.push("/myPage/purchase");
     }
