@@ -1,7 +1,6 @@
-import { useRouter } from "next/dist/client/router";
 import Image from "next/image";
+import { useRouter } from "next/dist/client/router";
 import styled from "styled-components";
-
 import { NovelCardType } from "novel";
 
 function NovelCard(props: NovelCardType) {

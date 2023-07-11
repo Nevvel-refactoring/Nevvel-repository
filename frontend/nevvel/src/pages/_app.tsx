@@ -1,13 +1,12 @@
-import { atom, Provider, useAtom } from "jotai";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import type { AppProps } from "next/app";
+import { Provider } from "jotai";
 import { ThemeProvider } from "styled-components";
-import "../assets/fonts/font.css";
-
 import { lightTheme, darkTheme } from "../constants/styles/theme";
 import { GlobalStyle } from "../constants/styles/globalStyle";
-import styled from "styled-components";
-import "../assets/fonts/font.css";
+
 import Layout from "../components/layout/Layout";
+import type { AppProps } from "next/app";
 import DarkModeToggle from "../components/common/DarkModeToggle";
 import CustomRouter from "../components/common/CustomRouter";
 

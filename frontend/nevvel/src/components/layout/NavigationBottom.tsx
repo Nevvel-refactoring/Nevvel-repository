@@ -2,20 +2,11 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import Image from "next/image";
-import nevvel_light from "../../assets/img/nevvel_light.png";
-import nevvel_dark from "../../assets/img/nevvel_dark.png";
-import nevvel_m_light from "../../assets/img/nevvel_m_light.png";
-import nevvel_m_dark from "../../assets/img/nevvel_m_dark.png";
 import styled from "styled-components";
-
-import { useAtomValue } from "jotai";
 import { tabletH } from "../../util/Mixin";
 import { mobile } from "../../util/Mixin";
 import { themeAtom } from "@/src/store/Theme";
-
-import nevvel_light from "../../assets/img/nevvel_light.png";
-import nevvel_dark from "../../assets/img/nevvel_dark.png";
-import nevvel_m_dark from "../../assets/img/nevvel_m_dark.png";
+import { useAtomValue } from "jotai";
 
 interface Props {
   clickNull: boolean;

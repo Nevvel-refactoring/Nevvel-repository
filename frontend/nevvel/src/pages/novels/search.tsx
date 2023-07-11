@@ -1,13 +1,7 @@
-import { useState, useEffect } from "react";
-import noveldata from "../../components/main/DummyNovelData.json";
-import NovelCard from "@/src/components/common/NovelCard";
-import { NewvelApi } from "@/src/api";
-import axios from "axios";
 import styled from "styled-components";
-
+import { useState, useEffect } from "react";
+import axios from "axios";
 import { Novel } from "novel"
-
-import NovelCard from "@/src/components/common/NovelCard";
 
 function SearchNovel(props: { word: string }) {
   const [novels, setNovels] = useState<Novel | undefined>(undefined);

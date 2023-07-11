@@ -1,9 +1,8 @@
-import { useEffect, useState } from "react";
-import { useAtomValue } from "jotai";
-import styled from "styled-components";
-
-import { NewvelApi } from "@/src/api";
 import { userInfoAtom } from "@/src/store/Login";
+import { useAtomValue } from "jotai";
+import { useEffect, useState } from "react";
+import { NewvelApi } from "@/src/api";
+import styled from "styled-components";
 
 function MyProfile() {
   const userInfoStatus = useAtomValue(userInfoAtom);

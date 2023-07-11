@@ -1,11 +1,10 @@
 import React, { useState, Dispatch, SetStateAction, useEffect } from "react";
 import styled from "styled-components";
-import { useAtom } from "jotai";
-import { useRouter } from "next/router";
 import { MdDarkMode, MdLightMode } from "react-icons/md";
-
+import { useAtom } from "jotai";
 import { themeAtom } from "@/src/store/Theme";
 import { mobile } from "@/src/util/Mixin";
+import { useRouter } from "next/router";
 
 type DarkModeToggleProps = {
   setTheme: Dispatch<SetStateAction<"light" | "dark">>;

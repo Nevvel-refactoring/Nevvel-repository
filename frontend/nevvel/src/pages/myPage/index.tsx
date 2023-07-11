@@ -1,12 +1,18 @@
 import { useEffect } from "react";
 import { useRouter } from "next/router";
-import springApi from "@/src/api";
-import { NewvelApi } from "@/src/api";
+import { useAtom } from "jotai";
+import styled from "styled-components";
+import { NextPageContext } from "next";
+
 import MyProfile from "@/src/components/mypage/MyProfile";
 import MyPoint from "@/src/components/mypage/MyPoint";
 import MyNovel from "@/src/components/mypage/MyNovel";
 import MyAsset from "@/src/components/mypage/MyAsset";
 import { loginAtom, userInfoAtom } from "@/src/store/Login";
+import { useAtom } from "jotai";
+import styled from "styled-components";
+
+import { NextPageContext } from "next";
 
 function MyPage(props: { userDTO: string }) {
   const userDTO = props.userDTO === "" ? "" : JSON.parse(props.userDTO);

@@ -1,8 +1,7 @@
+import { userInfoAtom } from "@/src/store/Login";
 import { useAtomValue } from "jotai";
 import { useRouter } from "next/dist/client/router";
 import styled from "styled-components";
-
-import { userInfoAtom } from "@/src/store/Login";
 
 function MyPoint() {
   const userInfoStatus = useAtomValue(userInfoAtom);

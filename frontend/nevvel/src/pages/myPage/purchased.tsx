@@ -1,12 +1,13 @@
-import springApi from "@/src/api";
+import React, { useEffect } from "react";
+import { NextPageContext } from "next";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import { useAtom } from "jotai";
 import styled from "styled-components";
-
-import springApi from "@/src/api";
-import { loginAtom, userInfoAtom } from "@/src/store/Login";
-
 import { PurchaseData } from "./purchase";
+import { loginAtom, userInfoAtom } from "@/src/store/Login";
+import { useAtom } from "jotai";
+
+import { NextPageContext } from "next";
 
 function purchased(props: { userDTO: string }) {
   const userDTO = props.userDTO === "" ? "" : JSON.parse(props.userDTO);

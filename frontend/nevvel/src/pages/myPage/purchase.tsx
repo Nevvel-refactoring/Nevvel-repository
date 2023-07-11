@@ -1,13 +1,12 @@
+import springApi from "@/src/api";
+import RadioInput from "@/src/components/common/RadioInput";
+import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
+import { loginAtom, userInfoAtom } from "@/src/store/Login";
 import { useAtom } from "jotai";
 import styled from "styled-components";
+
 import { NextPageContext } from "next";
-import { useRouter } from "next/router";
-
-import springApi from "@/src/api";
-import { loginAtom, userInfoAtom } from "@/src/store/Login";
-
-import RadioInput from "@/src/components/common/RadioInput";
 
 export interface RequestPayAdditionalParams {
   digital?: boolean;

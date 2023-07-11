@@ -1,63 +1,15 @@
-import React, { useState, useEffect } from "react";
 import { NextPageContext } from "next";
-import axios from "axios";
-import { useAtom } from "jotai";
-import styled from "styled-components";
-
-import springApi from "@/src/api";
-import { Novel } from "novel"
 import { loginAtom, userInfoAtom } from "../store/Login";
-import { ImageAssetAtom, AudioAssetAtom } from "@/src/store/EditorAssetStore";
-
+import { useAtom } from "jotai";
+import { useEffect } from "react";
 import NovelSwiper from "../components/main/NovelSwiper";
 import BestDetails from "../components/main/BestDetails";
 import AssetSwiper from "../components/main/AssetSwiper";
+import axios from "axios";
+import styled from "styled-components";
+import springApi from "@/src/api";
 import DummyAssetData_audio from "@/src/components/assetstore/DummyAssetData_Audio.json";
 import DummyAssetData_image from "@/src/components/assetstore/DummyAssetData_Image.json";
-import { ImageAssetAtom, AudioAssetAtom } from "@/src/store/EditorAssetStore";
-import React from "react";
-import { useState } from "react";
-
-interface Novel {
-  content: {
-    id: number;
-    title: string;
-    status: string;
-    thumbnail: string;
-    genre: string;
-    writer: {
-      id: number;
-      nickname: string;
-    };
-    isUploaded: boolean;
-    isNew: boolean;
-  }[];
-  pageable: {
-    sort: {
-      sorted: boolean;
-      unsorted: boolean;
-      empty: boolean;
-    };
-    pageSize: number;
-    pageNumber: number;
-    offset: number;
-    paged: boolean;
-    unpaged: boolean;
-  };
-  totalPages: number;
-  totalElements: number;
-  last: boolean;
-  number: number;
-  sort: {
-    sorted: boolean;
-    unsorted: boolean;
-    empty: boolean;
-  };
-  size: number;
-  numberOfElements: number;
-  first: boolean;
-  empty: boolean;
-}
 
 interface AssetTag {
   id: number;

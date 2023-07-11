@@ -1,15 +1,13 @@
-import { useEffect } from "react";
-import axios from "axios";
-import Image from "next/image";
-import { useRouter } from "next/dist/client/router";
-import styled from "styled-components";
-
-import { Novel } from "novel"
-
 import NovelNav from "@/src/components/main/NovelNav";
 import NovelPagination from "@/src/components/common/NovelPagination";
-import NovelCard from "@/src/components/common/NovelCard";
+import { useRouter } from "next/dist/client/router";
+import { useEffect } from "react";
+import styled from "styled-components";
+import axios from "axios";
+import Image from "next/image";
 import nevvel_m_dark from "../../assets/img/nevvel_m_dark.png";
+import NovelCard from "@/src/components/common/NovelCard";
+import { Novel } from "novel"
 
 function GenreNovel(props: {
   content: Novel;

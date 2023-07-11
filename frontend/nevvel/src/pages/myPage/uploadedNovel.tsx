@@ -1,21 +1,11 @@
 import { useState, useEffect } from "react";
-import { NextPageContext } from "next";
 import { useRouter } from "next/router";
-import Image from "next/image";
+import { loginAtom, userInfoAtom } from "@/src/store/Login";
 import { useAtom } from "jotai";
-import NovelCard from "@/src/components/common/NovelCard";
-import axios from "axios";
-import springApi from "@/src/api";
-import Image from "next/image";
-import nevvel_m_dark from "../../assets/img/nevvel_m_dark.png";
 import styled from "styled-components";
 
-import { loginAtom, userInfoAtom } from "@/src/store/Login";
-import springApi from "@/src/api";
+import { NextPageContext } from "next";
 import { Novel } from "novel";
-
-import NovelCard from "@/src/components/common/NovelCard";
-import nevvel_m_dark from "../../assets/img/nevvel_m_dark.png";
 
 function UploadedNovel(props: { userDTO: string }) {
   const userDTO = props.userDTO === "" ? "" : JSON.parse(props.userDTO);
