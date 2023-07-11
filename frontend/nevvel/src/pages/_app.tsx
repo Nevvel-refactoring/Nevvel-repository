@@ -1,9 +1,8 @@
-import { atom, Provider, useAtom } from "jotai";
-import { useEffect, useState } from "react";
+import { Provider } from "jotai";
+import { useState } from "react";
 import { ThemeProvider } from "styled-components";
 import { lightTheme, darkTheme } from "../constants/styles/theme";
 import { GlobalStyle } from "../constants/styles/globalStyle";
-import styled from "styled-components";
 import "../assets/fonts/font.css";
 import Layout from "../components/layout/Layout";
 import type { AppProps } from "next/app";

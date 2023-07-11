@@ -1,6 +1,6 @@
 import springApi from "@/src/api";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { PurchaseData } from "./purchase";
 import { loginAtom, userInfoAtom } from "@/src/store/Login";

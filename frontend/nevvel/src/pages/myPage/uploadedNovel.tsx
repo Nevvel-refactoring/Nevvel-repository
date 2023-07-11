@@ -3,54 +3,13 @@ import { useRouter } from "next/router";
 import { loginAtom, userInfoAtom } from "@/src/store/Login";
 import { useAtom } from "jotai";
 import NovelCard from "@/src/components/common/NovelCard";
-import axios from "axios";
 import springApi from "@/src/api";
 import Image from "next/image";
 import nevvel_m_dark from "../../assets/img/nevvel_m_dark.png";
 import styled from "styled-components";
 
 import { NextPageContext } from "next";
-
-interface Novel {
-  content: {
-    id: number;
-    title: string;
-    status: string;
-    thumbnail: string;
-    genre: string;
-    writer: {
-      id: number;
-      nickname: string;
-    };
-    isUploaded: boolean;
-    isNew: boolean;
-  }[];
-  pageable: {
-    sort: {
-      sorted: boolean;
-      unsorted: boolean;
-      empty: boolean;
-    };
-    pageSize: number;
-    pageNumber: number;
-    offset: number;
-    paged: boolean;
-    unpaged: boolean;
-  };
-  totalPages: number;
-  totalElements: number;
-  last: boolean;
-  number: number;
-  sort: {
-    sorted: boolean;
-    unsorted: boolean;
-    empty: boolean;
-  };
-  size: number;
-  numberOfElements: number;
-  first: boolean;
-  empty: boolean;
-}
+import { Novel } from "novel";
 
 function UploadedNovel(props: { userDTO: string }) {
   const userDTO = props.userDTO === "" ? "" : JSON.parse(props.userDTO);
