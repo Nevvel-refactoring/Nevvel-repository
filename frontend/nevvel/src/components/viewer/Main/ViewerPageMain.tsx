@@ -36,6 +36,7 @@ function ViewerPageMain({
           <TextBlock viewerColor={viewerColor} interval={interval} key={index}>
             <ViewerPageTextBlock 
             content={content}
+            idx={index}
             />
           </TextBlock>
         ))}

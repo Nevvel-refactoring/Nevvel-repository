@@ -50,7 +50,7 @@ function viewer(props: { userDTO: string }) {
   const router = useRouter();
   const id = router.query.id;
   const [headerToggle, setHeaderToggle] = useState(true); // header on/off
-  const [tabNumber, setTabNumber] = useState(1); // tab mode 일 때 사용
+  const [tabNumber, setTabNumber] = useState(0); // tab mode 일 때 사용
   const [eventCatch, setEventCatch] = useState(false); // tab mode 일때 이벤트 있는 경우 사용
   const [settingBox, setSettingBox] = useState(false); // 설정 box 보여 줄 때 사용
   const [writeMode, setWriteMode] = useState(false); // tab or page 모드 설정 토글
@@ -99,7 +99,7 @@ function viewer(props: { userDTO: string }) {
       // } else {
       //   setEpisodeData(Dummy_Episode);
     }
-    // setEpisodeData(Dummy_Episode); // merge 하기 전에 주석처리! 위에꺼는 해제
+    setEpisodeData(Dummy_Episode); // merge 하기 전에 주석처리! 위에꺼는 해제
   }, [id]);
 
   useEffect(() => {
@@ -110,16 +110,17 @@ function viewer(props: { userDTO: string }) {
     // console 찍었을때 content 젤 마지막 index 값이 나오고 현재 스크롤 마지막 값이 나옴..
     if (EpisodeData) {
       if (nowTextBlock !== EpisodeData.contents.length) {
-        if(EpisodeData.contents[nowTextBlock].idx ==0){
-          if( EpisodeData.contents[0].event.length ===1 &&EpisodeData.contents[0].event[0].type ==="IMAGE"){
-            setTotalImage(EpisodeData.contents[0].event[0].assetUrl)
-          }else if(EpisodeData.contents[0].event.length ===1 &&EpisodeData.contents[0].event[0].type ==="AUDIO"){
-            setTotalAudio(EpisodeData.contents[0].event[0].assetUrl)
-              }else if(EpisodeData.contents[0].event.length ===2){
-            setTotalImage(EpisodeData.contents[0].event[0].assetUrl)
-            setTotalAudio(EpisodeData.contents[0].event[1].assetUrl)
-          }
-        }else{
+        // if(EpisodeData.contents[nowTextBlock].idx ==0){
+        //   if( EpisodeData.contents[0].event.length ===1 &&EpisodeData.contents[0].event[0].type ==="IMAGE"){
+        //     setTotalImage(EpisodeData.contents[0].event[0].assetUrl)
+        //   }else if(EpisodeData.contents[0].event.length ===1 &&EpisodeData.contents[0].event[0].type ==="AUDIO"){
+        //     setTotalAudio(EpisodeData.contents[0].event[0].assetUrl)
+        //       }else if(EpisodeData.contents[0].event.length ===2){
+        //     setTotalImage(EpisodeData.contents[0].event[0].assetUrl)
+        //     setTotalAudio(EpisodeData.contents[0].event[1].assetUrl)
+        //   }
+        // }
+        // else{
           if (EpisodeData.contents[nowTextBlock].event.length !== 0) {
             const events = EpisodeData.contents[nowTextBlock].event;
             for (const event of events) {
@@ -134,7 +135,7 @@ function viewer(props: { userDTO: string }) {
                 setAudioEvent(event.assetUrl);
               }
             }
-          }
+          // }
         }
       }
     }
@@ -153,6 +154,8 @@ function viewer(props: { userDTO: string }) {
     if (scrollElement) {
       scrollElement.scrollTop = scrollRef.current?.scrollHeight;
     }
+    console.log(tabNumber)
+    console.log(EpisodeData.contents[tabNumber])
   }, [tabNumber]);
 
   useEffect(()=>{
@@ -170,16 +173,17 @@ function viewer(props: { userDTO: string }) {
   useEffect(() => {
     // tab.ver
     if (EpisodeData) {
-      if(EpisodeData.contents[0].idx === 0){
-        if( EpisodeData.contents[0].event.length ===1 &&EpisodeData.contents[0].event[0].type ==="IMAGE"){
-          setTotalImage(EpisodeData.contents[0].event[0].assetUrl)
-        }else if(EpisodeData.contents[0].event.length ===1 &&EpisodeData.contents[0].event[0].type ==="AUDIO"){
-          setTotalAudio(EpisodeData.contents[0].event[0].assetUrl)
-            }else if(EpisodeData.contents[0].event.length ===2){
-          setTotalImage(EpisodeData.contents[0].event[0].assetUrl)
-          setTotalAudio(EpisodeData.contents[0].event[1].assetUrl)
-        }
-      } else{
+      // if(EpisodeData.contents[0].idx === 0){
+      //   if( EpisodeData.contents[0].event.length ===1 &&EpisodeData.contents[0].event[0].type ==="IMAGE"){
+      //     setTotalImage(EpisodeData.contents[0].event[0].assetUrl)
+      //   }else if(EpisodeData.contents[0].event.length ===1 &&EpisodeData.contents[0].event[0].type ==="AUDIO"){
+      //     setTotalAudio(EpisodeData.contents[0].event[0].assetUrl)
+      //       }else if(EpisodeData.contents[0].event.length ===2){
+      //     setTotalImage(EpisodeData.contents[0].event[0].assetUrl)
+      //     setTotalAudio(EpisodeData.contents[0].event[1].assetUrl)
+      //   }
+      // } 
+      // else{
         if (EpisodeData.contents[tabNumber] && EpisodeData.contents[tabNumber].event && EpisodeData.contents[tabNumber].event.length !== 0) {
           const events = EpisodeData.contents[tabNumber]?.event;
           for (const event of events) {
@@ -194,7 +198,7 @@ function viewer(props: { userDTO: string }) {
               setAudioEvent(event.assetUrl);
             }
           }
-        }
+        // }
       }
       }
     return () => {
