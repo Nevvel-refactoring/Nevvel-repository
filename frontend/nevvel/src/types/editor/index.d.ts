@@ -23,7 +23,7 @@ declare module "editor" {
 
 
   export interface content {
-    idx: number;
+    idx: string;
     context: string;
     event: event[];
   }

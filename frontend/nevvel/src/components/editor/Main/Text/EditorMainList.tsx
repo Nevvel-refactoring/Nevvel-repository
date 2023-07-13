@@ -43,44 +43,47 @@ function EditorMainList({
     // console.log("mainlist", eid);
   }, []);
 
-  useEffect(() => {
-    if (deleted) {
-      relocationHandler();
-    }
-    return () => {
-      setDeleted(false);
-      setRelocation([]);
-      setEpisode({ ...episode, contents: reLocation });
-    };
-  }, [deleted]);
+  // useEffect(() => {
+  //   if (deleted) {
+  //     relocationHandler();
+  //   }
+  //   return () => {
+  //     setDeleted(false);
+  //     setRelocation([]);
+  //     setEpisode({ ...episode, contents: reLocation });
+  //   };
+  // }, [deleted]);
 
   useEffect(()=>{
     // console.log(deleted,"deleted")
   },[])
 
-  useEffect(() => {
-    if (!deleted) {
-      relocationHandler();
-    }
-    return(()=>{
-      if (!deleted) {
-      setRelocation([]);
-      }
-    })
-  }, [contents]);
-  const relocationHandler = () => {
-    if (contents[contents.length - 1]?.idx != contents.length) {
-      // console.log("여기 안들어온건가");
-      contents.map((content, index) => {
-        reLocation.push({
-          idx: index + 1,
-          context: content.context,
-          event: content.event,
-        });
-      });
-      setEpisode({ ...episode, contents: reLocation });
-    }
-  };
+  // useEffect(() => {
+  //   if (!deleted) {
+  //     relocationHandler();
+  //   }
+  //   return(()=>{
+  //     if (!deleted) {
+  //     setRelocation([]);
+  //     }
+  //   })
+  // }, [contents]);
+  // const relocationHandler = () => {
+  //   if (contents[contents.length - 1]?.idx != contents.length) {
+  //     // console.log("여기 안들어온건가");
+  //     contents.map((content, index) => {
+  //       reLocation.push({
+  //         idx: index + 1,
+  //         context: content.context,
+  //         event: content.event,
+  //       });
+  //     });
+  //     setEpisode({ ...episode, contents: reLocation });
+  //   }
+  // };
+  useEffect(()=>{
+    console.log(episode)
+  },[episode])
 
 
   return (
