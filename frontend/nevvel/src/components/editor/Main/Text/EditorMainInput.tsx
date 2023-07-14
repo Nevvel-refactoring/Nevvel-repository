@@ -10,6 +10,7 @@ import { useRouter } from "next/dist/client/router";
 import styled from "styled-components";
 import { episode, content, event } from "editor";
 
+
 type EditorMainInputProps = {
   episode: episode;
   currentText: string;
@@ -29,10 +30,8 @@ function EditorMainInput({
   const eid = router.query.eid;
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [nextId, setNextId] = useState(1);
-
-  useEffect(() => {
-    // console.log("nextId", nextId);
-  }, [nextId]);
+  const {v4:uuidv4} = require('uuid')
+  const uuid = uuidv4();
 
   useEffect(() => {
     setNextId(episode.contents.length + 1);
@@ -48,12 +47,11 @@ function EditorMainInput({
         event.preventDefault();
 
         const newBlock: content = {
-          idx: nextId,
+          idx: uuid,
           context: currentText,
           event: [],
         };
         setContents([...contents, newBlock]);
-        setNextId(nextId + 1);
         setCurrentText("");
       }
     }

@@ -22,7 +22,7 @@ declare module "viewer" {
         contents: content[];
     }
     export interface content {
-        idx: number;
+        idx: string;
         context: string;
         event: event[];
       }

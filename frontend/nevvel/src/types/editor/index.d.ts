@@ -23,7 +23,7 @@ declare module "editor" {
 
 
   export interface content {
-    idx: number;
+    idx: string;
     context: string;
     event: event[];
   }
@@ -59,5 +59,13 @@ declare module "editor" {
     thumbnail: string;
     url: string;
     uploader: AssetUploader;
+  }
+  
+  export interface date {
+    year: number;
+      month: number;
+      date: number;
+      hours: number;
+      minutes: string;
   }
 }

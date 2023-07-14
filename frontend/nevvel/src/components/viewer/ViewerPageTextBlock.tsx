@@ -7,20 +7,20 @@ import { numAtom } from "@/src/store/ViewerScroll";
 
 type ViewerPageTextBlock ={
     content:content;
+    idx:number;
 }
 
-function ViewerPageTextBlock({content}:ViewerPageTextBlock) {
+function ViewerPageTextBlock({content,idx}:ViewerPageTextBlock) {
   const ref = useRef<HTMLDivElement>(null);
   const isInViewport = useIntersectionObsever(ref);
   const [noWNum, setNowNum] =useAtom(numAtom)
 
   useEffect(()=>{
     return(()=>{
-        setNowNum(content.idx)
+        setNowNum(idx)
     })
   },[isInViewport])
-  
-  
+
   return (
     <>
       <Text

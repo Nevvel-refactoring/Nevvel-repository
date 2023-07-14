@@ -3,7 +3,7 @@ import { Asset, AssetContent, AssetUploader,content } from "editor";
 
 export const assetOpenAtom = atom(0);
 
-export const nowTextBlockAtom = atom(0);
+export const nowTextBlockAtom = atom("");
 
 export const ImageAssetAtom = atom<Asset[]>([]);
 
@@ -13,7 +13,7 @@ export const putEditorAtom = atom<boolean>(false)
 
 export const totalEventAtom =atom<content>(
     {
-        idx:0,
+        idx:"total-asset",
         context:"",
         event:[]
     }

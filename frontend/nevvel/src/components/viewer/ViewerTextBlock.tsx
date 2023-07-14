@@ -11,6 +11,7 @@ type ViewerTextBlockProps = {
   tabNumber: number;
   setEventCatch: React.Dispatch<React.SetStateAction<boolean>>;
   interval: number;
+  idx:number;
 };
 
 function ViewerTextBlock({
@@ -19,10 +20,11 @@ function ViewerTextBlock({
   tabNumber,
   setEventCatch,
   interval,
+  idx
 }: ViewerTextBlockProps) {
   return (
     <>
-      {content.idx <= tabNumber && (
+      {idx <= tabNumber && (
         <TextBlock viewerColor={viewerColor} interval={interval}
         dangerouslySetInnerHTML={{ __html: content.context }}/>
       )}

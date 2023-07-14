@@ -89,7 +89,7 @@ const PreviewMain = styled.div`
   width: 60vh;
   height: 70vh;
   ::-webkit-scrollbar {
-    display: none; 
+    display: none;
   }
 `;
 export default EditorPreview;
