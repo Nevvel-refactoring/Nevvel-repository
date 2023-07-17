@@ -71,7 +71,6 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
 
   // 발행하기 모달함수
   const PublishHandler = () => {
-    relocationHandler(); // 재배치 함수 아마 json 구조 바꾸면서 삭제 될 예정
     setRelocation([]);
     if (episode.title == "") {
       alert("제목을 입력해주세요");
@@ -97,7 +96,6 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
       alert("내용을 입력해주세요");
     } else {
       if (e == "save") {
-        relocationHandler();
         // 임시 저장을 클릭 했다면
         setSaveToast(true);
       }
@@ -116,27 +114,9 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
     }
   };
 
-  // 배열 재배치 함수
-  const relocationHandler = () => {
-    if (
-      episode.contents[episode.contents.length - 1]?.idx !=
-      episode.contents.length
-    ) {
-      episode.contents.map((content, index) => {
-        reLocation.push({
-          idx: index + 1,
-          context: content.context,
-          event: content.event,
-        });
-      });
-      setEpisode({ ...episode, contents: reLocation });
-      setRelocation([]);
-    }
-  };
 
   // 미리보기 모달 함수
   const previewHandler = () => {
-    relocationHandler();
     setModalOpen(true);
   };
 
@@ -173,10 +153,10 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
   const AssetHandler = (e: number) => {
     if (e === 1) {
       setAssetOpen(1);
-      setNowTextBlock(0);
+      setNowTextBlock("");
     } else if (e === 2) {
       setAssetOpen(2);
-      setNowTextBlock(0);
+      setNowTextBlock("");
     }
   };
 

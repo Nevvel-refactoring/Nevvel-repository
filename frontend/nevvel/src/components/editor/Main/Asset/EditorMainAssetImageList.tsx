@@ -38,7 +38,7 @@ function EditorMainAssetImageList({
 
   // 에셋 수정 삭제 기능도 구현해야함!
   const ClickHandler = (asset: Asset) => {
-    if (nowTextBlock == 0) {
+    if (nowTextBlock == "") {
       if (totalEvent.event.length >= 2) {
       } else {
         if (totalEvent.event.length !== 0) {
