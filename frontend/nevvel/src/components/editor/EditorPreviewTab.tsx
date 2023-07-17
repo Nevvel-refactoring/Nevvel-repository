@@ -100,6 +100,7 @@ function EditorPreviewTab({
           <EditorPreviewTextBlock
             interval={interval}
             key={index}
+            idx={index}
             content={content}
             tabNumber={tabNumber}
             setEventCatch={setEventCatch}

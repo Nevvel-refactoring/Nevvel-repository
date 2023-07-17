@@ -32,7 +32,7 @@ function EditorMainAssetSoundList({
   }, [contents]);
 
   const ClickHandler = (asset: Asset) => {
-    if (nowTextBlock == 0) {
+    if (nowTextBlock == "") {
       if (totalEvent.event.length >= 2) {
       } else {
         if (totalEvent.event.length !== 0) {
