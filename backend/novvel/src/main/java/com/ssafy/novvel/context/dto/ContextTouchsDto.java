@@ -11,8 +11,12 @@ public class ContextTouchsDto {
     /**
      *   "contents": [
      *     {
-     *       "idx": "integer",
-     *       "context": "String"
+     *       "idx": "string",
+     *       "context": [
+     *          {
+     *              "tag": "string",
+     *              "text": "string"
+     *          }
      *       "event": [
      *         {
      *           "assetId": "integer",
@@ -23,9 +27,9 @@ public class ContextTouchsDto {
      *     },
      *   ]
      */
-    private Long idx;
+    private String idx;
 
-    private String context;
+    private ContextDto context;
 
     private List<ContextAffectInfoDto> event;
 
