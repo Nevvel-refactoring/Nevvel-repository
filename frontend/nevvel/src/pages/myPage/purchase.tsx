@@ -173,7 +173,7 @@ function Purchase(props: { userDTO: string }) {
       // buyer_email: "example@example", // 구매자 이메일(사용자 정보 저장 가능해지면 수정)
       //   buyer_addr: "신사동 661-16", // 구매자 주소
       //   buyer_postcode: "06018", // 구매자 우편번호
-      m_redirect_url: "https://k8d1061.p.ssafy.io/myPage/purchased", // 예: https://www.my-service.com/payments/complete
+      m_redirect_url: "http://3.35.53.215:8080//myPage/purchased", // 예: https://www.my-service.com/payments/complete
     };
     IMP.request_pay(data, callback);
   };

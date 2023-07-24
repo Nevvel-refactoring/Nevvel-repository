@@ -266,7 +266,7 @@ function assetstore({ content }: any) {
 //    const cookie = context.req ? context.req.headers.cookie : "";
 
 //   try {
-//     const res = await axios.get("https://k8d1061.p.ssafy.io:8080/api/tags",{ headers: { cookie } });
+//     const res = await axios.get("http://3.35.53.215:8080/:8080/api/tags",{ headers: { cookie } });
 //     return {
 //       props: { content: res.data },
 //     };

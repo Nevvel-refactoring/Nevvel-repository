@@ -32,7 +32,7 @@ function Login(props: { userDTO: string }) {
   const router = useRouter();
 
   const kakaoLogin = () => {
-    router.push("https://k8d1061.p.ssafy.io/api/oauth2/authorization/kakao");
+    router.push("https://www.nevvel.net:8081/api/oauth2/authorization/kakao");
   };
 
   return (

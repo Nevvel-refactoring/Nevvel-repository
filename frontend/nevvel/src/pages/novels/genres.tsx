@@ -188,7 +188,7 @@ export async function getServerSideProps(context: {
     pageNum = Number(context.query.pageNum);
   }
   try {
-    const res = await axios.get("https://k8d1061.p.ssafy.io/api/covers", {
+    const res = await axios.get("https://www.nevvel.net:8081/api/covers", {
       params: {
         sorttype: sort,
         page: pageNum,
