@@ -34,7 +34,7 @@ export const MyPageModal = ({
     setModal(false);
     onClickProfile();
     axios
-      .post("https://k8d1061.p.ssafy.io/api/users/signout")
+      .post("https://www.nevvel.net:8081/api/users/signout")
       .then(() => logoutRoute())
       .catch((error) => console.log(error));
   };

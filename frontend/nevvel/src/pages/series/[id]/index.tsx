@@ -91,7 +91,7 @@ function index(props: { userDTO: string }) {
 }
 
 // export async function getStaticPaths() {
-//   const res = await axios.get("https://k8d1061.p.ssafy.io/api/covers");
+//   const res = await axios.get("https://www.nevvel.net:8081/api/covers");
 //   const series = await res.data;
 
 //   const paths = series.content.map((serie: Content) => ({
@@ -107,7 +107,7 @@ function index(props: { userDTO: string }) {
 //   const seriesId = context.params?.id ?? "";
 
 //   const res = await axios.get(
-//     `https://k8d1061.p.ssafy.io/api/covers/${seriesId}`
+//     `https://www.nevvel.net:8081/api/covers/${seriesId}`
 //   );
 //   const seriesData = res.data;
 

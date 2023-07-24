@@ -6,7 +6,8 @@ import axios from "axios";
 // }
 
 const springApi = axios.create({
-  baseURL: "https://k8d1061.p.ssafy.io/api"
+  baseURL: "https://www.nevvel.net:8081/api"
+  // baseURL: "http://3.35.53.215:8080//api"
   // baseURL: "https://k8d106.p.ssafy.io:8080/api"
 })
 
@@ -24,7 +25,7 @@ export const NewvelApi = {
 
   // 소셜 로그인
   logIn: () =>
-    springApi.get("https://k8d1061.p.ssafy.io/api/oauth2/authorization/kakao"),
+    springApi.get("https://www.nevvel.net:8081/api/oauth2/authorization/kakao"),
   // 로그인 api 이게 맞나요...??
 
   // 에피소드 판매지수 높은 순 인기작가
