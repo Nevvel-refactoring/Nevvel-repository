@@ -1,0 +1,57 @@
+name: deployFrontendServer
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - dev_fe
+    paths:
+      - frontend/nevvel/**
+
+jobs:
+  docker:
+    runs-on: ubuntu-20.04
+    defaults:
+      run:
+        working-directory: "./frontend/nevvel"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      - name: Docker Push
+        uses: docker/build-push-action@v4
+        with:
+          push: true
+          tags: hokyun/frontend:latest
+
+      - name: Install Utilities # 필수 유틸리티 다운로드
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq unzip
+      - name: Install AWS Client # AWS SDK 다운로드 (LightSail 이미지 푸시 및 배포를 위함)
+        run: |
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip awscliv2.zip
+          sudo ./aws/install || true
+          aws --version
+          curl "https://s3.us-west-2.amazonaws.com/lightsailctl/latest/linux-amd64/lightsailctl" -o "lightsailctl"
+          sudo mv "lightsailctl" "/usr/local/bin/lightsailctl"
+          sudo chmod +x /usr/local/bin/lightsailctl
+      - name: Configure AWS credentials # 입력된 IAM 사용자 액세스키 & 시크릿키 검증
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: 'ap-northeast-2'
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Deploy To LightSail # 이미지 푸시 및 배포
+        run: |
+          aws lightsail get-container-service-deployments --service-name container-service-1 | jq --raw-output ".containerImages[0].image" > image.txt
+          jq --arg image $(cat image.txt) '.containers.app.image = $image' container.template.json > container.json
+          aws lightsail create-container-service-deployment --service-name container-service-1 --cli-input-json file://$(pwd)/container.json
