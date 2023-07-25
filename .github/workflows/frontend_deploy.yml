@@ -15,9 +15,6 @@ jobs:
       run:
         working-directory: "./frontend/nevvel"
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
         
@@ -33,6 +30,7 @@ jobs:
       - name: Docker Push
         uses: docker/build-push-action@v4
         with:
+          context: ./frontend/nevvel
           push: true
           tags: hokyun/frontend:latest
 
