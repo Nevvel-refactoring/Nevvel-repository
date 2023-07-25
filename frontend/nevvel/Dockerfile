@@ -4,7 +4,7 @@ WORKDIR /home/ubuntu/frontend
 
 COPY ./frontend/nevvel/package*.json ./
 RUN npm install
-COPY ./ ./
+COPY ./frontend/nevvel/ ./
 RUN chmod 755 -R ./node_modules
 RUN npm run build
 
