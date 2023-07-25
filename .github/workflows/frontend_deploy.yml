@@ -11,9 +11,9 @@ on:
 jobs:
   docker:
     runs-on: ubuntu-20.04
-#     defaults:
-#       run:
-#         working-directory: "./frontend/nevvel"
+    defaults:
+      run:
+        working-directory: "frontend/nevvel"
     steps:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
@@ -57,5 +57,5 @@ jobs:
       - name: Deploy To LightSail # 이미지 푸시 및 배포
         run: |
           aws lightsail get-container-service-deployments --service-name container-service-1 | jq --raw-output ".containerImages[0].image" > image.txt
-          jq --arg image $(cat image.txt) '.containers.app.image = $image' ./frontend/nevvel/container.template.json > container.json
+          jq --arg image $(cat image.txt) '.containers.app.image = $image' container.template.json > container.json
           aws lightsail create-container-service-deployment --service-name container-service-1 --cli-input-json file://$(pwd)/container.json
