@@ -9,7 +9,6 @@ import styled from "styled-components";
 import EditorMainListItem from "./EditorMainListItem";
 import EditorMainAssetContainer from "../Asset/EditorMainAssetContainer";
 import { content, episode } from "editor";
-import EditorMainInput from "./EditorMainInput";
 import { useRouter } from "next/router";
 
 type EditorMainListProps = {
@@ -37,81 +36,24 @@ function EditorMainList({
   const router = useRouter();
   const eid = router.query.eid;
   const [deleted, setDeleted] = useState(false);
-  const [reLocation, setRelocation] = useState<content[]>([]);
-
-  useEffect(() => {
-    // console.log("mainlist", eid);
-  }, []);
-
-  // useEffect(() => {
-  //   if (deleted) {
-  //     relocationHandler();
-  //   }
-  //   return () => {
-  //     setDeleted(false);
-  //     setRelocation([]);
-  //     setEpisode({ ...episode, contents: reLocation });
-  //   };
-  // }, [deleted]);
-
-  useEffect(()=>{
-    // console.log(deleted,"deleted")
-  },[])
-
-  // useEffect(() => {
-  //   if (!deleted) {
-  //     relocationHandler();
-  //   }
-  //   return(()=>{
-  //     if (!deleted) {
-  //     setRelocation([]);
-  //     }
-  //   })
-  // }, [contents]);
-  // const relocationHandler = () => {
-  //   if (contents[contents.length - 1]?.idx != contents.length) {
-  //     // console.log("여기 안들어온건가");
-  //     contents.map((content, index) => {
-  //       reLocation.push({
-  //         idx: index + 1,
-  //         context: content.context,
-  //         event: content.event,
-  //       });
-  //     });
-  //     setEpisode({ ...episode, contents: reLocation });
-  //   }
-  // };
-  useEffect(()=>{
-    console.log(episode)
-  },[episode])
-
 
   return (
     <MainWrapper>
       <MainContainer ref={scrollRef}>
         <ListWrapper>
           {episode.contents.map((content, index) => (
-            <EditorMainListItem
-              key={content.idx}
-              content={content}
-              contents={contents}
-              setContents={setContents}
-              deleted={deleted}
-              setDeleted={setDeleted}
-            />
+            <div>
+              <EditorMainListItem
+                key={content.idx}
+                content={content}
+                contents={contents}
+                setContents={setContents}
+                deleted={deleted}
+                setDeleted={setDeleted}
+              />
+            </div>
           ))}
         </ListWrapper>
-        <ContentWrapper>
-          <InputWrapper>
-            <EditorMainInput
-              episode={episode}
-              currentText={currentText}
-              setCurrentText={setCurrentText}
-              contents={contents}
-              setContents={setContents}
-            />
-          </InputWrapper>
-        </ContentWrapper>
       </MainContainer>
     </MainWrapper>
   );
@@ -148,6 +90,7 @@ const ContentWrapper = styled.div`
 
 const InputWrapper = styled.div`
   display: flex;
+  flex-direction: column;
   flex-grow: 1;
   width: 100%;
   /* padding: 0.5rem; */

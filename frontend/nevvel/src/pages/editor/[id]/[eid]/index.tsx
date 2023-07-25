@@ -95,7 +95,7 @@ function index(props: { userDTO: string }) {
         setEpisode(res.data);
       }
     }catch(error){
-      setEpisode(Dummy_Episode)
+      console.log(error)
     }
   };
 

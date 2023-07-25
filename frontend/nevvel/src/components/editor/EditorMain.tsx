@@ -17,26 +17,35 @@ type EditorMainProps = {
 function EditorMain({setEpisode,episode}:EditorMainProps) {
   const [contents, setContents] =useState<content[]>([]);
   const [currentText, setCurrentText] = useState("");
-  const assetOpen = useAtomValue(assetOpenAtom) 
-  
+  const assetOpen = useAtomValue(assetOpenAtom);
+
+  const generateUniqueId = () => {
+    // 현재 시간을 이용하여 고유한 ID 생성
+    const timestamp = new Date().getTime();
+    return `block_${timestamp}`;
+  };
+
   useEffect(()=>{
-    if (episode.contents.length !== 0){
-      setContents(episode.contents)
-    }
-  },[episode])
+    if (contents.length === 0) {
+      const newBlock: content = {
+        idx: generateUniqueId(), // Generate a new unique ID for the block
+        context: [
+          {
+            id: "a",
+            tag: "p",
+            text: " ",
+          },
+        ],
+        event: [],
+      };
+      setContents([...contents, newBlock]);
+    };
+  },[])
 
   useEffect(()=>{
     setEpisode({...episode,contents:contents})
-    // console.log("episode 들오오냐 메인에",episode)
   },[contents])
 
-  // useEffect(()=>{
-  //   if (episode.contents.length !== 0){
-  //     setContents(episode.contents)
-  //   }
-  //   console.log("최초 에피소드",episode)
-  // },[])
-  
 
     return (<>
     <Wrapper assetOpen={assetOpen}>
@@ -50,7 +59,7 @@ function EditorMain({setEpisode,episode}:EditorMainProps) {
             />
     </Wrapper>
     <NumColor>
-        {assetOpen && <EditorMainAssetContainer 
+        {assetOpen && <EditorMainAssetContainer
         contents={contents}
         setContents={setContents} />}
     </NumColor>

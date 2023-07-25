@@ -64,7 +64,7 @@ function viewer(props: { userDTO: string }) {
   const scrollElement = scrollRef.current as HTMLDivElement;
   const [currentScroll, setCurrentScroll] = useState(0);
   const nowTextBlock = useAtomValue(numAtom);
-  const [EpisodeData, setEpisodeData] = useState<episodeViewer>(Dummy_Episode);
+  const [EpisodeData, setEpisodeData] = useState<episodeViewer>();
   const [imageEvent, setImageEvent] = useState<string>("");
   const [audioEvent, setAudioEvent] = useState<string>("");
   const [viewerColor, setViewerColor] = useState<string>("");
@@ -99,7 +99,7 @@ function viewer(props: { userDTO: string }) {
       // } else {
       //   setEpisodeData(Dummy_Episode);
     }
-    setEpisodeData(Dummy_Episode); // merge 하기 전에 주석처리! 위에꺼는 해제
+    // setEpisodeData(Dummy_Episode); // merge 하기 전에 주석처리! 위에꺼는 해제
   }, [id]);
 
   useEffect(() => {
@@ -154,8 +154,8 @@ function viewer(props: { userDTO: string }) {
     if (scrollElement) {
       scrollElement.scrollTop = scrollRef.current?.scrollHeight;
     }
-    console.log(tabNumber)
-    console.log(EpisodeData.contents[tabNumber])
+    // console.log(tabNumber)
+    // console.log(EpisodeData.contents[tabNumber])
   }, [tabNumber]);
 
   useEffect(()=>{

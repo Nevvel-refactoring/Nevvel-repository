@@ -24,9 +24,15 @@ declare module "editor" {
 
   export interface content {
     idx: string;
-    context: string;
+    context: context[];
     event: event[];
   }
+  export interface context {
+    id: string;
+    tag: string;
+    text: string;
+  }
+
   export interface event {
     assetId: number;
     type: string;

@@ -45,6 +45,7 @@ function index(props: { userDTO: string }) {
   });
   const [coverData, setCoverData] = useState<cover>();
   const scrollRef = useRef<any>();
+  
   useEffect(() => {
     scrollRef.current.scrollTop = scrollRef.current?.scrollHeight;
   }, [episode]);

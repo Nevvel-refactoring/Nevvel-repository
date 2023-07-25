@@ -1,5 +1,5 @@
 import { atom } from "jotai";
-import { Asset, AssetContent, AssetUploader,content } from "editor";
+import { Asset, AssetContent, AssetUploader,content,context } from "editor";
 
 export const assetOpenAtom = atom(0);
 
@@ -14,9 +14,9 @@ export const putEditorAtom = atom<boolean>(false)
 export const totalEventAtom =atom<content>(
     {
         idx:"total-asset",
-        context:"",
+        context:[],
         event:[]
     }
 )
 
-export const totalEventCheckAtom = atom<boolean>(false)
+export const totalEventCheckAtom = atom<boolean>(false);
