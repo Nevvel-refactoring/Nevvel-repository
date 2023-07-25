@@ -114,10 +114,8 @@ function index(props: { userDTO: string }) {
   };
 
   useEffect(() => {
-    // console.log(id, "id1");
     getAssetImgData();
     getAssetAudioData();
-    // setAssetData(DummyAssetData_image.content)
   }, []);
 
   // useEffect(() => {

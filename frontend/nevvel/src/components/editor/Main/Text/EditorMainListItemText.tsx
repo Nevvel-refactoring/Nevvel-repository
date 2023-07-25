@@ -1,7 +1,7 @@
 import React, { useEffect, useState,memo} from "react";
 import ContentEditable, { ContentEditableEvent } from "react-contenteditable";
 import styled from "styled-components";
-import {content, context} from "editor";
+import {content} from "editor";
 import { nowTextBlockAtom } from "@/src/store/EditorAssetStore";
 import { useAtom } from "jotai";
 
@@ -13,11 +13,10 @@ type EditorMainListItemTextProps = {
   setContents: React.Dispatch<React.SetStateAction<content[]>>;
   setEnterClick: React.Dispatch<React.SetStateAction<boolean>>;
   contents: content[];
-  context: context;
   setNowContent: React.Dispatch<React.SetStateAction<content>>
   nowContent: content;
 };
-function EditorMainListItemText({ id,idx,text,setTextId,context,setEnterClick,setContents,contents,setNowContent,nowContent
+function EditorMainListItemText({ id,idx,text,setTextId,setEnterClick,setContents,contents,setNowContent,nowContent
  }: EditorMainListItemTextProps) {
   const { v4: uuidv4 } = require("uuid");
   const uuid = uuidv4();
@@ -25,17 +24,17 @@ function EditorMainListItemText({ id,idx,text,setTextId,context,setEnterClick,se
   const [nowTextBlock, setNowTextBlock] = useAtom(nowTextBlockAtom);
   const [blockText, setBlockText] = useState("");
 
-  useEffect(() => {
-    // `nowContent`의 복사본을 만들어서 업데이트합니다.
-    if(nowContent){
-      setNowContent((prevContent) => ({
-        ...prevContent,
-        context: prevContent.context.map((el) =>
-          el.id === id ? { ...el, text: blockText } : el
-        ),
-      }));
-    }
-  }, [blockText]);
+  // useEffect(() => {
+  //   // `nowContent`의 복사본을 만들어서 업데이트합니다.
+  //   if(nowContent){
+  //     setNowContent((prevContent) => ({
+  //       ...prevContent,
+  //       context: prevContent.context.map((el) =>
+  //         el.id === id ? { ...el, text: blockText } : el
+  //       ),
+  //     }));
+  //   }
+  // }, [blockText]);
   useEffect(()=>{
     //useMemo 사용하기
     setTextId(id);

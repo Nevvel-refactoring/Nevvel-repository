@@ -1,239 +1,79 @@
 import React, { useState, useEffect, useRef, memo } from "react";
 import styled from "styled-components";
-import { BiImageAdd } from "react-icons/bi";
 import { TiDelete } from "react-icons/ti";
-import { AiOutlineSound } from "react-icons/ai";
 import EditorMainMenu from "./EditorMainMenu";
 import { bigMobile, mobile } from "@/src/util/Mixin";
 import { content } from "editor";
 import { atom, useAtom, useAtomValue } from "jotai";
-import { assetOpenAtom, nowTextBlockAtom } from "@/src/store/EditorAssetStore";
-import { ImageAssetAtom } from "@/src/store/EditorAssetStore";
-import { AudioAssetAtom } from "@/src/store/EditorAssetStore";
-import { useRouter } from "next/router";
-import EditorMainListItemText from "./EditorMainListItemText";
+import EditorMainAssetBtn from "../Asset/EditorMainAssetBtn";
 import ContentEditable from "react-contenteditable";
 
 type EditorMainListItemProps = {
   content: content;
   contents: content[];
   setContents: React.Dispatch<React.SetStateAction<content[]>>;
-  deleted: boolean;
-  setDeleted: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 function EditorMainListItem({
   content,
   contents,
   setContents,
-  deleted,
-  setDeleted,
 }: EditorMainListItemProps) {
-  const [plus, setPlus] = useState(false);
-  const textRef = useRef<HTMLDivElement>(null);
-  const [isComposing, setIsComposing] = useState(false);
-  const [menuBlock, setMenuBlock] = useState(false);
-  const [assetOpen, setAssetOpen] = useAtom(assetOpenAtom);
-  const [nowTextBlock, setNowTextBlock] = useAtom(nowTextBlockAtom);
-  const [isDragging, setIsDragging] = useState(false);
-  const [blockText, setBlockText] = useState("");
-
-  const [TextId, setTextId] = useState("");
-  const [nowContent, setNowContent] = useState<content>(content);
+  const [blockText, setBlockText] = useState(content.context);
   const [enterClick, setEnterClick] = useState(false);
-
+  const [createBlock, setCreateBlock] =useState(false)
+  const { v4: uuidv4 } = require("uuid");
+  const uuid = uuidv4();
   const idx = content.idx;
-  const IMAGE = useAtomValue(ImageAssetAtom);
-  const AUDIO = useAtomValue(AudioAssetAtom);
-  const router = useRouter();
-  const eid = router.query.eid;
-  const nowIdx = contents.findIndex((el) => el.idx === idx);
+  const fIndex = contents.findIndex((el) => el.idx === idx);
+  const handleChange = (e: any) => {
+   setContents((prevContent)=>
+   prevContent.map((el) =>
+        el.idx === idx ? { ...el, context: e.target.value } : el
+      ))
+  };
+
+  useEffect(()=>{
+    if(createBlock){
+      const copiedContents = [...contents]
+      const newBlock:content ={
+        idx:uuid,
+        tag:"p",
+        context:"",
+        event:[]
+      }
+      copiedContents.splice(fIndex+1,0,newBlock)
+      console.log("copiedContents",copiedContents)
+      setContents(copiedContents)
+    }
+    setCreateBlock(false)
+  },[createBlock])
 
   useEffect(() => {
     console.log(contents);
   }, [contents]);
 
-  useEffect(() => {
-    const newContents: content[] = [];
-
-    contents.map((content, index) => {
-      if (index === nowIdx) {
-        newContents.push(nowContent);
-      } else {
-        newContents.push(content);
-      }
-    });
-    setContents(newContents);
-  }, [nowContent]);
-
-  useEffect(() => {
-    // 마지막 객체에서 enter를 눌렀을 경우
-    if (enterClick && contents.length - 1 == nowIdx) {
-      const newBlock: content = {
-        idx: Math.random().toString(),
-        context: [
-          {
-            id: "a",
-            tag: "p",
-            text: "",
-          },
-        ],
-        event: [],
-      };
-      setContents([...contents, newBlock]);
-      setEnterClick(false);
-      // 중간에 enter를 눌렀을 경우
-    } else if (enterClick && contents.length - 1 !== nowIdx) {
-      let copiedContents = [...contents];
-      copiedContents.splice(nowIdx + 1, 0, {
-        idx: Math.random().toString(),
-        context: [
-          {
-            id: "a",
-            tag: "p",
-            text: "추가된 것",
-          },
-        ],
-        event: [],
-      });
-      setContents(copiedContents);
-    }
-  }, [enterClick]);
-
-  useEffect(() => {
-    // `nowContent`의 복사본을 만들어서 업데이트합니다.
-    if (nowContent) {
-      setNowContent((prevContent) => ({
-        ...prevContent,
-        context: prevContent.context.map((el) =>
-          el.id === "a" ? { ...el, text: blockText } : el
-        ),
-      }));
-    }
-  }, [blockText]);
-
-  const handleChange = (e: any) => {
-    setBlockText(e.target.value); // Use innerText to get the content
-  };
-
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
     if (event.key == "Enter") {
       if (!event.shiftKey) {
         event.preventDefault();
-        setEnterClick(true);
-        setNowTextBlock(idx);
+        setCreateBlock(true)
       }
     }
   };
-
   // block삭제
   const RemoveHandler = (content: content) => {
     setContents(contents.filter((el) => el.idx !== idx));
-    setDeleted(true);
   };
-
-  const AssetHandler = (e: number) => {
-    if (e === 1) {
-      setAssetOpen(1);
-      setNowTextBlock(content.idx);
-    } else {
-      setAssetOpen(2);
-      setNowTextBlock(content.idx);
-    }
-  };
-
-  const ImageEvent = content.event.map((asset, index) => {
-    if (content.event.length == 1 && index == 0 && asset.type === "IMAGE") {
-      const assetImageFindIndex = IMAGE.findIndex(
-        (el) => el.id == asset.assetId
-      );
-      return (
-        <AssetContainer key={index}>
-          <Img src={IMAGE[assetImageFindIndex]?.thumbnail} alt="썸네일" />
-          <AssetButton onClick={() => AssetHandler(2)}>
-            <AiOutlineSound className="sound" size="24" />
-          </AssetButton>
-        </AssetContainer>
-      );
-    } else if (
-      content.event.length == 1 &&
-      index == 0 &&
-      asset.type === "AUDIO"
-    ) {
-      const assetAudioFindIndex = AUDIO.findIndex(
-        (el) => el.id == asset.assetId
-      );
-      return (
-        <AssetContainer key={index}>
-          <AssetButton onClick={() => AssetHandler(1)}>
-            <BiImageAdd className="image" size="24" />
-          </AssetButton>
-          <Img src={AUDIO[assetAudioFindIndex]?.thumbnail} alt="썸네일" />
-        </AssetContainer>
-      );
-    } else {
-      const assetImageFindIndex = IMAGE.findIndex(
-        (el) => el.id == asset.assetId
-      );
-      const assetAudioFindIndex = AUDIO.findIndex(
-        (el) => el.id == asset.assetId
-      );
-      return (
-        <div key={index}>
-          {asset.type === "IMAGE" && (
-            <Img
-              className="check"
-              src={IMAGE[assetImageFindIndex]?.thumbnail}
-              alt="썸네일"
-            />
-          )}
-          {asset.type === "AUDIO" && (
-            <Img
-              className="check"
-              src={AUDIO[assetAudioFindIndex]?.thumbnail}
-              alt="썸네일"
-            />
-          )}
-        </div>
-      );
-    }
-  });
-
   return (
     <BlockContainer>
-      {plus ? (
-        <>
-          <AssetButtonContainer>
-            {content.event.length == 0 ? (
-              <>
-                <AssetButton onClick={() => AssetHandler(1)}>
-                  <BiImageAdd className="image" size="24" />
-                </AssetButton>
-                <AssetButton onClick={() => AssetHandler(2)}>
-                  <AiOutlineSound className="sound" size="24" />
-                </AssetButton>
-                <PlusButton onClick={() => setPlus(!plus)}>-</PlusButton>
-              </>
-            ) : (
-              <>{eid ? null : ImageEvent}</>
-            )}
-          </AssetButtonContainer>
-        </>
-      ) : (
-        <>
-          <AssetButtonContainer>
-            <Space>&nbsp;</Space>
-            <Space>&nbsp;</Space>
-            <PlusButton onClick={() => setPlus(!plus)}>+</PlusButton>
-          </AssetButtonContainer>
-        </>
-      )}
+      <EditorMainAssetBtn content={content} />
       <TextBlock>
         <TextContainer>
           <ContentEditable
             className="textblock"
             tagName="pre"
-            html={blockText}
+            html={content.context}
             onChange={handleChange}
             onKeyDown={handleKeyDown}
             placeholder="등록 할 내용을 입력해주세요"
@@ -259,58 +99,6 @@ const BlockContainer = styled.div`
     flex-direction: column;
   }
 `;
-const AssetButtonContainer = styled.div`
-  width: 10rem;
-  display: inline-flex;
-  text-align: center;
-  align-items: center;
-  margin-left: 0.5rem;
-  margin-right: 0.5rem;
-  justify-content: center;
-  ${bigMobile} {
-    display: flex;
-  }
-`;
-
-const AssetContainer = styled.div`
-  display: inline-flex;
-  text-align: center;
-  align-items: center;
-  margin-left: 0.5rem;
-  margin-right: 0.5rem;
-  justify-content: center;
-`;
-
-const AssetButton = styled.button`
-  width: 3.5rem;
-  height: 2.5rem;
-  display: flex;
-  justify-content: center;
-  text-align: center;
-  align-items: center;
-  margin-left: 0.3rem;
-  border: 2px solid ${({ theme }) => theme.color.hover};
-  border-radius: 10px;
-  color: ${({ theme }) => theme.color.hover};
-  :hover {
-    color: ${({ theme }) => theme.color.point};
-    border: 2px solid ${({ theme }) => theme.color.point};
-  }
-`;
-const Space = styled.div`
-  width: 3.5rem;
-  height: 2.5rem;
-`;
-
-const PlusButton = styled.button`
-  width: 2rem;
-  color: ${({ theme }) => theme.color.point};
-  font-size: 2rem;
-  margin-left: 1rem;
-  display: flex;
-  text-align: center;
-  align-items: center;
-`;
 
 const TextBlock = styled.div`
   width: 85%;
@@ -333,14 +121,6 @@ const RemoveButton = styled.button`
   color: ${({ theme }) => theme.color.hover};
   :hover {
     ${({ theme }) => theme.color.point};
-  }
-`;
-
-const Img = styled.img`
-  width: 3.5rem;
-  height: 2.5rem;
-  &.check {
-    margin-left: 0.3rem;
   }
 `;
 

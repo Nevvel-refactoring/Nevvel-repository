@@ -8,30 +8,22 @@ import React, {
 import styled from "styled-components";
 import EditorMainListItem from "./EditorMainListItem";
 import EditorMainAssetContainer from "../Asset/EditorMainAssetContainer";
+import { useAtom } from "jotai";
 import { content, episode } from "editor";
 import { useRouter } from "next/router";
 
 type EditorMainListProps = {
-  episode: episode;
-  setEpisode: React.Dispatch<React.SetStateAction<episode>>;
   contents: content[];
   setContents: React.Dispatch<React.SetStateAction<content[]>>;
-  currentText: string;
-  setCurrentText: Dispatch<SetStateAction<string>>;
 };
 
 function EditorMainList({
-  episode,
   contents,
   setContents,
-  currentText,
-  setCurrentText,
-  setEpisode,
 }: EditorMainListProps) {
   const scrollRef = useRef<any>();
   const router = useRouter();
   const eid = router.query.eid;
-  const [deleted, setDeleted] = useState(false);
 
   return (
     <MainWrapper>
@@ -44,8 +36,6 @@ function EditorMainList({
                 content={content}
                 contents={contents}
                 setContents={setContents}
-                deleted={deleted}
-                setDeleted={setDeleted}
               />
             </div>
           ))}

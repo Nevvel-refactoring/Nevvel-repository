@@ -6,8 +6,6 @@ import { useAtom,useAtomValue } from "jotai";
 import { assetOpenAtom } from "@/src/store/EditorAssetStore";
 import EditorMainAssetContainer from "@/src/components/editor/Main/Asset/EditorMainAssetContainer";
 import springApi from "@/src/api";
-import DummyAssetData_image from "@/src/components/assetstore/DummyAssetData_Image.json";
-import DummyAssetData_audio from "@/src/components/assetstore/DummyAssetData_Audio.json";
 
 type EditorMainProps = {
   setEpisode:React.Dispatch<React.SetStateAction<episode>>;
@@ -16,7 +14,6 @@ type EditorMainProps = {
 
 function EditorMain({setEpisode,episode}:EditorMainProps) {
   const [contents, setContents] =useState<content[]>([]);
-  const [currentText, setCurrentText] = useState("");
   const assetOpen = useAtomValue(assetOpenAtom);
 
   const generateUniqueId = () => {
@@ -26,16 +23,12 @@ function EditorMain({setEpisode,episode}:EditorMainProps) {
   };
 
   useEffect(()=>{
+    // useState에 최초값 넣어주게 되면 그대로 복사 되는 현상 발생함 ㅠㅠ
     if (contents.length === 0) {
       const newBlock: content = {
         idx: generateUniqueId(), // Generate a new unique ID for the block
-        context: [
-          {
-            id: "a",
-            tag: "p",
-            text: " ",
-          },
-        ],
+        tag:"p",
+        context:"",
         event: [],
       };
       setContents([...contents, newBlock]);
@@ -45,17 +38,11 @@ function EditorMain({setEpisode,episode}:EditorMainProps) {
   useEffect(()=>{
     setEpisode({...episode,contents:contents})
   },[contents])
-
-
     return (<>
     <Wrapper assetOpen={assetOpen}>
       <EditorMainList
-            episode={episode}
-            setEpisode={setEpisode}
             contents={contents}
             setContents={setContents}
-             currentText={currentText}
-            setCurrentText={setCurrentText}
             />
     </Wrapper>
     <NumColor>

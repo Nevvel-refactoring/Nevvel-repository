@@ -47,13 +47,8 @@ function EditorMainInput({
 
         const newBlock: content = {
           idx: uuid,
-          context: [
-            {
-              id:uuid,
-              tag: "p",
-              text: currentText,
-            },
-          ],
+          context:"",
+          tag:"",
           event: [],
         };
         setContents([...contents, newBlock]);
