@@ -2,7 +2,7 @@ FROM node:18.15.0 AS base
 
 WORKDIR /home/ubuntu/frontend
 
-COPY ./package*.json ./
+COPY ./frontend/nevvel/package*.json ./
 RUN npm install
 COPY ./ ./
 RUN chmod 755 -R ./node_modules
