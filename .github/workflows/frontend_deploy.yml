@@ -51,7 +51,7 @@ jobs:
           sudo mv "lightsailctl" "/usr/local/bin/lightsailctl"
           sudo chmod +x /usr/local/bin/lightsailctl
       - name: Configure AWS credentials # 입력된 IAM 사용자 액세스키 & 시크릿키 검증
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-region: 'ap-northeast-2'
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -59,6 +59,4 @@ jobs:
 
       - name: Deploy To LightSail # 이미지 푸시 및 배포
         run: |
-          aws lightsail get-container-service-deployments --service-name container-service-1 | jq --raw-output ".containerImages[0].image" > image.txt
-          jq --arg image $(cat image.txt) '.containers.app.image = $image' container.template.json > container.json
           aws lightsail create-container-service-deployment --service-name container-service-1 --cli-input-json file://$(pwd)/container.json
