@@ -30,7 +30,7 @@ jobs:
       - name: Docker Push
         uses: docker/build-push-action@v4
         with:
-          file: /frontend/nevvel
+          file: /frontend/nevvel/Dockerfile
           push: true
           tags: hokyun/frontend:latest
 
