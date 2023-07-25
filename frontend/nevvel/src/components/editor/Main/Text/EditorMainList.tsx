@@ -29,10 +29,6 @@ function EditorMainList({
   setEpisode,
 }: EditorMainListProps) {
   const scrollRef = useRef<any>();
-  // useEffect(() => {
-  //   console.log(scrollRef.current?.scrollHeight)
-  //   scrollRef.current.scrollTop = (scrollRef.current?.scrollHeight + 64);
-  // }, [currentText,contents]);
   const router = useRouter();
   const eid = router.query.eid;
   const [deleted, setDeleted] = useState(false);
@@ -41,7 +37,7 @@ function EditorMainList({
     <MainWrapper>
       <MainContainer ref={scrollRef}>
         <ListWrapper>
-          {episode.contents.map((content, index) => (
+          {contents.map((content, index) => (
             <div>
               <EditorMainListItem
                 key={content.idx}

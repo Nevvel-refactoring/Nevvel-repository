@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, memo } from "react";
 import styled from "styled-components";
 import { BiImageAdd } from "react-icons/bi";
 import { TiDelete } from "react-icons/ti";
@@ -12,6 +12,7 @@ import { ImageAssetAtom } from "@/src/store/EditorAssetStore";
 import { AudioAssetAtom } from "@/src/store/EditorAssetStore";
 import { useRouter } from "next/router";
 import EditorMainListItemText from "./EditorMainListItemText";
+import ContentEditable from "react-contenteditable";
 
 type EditorMainListItemProps = {
   content: content;
@@ -36,60 +37,94 @@ function EditorMainListItem({
   const [nowTextBlock, setNowTextBlock] = useAtom(nowTextBlockAtom);
   const [isDragging, setIsDragging] = useState(false);
   const [blockText, setBlockText] = useState("");
+
   const [TextId, setTextId] = useState("");
-  const [nowContent, setNowContent] =useState<content>(content);
-  const [enterClick, setEnterClick] =useState(false)
+  const [nowContent, setNowContent] = useState<content>(content);
+  const [enterClick, setEnterClick] = useState(false);
 
   const idx = content.idx;
   const IMAGE = useAtomValue(ImageAssetAtom);
   const AUDIO = useAtomValue(AudioAssetAtom);
   const router = useRouter();
   const eid = router.query.eid;
+  const nowIdx = contents.findIndex((el) => el.idx === idx);
 
-
-  useEffect(()=>{
+  useEffect(() => {
     console.log(contents);
-  },[contents])
+  }, [contents]);
 
-  useEffect(()=>{
-    const newContents:content[] = [];
-    const nowIdx = contents.findIndex((el)=>el.idx === idx);
-    contents.map((content,index)=>{
-      if(index === nowIdx){
-        newContents.push(nowContent)
-      }else {
-        newContents.push(content)
+  useEffect(() => {
+    const newContents: content[] = [];
+
+    contents.map((content, index) => {
+      if (index === nowIdx) {
+        newContents.push(nowContent);
+      } else {
+        newContents.push(content);
       }
-    })
-    setContents(newContents)
-    if(enterClick){
+    });
+    setContents(newContents);
+  }, [nowContent]);
+
+  useEffect(() => {
+    // 마지막 객체에서 enter를 눌렀을 경우
+    if (enterClick && contents.length - 1 == nowIdx) {
       const newBlock: content = {
         idx: Math.random().toString(),
         context: [
           {
-            id:"a",
+            id: "a",
             tag: "p",
             text: "",
           },
         ],
-        event:[],
+        event: [],
       };
       setContents([...contents, newBlock]);
-      setEnterClick(false)
+      setEnterClick(false);
+      // 중간에 enter를 눌렀을 경우
+    } else if (enterClick && contents.length - 1 !== nowIdx) {
+      let copiedContents = [...contents];
+      copiedContents.splice(nowIdx + 1, 0, {
+        idx: Math.random().toString(),
+        context: [
+          {
+            id: "a",
+            tag: "p",
+            text: "추가된 것",
+          },
+        ],
+        event: [],
+      });
+      setContents(copiedContents);
     }
-  },[nowContent,enterClick])
+  }, [enterClick]);
 
   useEffect(() => {
     // `nowContent`의 복사본을 만들어서 업데이트합니다.
-    if(nowContent){
+    if (nowContent) {
       setNowContent((prevContent) => ({
         ...prevContent,
         context: prevContent.context.map((el) =>
-          el.id === TextId ? { ...el, text: blockText } : el
+          el.id === "a" ? { ...el, text: blockText } : el
         ),
       }));
     }
-  }, [blockText, TextId]);
+  }, [blockText]);
+
+  const handleChange = (e: any) => {
+    setBlockText(e.target.value); // Use innerText to get the content
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key == "Enter") {
+      if (!event.shiftKey) {
+        event.preventDefault();
+        setEnterClick(true);
+        setNowTextBlock(idx);
+      }
+    }
+  };
 
   // block삭제
   const RemoveHandler = (content: content) => {
@@ -194,20 +229,16 @@ function EditorMainListItem({
         </>
       )}
       <TextBlock>
-        {content.context.map((context, index) => (
-          <EditorMainListItemText
-            key={index}
-            id={context.id}
-            text={context.text}
-            setContents={setContents}
-            contents={contents}
-            setEnterClick={setEnterClick}
-            context={context}
-            setTextId={setTextId}
-            blockText={blockText}
-            setBlockText={setBlockText}
+        <TextContainer>
+          <ContentEditable
+            className="textblock"
+            tagName="pre"
+            html={blockText}
+            onChange={handleChange}
+            onKeyDown={handleKeyDown}
+            placeholder="등록 할 내용을 입력해주세요"
           />
-        ))}
+        </TextContainer>
       </TextBlock>
       <RemoveButton onClick={() => RemoveHandler(content)}>
         <TiDelete size="24" />
@@ -313,4 +344,11 @@ const Img = styled.img`
   }
 `;
 
-export default EditorMainListItem;
+const TextContainer = styled.div`
+  width: 100%;
+  .textblock {
+    width: 100%;
+  }
+`;
+
+export default memo(EditorMainListItem);
