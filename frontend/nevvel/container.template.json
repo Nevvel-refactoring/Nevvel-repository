@@ -1,14 +1,14 @@
 {
     "containers": {
-      "app": {
-        "image": "",
+      "frontend": {
+        "image": "hokyun/frontend:latest",
         "ports": {
           "3000": "HTTP"
         }
       }
     },
     "publicEndpoint": {
-      "containerName": "app",
+      "containerName": "frontend",
       "containerPort": 3000,
       "healthCheck": {
         "healthyThreshold": 2,
