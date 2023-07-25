@@ -11,9 +11,9 @@ on:
 jobs:
   docker:
     runs-on: ubuntu-20.04
-    defaults:
-      run:
-        working-directory: "./frontend/nevvel"
+#     defaults:
+#       run:
+#         working-directory: "./frontend/nevvel"
     steps:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
