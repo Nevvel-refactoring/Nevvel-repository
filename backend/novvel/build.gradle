@@ -14,8 +14,13 @@ plugins {
 }
 
 group = 'com.ssafy'
-version = '0.0.1-SNAPSHOT'
+version = '0.0.1'
+archivesBaseName = 'spring-webapp'
 sourceCompatibility = '11'
+
+jar {
+    enabled=false
+}
 
 configurations {
     compileOnly {
@@ -78,19 +83,6 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
-}
-task copyPrivate(type: Copy) {
-    copy {
-        from "../../d106_config"
-        include "*.yml"
-        into "src/main/resources"
-    }
-
-    copy {
-        from "../../d106_config"
-        include "*.yml"
-        into "src/test/resources"
-    }
 }
 
 //querydsl 추가 시작
