@@ -3,7 +3,6 @@ import EditorHead from "@/src/components/editor/EditorHead";
 import EditorMain from "@/src/components/editor/EditorMain";
 import styled from "styled-components";
 import { episode } from "editor";
-import Dummy_Episode from "../../../../components/viewer/DummyEpisodeData.json";
 import { useRouter } from "next/dist/client/router";
 import { mobile } from "@/src/util/Mixin";
 import springApi from "@/src/api";
@@ -95,7 +94,7 @@ function index(props: { userDTO: string }) {
         setEpisode(res.data);
       }
     }catch(error){
-      setEpisode(Dummy_Episode)
+      console.log(error)
     }
   };
 

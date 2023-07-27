@@ -10,7 +10,6 @@ import { useRouter } from "next/dist/client/router";
 import styled from "styled-components";
 import { episode, content, event } from "editor";
 
-
 type EditorMainInputProps = {
   episode: episode;
   currentText: string;
@@ -30,7 +29,7 @@ function EditorMainInput({
   const eid = router.query.eid;
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [nextId, setNextId] = useState(1);
-  const {v4:uuidv4} = require('uuid')
+  const { v4: uuidv4 } = require("uuid");
   const uuid = uuidv4();
 
   useEffect(() => {
@@ -48,7 +47,8 @@ function EditorMainInput({
 
         const newBlock: content = {
           idx: uuid,
-          context: currentText,
+          context:"",
+          tag:"",
           event: [],
         };
         setContents([...contents, newBlock]);
@@ -106,7 +106,6 @@ const RightSpace = styled.div`
 const BlockInput = styled.textarea`
   display: flex;
   justify-content: flex-end;
-  background-color: ${({ theme }) => theme.color.editor};
   width: 100%;
   padding: 1rem;
   border: none;
@@ -116,8 +115,10 @@ const BlockInput = styled.textarea`
   min-height: 3rem;
   resize: none;
   align-items: center;
-  ${bigMobile}{
-  
+  &:focus {
+    background-color: ${({ theme }) => theme.color.editor};
+  }
+  ${bigMobile} {
   }
 `;
 

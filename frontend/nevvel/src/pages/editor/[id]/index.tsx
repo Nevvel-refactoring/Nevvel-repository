@@ -45,6 +45,7 @@ function index(props: { userDTO: string }) {
   });
   const [coverData, setCoverData] = useState<cover>();
   const scrollRef = useRef<any>();
+  
   useEffect(() => {
     scrollRef.current.scrollTop = scrollRef.current?.scrollHeight;
   }, [episode]);
@@ -113,10 +114,8 @@ function index(props: { userDTO: string }) {
   };
 
   useEffect(() => {
-    // console.log(id, "id1");
     getAssetImgData();
     getAssetAudioData();
-    // setAssetData(DummyAssetData_image.content)
   }, []);
 
   // useEffect(() => {

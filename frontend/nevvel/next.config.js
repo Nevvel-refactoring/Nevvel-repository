@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
+  reactStrictMode: false,
+  swcMinify: true,
   images: {
     domains: ["nevvel.s3.ap-northeast-2.amazonaws.com", "3.35.53.215:8080"],
   },

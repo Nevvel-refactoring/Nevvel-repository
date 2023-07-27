@@ -7,113 +7,73 @@ import React, {
 } from "react";
 import styled from "styled-components";
 import EditorMainListItem from "./EditorMainListItem";
-import EditorMainAssetContainer from "../Asset/EditorMainAssetContainer";
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import "@atlaskit/css-reset";
+
 import { content, episode } from "editor";
-import EditorMainInput from "./EditorMainInput";
 import { useRouter } from "next/router";
 
 type EditorMainListProps = {
-  episode: episode;
-  setEpisode: React.Dispatch<React.SetStateAction<episode>>;
   contents: content[];
   setContents: React.Dispatch<React.SetStateAction<content[]>>;
-  currentText: string;
-  setCurrentText: Dispatch<SetStateAction<string>>;
 };
 
-function EditorMainList({
-  episode,
-  contents,
-  setContents,
-  currentText,
-  setCurrentText,
-  setEpisode,
-}: EditorMainListProps) {
-  const scrollRef = useRef<any>();
-  // useEffect(() => {
-  //   console.log(scrollRef.current?.scrollHeight)
-  //   scrollRef.current.scrollTop = (scrollRef.current?.scrollHeight + 64);
-  // }, [currentText,contents]);
+function EditorMainList({ contents, setContents }: EditorMainListProps) {
   const router = useRouter();
   const eid = router.query.eid;
-  const [deleted, setDeleted] = useState(false);
-  const [reLocation, setRelocation] = useState<content[]>([]);
+  const [deleteBlock, setDeleteBlock] = useState("");
+
+  const handleChage = (result: any) => {
+    if (!result.destination) return;
+    const items = [...contents];
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+    setContents(items);
+  };
 
   useEffect(() => {
-    // console.log("mainlist", eid);
-  }, []);
-
-  // useEffect(() => {
-  //   if (deleted) {
-  //     relocationHandler();
-  //   }
-  //   return () => {
-  //     setDeleted(false);
-  //     setRelocation([]);
-  //     setEpisode({ ...episode, contents: reLocation });
-  //   };
-  // }, [deleted]);
-
-  useEffect(()=>{
-    // console.log(deleted,"deleted")
-  },[])
-
-  // useEffect(() => {
-  //   if (!deleted) {
-  //     relocationHandler();
-  //   }
-  //   return(()=>{
-  //     if (!deleted) {
-  //     setRelocation([]);
-  //     }
-  //   })
-  // }, [contents]);
-  // const relocationHandler = () => {
-  //   if (contents[contents.length - 1]?.idx != contents.length) {
-  //     // console.log("여기 안들어온건가");
-  //     contents.map((content, index) => {
-  //       reLocation.push({
-  //         idx: index + 1,
-  //         context: content.context,
-  //         event: content.event,
-  //       });
-  //     });
-  //     setEpisode({ ...episode, contents: reLocation });
-  //   }
-  // };
-  useEffect(()=>{
-    console.log(episode)
-  },[episode])
-
+    const fIndex = contents.findIndex((el) => el.idx === deleteBlock);
+    if (contents && contents[fIndex]?.context.length == 0) {
+      setContents(contents.filter((el) => el.idx !== deleteBlock));
+    }
+  }, [deleteBlock,contents]);
 
   return (
-    <MainWrapper>
-      <MainContainer ref={scrollRef}>
-        <ListWrapper>
-          {episode.contents.map((content, index) => (
-            <EditorMainListItem
-              key={content.idx}
-              content={content}
-              contents={contents}
-              setContents={setContents}
-              deleted={deleted}
-              setDeleted={setDeleted}
-            />
-          ))}
-        </ListWrapper>
-        <ContentWrapper>
-          <InputWrapper>
-            <EditorMainInput
-              episode={episode}
-              currentText={currentText}
-              setCurrentText={setCurrentText}
-              contents={contents}
-              setContents={setContents}
-            />
-          </InputWrapper>
-        </ContentWrapper>
-      </MainContainer>
-    </MainWrapper>
+    <DragDropContext onDragEnd={handleChage}>
+      <MainWrapper>
+        <Droppable droppableId="cardlists">
+          {(provided) => (
+            <MainContainer {...provided.droppableProps} ref={provided.innerRef}>
+              {contents.map((content, index) => (
+                <Draggable
+                  draggableId={content.idx}
+                  index={index}
+                  key={content.idx}
+                >
+                  {(provided, snapshot) => (
+                    <div
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                      ref={provided.innerRef}
+                    >
+                      <EditorMainListItem
+                        key={content.idx}
+                        index={index}
+                        content={content}
+                        contents={contents}
+                        setContents={setContents}
+                        setDeleteBlock={setDeleteBlock}
+                      />
+                    </div>
+                  )}
+                </Draggable>
+              ))}
+              <>{provided.placeholder}</>
+            </MainContainer>
+          )}
+        </Droppable>
+      </MainWrapper>
+    </DragDropContext>
   );
 }
 
@@ -148,6 +108,7 @@ const ContentWrapper = styled.div`
 
 const InputWrapper = styled.div`
   display: flex;
+  flex-direction: column;
   flex-grow: 1;
   width: 100%;
   /* padding: 0.5rem; */

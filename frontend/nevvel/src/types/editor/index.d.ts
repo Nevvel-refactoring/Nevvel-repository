@@ -10,7 +10,6 @@ declare module "editor" {
     title: string;
     contents: content[];
   }
-
   export interface postEpisode {
     coverId: number;
     statusType: string;
@@ -24,9 +23,11 @@ declare module "editor" {
 
   export interface content {
     idx: string;
+    tag: string;
     context: string;
     event: event[];
   }
+
   export interface event {
     assetId: number;
     type: string;

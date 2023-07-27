@@ -5,13 +5,12 @@ import { bigMobile, mobile } from "@/src/util/Mixin";
 import ViewerPageTextBlock from "../ViewerPageTextBlock";
 
 type viewerPageMainProps = {
-  viewerColor:string
+  viewerColor: string;
   EpisodeData: episodeViewer;
   fontSize: number;
   whiteSpace: number;
   interval: number;
   fontStyle: string;
-
 };
 
 function ViewerPageMain({
@@ -24,7 +23,6 @@ function ViewerPageMain({
 }: viewerPageMainProps) {
   const contents = EpisodeData.contents;
 
-
   return (
     <>
       <Container
@@ -34,10 +32,7 @@ function ViewerPageMain({
       >
         {contents.map((content, index) => (
           <TextBlock viewerColor={viewerColor} interval={interval} key={index}>
-            <ViewerPageTextBlock 
-            content={content}
-            idx={index}
-            />
+            <ViewerPageTextBlock content={content} idx={index} />
           </TextBlock>
         ))}
       </Container>
@@ -60,10 +55,9 @@ const Container = styled.div<{
       props.fontSize == 3 ? 16 : props.fontSize * 5.5}px;
   }
 `;
-const TextBlock = styled.div<{ interval: number, viewerColor:string }>`
+const TextBlock = styled.div<{ interval: number; viewerColor: string }>`
   z-index: 100;
   padding: ${(props) => props.interval * 0.5}rem;
-  
 `;
 const Text = styled.div`
   &.animation {
@@ -79,6 +73,6 @@ const Text = styled.div`
       }
     }
   }
-`
+`;
 
 export default ViewerPageMain;
