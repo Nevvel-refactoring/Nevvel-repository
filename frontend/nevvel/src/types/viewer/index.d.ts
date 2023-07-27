@@ -22,13 +22,9 @@ declare module "viewer" {
   }
   export interface content {
     idx: string;
-    context: context[];
+    tag:string;
+    context: string;
     event: event[];
-  }
-  export interface context {
-    id:string;
-    tag: string;
-    text: string;
   }
   export interface event {
     assetId: number;

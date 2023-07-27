@@ -7,8 +7,9 @@ import React, {
 } from "react";
 import styled from "styled-components";
 import EditorMainListItem from "./EditorMainListItem";
-import EditorMainAssetContainer from "../Asset/EditorMainAssetContainer";
-import { useAtom } from "jotai";
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import "@atlaskit/css-reset";
+
 import { content, episode } from "editor";
 import { useRouter } from "next/router";
 
@@ -17,31 +18,52 @@ type EditorMainListProps = {
   setContents: React.Dispatch<React.SetStateAction<content[]>>;
 };
 
-function EditorMainList({
-  contents,
-  setContents,
-}: EditorMainListProps) {
-  const scrollRef = useRef<any>();
+function EditorMainList({ contents, setContents }: EditorMainListProps) {
   const router = useRouter();
   const eid = router.query.eid;
 
+  const handleChage = (result: any) => {
+    if (!result.destination) return;
+    const items = [...contents];
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+    setContents(items);
+  };
+
   return (
-    <MainWrapper>
-      <MainContainer ref={scrollRef}>
-        <ListWrapper>
-          {contents.map((content, index) => (
-            <div>
-              <EditorMainListItem
-                key={content.idx}
-                content={content}
-                contents={contents}
-                setContents={setContents}
-              />
-            </div>
-          ))}
-        </ListWrapper>
-      </MainContainer>
-    </MainWrapper>
+    <DragDropContext onDragEnd={handleChage}>
+      <MainWrapper>
+        <Droppable droppableId="cardlists">
+          {(provided) => (
+            <MainContainer {...provided.droppableProps} ref={provided.innerRef}>
+              {contents.map((content, index) => (
+                <Draggable
+                  draggableId={content.idx}
+                  index={index}
+                  key={content.idx}
+                >
+                  {(provided, snapshot) => (
+                    <div
+                      {...provided.draggableProps}
+                      {...provided.dragHandleProps}
+                      ref={provided.innerRef}
+                    >
+                      <EditorMainListItem
+                        key={content.idx}
+                        content={content}
+                        contents={contents}
+                        setContents={setContents}
+                      />
+                    </div>
+                  )}
+                </Draggable>
+              ))}
+              <>{provided.placeholder}</>
+            </MainContainer>
+          )}
+        </Droppable>
+      </MainWrapper>
+    </DragDropContext>
   );
 }
 

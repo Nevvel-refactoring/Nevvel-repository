@@ -21,33 +21,35 @@ function EditorMainListItem({
 }: EditorMainListItemProps) {
   const [blockText, setBlockText] = useState(content.context);
   const [enterClick, setEnterClick] = useState(false);
-  const [createBlock, setCreateBlock] =useState(false)
+  const [createBlock, setCreateBlock] = useState(false);
   const { v4: uuidv4 } = require("uuid");
   const uuid = uuidv4();
   const idx = content.idx;
   const fIndex = contents.findIndex((el) => el.idx === idx);
+
+
   const handleChange = (e: any) => {
-   setContents((prevContent)=>
-   prevContent.map((el) =>
+    setContents((prevContent) =>
+      prevContent.map((el) =>
         el.idx === idx ? { ...el, context: e.target.value } : el
-      ))
+      )
+    );
   };
 
-  useEffect(()=>{
-    if(createBlock){
-      const copiedContents = [...contents]
-      const newBlock:content ={
-        idx:uuid,
-        tag:"p",
-        context:"",
-        event:[]
-      }
-      copiedContents.splice(fIndex+1,0,newBlock)
-      console.log("copiedContents",copiedContents)
-      setContents(copiedContents)
+  useEffect(() => {
+    if (createBlock) {
+      const copiedContents = [...contents];
+      const newBlock: content = {
+        idx: uuid,
+        tag: "p",
+        context: "",
+        event: [],
+      };
+      copiedContents.splice(fIndex + 1, 0, newBlock);
+      setContents(copiedContents);
     }
-    setCreateBlock(false)
-  },[createBlock])
+    setCreateBlock(false);
+  }, [createBlock]);
 
   useEffect(() => {
     console.log(contents);
@@ -57,10 +59,11 @@ function EditorMainListItem({
     if (event.key == "Enter") {
       if (!event.shiftKey) {
         event.preventDefault();
-        setCreateBlock(true)
+        setCreateBlock(true);
       }
     }
   };
+
   // block삭제
   const RemoveHandler = (content: content) => {
     setContents(contents.filter((el) => el.idx !== idx));
@@ -72,8 +75,9 @@ function EditorMainListItem({
         <TextContainer>
           <ContentEditable
             className="textblock"
-            tagName="pre"
+            tagName={content.tag}
             html={content.context}
+            disabled={false}
             onChange={handleChange}
             onKeyDown={handleKeyDown}
             placeholder="등록 할 내용을 입력해주세요"
