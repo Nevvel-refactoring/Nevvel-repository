@@ -21,6 +21,7 @@ type EditorMainListProps = {
 function EditorMainList({ contents, setContents }: EditorMainListProps) {
   const router = useRouter();
   const eid = router.query.eid;
+  const [deleteBlock, setDeleteBlock] = useState("");
 
   const handleChage = (result: any) => {
     if (!result.destination) return;
@@ -29,6 +30,13 @@ function EditorMainList({ contents, setContents }: EditorMainListProps) {
     items.splice(result.destination.index, 0, reorderedItem);
     setContents(items);
   };
+
+  useEffect(() => {
+    const fIndex = contents.findIndex((el) => el.idx === deleteBlock);
+    if (contents && contents[fIndex]?.context.length == 0) {
+      setContents(contents.filter((el) => el.idx !== deleteBlock));
+    }
+  }, [deleteBlock,contents]);
 
   return (
     <DragDropContext onDragEnd={handleChage}>
@@ -50,9 +58,11 @@ function EditorMainList({ contents, setContents }: EditorMainListProps) {
                     >
                       <EditorMainListItem
                         key={content.idx}
+                        index={index}
                         content={content}
                         contents={contents}
                         setContents={setContents}
+                        setDeleteBlock={setDeleteBlock}
                       />
                     </div>
                   )}

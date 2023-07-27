@@ -9,24 +9,25 @@ import EditorMainAssetBtn from "../Asset/EditorMainAssetBtn";
 import ContentEditable from "react-contenteditable";
 
 type EditorMainListItemProps = {
+  index: number;
   content: content;
   contents: content[];
   setContents: React.Dispatch<React.SetStateAction<content[]>>;
+  setDeleteBlock: React.Dispatch<React.SetStateAction<string>>
 };
 
 function EditorMainListItem({
   content,
   contents,
   setContents,
+  index,
+  setDeleteBlock
 }: EditorMainListItemProps) {
-  const [blockText, setBlockText] = useState(content.context);
-  const [enterClick, setEnterClick] = useState(false);
   const [createBlock, setCreateBlock] = useState(false);
   const { v4: uuidv4 } = require("uuid");
   const uuid = uuidv4();
   const idx = content.idx;
   const fIndex = contents.findIndex((el) => el.idx === idx);
-
 
   const handleChange = (e: any) => {
     setContents((prevContent) =>
@@ -57,9 +58,15 @@ function EditorMainListItem({
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
     if (event.key == "Enter") {
+      console.log(event)
       if (!event.shiftKey) {
         event.preventDefault();
         setCreateBlock(true);
+      }
+    }
+    if (event.key === "Backspace" && index !== 0) {
+      if (content.context.trim() === "") {
+        setDeleteBlock(idx)
       }
     }
   };
@@ -68,6 +75,7 @@ function EditorMainListItem({
   const RemoveHandler = (content: content) => {
     setContents(contents.filter((el) => el.idx !== idx));
   };
+
   return (
     <BlockContainer>
       <EditorMainAssetBtn content={content} />
@@ -84,9 +92,6 @@ function EditorMainListItem({
           />
         </TextContainer>
       </TextBlock>
-      <RemoveButton onClick={() => RemoveHandler(content)}>
-        <TiDelete size="24" />
-      </RemoveButton>
     </BlockContainer>
   );
 }
