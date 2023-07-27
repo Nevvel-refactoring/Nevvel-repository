@@ -8,8 +8,6 @@ on:
     paths:
       - backend/novvel/**
 
-# 본인이 설정한 값을 여기서 채워넣습니다.
-# 리전, 버킷 이름, CodeDeploy 앱 이름, CodeDeploy 배포 그룹 이름
 env:
   AWS_REGION: ap-northeast-2
   S3_BUCKET_NAME: backend-version-bucket
@@ -21,7 +19,6 @@ permissions:
 
 jobs:
   deploy:
-    name: Deploy
     runs-on: ubuntu-20.04
     environment: production
 
