@@ -21,6 +21,9 @@ jobs:
   deploy:
     runs-on: ubuntu-20.04
     environment: production
+    defaults:
+      run:
+        working-directory: "backend/novvel"
 
     steps:
     - name: Checkout
