@@ -22,7 +22,6 @@ function EditorMainList({ contents, setContents }: EditorMainListProps) {
   const router = useRouter();
   const eid = router.query.eid;
   const [deleteBlock, setDeleteBlock] = useState("");
-
   const handleChage = (result: any) => {
     if (!result.destination) return;
     const items = [...contents];

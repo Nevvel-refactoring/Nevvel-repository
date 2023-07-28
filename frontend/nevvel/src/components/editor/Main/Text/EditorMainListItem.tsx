@@ -13,7 +13,7 @@ type EditorMainListItemProps = {
   content: content;
   contents: content[];
   setContents: React.Dispatch<React.SetStateAction<content[]>>;
-  setDeleteBlock: React.Dispatch<React.SetStateAction<string>>
+  setDeleteBlock: React.Dispatch<React.SetStateAction<string>>;
 };
 
 function EditorMainListItem({
@@ -28,6 +28,8 @@ function EditorMainListItem({
   const uuid = uuidv4();
   const idx = content.idx;
   const fIndex = contents.findIndex((el) => el.idx === idx);
+  const [focusBlock, setFocusBlock] = useState(fIndex);
+  const focusRef = useRef<HTMLDivElement>(null);
 
   const handleChange = (e: any) => {
     setContents((prevContent) =>
@@ -36,6 +38,13 @@ function EditorMainListItem({
       )
     );
   };
+
+  useEffect(()=>{
+    if(focusRef.current){
+      focusRef.current.focus();
+      console.log(focusRef.current)
+    }
+  },[focusRef])
 
   useEffect(() => {
     if (createBlock) {
@@ -83,6 +92,7 @@ function EditorMainListItem({
         <TextContainer>
           <ContentEditable
             className="textblock"
+            innerRef={focusRef}
             tagName={content.tag}
             html={content.context}
             disabled={false}
