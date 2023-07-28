@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -20,16 +19,16 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-//@Service
+@Service
 @RequiredArgsConstructor
-//@Slf4j
+@Slf4j
 public class ResourceServiceAsyncImple implements ResourceService {
 
     private final S3Service s3Service;
     private final ResourceRepository resourceRepository;
     private final ImageResolutionService imageResolutionService;
-    static final int newWidth = 150;
-    static final int newHeight = 150;
+
+
 
     @Override
     @Transactional
@@ -53,12 +52,13 @@ public class ResourceServiceAsyncImple implements ResourceService {
     @Transactional
     public Resource saveFile(File file) throws IOException {
 //        log.info("method: saveFile {}", TransactionSynchronizationManager.isActualTransactionActive());
-
+        long beforeTime = System.currentTimeMillis(); //코드 실행 전에 시간 받아오기
         String fileExtension = getFileExtension(file);
         String fileNamePrefix = "files/" + LocalDate.now(ZoneId.of("Asia/Seoul")) + UUID.randomUUID() + "-";
-        File s = null;
-        File mid = null;
-        CompletableFuture<File> completableFutureMid = null, completableFutureThumbnail = null;
+        CompletableFuture<File> completableFutureMid = null;
+        CompletableFuture<File> completableFutureThumbnail = null,
+                completableFutureThumbnailWidth = null,
+                completableFutureThumbnailHeight = null;
         String url = null;
 
         Resource resourceEntity = null;
@@ -67,20 +67,24 @@ public class ResourceServiceAsyncImple implements ResourceService {
                 case ".jpg":
                 case ".jpeg":
                     completableFutureMid = imageResolutionService.convertToPng(file);
-                    completableFutureThumbnail = imageResolutionService.convertResolutionPng(completableFutureMid.get(), newWidth, newHeight);
+                    completableFutureThumbnail = imageResolutionService.convertResolutionPng(completableFutureMid.get(), 0, 0);
                     resourceEntity = new Resource(file.getName(), fileNamePrefix + file.getName(),
-                            fileNamePrefix + completableFutureThumbnail.get().getName(), true);
+                            fileNamePrefix + getFileName(file, "_resolution.png"), true);
                     break;
                 case ".png":
-                    completableFutureThumbnail = imageResolutionService.convertResolutionPng(file, newWidth, newHeight);
+                    completableFutureThumbnail = imageResolutionService.convertResolutionPng(file, 0, 0);
                     resourceEntity = new Resource(file.getName(), fileNamePrefix + file.getName(),
-                            fileNamePrefix + completableFutureThumbnail.get().getName(), true);
+                            fileNamePrefix + getFileName(file, "_resolution.png"), true);
                     break;
                 case ".gif":
                     completableFutureMid = imageResolutionService.makeThumbnailFromGif(file);
-                    completableFutureThumbnail = imageResolutionService.convertResolutionPng(completableFutureMid.get(), newWidth, newHeight);
+                    completableFutureThumbnail = imageResolutionService.convertResolutionPng(completableFutureMid.get(), 0, 0);
+//                    completableFutureThumbnailWidth = imageResolutionService.convertResolutionPng(completableFutureMid.get(), 100, 0);
+//                    completableFutureThumbnailHeight = imageResolutionService.convertResolutionPng(completableFutureMid.get(), 0, 100);
                     resourceEntity = new Resource(file.getName(), fileNamePrefix + file.getName(),
-                            fileNamePrefix + completableFutureThumbnail.get().getName(), true);
+                            fileNamePrefix + getFileName(file, "_resolution.png"), true);
+//                    completableFutureThumbnailWidth.get();
+//                    completableFutureThumbnailHeight.get();
                     break;
 
                 case ".mp3":
@@ -95,7 +99,8 @@ public class ResourceServiceAsyncImple implements ResourceService {
             url = s3Service.uploadFile(file, fileNamePrefix + file.getName());
 
             resourceEntity.setUrl(url);
-            if (completableFutureThumbnail != null) {
+
+            if (completableFutureThumbnail != null && completableFutureThumbnail.get() != null) {
                 String thumbnailUrl = s3Service.uploadFile(completableFutureThumbnail.get(),
                         fileNamePrefix + completableFutureThumbnail.get().getName());
                 resourceEntity.setThumbnailUrl(thumbnailUrl);
@@ -108,19 +113,24 @@ public class ResourceServiceAsyncImple implements ResourceService {
             throw new RuntimeException(e);
         } finally {
             if (completableFutureThumbnail != null) {
-                try {
-                    completableFutureThumbnail.get().delete();
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                } catch (ExecutionException e) {
-                    throw new RuntimeException(e);
-                }
+                completableFutureThumbnail.join().delete();
             }
-            if (mid != null) {
-                mid.delete();
+            if (completableFutureThumbnailWidth != null) {
+                completableFutureThumbnailWidth.join().delete();
             }
+            if (completableFutureThumbnailHeight != null) {
+                completableFutureThumbnailHeight.join().delete();
+            }
+            if (completableFutureMid != null) {
+                completableFutureMid.join().delete();
+            }
+
+
+            long afterTime = System.currentTimeMillis(); // 코드 실행 후에 시간 받아오기
+            long secDiffTime = (afterTime - beforeTime) / 1000; //두 시간에 차 계산
+            log.info("saveFile 동작시간: {}", secDiffTime);
+            return resourceEntity;
         }
-        return resourceEntity;
     }
 
     private String getFileExtension(File file) {
@@ -136,6 +146,15 @@ public class ResourceServiceAsyncImple implements ResourceService {
         fos.write(file.getBytes());
         fos.close();
         return convFile;
+    }
+
+    public String getFileName(File file, String extention) {
+        String fileName = file.getName();
+        int index = fileName.lastIndexOf('.');
+        if (index > 0 && index < fileName.length() - 1) {
+            fileName = fileName.substring(0, index);
+        }
+        return fileName + extention;
     }
 
 
