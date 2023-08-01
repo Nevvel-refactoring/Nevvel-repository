@@ -2,15 +2,19 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import EditorMainList from "./Main/Text/EditorMainList";
 import { episode,content } from "editor";
-import { useAtom,useAtomValue } from "jotai";
+import {useAtomValue } from "jotai";
 import { assetOpenAtom } from "@/src/store/EditorAssetStore";
-import EditorMainAssetContainer from "@/src/components/editor/Main/Asset/EditorMainAssetContainer";
-import springApi from "@/src/api";
+
+import dynamic from "next/dynamic";
 
 type EditorMainProps = {
   setEpisode:React.Dispatch<React.SetStateAction<episode>>;
   episode:episode;
 }
+
+const EditorMainAssetContainer = dynamic(()=>
+import("@/src/components/editor/Main/Asset/EditorMainAssetContainer"));
+
 
 function EditorMain({setEpisode,episode}:EditorMainProps) {
   const [contents, setContents] =useState<content[]>([]);

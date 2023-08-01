@@ -1,20 +1,21 @@
 import React, { useState, useEffect, useRef, memo } from "react";
 import styled from "styled-components";
-import { TiDelete } from "react-icons/ti";
 import EditorMainMenu from "./EditorMainMenu";
 import { bigMobile, mobile } from "@/src/util/Mixin";
 import { content } from "editor";
-import { atom, useAtom, useAtomValue } from "jotai";
-import EditorMainAssetBtn from "../Asset/EditorMainAssetBtn";
 import ContentEditable from "react-contenteditable";
+import dynamic from "next/dynamic";
 
 type EditorMainListItemProps = {
   index: number;
   content: content;
   contents: content[];
   setContents: React.Dispatch<React.SetStateAction<content[]>>;
-  setDeleteBlock: React.Dispatch<React.SetStateAction<string>>
+  setDeleteBlock: React.Dispatch<React.SetStateAction<string>>;
 };
+
+const EditorMainAssetBtn = dynamic(()=>
+import("../Asset/EditorMainAssetBtn"));
 
 function EditorMainListItem({
   content,
@@ -28,6 +29,8 @@ function EditorMainListItem({
   const uuid = uuidv4();
   const idx = content.idx;
   const fIndex = contents.findIndex((el) => el.idx === idx);
+  const focusRef = useRef<HTMLDivElement>(null);
+  const [deleteFocus, setDeleteFocus] =useState(false)
 
   const handleChange = (e: any) => {
     setContents((prevContent) =>
@@ -36,6 +39,16 @@ function EditorMainListItem({
       )
     );
   };
+
+  useEffect(()=>{
+    if(focusRef.current){
+      focusRef.current.focus();
+      console.log(focusRef.current)
+      if(deleteFocus){
+        setDeleteFocus(false)
+      }
+    }
+  },[focusRef,deleteFocus])
 
   useEffect(() => {
     if (createBlock) {
@@ -67,14 +80,16 @@ function EditorMainListItem({
     if (event.key === "Backspace" && index !== 0) {
       if (content.context.trim() === "") {
         setDeleteBlock(idx)
+        setDeleteFocus(true)
+
       }
     }
   };
 
-  // block삭제
-  const RemoveHandler = (content: content) => {
-    setContents(contents.filter((el) => el.idx !== idx));
-  };
+  // // block삭제
+  // const RemoveHandler = (content: content) => {
+  //   setContents(contents.filter((el) => el.idx !== idx));
+  // };
 
   return (
     <BlockContainer>
@@ -83,6 +98,7 @@ function EditorMainListItem({
         <TextContainer>
           <ContentEditable
             className="textblock"
+            innerRef={focusRef}
             tagName={content.tag}
             html={content.context}
             disabled={false}
@@ -119,18 +135,6 @@ const TextBlock = styled.div`
   display: flex;
   align-items: center;
   white-space: normal;
-`;
-
-const RemoveButton = styled.button`
-  display: flex;
-  width: 2rem;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  color: ${({ theme }) => theme.color.hover};
-  :hover {
-    ${({ theme }) => theme.color.point};
-  }
 `;
 
 const TextContainer = styled.div`

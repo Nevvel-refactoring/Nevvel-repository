@@ -8,7 +8,7 @@ import React, {
 import styled from "styled-components";
 import EditorMainListItem from "./EditorMainListItem";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
-import "@atlaskit/css-reset";
+
 
 import { content, episode } from "editor";
 import { useRouter } from "next/router";
@@ -22,7 +22,6 @@ function EditorMainList({ contents, setContents }: EditorMainListProps) {
   const router = useRouter();
   const eid = router.query.eid;
   const [deleteBlock, setDeleteBlock] = useState("");
-
   const handleChage = (result: any) => {
     if (!result.destination) return;
     const items = [...contents];
@@ -89,35 +88,4 @@ const MainContainer = styled.div`
   /* box-shadow: 0px 0px 3px gray; */
   /* margin-bottom:10vh; */
 `;
-
-const ListWrapper = styled.div`
-  /* border: 2px solid ${({ theme }) => theme.color.hover}; */
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  ::-webkit-scrollbar {
-    display: none;
-    margin-bottom: 1rem;
-  }
-`;
-
-const ContentWrapper = styled.div`
-  width: 100%;
-`;
-
-const InputWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  width: 100%;
-  /* padding: 0.5rem; */
-  /* background-color: ${({ theme }) => theme.color.secondary}; */
-  /* border-radius: 5px; */
-  /* box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1); */
-`;
-
-const AssetWrapper = styled.div``;
-
-const ItemContainer = styled.div``;
 export default EditorMainList;
