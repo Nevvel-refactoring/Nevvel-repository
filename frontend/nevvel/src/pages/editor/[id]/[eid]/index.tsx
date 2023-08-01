@@ -56,7 +56,6 @@ function index(props: { userDTO: string }) {
         "assets/own?assettype=IMAGE"
       );
       if (res) {
-        // console.log(res);
         setAssetImageData(res.data.content);
       }
     } catch (error) {

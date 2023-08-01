@@ -1,25 +1,27 @@
-import React, { ChangeEvent, useCallback, useEffect, useState } from "react";
+import React, {useEffect, useState } from "react";
 import styled from "styled-components";
 import { episode, postEpisode } from "editor";
-
 import { useRouter } from "next/router";
 import { Modal } from "../common/Modal";
-import EditorPreview from "./Head/EditorPreview";
-
 import { AiFillCheckCircle } from "react-icons/ai";
 import { useAtomValue, useAtom } from "jotai";
 import * as A from "@/src/store/EditorAssetStore";
 import springApi from "@/src/api";
 import { content } from "editor";
 import { BiImageAdd } from "react-icons/bi";
-
 import { AiOutlineSound } from "react-icons/ai";
 import { mobile } from "@/src/util/Mixin";
-import EditorPublishModal from "./Head/Publish/EditorPublishModal";
+import dynamic from "next/dynamic";
 type EditorHeadProps = {
   setEpisode: React.Dispatch<React.SetStateAction<episode>>;
   episode: episode;
 };
+
+const EditorPublishModal = dynamic(()=>
+import("./Head/Publish/EditorPublishModal"))
+
+const EditorPreview = dynamic(()=>
+import("./Head/EditorPreview"))
 
 function EditorHead({ episode, setEpisode }: EditorHeadProps) {
   const router = useRouter();

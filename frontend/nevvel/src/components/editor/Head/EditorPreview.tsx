@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-import ViewerTabMain from "../../viewer/Main/ViewerTabMain";
-import { episodeViewer } from "viewer";
 import { episode } from "editor";
 import styled from "styled-components";
 import {useRouter} from 'next/router'
@@ -15,9 +13,6 @@ function EditorPreview({ postEpisode }: EditorPreviewProps) {
   const id = router.query.id
   const [tabNumber, setTabNumber] = useState(0); // tab mode 일 때 사용
   const [eventCatch, setEventCatch] = useState(false); // tab mode 일때 이벤트 있는 경우 사용
-
-  // console.log("여기");
-  // console.log(postEpisode, "postEpisode");
 
   useEffect(() => {
     if (postEpisode.contents) {
@@ -45,14 +40,9 @@ function EditorPreview({ postEpisode }: EditorPreviewProps) {
 
   const countHandler = () => {
     const contentLength = postEpisode.contents.length;
-    // console.log();
-    // console.log("이거 댐?");
     if (tabNumber <= contentLength - 1) {
       setTabNumber(tabNumber + 1);
-    } else if (tabNumber === contentLength - 1) {
-      // console.log("마지막 입니다. ");
     }
-    // console.log(tabNumber);
   };
 
   return (
