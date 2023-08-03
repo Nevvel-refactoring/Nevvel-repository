@@ -38,7 +38,9 @@ jobs:
     - name: Build with Gradle
       uses: gradle/gradle-build-action@v2
       with:
+        gradle-version: 7.6.1
         arguments: build
+        build-root-directory: backend/novvel
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
