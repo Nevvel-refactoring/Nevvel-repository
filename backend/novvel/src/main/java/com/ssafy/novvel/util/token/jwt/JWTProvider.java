@@ -59,6 +59,7 @@ public class JWTProvider {
         Cookie tokenCookie = new Cookie(tokenType, token);
         tokenCookie.setPath(PATH);
         tokenCookie.setMaxAge(expiredTime);
+        tokenCookie.setDomain("nevvel.net");
         tokenCookie.setHttpOnly(REFRESH_TOKEN.equals(tokenType));
 
         return tokenCookie;
