@@ -79,12 +79,8 @@ public class ResourceServiceAsyncImple implements ResourceService {
                 case ".gif":
                     completableFutureMid = imageResolutionService.makeThumbnailFromGif(file);
                     completableFutureThumbnail = imageResolutionService.convertResolutionPng(completableFutureMid.get(), 0, 0);
-//                    completableFutureThumbnailWidth = imageResolutionService.convertResolutionPng(completableFutureMid.get(), 100, 0);
-//                    completableFutureThumbnailHeight = imageResolutionService.convertResolutionPng(completableFutureMid.get(), 0, 100);
                     resourceEntity = new Resource(file.getName(), fileNamePrefix + file.getName(),
                             fileNamePrefix + getFileName(file, "_resolution.png"), true);
-//                    completableFutureThumbnailWidth.get();
-//                    completableFutureThumbnailHeight.get();
                     break;
 
                 case ".mp3":
