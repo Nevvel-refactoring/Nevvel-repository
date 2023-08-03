@@ -25,7 +25,7 @@ export const NewvelApi = {
 
   // 소셜 로그인
   logIn: () =>
-    springApi.get("https://www.nevvel.net:8081/api/oauth2/authorization/kakao"),
+    springApi.get("/oauth2/authorization/kakao"),
   // 로그인 api 이게 맞나요...??
 
   // 에피소드 판매지수 높은 순 인기작가
