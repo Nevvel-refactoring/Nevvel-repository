@@ -2,7 +2,7 @@ version: 0.0
 os: linux
 
 files:
-  - source:  /backend/novvel/build/libs/spring-webapp-0.0.1.jar
+  - source:  ./spring-webapp-0.0.1.jar
     destination: /home/ubuntu
     overwrite: yes
 
