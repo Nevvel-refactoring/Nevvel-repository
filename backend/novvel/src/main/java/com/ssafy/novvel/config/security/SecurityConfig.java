@@ -58,12 +58,8 @@ public class SecurityConfig {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowedOrigins(
                 Arrays.asList(
-                        "http://k8d1061.p.ssafy.io",
-                        "https://k8d1061.p.ssafy.io",
-                        "http://k8d106.p.ssafy.io:3000",
-                        "https://k8d106.p.ssafy.io:3000",
-                        "http://k8d106.p.ssafy.io",
-                        "https://k8d106.p.ssafy.io",
+                        "https://nevvel.net",
+                        "https://nevvel.net:3000",
                         "http://localhost:3000",
                         "http://localhost"));
         corsConfiguration.addAllowedMethod("*");
