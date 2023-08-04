@@ -35,6 +35,15 @@ jobs:
         distribution: 'temurin'
         java-version: '11'
 
+    - name: Add application.yml
+      env:
+        YML: ${{ secrets.APPLICATION_YML }}
+        DIR: src/main/resources
+        TEST_DIR: src/test/resources
+        FILE_NAME: application.yml
+      run: echo $YML | base64 --decode > $DIR/$FILE_NAME &&
+            echo $YML | base64 --decode > $TEST_DIR/$FILE_NAME &&
+
     - name: Build with Gradle
       uses: gradle/gradle-build-action@v2
       with:
