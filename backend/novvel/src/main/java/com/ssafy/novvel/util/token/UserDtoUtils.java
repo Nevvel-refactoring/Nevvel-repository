@@ -35,6 +35,7 @@ public class UserDtoUtils {
     public Cookie createUserDtoCookie(String encodedMemberInfoDto, int expiredTime) {
 
         Cookie cookie = new Cookie(USER_DTO, encodedMemberInfoDto);
+        cookie.setDomain("nevvel.net");
         cookie.setPath("/");
         cookie.setMaxAge(expiredTime);
         return cookie;
@@ -43,6 +44,7 @@ public class UserDtoUtils {
     public Cookie createUserDtoCookie(Member member, int expiredTime) {
 
         Cookie cookie = new Cookie(USER_DTO, convertEntityToJSONDto(member));
+        cookie.setDomain("nevvel.net");
         cookie.setPath("/");
         cookie.setMaxAge(expiredTime);
         return cookie;
@@ -50,6 +52,7 @@ public class UserDtoUtils {
 
     public Cookie removeUserDtoCookie() {
         Cookie cookie = new Cookie(USER_DTO, "");
+        cookie.setDomain("nevvel.net");
         cookie.setPath("/");
         cookie.setMaxAge(0);
         return cookie;
