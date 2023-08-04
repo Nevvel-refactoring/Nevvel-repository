@@ -42,7 +42,7 @@ jobs:
         TEST_DIR: src/test/resources
         FILE_NAME: application.yml
       run: echo $YML | base64 --decode > $DIR/$FILE_NAME &&
-            echo $YML | base64 --decode > $TEST_DIR/$FILE_NAME &&
+            echo $YML | base64 --decode > $TEST_DIR/$FILE_NAME
 
     - name: Build with Gradle
       uses: gradle/gradle-build-action@v2
