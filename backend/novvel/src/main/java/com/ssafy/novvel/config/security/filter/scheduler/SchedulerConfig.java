@@ -1,4 +1,4 @@
-package com.ssafy.novvel.config.scheduler;
+package com.ssafy.novvel.config.security.filter.scheduler;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.AsyncConfigurer;

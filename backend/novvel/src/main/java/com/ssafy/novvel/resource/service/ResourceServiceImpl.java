@@ -18,7 +18,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.UUID;
 
-@Service
+//@Service
 @RequiredArgsConstructor
 @Slf4j
 public class ResourceServiceImpl implements ResourceService {
@@ -50,7 +50,7 @@ public class ResourceServiceImpl implements ResourceService {
 
         String fileExtension = getFileExtension(file);
         String fileNamePrefix = "files/" + LocalDate.now(ZoneId.of("Asia/Seoul")) + UUID.randomUUID() + "-";
-        File thumbnail = null, mid = null;
+        File thumbnail = null, mid = null, thumbnailHeight = null, thumbnailWidth = null;
         String url = null;
 
         Resource resourceEntity = null;
@@ -59,18 +59,20 @@ public class ResourceServiceImpl implements ResourceService {
                 case ".jpg":
                 case ".jpeg":
                     mid = convertToPng(file);
-                    thumbnail = convertResolutionPng(mid, newWidth, newHeight);
+                    thumbnail = convertResolutionPng(mid, 0, 0);
                     resourceEntity = new Resource(file.getName(), fileNamePrefix + file.getName(),
                             fileNamePrefix + thumbnail.getName(), true);
                     break;
                 case ".png":
-                    thumbnail = convertResolutionPng(file, newWidth, newHeight);
+                    thumbnail = convertResolutionPng(file, 0, 0);
                     resourceEntity = new Resource(file.getName(), fileNamePrefix + file.getName(),
                             fileNamePrefix + thumbnail.getName(), true);
                     break;
                 case ".gif":
                     mid = makeThumbnailFromGif(file);
-                    thumbnail = convertResolutionPng(mid, newWidth, newHeight);
+                    thumbnail = convertResolutionPng(mid, 0, 0);
+                    thumbnailWidth = convertResolutionPng(mid, 100, 0);
+                    thumbnailHeight = convertResolutionPng(mid, 0, 100);
                     resourceEntity = new Resource(file.getName(), fileNamePrefix + file.getName(),
                             fileNamePrefix + thumbnail.getName(), true);
                     break;
@@ -104,7 +106,7 @@ public class ResourceServiceImpl implements ResourceService {
         return resourceEntity;
     }
 
-    private File makeThumbnailFromGif(File file) throws IOException {
+    public File makeThumbnailFromGif(File file) throws IOException {
 
         log.info("makeThumbnailFromGif: {}", file.getName());
 
@@ -118,14 +120,14 @@ public class ResourceServiceImpl implements ResourceService {
         //todo gif중간으로 자를지 처음으로 자를지 정할것
         int frameCount = gifDecoder.getFrameCount();
 
-        BufferedImage image = gifDecoder.getFrame(frameCount/2); // 인덱스에 해당하는 프레임 추출
+        BufferedImage image = gifDecoder.getFrame(frameCount / 2); // 인덱스에 해당하는 프레임 추출
         ImageIO.write(image, "gif", result);
 
         return result;
 
     }
 
-    private File convertToPng(File file) throws IOException {
+    public File convertToPng(File file) throws IOException {
         File inputFile = file;
         String fileName = getFineName(file);
         log.info("convertToPng: {}", fileName);
@@ -135,7 +137,7 @@ public class ResourceServiceImpl implements ResourceService {
         return outputFile;
     }
 
-    private File convertToJpg(File file) throws IOException {
+    public File convertToJpg(File file) throws IOException {
         File inputFile = file;
         String fileName = getFineName(file);
         log.info("convertToPng: {}", fileName);
@@ -146,7 +148,7 @@ public class ResourceServiceImpl implements ResourceService {
     }
 
 
-    private File convertResolutionPng(File file, Integer inputWidth, Integer inputHeight) throws IOException {
+    public File convertResolutionPng(File file, Integer inputWidth, Integer inputHeight) throws IOException {
         File inputFile = file;
         String fileName = getFineName(file);
         File outputFile = new File(fileName + "_resolution.png");
@@ -156,12 +158,23 @@ public class ResourceServiceImpl implements ResourceService {
         int height = inputImage.getHeight();
         int resultWidth, resultHeight;
 
-        if (width >= height) {
-            resultWidth = (int) (width / (height / (double) newWidth));
-            resultHeight = newHeight;
+        if (inputWidth == 0 && inputHeight == 0) {
+            if (width >= height) {
+                resultHeight = newHeight;
+                resultWidth = (int) (width / (height / (double) newWidth));
+            } else {
+                resultWidth = newWidth;
+                resultHeight = (int) (height / (width / (double) newHeight));
+            }
+        } else if (inputWidth == 0 && inputHeight != 0) {
+            resultHeight = inputHeight;
+            resultWidth = (int) (width / (height / (double) inputHeight));
+        } else if (inputWidth != 0 && inputHeight == 0) {
+            resultWidth = inputWidth;
+            resultHeight = (int) (height / (width / (double) inputWidth));
         } else {
-            resultWidth = newWidth;
-            resultHeight = (int) (height / (width / (double) newHeight));
+            resultWidth = inputWidth;
+            resultHeight = inputHeight;
         }
 
 
