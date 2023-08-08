@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 PROJECT_ROOT="/home/ubuntu"
-JAR_FILE="$PROJECT_ROOT/spring-webappspring-webapp-0.0.1.jar"
+JAR_FILE="$PROJECT_ROOT/spring-webapp-0.0.1.jar"
 SSL_JAR_FILE="$PROJECT_ROOT/ssl-spring-webapp.jar"
 
 APP_LOG="$PROJECT_ROOT/application.log"
