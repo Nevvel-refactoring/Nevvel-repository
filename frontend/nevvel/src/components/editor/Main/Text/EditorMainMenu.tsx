@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { BiBold, BiItalic } from "react-icons/bi";
 import EditorMainMenuColor from "./EditorMainMenuColor";
@@ -21,7 +21,6 @@ function EditorMainMenu({ setText, x, y, style, setStyle }: EditorMainMenuProps)
       const range = selection.getRangeAt(0);
       const selectedText = range.toString();
       const formattedText = `<${type}>${selectedText}</${type}>`;
-      // console.log(formattedText)
       setText(formattedText)
       range.deleteContents();
       range.insertNode(
