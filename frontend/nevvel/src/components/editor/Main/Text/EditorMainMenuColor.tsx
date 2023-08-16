@@ -3,14 +3,22 @@ import styled from "styled-components";
 
 type EditorMainMenuColorProps = {
   setText: React.Dispatch<React.SetStateAction<string>>;
+  setStyle: React.Dispatch<React.SetStateAction<boolean>>;
+  setPoint: React.Dispatch<React.SetStateAction<string>>;
+  setStart:React.Dispatch<React.SetStateAction<number>>;
+  context:string;
+  style:boolean;
 };
 
-function EditorMainMenuColor({ setText }: EditorMainMenuColorProps) {
+function EditorMainMenuColor({ setText,setStyle,setPoint,setStart,context,style }: EditorMainMenuColorProps) {
   const handleSelectionColor = (color: string) => {
     const selection = window.getSelection();
     if (selection) {
       const range = selection.getRangeAt(0);
       const selectedText = range.toString();
+      const startPoint = selection.anchorOffset
+      setPoint(selectedText)
+      setStart(startPoint)
       const formattedText = `<span style="color:${color}">${selectedText}</span>`;
       setText(formattedText)
       range.deleteContents();
@@ -21,6 +29,7 @@ function EditorMainMenuColor({ setText }: EditorMainMenuColorProps) {
       if (textElement) {
         setText(textElement!.innerHTML);
       }
+      setStyle(!style)
     }
   };
 

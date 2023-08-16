@@ -38,8 +38,8 @@ function EditorMainListItem({
   const [style, setStyle] = useState(false);
   const [menuBlock, setMenuBlock] = useState(false);
   const [text, setText] = useState(content.context);
-  const [point, setPoint] = useState<number>(0);
-  
+  const [point, setPoint] = useState("");
+  const [start, setStart] =useState(0)
   useEffect(()=>{
     console.log(text,"부분")
   },[text])
@@ -47,13 +47,16 @@ function EditorMainListItem({
 
   useEffect(() => {
     // 텍스트에 style 적용한 경우
+    let context= content.context;
+    const styleText = context.substring(0,start) + text + context.substring(start+point.length,context.length)
+    console.log(styleText)
+    setContents(contents.map((el) => {
+      if (el.idx === idx) {
+        return { ...el, context: styleText };
+      }
+      return el;
+    }));
     return (()=>{
-      setContents(contents.map((el) => {
-        if (el.idx === idx) {
-          return { ...el, context: text };
-        }
-        return el;
-      }));
     })
   }, [style]);
 
@@ -133,6 +136,9 @@ function EditorMainListItem({
           setText={setText}
           style={style}
           setStyle={setStyle}
+          setPoint={setPoint}
+          setStart ={setStart}
+          context={content.context}
         />
       ) : null}
         <TextContainer>
