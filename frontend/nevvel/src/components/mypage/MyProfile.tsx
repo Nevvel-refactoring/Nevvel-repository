@@ -1,7 +1,8 @@
 import { userInfoAtom } from "@/src/store/Login";
 import { useAtomValue } from "jotai";
 import { useEffect, useState } from "react";
-import { NewvelApi } from "@/src/api";
+import { NewvelApi } from "@/src/api/instance";
+import { getUserInfo } from "@/src/api/users";
 import styled from "styled-components";
 
 function MyProfile() {
@@ -18,6 +19,13 @@ function MyProfile() {
       setUserDescription(res.data.description);
     };
     getUserData();
+    // async () => {
+    //   const res = await getUserInfo();
+    //   if (res !== null) {
+    //     console.log(res.data);
+    //     setUserDescription(res.data.description);
+    //   }
+    // };
   }, []);
 
   return (

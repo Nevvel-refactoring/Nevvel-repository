@@ -1,4 +1,4 @@
-import springApi from "@/src/api";
+import springApi from "@/src/api/instance";
 import React, {
   Dispatch,
   SetStateAction,

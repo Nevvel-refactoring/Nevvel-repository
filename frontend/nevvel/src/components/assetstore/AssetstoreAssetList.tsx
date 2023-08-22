@@ -7,7 +7,7 @@ import sounddata from "./DummyAssetData_Audio.json"
 import { Modal } from "../common/Modal";
 import AssetDetailModal from "./AssetDetailModal";
 
-import springApi from "@/src/api";
+import springApi from "@/src/api/instance";
 
 
 interface AssetTag {

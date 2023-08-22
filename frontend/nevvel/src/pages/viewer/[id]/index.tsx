@@ -7,7 +7,7 @@ import { useRouter } from "next/dist/client/router";
 import { useParams } from "next/navigation";
 import { GetStaticPaths, GetStaticProps } from "next";
 
-import springApi from "@/src/api";
+import springApi from "@/src/api/instance";
 import { AiFillSetting } from "react-icons/ai";
 
 import { bigMobile, mobile, tabletH } from "@/src/util/Mixin";

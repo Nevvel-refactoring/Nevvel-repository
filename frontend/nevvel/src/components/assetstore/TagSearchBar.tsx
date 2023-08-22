@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import DummyTagData from './DummyTagData.json'
-import { NewvelApi } from "@/src/api";
+import { NewvelApi } from "@/src/api/instance";
 
 type TagData = {
   id: number;

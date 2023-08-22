@@ -1,25 +1,12 @@
 import axios from "axios";
 
-// export interface Tokens {
-//   "accessToken": string;
-//   "refreshToken": string;
-// }
+const API_BASE_URL = process.env.API_BASE_URL;
 
-const springApi = axios.create({
-  // withCredentials: true,
-  baseURL: "https://www.nevvel.net:8081/api",
-  // baseURL: "http://3.35.53.215:8080//api"
-  // baseURL: "https://k8d106.p.ssafy.io:8080/api"
-});
+// api request가 있는 경우 | api에 params가 들어가는 경우 -> springApi 호출로 baseURL만 받아서 request 넣거나, api 완성해서 axios 요청
+const springApi = axios.create({ baseURL: API_BASE_URL });
 springApi.defaults.withCredentials = true;
 
 export default springApi;
-
-// api request가 있는 경우 | api에 params가 들어가는 경우 -> springApi 호출로 baseURL만 받아서 request 넣거나, api 완성해서 axios 요청
-
-// ----------------------------------------------------------------------------------------------------------------------------------
-
-// api request 없고, params도 안들어가는 경우 -> NewvelApi.___ 호출로 바로 response 받을 수 있음
 
 export const NewvelApi = {
   // users

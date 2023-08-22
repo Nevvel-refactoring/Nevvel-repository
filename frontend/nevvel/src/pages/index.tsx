@@ -7,7 +7,7 @@ import BestDetails from "../components/main/BestDetails";
 import AssetSwiper from "../components/main/AssetSwiper";
 import axios from "axios";
 import styled from "styled-components";
-import springApi from "@/src/api";
+import springApi from "@/src/api/instance";
 import DummyAssetData_audio from "@/src/components/assetstore/DummyAssetData_Audio.json";
 import DummyAssetData_image from "@/src/components/assetstore/DummyAssetData_Image.json";
 import { ImageAssetAtom, AudioAssetAtom } from "@/src/store/EditorAssetStore";
