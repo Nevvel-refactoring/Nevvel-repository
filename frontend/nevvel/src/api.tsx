@@ -6,11 +6,12 @@ import axios from "axios";
 // }
 
 const springApi = axios.create({
-  withCredentials: true,
+  // withCredentials: true,
   baseURL: "https://www.nevvel.net:8081/api",
   // baseURL: "http://3.35.53.215:8080//api"
   // baseURL: "https://k8d106.p.ssafy.io:8080/api"
 });
+springApi.defaults.withCredentials = true;
 
 export default springApi;
 
