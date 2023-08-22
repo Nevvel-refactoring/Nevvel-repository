@@ -8,6 +8,7 @@ import styled from "styled-components";
 import { useAtom } from "jotai";
 import { userInfoAtom, loginAtom } from "@/src/store/Login";
 import { NextPageContext } from "next";
+import { getKakaoLogin } from "@/src/api/oauth";
 
 function Login(props: { userDTO: string }) {
   const userDTO = props.userDTO === "" ? "" : JSON.parse(props.userDTO);
@@ -32,7 +33,7 @@ function Login(props: { userDTO: string }) {
   const router = useRouter();
 
   const kakaoLogin = () => {
-    router.push("https://www.nevvel.net:8081/api/oauth2/authorization/kakao");
+    getKakaoLogin();
   };
 
   return (
