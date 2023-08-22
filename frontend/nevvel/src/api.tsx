@@ -11,7 +11,7 @@ const springApi = axios.create({
   // baseURL: "http://3.35.53.215:8080//api"
   // baseURL: "https://k8d106.p.ssafy.io:8080/api"
 });
-springApi.default.withCredentials = true;
+springApi.defaults.withCredentials = true;
 
 export default springApi;
 
