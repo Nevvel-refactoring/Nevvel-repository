@@ -11,6 +11,7 @@ const springApi = axios.create({
   // baseURL: "http://3.35.53.215:8080//api"
   // baseURL: "https://k8d106.p.ssafy.io:8080/api"
 });
+springApi.default.withCredentials = true;
 
 export default springApi;
 
@@ -31,7 +32,7 @@ export const NewvelApi = {
   bestWriters: () => springApi.get("/users/best"),
 
   // 내 프로필 정보 반환
-  profileInfo: () => springApi.get("/users", {withCredentials: true}),
+  profileInfo: () => springApi.get("/users"),
 
   // covers
 
