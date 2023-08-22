@@ -9,7 +9,6 @@ import { useAtom } from "jotai";
 import { userInfoAtom, loginAtom } from "@/src/store/Login";
 import { NextPageContext } from "next";
 import { getKakaoLogin } from "@/src/api/oauth";
-import { NewvelApi } from "@/src/api/instance";
 
 function Login(props: { userDTO: string }) {
   const userDTO = props.userDTO === "" ? "" : JSON.parse(props.userDTO);
@@ -34,7 +33,7 @@ function Login(props: { userDTO: string }) {
   const router = useRouter();
 
   const kakaoLogin = () => {
-    NewvelApi.logIn();
+    getKakaoLogin();
   };
 
   return (
