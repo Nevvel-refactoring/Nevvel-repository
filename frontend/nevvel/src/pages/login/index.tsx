@@ -8,7 +8,6 @@ import styled from "styled-components";
 import { useAtom } from "jotai";
 import { userInfoAtom, loginAtom } from "@/src/store/Login";
 import { NextPageContext } from "next";
-import { getKakaoLogin } from "@/src/api/oauth";
 
 function Login(props: { userDTO: string }) {
   const userDTO = props.userDTO === "" ? "" : JSON.parse(props.userDTO);
@@ -32,8 +31,9 @@ function Login(props: { userDTO: string }) {
 
   const router = useRouter();
 
+  const KAKAO_LOGIN_URL = process.env.NEXT_PUBLIC_KAKAO_LOGIN_URL;
   const kakaoLogin = () => {
-    getKakaoLogin();
+    router.push(`${KAKAO_LOGIN_URL}`);
   };
 
   return (

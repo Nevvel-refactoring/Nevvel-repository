@@ -1,14 +1,10 @@
 import axios from "axios";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-console.log(API_BASE_URL);
+const API_BASE_URL = process.env.NEXT_PUBLIC_KAKAO_LOGIN_URL;
 
 // api request가 있는 경우 | api에 params가 들어가는 경우 -> springApi 호출로 baseURL만 받아서 request 넣거나, api 완성해서 axios 요청
 const springApi = axios.create({
   baseURL: API_BASE_URL,
-  // baseURL: "https://www.nevvel.net:8081/api",
-  // http://3.35.53.215:8080//api
-  // https://k8d106.p.ssafy.io:8080/api
 });
 springApi.defaults.withCredentials = true;
 
