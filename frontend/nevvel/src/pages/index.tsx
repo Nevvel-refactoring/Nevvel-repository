@@ -13,7 +13,8 @@ import DummyAssetData_image from "@/src/components/assetstore/DummyAssetData_Ima
 import { ImageAssetAtom, AudioAssetAtom } from "@/src/store/EditorAssetStore";
 import React from "react";
 import { useState } from "react";
-import { Novel } from "novel"
+import { Novel } from "novel";
+import { getTagList } from "../api/tags";
 
 interface AssetTag {
   id: number;
@@ -68,6 +69,8 @@ export default function Home(props: {
   const [loginStatus, setLoginStatus] = useAtom(loginAtom);
   const [userInfoStatus, setUserInfoStatus] = useAtom(userInfoAtom);
   useEffect(() => {
+    const res = getTagList();
+    console.log(res);
     setLoginStatus(userDTO === "" ? false : true);
     setUserInfoStatus(newUserInfo);
     return () => {
@@ -114,14 +117,14 @@ export default function Home(props: {
   // console.log(loginStatus);
   // console.log(userInfoStatus);
 
-  const[axiosReloader, setAxiosReloaer] = useState<boolean>(false)
+  const [axiosReloader, setAxiosReloaer] = useState<boolean>(false);
 
   useEffect(() => {
-    if (axiosReloader === true){
-      setAxiosReloaer(false)
-      location.reload()
+    if (axiosReloader === true) {
+      setAxiosReloaer(false);
+      location.reload();
     }
-  },[axiosReloader])
+  }, [axiosReloader]);
 
   return (
     <HomeWrapper>
