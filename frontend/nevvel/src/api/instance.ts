@@ -5,7 +5,8 @@ console.log(API_BASE_URL);
 
 // api request가 있는 경우 | api에 params가 들어가는 경우 -> springApi 호출로 baseURL만 받아서 request 넣거나, api 완성해서 axios 요청
 const springApi = axios.create({
-  baseURL: "https://www.nevvel.net:8081/api",
+  baseURL: API_BASE_URL,
+  // baseURL: "https://www.nevvel.net:8081/api",
   // http://3.35.53.215:8080//api
   // https://k8d106.p.ssafy.io:8080/api
 });
