@@ -76,7 +76,6 @@ function EditorMainListItem({
       const copiedContents = [...contents];
       const newBlock: content = {
         idx: uuid,
-        tag: "p",
         context: "",
         event: [],
       };
@@ -145,7 +144,6 @@ function EditorMainListItem({
           <ContentEditable
             className="textblock"
             innerRef={focusRef}
-            tagName={content.tag}
             html={content.context}
             disabled={false}
             onChange={handleChange}
