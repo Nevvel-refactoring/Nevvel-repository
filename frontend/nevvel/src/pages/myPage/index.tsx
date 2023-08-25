@@ -10,7 +10,13 @@ import styled from "styled-components";
 
 import { NextPageContext } from "next";
 
-function MyPage(props: { userDTO: string }) {
+function MyPage(props: {
+  userDTO: string;
+  accessToken: string;
+  refreshToken: string;
+}) {
+  console.log(props.accessToken);
+  console.log(props.refreshToken);
   const userDTO = props.userDTO === "" ? "" : JSON.parse(props.userDTO);
   const newUserInfo =
     userDTO === ""
@@ -87,11 +93,11 @@ function MyPage(props: { userDTO: string }) {
     <Wrapper>
       {/* {loginStatus ? (
         <> */}
-          <MyProfile />
-          <MyPoint />
-          <MyNovel />
-          <MyAsset />
-        {/* </>
+      <MyProfile />
+      <MyPoint />
+      <MyNovel />
+      <MyAsset />
+      {/* </>
       ) : (
         <></>
       )} */}
@@ -113,9 +119,25 @@ export async function getServerSideProps({ req }: NextPageContext) {
       break;
     }
   }
+  let accessTokencookie = "";
+  for (let i = 0; i < parts.length; i++) {
+    if (parts[i].startsWith("accessToken=")) {
+      accessTokencookie = parts[i].substring("accessToken=".length);
+      break;
+    }
+  }
+  let refreshTokencookie = "";
+  for (let i = 0; i < parts.length; i++) {
+    if (parts[i].startsWith("refreshToken=")) {
+      refreshTokencookie = parts[i].substring("refreshToken=".length);
+      break;
+    }
+  }
   return {
     props: {
       userDTO: userDTOcookie,
+      accessToken: accessTokencookie,
+      refreshToken: refreshTokencookie,
     },
   };
 }
