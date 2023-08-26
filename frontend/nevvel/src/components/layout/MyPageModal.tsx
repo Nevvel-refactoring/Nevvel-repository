@@ -34,7 +34,7 @@ export const MyPageModal = ({
     setModal(false);
     onClickProfile();
     axios
-      .post("https://www.nevvel.net:8081/api/users/signout", "로그아웃" ,{withCredentials: true})
+      .post("https://www.nevvel.net:8081/api/users/signout", null, { withCredentials: true })
       .then(() => logoutRoute())
       .catch((error) => console.log(error));
   };
