@@ -71,7 +71,7 @@ export default function Home(props: {
   useEffect(() => {
     const res = getTagList();
     console.log(res);
-    console.log("111");
+    console.log("222");
     setLoginStatus(userDTO === "" ? false : true);
     setUserInfoStatus(newUserInfo);
     return () => {
