@@ -14,6 +14,7 @@ import { ImageAssetAtom, AudioAssetAtom } from "@/src/store/EditorAssetStore";
 import React from "react";
 import { useState } from "react";
 import { Novel } from "novel";
+import { getTagList } from "../api/tags";
 
 interface AssetTag {
   id: number;
@@ -68,6 +69,10 @@ export default function Home(props: {
   const [loginStatus, setLoginStatus] = useAtom(loginAtom);
   const [userInfoStatus, setUserInfoStatus] = useAtom(userInfoAtom);
   useEffect(() => {
+    async () => {
+      const res = await getTagList();
+      console.log(res)
+    };
     setLoginStatus(userDTO === "" ? false : true);
     setUserInfoStatus(newUserInfo);
     return () => {
