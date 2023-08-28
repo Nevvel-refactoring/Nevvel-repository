@@ -13,12 +13,6 @@ function MyProfile() {
     undefined
   );
   useEffect(() => {
-    // const getUserData = async () => {
-    //   const res = await NewvelApi.profileInfo();
-    //   // console.log(res.data.description);
-    //   setUserDescription(res.data.description);
-    // };
-    // getUserData();
     const getUserData = async () => {
       const res = await getUserInfo();
       if (res !== null) {
@@ -26,6 +20,7 @@ function MyProfile() {
         setUserDescription(res.data.description);
       }
     };
+    console.log('description')
     getUserData();
   }, []);
 
