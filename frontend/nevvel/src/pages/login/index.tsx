@@ -31,8 +31,9 @@ function Login(props: { userDTO: string }) {
 
   const router = useRouter();
 
+  const KAKAO_LOGIN_URL = process.env.NEXT_PUBLIC_KAKAO_LOGIN_URL;
   const kakaoLogin = () => {
-    router.push("https://www.nevvel.net:8081/api/oauth2/authorization/kakao");
+    router.push(`${KAKAO_LOGIN_URL}`);
   };
 
   return (

@@ -11,7 +11,7 @@ import {
   BottomBtn,
   PostBtn,
 } from "../../styles/Editor.styled";
-import springApi from "@/src/api";
+import springApi from "@/src/api/instance";
 
 import EditorPublishPoint from "./EditorPublishPoint";
 import EditorPublishDate from "./EditorPublishDate";

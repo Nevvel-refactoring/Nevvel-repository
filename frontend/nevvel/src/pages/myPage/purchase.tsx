@@ -1,4 +1,4 @@
-import springApi from "@/src/api";
+import springApi from "@/src/api/instance";
 import RadioInput from "@/src/components/common/RadioInput";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";

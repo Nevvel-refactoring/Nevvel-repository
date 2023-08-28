@@ -7,13 +7,14 @@ import BestDetails from "../components/main/BestDetails";
 import AssetSwiper from "../components/main/AssetSwiper";
 import axios from "axios";
 import styled from "styled-components";
-import springApi from "@/src/api";
+import springApi from "@/src/api/instance";
 import DummyAssetData_audio from "@/src/components/assetstore/DummyAssetData_Audio.json";
 import DummyAssetData_image from "@/src/components/assetstore/DummyAssetData_Image.json";
 import { ImageAssetAtom, AudioAssetAtom } from "@/src/store/EditorAssetStore";
 import React from "react";
 import { useState } from "react";
-import { Novel } from "novel"
+import { Novel } from "novel";
+import { getTagList } from "../api/tags";
 
 interface AssetTag {
   id: number;
@@ -68,6 +69,13 @@ export default function Home(props: {
   const [loginStatus, setLoginStatus] = useAtom(loginAtom);
   const [userInfoStatus, setUserInfoStatus] = useAtom(userInfoAtom);
   useEffect(() => {
+    // const tagList = async () => {
+    //   const res = await getTagList();
+    //   if (res !== null) {
+    //     // 하고싶은거
+    //   }
+    // }
+    // tagList()
     setLoginStatus(userDTO === "" ? false : true);
     setUserInfoStatus(newUserInfo);
     return () => {
@@ -114,14 +122,14 @@ export default function Home(props: {
   // console.log(loginStatus);
   // console.log(userInfoStatus);
 
-  const[axiosReloader, setAxiosReloaer] = useState<boolean>(false)
+  const [axiosReloader, setAxiosReloaer] = useState<boolean>(false);
 
   useEffect(() => {
-    if (axiosReloader === true){
-      setAxiosReloaer(false)
-      location.reload()
+    if (axiosReloader === true) {
+      setAxiosReloaer(false);
+      location.reload();
     }
-  },[axiosReloader])
+  }, [axiosReloader]);
 
   return (
     <HomeWrapper>

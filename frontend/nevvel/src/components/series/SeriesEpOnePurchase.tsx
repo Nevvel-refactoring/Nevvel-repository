@@ -1,4 +1,4 @@
-import springApi from "@/src/api";
+import springApi from "@/src/api/instance";
 import { mobile, tabletH } from "@/src/util/Mixin";
 import { useRouter } from "next/router";
 import React, { useState } from "react";

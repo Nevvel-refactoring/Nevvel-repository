@@ -9,7 +9,7 @@ import {
 import { Asset } from "editor";
 import { content } from "editor";
 import { event } from "editor";
-import springApi from "@/src/api";
+import springApi from "@/src/api/instance";
 import { AudioAssetAtom } from "@/src/store/EditorAssetStore";
 import { totalEventAtom } from "@/src/store/EditorAssetStore";
 

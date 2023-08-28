@@ -6,7 +6,7 @@ import { Modal } from "../common/Modal";
 import { AiFillCheckCircle } from "react-icons/ai";
 import { useAtomValue, useAtom } from "jotai";
 import * as A from "@/src/store/EditorAssetStore";
-import springApi from "@/src/api";
+import springApi from "@/src/api/instance";
 import { content } from "editor";
 import { BiImageAdd } from "react-icons/bi";
 import { AiOutlineSound } from "react-icons/ai";

@@ -11,7 +11,7 @@ import EditorMainAssetTotalList from "./EditorMainAssetTotalList";
 import { BiImageAdd } from "react-icons/bi";
 import { AiOutlineSound } from "react-icons/ai";
 import { MdStorefront } from "react-icons/md"
-import springApi from "@/src/api";
+import springApi from "@/src/api/instance";
 import { Asset } from "editor";
 
 

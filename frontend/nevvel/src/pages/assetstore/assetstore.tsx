@@ -14,7 +14,7 @@ import ImgUpload from "@/src/components/assetstore/ImgUpload";
 import AudUpload from "@/src/components/assetstore/AudUpload";
 
 import TagData from "@/src/components/assetstore/DummyTagData.json";
-import { NewvelApi } from "@/src/api";
+import { NewvelApi } from "@/src/api/instance";
 import TagAddModal from "@/src/components/assetstore/TagAddModal";
 
 import type { GetServerSideProps, GetServerSidePropsContext, NextPage } from "next"

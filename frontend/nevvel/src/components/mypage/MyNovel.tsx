@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import springApi from "@/src/api";
-import { NewvelApi } from "@/src/api";
+import springApi from "@/src/api/instance";
+import { NewvelApi } from "@/src/api/instance";
 import { userInfoAtom } from "@/src/store/Login";
 import { useAtomValue } from "jotai";
 import SemiTitle from "./SemiTitle";
