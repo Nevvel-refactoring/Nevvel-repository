@@ -75,7 +75,7 @@ export default function Home(props: {
       console.log(res);
     }
     tagList()
-    console.log("111");
+    console.log("222");
     setLoginStatus(userDTO === "" ? false : true);
     setUserInfoStatus(newUserInfo);
     return () => {
