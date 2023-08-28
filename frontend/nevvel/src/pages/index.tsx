@@ -69,13 +69,9 @@ export default function Home(props: {
   const [loginStatus, setLoginStatus] = useAtom(loginAtom);
   const [userInfoStatus, setUserInfoStatus] = useAtom(userInfoAtom);
   useEffect(() => {
-    async () => {
-      console.log('222')
-      const res = await getTagList();
-      console.log('333')
-      console.log(res)
-    };
-    console.log('111')
+    const res = getTagList();
+    console.log(res);
+    console.log("111");
     setLoginStatus(userDTO === "" ? false : true);
     setUserInfoStatus(newUserInfo);
     return () => {
