@@ -4,7 +4,7 @@ import springApi from "./instance";
 // refresh token 삭제
 export const postLogout = async () => {
   try {
-    springApi.post("/users/signout");
+    await springApi.post("/users/signout");
     return true;
   } catch (error) {
     console.log(error);
