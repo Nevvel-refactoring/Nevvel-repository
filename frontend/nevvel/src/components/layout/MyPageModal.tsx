@@ -37,16 +37,17 @@ export const MyPageModal = ({
     const KaKaoLogout = async () => {
       const res = await postLogout();
       if (res === true) {
-        console.log(222);
+        console.log(555);
         // localStorage 초기화
         localStorage.removeItem("loginStatus");
         localStorage.removeItem("userInfoStatus");
         // 로그아웃 후 로그아웃페이지 리다이렉트
-        router.push({ pathname: "/logout" });
+        await router.push({ pathname: "/logout" });
       }
-      console.log(111);
+      console.log(444);
     };
     KaKaoLogout();
+    console.log(666);
     // axios
     //   .post("https://www.nevvel.net:8081/api/users/signout", null, {
     //     withCredentials: true,
