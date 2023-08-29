@@ -2,6 +2,7 @@ import { Dispatch, SetStateAction } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import styled from "styled-components";
+import { postLogout } from "@/src/api/oauth";
 
 interface ModalProps {
   modal: any;
@@ -33,10 +34,16 @@ export const MyPageModal = ({
   const kakaoLogout = () => {
     setModal(false);
     onClickProfile();
-    axios
-      .post("https://www.nevvel.net:8081/api/users/signout", null, { withCredentials: true })
-      .then(() => logoutRoute())
-      .catch((error) => console.log(error));
+    const res = postLogout();
+    if (res === true) {
+      () => logoutRoute();
+    }
+    // axios
+    //   .post("https://www.nevvel.net:8081/api/users/signout", null, {
+    //     withCredentials: true,
+    //   })
+    //   .then(() => logoutRoute())
+    //   .catch((error) => console.log(error));
   };
 
   // 로그아웃 후 로그아웃페이지 리다이렉트

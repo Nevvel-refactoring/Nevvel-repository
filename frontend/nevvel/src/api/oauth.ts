@@ -5,15 +5,7 @@ import springApi from "./instance";
 export const postLogout = () => {
   try {
     springApi.post("/users/signout");
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-// access token 재발급
-export const postRefresh = () => {
-  try {
-    springApi.post("/users/refresh", {});
+    return true;
   } catch (error) {
     console.log(error);
   }
