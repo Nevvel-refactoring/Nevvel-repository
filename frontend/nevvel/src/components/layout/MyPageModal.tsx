@@ -1,5 +1,4 @@
 import { Dispatch, SetStateAction } from "react";
-import axios from "axios";
 import { useRouter } from "next/router";
 import styled from "styled-components";
 import { postLogout } from "@/src/api/oauth";
@@ -37,27 +36,14 @@ export const MyPageModal = ({
     const KaKaoLogout = async () => {
       const res = await postLogout();
       if (res === true) {
-        console.log(444);
         // localStorage 초기화
         localStorage.removeItem("loginStatus");
         localStorage.removeItem("userInfoStatus");
-        // 로그아웃 후 메인페이지 리다이렉트
-        router.push({ pathname: "/" });
+        // 로그아웃 후 로그아웃페이지 리다이렉트
+        router.push({ pathname: "/logout" });
       }
-      console.log(333);
     };
     KaKaoLogout();
-    // axios
-    //   .post("https://www.nevvel.net:8081/api/users/signout", null, {
-    //     withCredentials: true,
-    //   })
-    //   .then(() => logoutRoute())
-    //   .catch((error) => console.log(error));
-  };
-
-  // 로그아웃 후 로그아웃페이지 리다이렉트
-  const logoutRoute = () => {
-    router.push({ pathname: "/logout" });
   };
 
   return (
