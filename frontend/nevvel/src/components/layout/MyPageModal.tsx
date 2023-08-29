@@ -36,11 +36,14 @@ export const MyPageModal = ({
     onClickProfile();
     const res = postLogout();
     if (res === true) {
-      console.log(444);
-      // 로그아웃 후 로그아웃페이지 리다이렉트
-      router.push({ pathname: "/logout" });
+      console.log(222);
+      // localStorage 초기화
+      localStorage.removeItem('loginStatus')
+      localStorage.removeItem('userInfoStatus')
+      // 로그아웃 후 메인페이지 리다이렉트
+      router.push({ pathname: "/" });
     }
-    console.log(333);
+    console.log(111);
     // axios
     //   .post("https://www.nevvel.net:8081/api/users/signout", null, {
     //     withCredentials: true,
