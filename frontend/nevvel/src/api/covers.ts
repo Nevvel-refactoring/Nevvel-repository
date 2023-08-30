@@ -1,19 +1,19 @@
 import springApi from "./instance";
 
 // 새 소설 생성하기
-// export const postCover = async () => {
-//     try {
-//       const data = await springApi.post("/covers", formData, {
-//         headers: {
-//           "Content-Type": "multipart/form-data",
-//         },
-//       });
-//       return data;
-//     } catch (error) {
-//       console.log(error);
-//       return null;
-//     }
-//   };
+export const postCover = async (formData: FormData) => {
+  try {
+    const data = await springApi.post("/covers", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return data;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
 
 // 소설의 전체 에피소드 목록
 

@@ -1,6 +1,4 @@
 import { useState, useEffect } from "react";
-import springApi from "@/src/api/instance";
-import { NewvelApi } from "@/src/api/instance";
 import { userInfoAtom } from "@/src/store/Login";
 import { useAtomValue } from "jotai";
 import SemiTitle from "./SemiTitle";
@@ -31,8 +29,7 @@ function MyNovel() {
       if (userInfoStatus != undefined) {
         const res = await getUploadedNovel(userInfoStatus.id);
         if (res != null) {
-          console.log("uploadedCovers");
-          console.log(res.data);
+          // console.log(res.data);
           setUploadedNovel(res.data);
           // console.log(res.data.empty);
           if (res.data.empty) {
@@ -63,8 +60,7 @@ function MyNovel() {
     const getPurchasedCovers = async () => {
       const res = await getPurchasedNovel();
       if (res != null) {
-        console.log("purchasedCovers");
-        console.log(res.data);
+        // console.log(res.data);
         setPurchasedNovel(res.data);
         if (res.data.empty) {
           setPurchasedMore("");
@@ -90,8 +86,7 @@ function MyNovel() {
     const getLikedCovers = async () => {
       const res = await getLikedNovel();
       if (res != null) {
-        console.log("likedCovers");
-        console.log(res.data);
+        // console.log(res.data);
         setLikedNovel(res.data);
         if (res.data.empty) {
           setLikedMore("");
