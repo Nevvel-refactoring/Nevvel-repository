@@ -1,3 +1,4 @@
+import { getGenre } from "@/src/api/genre";
 import springApi, { NewvelApi } from "@/src/api/instance";
 import { useRouter } from "next/router";
 import React, {
@@ -78,9 +79,11 @@ function CreateNewNovel({ setModalOpen }: Props) {
 
   useEffect(() => {
     const getGenres = async () => {
-      const res = await NewvelApi.allGenres();
-      setGenres(res.data.genres);
-      // console.log(res.data.genres);
+      const res = await getGenre();
+      if (res != null) {
+        console.log(res.data.genres);
+        setGenres(res.data.genres);
+      }
     };
     getGenres();
   }, []);
