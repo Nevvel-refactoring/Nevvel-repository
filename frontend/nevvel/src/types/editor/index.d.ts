@@ -23,7 +23,6 @@ declare module "editor" {
 
   export interface content {
     idx: string;
-    tag: string;
     context: string;
     event: event[];
   }

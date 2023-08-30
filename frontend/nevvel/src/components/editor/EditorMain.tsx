@@ -31,7 +31,6 @@ function EditorMain({setEpisode,episode}:EditorMainProps) {
     if (contents.length === 0) {
       const newBlock: content = {
         idx: generateUniqueId(), // Generate a new unique ID for the block
-        tag:"p",
         context:"",
         event: [],
       };

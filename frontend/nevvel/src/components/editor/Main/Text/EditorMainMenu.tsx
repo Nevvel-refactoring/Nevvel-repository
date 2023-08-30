@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { BiBold, BiItalic } from "react-icons/bi";
 import EditorMainMenuColor from "./EditorMainMenuColor";
@@ -9,9 +9,12 @@ type EditorMainMenuProps = {
   y: number;
   style:boolean;
   setStyle: React.Dispatch<React.SetStateAction<boolean>>;
+  setPoint: React.Dispatch<React.SetStateAction<string>>;
+  setStart:React.Dispatch<React.SetStateAction<number>>;
+  context:string;
 };
 
-function EditorMainMenu({ setText, x, y, style, setStyle }: EditorMainMenuProps) {
+function EditorMainMenu({ setText, x, y, style, setStyle, setPoint, context,setStart }: EditorMainMenuProps) {
   const positionY = y;
   const [colorDrop, setColorDrop] = useState(false);
 
@@ -20,8 +23,10 @@ function EditorMainMenu({ setText, x, y, style, setStyle }: EditorMainMenuProps)
     if (selection) {
       const range = selection.getRangeAt(0);
       const selectedText = range.toString();
+      const startPoint = selection.anchorOffset
+      setPoint(selectedText)
+      setStart(startPoint)
       const formattedText = `<${type}>${selectedText}</${type}>`;
-      // console.log(formattedText)
       setText(formattedText)
       range.deleteContents();
       range.insertNode(
@@ -40,7 +45,10 @@ function EditorMainMenu({ setText, x, y, style, setStyle }: EditorMainMenuProps)
     if (selection) {
       const range = selection.getRangeAt(0);
       const selectedText = range.toString();
-      const formattedText = `<span style="font-size: ${size}px">${selectedText}</span>`;
+      const startPoint = selection.anchorOffset
+      setPoint(selectedText)
+      setStart(startPoint)
+      const formattedText = `<span style="font-size:${size}px">${selectedText}</span>`;
       setText(formattedText)
       range.deleteContents();
       range.insertNode(
@@ -50,6 +58,7 @@ function EditorMainMenu({ setText, x, y, style, setStyle }: EditorMainMenuProps)
       if (textElement) {
         setText(textElement!.innerHTML);
       }
+      setStyle(!style)
     }
   };
 
@@ -72,7 +81,14 @@ function EditorMainMenu({ setText, x, y, style, setStyle }: EditorMainMenuProps)
         <MenuButton onClick={() => setColorDrop(!colorDrop)}>color</MenuButton>
         {colorDrop ? (
           <MenuColorContainer>
-            <EditorMainMenuColor setText={setText} />
+            <EditorMainMenuColor 
+            setText={setText}
+            setStyle={setStyle}
+            setPoint={setPoint}
+            setStart={setStart}
+            context={context}
+            style={style}
+             />
           </MenuColorContainer>
         ) : null}
       </TextColorContainer>

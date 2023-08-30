@@ -3,8 +3,10 @@ import styled from "styled-components";
 import EditorMainMenu from "./EditorMainMenu";
 import { bigMobile, mobile } from "@/src/util/Mixin";
 import { content } from "editor";
-import ContentEditable from "react-contenteditable";
 import dynamic from "next/dynamic";
+
+import ContentEditable from "react-contenteditable";
+import dompurify from 'dompurify';
 
 type EditorMainListItemProps = {
   index: number;
@@ -24,21 +26,42 @@ function EditorMainListItem({
   index,
   setDeleteBlock
 }: EditorMainListItemProps) {
-  const [createBlock, setCreateBlock] = useState(false);
   const { v4: uuidv4 } = require("uuid");
   const uuid = uuidv4();
   const idx = content.idx;
   const fIndex = contents.findIndex((el) => el.idx === idx);
   const focusRef = useRef<HTMLDivElement>(null);
-  const [deleteFocus, setDeleteFocus] =useState(false)
+  const [createBlock, setCreateBlock] = useState(false);
+  const [deleteFocus, setDeleteFocus] =useState(false);
+  const [tooltipPos, setTooltipPos] = useState<{ x: number; y: number }>({
+    x: 0,
+    y: 0,
+  });
+  const [style, setStyle] = useState(false);
+  const [menuBlock, setMenuBlock] = useState(false);
+  const [text, setText] = useState(content.context);
+  const [point, setPoint] = useState("");
+  const [start, setStart] =useState(0)
+  useEffect(()=>{
+    console.log(text,"부분")
+  },[text])
 
-  const handleChange = (e: any) => {
-    setContents((prevContent) =>
-      prevContent.map((el) =>
-        el.idx === idx ? { ...el, context: e.target.value } : el
-      )
-    );
-  };
+
+  useEffect(() => {
+    // 텍스트에 style 적용한 경우
+    let context= content.context;
+    const styleText = context.substring(0,start) + text + context.substring(start+point.length,context.length)
+    console.log(styleText)
+    setContents(contents.map((el) => {
+      if (el.idx === idx) {
+        return { ...el, context: styleText };
+      }
+      return el;
+    }));
+    return (()=>{
+    })
+  }, [style]);
+
 
   useEffect(()=>{
     if(focusRef.current){
@@ -55,7 +78,6 @@ function EditorMainListItem({
       const copiedContents = [...contents];
       const newBlock: content = {
         idx: uuid,
-        tag: "p",
         context: "",
         event: [],
       };
@@ -64,11 +86,18 @@ function EditorMainListItem({
     }
     setCreateBlock(false);
   }, [createBlock]);
-
+  
   useEffect(() => {
     console.log(contents);
   }, [contents]);
-
+  
+  const handleChange = (e: any) => {
+    setContents((prevContent) =>
+      prevContent.map((el) =>
+        el.idx === idx ? { ...el, context: e.target.value } : el
+      )
+    );
+  };
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
     if (event.key == "Enter") {
       console.log(event)
@@ -86,6 +115,12 @@ function EditorMainListItem({
     }
   };
 
+  const handleContextMenu = (event: any) => {
+    event.preventDefault();
+    setTooltipPos({ x: event.clientX, y: event.clientY });
+    setMenuBlock(true);
+  };
+
   // // block삭제
   // const RemoveHandler = (content: content) => {
   //   setContents(contents.filter((el) => el.idx !== idx));
@@ -94,16 +129,28 @@ function EditorMainListItem({
   return (
     <BlockContainer>
       <EditorMainAssetBtn content={content} />
-      <TextBlock>
+      <TextBlock onMouseLeave={() => setMenuBlock(false)}>
+      {menuBlock ? (
+        <EditorMainMenu
+          x={tooltipPos.x}
+          y={tooltipPos.y}
+          setText={setText}
+          style={style}
+          setStyle={setStyle}
+          setPoint={setPoint}
+          setStart ={setStart}
+          context={content.context}
+        />
+      ) : null}
         <TextContainer>
           <ContentEditable
             className="textblock"
             innerRef={focusRef}
-            tagName={content.tag}
-            html={content.context}
+            html={dompurify.sanitize(content.context)}
             disabled={false}
             onChange={handleChange}
             onKeyDown={handleKeyDown}
+            onContextMenu={handleContextMenu}
             placeholder="등록 할 내용을 입력해주세요"
           />
         </TextContainer>

@@ -14,7 +14,6 @@ export const putEditorAtom = atom<boolean>(false)
 export const totalEventAtom =atom<content>(
     {
         idx:"total-asset",
-        tag:"p",
         context:"",
         event:[]
     }

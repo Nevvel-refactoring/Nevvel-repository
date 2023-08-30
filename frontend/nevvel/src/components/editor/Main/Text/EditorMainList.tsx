@@ -22,6 +22,20 @@ function EditorMainList({ contents, setContents }: EditorMainListProps) {
   const router = useRouter();
   const eid = router.query.eid;
   const [deleteBlock, setDeleteBlock] = useState("");
+  const [isBrowser, setIsBrowser] = useState(false);
+
+  useEffect(() => {
+    setIsBrowser(process.browser);
+  }, []);
+ 
+  useEffect(() => {
+    const fIndex = contents.findIndex((el) => el.idx === deleteBlock);
+    if (contents && contents[fIndex]?.context.length == 0) {
+      setContents(contents.filter((el) => el.idx !== deleteBlock));
+    }
+  }, [deleteBlock,contents]);
+
+
   const handleChage = (result: any) => {
     if (!result.destination) return;
     const items = [...contents];
@@ -30,14 +44,9 @@ function EditorMainList({ contents, setContents }: EditorMainListProps) {
     setContents(items);
   };
 
-  useEffect(() => {
-    const fIndex = contents.findIndex((el) => el.idx === deleteBlock);
-    if (contents && contents[fIndex]?.context.length == 0) {
-      setContents(contents.filter((el) => el.idx !== deleteBlock));
-    }
-  }, [deleteBlock,contents]);
 
   return (
+    <>{isBrowser &&
     <DragDropContext onDragEnd={handleChage}>
       <MainWrapper>
         <Droppable droppableId="cardlists">
@@ -49,7 +58,7 @@ function EditorMainList({ contents, setContents }: EditorMainListProps) {
                   index={index}
                   key={content.idx}
                 >
-                  {(provided, snapshot) => (
+                  {(provided) => (
                     <div
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
@@ -73,6 +82,8 @@ function EditorMainList({ contents, setContents }: EditorMainListProps) {
         </Droppable>
       </MainWrapper>
     </DragDropContext>
+    }
+    </>
   );
 }
 
