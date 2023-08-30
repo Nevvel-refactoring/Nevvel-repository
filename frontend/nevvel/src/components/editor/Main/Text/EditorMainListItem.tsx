@@ -3,8 +3,10 @@ import styled from "styled-components";
 import EditorMainMenu from "./EditorMainMenu";
 import { bigMobile, mobile } from "@/src/util/Mixin";
 import { content } from "editor";
-import ContentEditable from "react-contenteditable";
 import dynamic from "next/dynamic";
+
+import ContentEditable from "react-contenteditable";
+import dompurify from 'dompurify';
 
 type EditorMainListItemProps = {
   index: number;
@@ -144,7 +146,7 @@ function EditorMainListItem({
           <ContentEditable
             className="textblock"
             innerRef={focusRef}
-            html={content.context}
+            html={dompurify.sanitize(content.context)}
             disabled={false}
             onChange={handleChange}
             onKeyDown={handleKeyDown}
