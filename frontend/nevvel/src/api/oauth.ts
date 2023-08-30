@@ -2,18 +2,10 @@ import springApi from "./instance";
 
 // 로그아웃
 // refresh token 삭제
-export const postLogout = () => {
+export const postLogout = async () => {
   try {
-    springApi.post("/users/signout");
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-// access token 재발급
-export const postRefresh = () => {
-  try {
-    springApi.post("/users/refresh", {});
+    await springApi.post("/users/signout");
+    return true;
   } catch (error) {
     console.log(error);
   }
