@@ -6,7 +6,7 @@ import TagSearchBar from "./TagSearchBar";
 import { ModalonModal } from "../common/ModalonModal";
 import AskUploadModalContent from "./AskUploadModalContent";
 
-import springApi from "@/src/api";
+import springApi from "@/src/api/instance";
 
 
 type assetstoreProps = {

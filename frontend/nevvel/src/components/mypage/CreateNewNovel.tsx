@@ -1,4 +1,4 @@
-import springApi, { NewvelApi } from "@/src/api";
+import springApi, { NewvelApi } from "@/src/api/instance";
 import { useRouter } from "next/router";
 import React, {
   Dispatch,

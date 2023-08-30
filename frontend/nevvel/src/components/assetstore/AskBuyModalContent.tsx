@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import springApi from "@/src/api";
+import springApi from "@/src/api/instance";
 
 
 type ModalonModalProps = {

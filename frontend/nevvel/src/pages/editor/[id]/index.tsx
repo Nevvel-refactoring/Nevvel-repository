@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { episode } from "editor";
 import { useRouter } from "next/router";
 import { mobile } from "@/src/util/Mixin";
-import springApi from "@/src/api";
+import springApi from "@/src/api/instance";
 import { ImageAssetAtom, AudioAssetAtom } from "@/src/store/EditorAssetStore";
 import DummyAssetData_audio from "@/src/components/assetstore/DummyAssetData_Audio.json";
 import DummyAssetData_image from "@/src/components/assetstore/DummyAssetData_Image.json";

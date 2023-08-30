@@ -1,4 +1,4 @@
-import springApi from "@/src/api";
+import springApi from "@/src/api/instance";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import styled from "styled-components";

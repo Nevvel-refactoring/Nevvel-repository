@@ -11,7 +11,7 @@ import { BsFillTrashFill } from "react-icons/bs";
 import styled from "styled-components";
 import { useRouter } from "next/dist/client/router";
 import { mobile, tabletH } from "@/src/util/Mixin";
-import springApi from "@/src/api";
+import springApi from "@/src/api/instance";
 import { Modal } from "../common/Modal";
 import { userInfoAtom, loginAtom } from "@/src/store/Login";
 import { useAtomValue } from "jotai";

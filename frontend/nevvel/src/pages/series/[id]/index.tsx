@@ -3,7 +3,7 @@ import styled from "styled-components";
 import SeriesHeader from "@/src/components/series/SeriesHeader";
 import SeriesMain from "@/src/components/series/SeriesMain";
 import SeriesData from "@/src/components/series/DummySeriesData.json";
-import springApi from "@/src/api";
+import springApi from "@/src/api/instance";
 import { cover } from "series";
 import { useRouter } from "next/dist/client/router";
 import { mobile, tabletH } from "@/src/util/Mixin";
