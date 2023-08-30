@@ -81,7 +81,7 @@ function CreateNewNovel({ setModalOpen }: Props) {
     const getGenres = async () => {
       const res = await getGenre();
       if (res != null) {
-        console.log(res.data.genres);
+        // console.log(res.data.genres);
         setGenres(res.data.genres);
       }
     };
@@ -93,6 +93,7 @@ function CreateNewNovel({ setModalOpen }: Props) {
 
   const genreChangeHandler = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setGenre(Number(event.target.value));
+    console.log(Number(event.target.value));
   };
 
   // 전체 JsonData
@@ -127,6 +128,8 @@ function CreateNewNovel({ setModalOpen }: Props) {
         "coverRegisterDto",
         new Blob([JSON.stringify(jsonDatas)], { type: "application/json" })
       );
+
+      console.log(formData)
 
       await springApi
         .post("/covers", formData, {
