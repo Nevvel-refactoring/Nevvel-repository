@@ -94,7 +94,6 @@ function CreateNewNovel({ setModalOpen }: Props) {
 
   const genreChangeHandler = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setGenre(Number(event.target.value));
-    console.log(Number(event.target.value));
   };
 
   // 전체 JsonData
@@ -129,6 +128,11 @@ function CreateNewNovel({ setModalOpen }: Props) {
         "coverRegisterDto",
         new Blob([JSON.stringify(jsonDatas)], { type: "application/json" })
       );
+
+      console.log("create");
+      for (const x of formData) {
+        console.log(x);
+       };
 
       const res = await postCover(formData);
       if (res != null) {
