@@ -5,37 +5,17 @@ import styled from "styled-components";
 import { ModalonModal } from "../common/ModalonModal";
 import AskBuyModalContent from "./AskBuyModalContent";
 import DoneBuyAsset from "./DoneBuyAsset";
+import { Asset } from "asset";
 
 import DummyEpisode from "./DummyEpisodeforMiri.json";
 
 import { useAtomValue } from "jotai";
 import { loginAtom, userInfoAtom } from "@/src/store/Login";
 
-interface AssetTag {
-  id: number;
-  tagName: string;
-  useCount: number;
-}
 
-interface AssetUploader {
-  id: number;
-  nickname: string;
-  profileImage: string;
-}
 
 type ModalDataProps = {
-  openModalData: {
-    id: number;
-    title: string;
-    type: string;
-    thumbnail: string;
-    url: string;
-    price: number;
-    downloadCount: number;
-    isAvailable: boolean;
-    tags: Array<AssetTag>;
-    uploader: AssetUploader;
-  };
+  openModalData:Asset;
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   modalStarter: boolean;
   setAxiosReloaer: React.Dispatch<React.SetStateAction<boolean>>;

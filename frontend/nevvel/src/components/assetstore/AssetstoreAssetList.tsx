@@ -7,33 +7,9 @@ import sounddata from "./DummyAssetData_Audio.json"
 import { Modal } from "../common/Modal";
 import AssetDetailModal from "./AssetDetailModal";
 
+import {Asset} from "asset";
 import springApi from "@/src/api/instance";
 
-
-interface AssetTag {
-  id : number,
-  tagName : string,
-  useCount : number
-}
-
-interface AssetUploader {
-  id : number,
-  nickname : string,
-  profileImage : string,
-}
-
-interface Asset {
-  id: number,
-  title: string,
-  type: string,
-  thumbnail : string,
-  url: string,
-  price : number,
-  downloadCount : number,
-  isAvailable : boolean,
-  tags: Array<AssetTag>,
-  uploader : AssetUploader
-}
 
 interface AssetstorePorps {
   afterUpload : boolean;

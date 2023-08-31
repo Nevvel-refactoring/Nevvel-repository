@@ -12,34 +12,12 @@ import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 
 import AssetCard from "../common/AssetCard";
+import {AssetTag,AssetUploader, Asset} from "asset"
 
 import { Modal } from "../common/Modal";
 import AssetDetailModal from "../assetstore/AssetDetailModal";
 
-interface AssetTag {
-  id: number;
-  tagName: string;
-  useCount: number;
-}
 
-interface AssetUploader {
-  id: number;
-  nickname: string;
-  profileImage: string;
-}
-
-interface Asset {
-  id: number;
-  title: string;
-  type: string;
-  thumbnail: string;
-  url: string;
-  price: number;
-  downloadCount: number;
-  isAvailable: boolean;
-  tags: Array<AssetTag>;
-  uploader: AssetUploader;
-}
 
 interface AssetSwiperProps {
   content: Asset[];

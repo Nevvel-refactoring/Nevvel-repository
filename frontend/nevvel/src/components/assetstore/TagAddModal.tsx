@@ -3,13 +3,8 @@ import { useState, useRef } from "react";
 import styled from "styled-components";
 
 import TagSearchBar from "./TagSearchBar";
+import { TagData } from "asset";
 
-
-type TagData = {
-  id: number;
-  tagName: string;
-  useCount: number;
-};
 
 type TagDataProp = {
   tagData : TagData[]
