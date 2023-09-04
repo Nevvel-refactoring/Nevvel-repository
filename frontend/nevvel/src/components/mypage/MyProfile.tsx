@@ -16,11 +16,9 @@ function MyProfile() {
     const getUserData = async () => {
       const res = await getUserInfo();
       if (res !== null) {
-        console.log(res.data);
         setUserDescription(res.data.description);
       }
     };
-    console.log('description')
     getUserData();
   }, []);
 

@@ -3,7 +3,7 @@ const nextConfig = {
   reactStrictMode: false,
   swcMinify: true,
   images: {
-    domains: ["nevvel.s3.ap-northeast-2.amazonaws.com", "3.35.53.215:8080"],
+    domains: ["nevvel.s3.ap-northeast-2.amazonaws.com", "www.nevvel.net"],
   },
   webpack: (config) => {
     config.module.rules.push({
