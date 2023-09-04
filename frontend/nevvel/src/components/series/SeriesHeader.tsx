@@ -18,6 +18,7 @@ import springApi from "@/src/api/instance";
 import { userInfoAtom, loginAtom } from "@/src/store/Login";
 import { useAtomValue } from "jotai";
 import SeriesEdit from "./SeriesEdit";
+import { postCoverLike } from "@/src/api/covers";
 
 type SeriesHeaderProps = {
   SeriesData: cover;
@@ -62,9 +63,9 @@ function SeriesHeader({
   // cover 좋아요하기
   const postSeriesLike = async (Id: number) => {
     if (loginStatus) {
-      const res = await springApi.post(`/covers/likes/${Id}`);
+      const res = await postCoverLike(Id);
       setIsLiked(!isLiked);
-      if (res) {
+      if (res != null) {
         // console.log(res);
       }
     } else {

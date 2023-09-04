@@ -1,4 +1,4 @@
-import springApi from "@/src/api/instance";
+import { putCover } from "@/src/api/covers";
 import React, {
   Dispatch,
   SetStateAction,
@@ -125,18 +125,12 @@ function SeriesEdit({
         new Blob([JSON.stringify(jsonDatas)], { type: "application/json" })
       );
 
-      await springApi
-        .put(`/covers/${Info.coverId}`, formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        })
-        .then((res) => {
-          // console.log(res);
-        })
-        .catch((err) => {
-          // console.log("에러남 error");
-        });
+      const res = await putCover(Info.coverId, formData);
+      if (res != null) {
+        // console.log(res);
+      } else {
+        // console.log("에러남 error");
+      }
     } catch (error) {
       alert("업로드 과정에서 문제가 발생하였습니다.");
     }

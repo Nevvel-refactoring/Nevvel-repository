@@ -1,6 +1,4 @@
 import { useState, useEffect } from "react";
-import springApi from "@/src/api/instance";
-import { NewvelApi } from "@/src/api/instance";
 import { userInfoAtom } from "@/src/store/Login";
 import { useAtomValue } from "jotai";
 import SemiTitle from "./SemiTitle";
@@ -10,6 +8,11 @@ import styled from "styled-components";
 import NovelCard from "../common/NovelCard";
 
 import { Novel, Content } from "novel";
+import {
+  getLikedNovel,
+  getPurchasedNovel,
+  getUploadedNovel,
+} from "@/src/api/covers";
 
 function MyNovel() {
   // 작성한 소설
@@ -23,14 +26,18 @@ function MyNovel() {
   const [uploadedMore, setUploadedMore] = useState("");
   useEffect(() => {
     const getUploadedCovers = async () => {
-      const res = await springApi.get(`/covers/uploader/${userInfoStatus?.id}`);
-      // console.log(res.data);
-      setUploadedNovel(res.data);
-      // console.log(res.data.empty);
-      if (res.data.empty) {
-        setUploadedMore("");
-      } else {
-        setUploadedMore("/myPage/uploadedNovel");
+      if (userInfoStatus != undefined) {
+        const res = await getUploadedNovel(userInfoStatus.id);
+        if (res != null) {
+          // console.log(res.data);
+          setUploadedNovel(res.data);
+          // console.log(res.data.empty);
+          if (res.data.empty) {
+            setUploadedMore("");
+          } else {
+            setUploadedMore("/myPage/uploadedNovel");
+          }
+        }
       }
     };
     getUploadedCovers();
@@ -51,13 +58,15 @@ function MyNovel() {
   const [purchasedMore, setPurchasedMore] = useState("");
   useEffect(() => {
     const getPurchasedCovers = async () => {
-      const res = await NewvelApi.purchasedCovers();
-      // console.log(res.data);
-      setPurchasedNovel(res.data);
-      if (res.data.empty) {
-        setPurchasedMore("");
-      } else {
-        setPurchasedMore("/myPage/purchasedNovel");
+      const res = await getPurchasedNovel();
+      if (res != null) {
+        // console.log(res.data);
+        setPurchasedNovel(res.data);
+        if (res.data.empty) {
+          setPurchasedMore("");
+        } else {
+          setPurchasedMore("/myPage/purchasedNovel");
+        }
       }
     };
     getPurchasedCovers();
@@ -75,13 +84,15 @@ function MyNovel() {
   const [likedMore, setLikedMore] = useState("");
   useEffect(() => {
     const getLikedCovers = async () => {
-      const res = await NewvelApi.likesCovers();
-      // console.log(res.data);
-      setLikedNovel(res.data);
-      if (res.data.empty) {
-        setLikedMore("");
-      } else {
-        setLikedMore("/myPage/likedNovel");
+      const res = await getLikedNovel();
+      if (res != null) {
+        // console.log(res.data);
+        setLikedNovel(res.data);
+        if (res.data.empty) {
+          setLikedMore("");
+        } else {
+          setLikedMore("/myPage/likedNovel");
+        }
       }
     };
     getLikedCovers();
