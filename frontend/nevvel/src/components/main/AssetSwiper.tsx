@@ -12,7 +12,7 @@ import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 
 import AssetCard from "../common/AssetCard";
-import {AssetTag,AssetUploader, Asset} from "asset"
+import { Asset } from "asset"
 
 import { Modal } from "../common/Modal";
 import AssetDetailModal from "../assetstore/AssetDetailModal";
@@ -60,35 +60,11 @@ function AssetSwiper(props: AssetSwiperProps) {
 
   return (
     <Wrapper>
-      <StyledSwiper
-        // install Swiper modules
-        modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
-        spaceBetween={20}
-        slidesPerView={1}
-        breakpoints={{
-          500: {
-            slidesPerView: 2,
-          },
-          750: {
-            slidesPerView: 3,
-          },
-          1250: {
-            slidesPerView: 4,
-          },
-          1440: {
-            slidesPerView: 5,
-          },
-        }}
-        navigation
-        pagination={{ clickable: true }}
-        autoplay={{ delay: 3000 }}
-        // scrollbar={{ draggable: true }}
-        // onSwiper={(swiper) => console.log(swiper)}
-        // onSlideChange={() => console.log("slide change")}
-      >
+      <Container>
+        <button>이전</button>
         {assetSwiperData.map((AssetData) => {
           return (
-            <SwiperSlide className="swiper_slide" key={AssetData.id}>
+           <Card>
               <AssetCard
                 AssetData={AssetData}
                 id={AssetData.id}
@@ -102,10 +78,11 @@ function AssetSwiper(props: AssetSwiperProps) {
                 // price={AssetData.price}
                 // uploader={AssetData.uploader}
               />
-            </SwiperSlide>
+            </Card>
           );
         })}
-      </StyledSwiper>
+        <button>이후</button>
+      </Container>
       {/* 여기부터 모달 */}
       {modalOpen ? (
         <Modal
@@ -129,10 +106,6 @@ function AssetSwiper(props: AssetSwiperProps) {
 
 export default AssetSwiper;
 
-const StyledSwiper = styled(Swiper)`
-  width: 100%;
-
-`;
 
 const Wrapper = styled.div`
   background-color: ${({ theme }) => theme.color.background};
@@ -147,3 +120,13 @@ const Wrapper = styled.div`
   padding-left: 10%;
   padding-right: 12%;
 `;
+
+const Container = styled.div`
+  width: 100%;
+  height:500px ;
+  display: flex;
+  overflow:hidden;  
+`
+const Card = styled.div`
+  
+`

@@ -23,6 +23,7 @@ export interface Asset {
   tags: Array<AssetTag>;
   uploader: AssetUploader;
 }
+
 export interface TagData {
     id: number;
     tagName: string;

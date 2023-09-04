@@ -140,7 +140,7 @@ export default function Home(props: {
       <Line />
       <DetailWrapper>
         <BestDetails title="베스트 에셋" more="/assetstore/assetstore" />
-        {/* <AssetSwiper content={props.assets} setAxiosReloaer={setAxiosReloaer} /> */}
+        <AssetSwiper content={props.assets} setAxiosReloaer={setAxiosReloaer} />
       </DetailWrapper>
     </HomeWrapper>
   );
