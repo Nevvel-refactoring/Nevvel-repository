@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 import NovelCard from "@/src/components/common/NovelCard";
-import { NewvelApi } from "@/src/api/instance";
 import axios from "axios";
 import { Novel } from "novel"
 
@@ -10,7 +9,7 @@ function SearchNovel(props: { word: string }) {
 
   useEffect(() => {
     const getSearchNovel = async () => {
-      const res = await axios.get("https://www.nevvel.net:8081/api/covers", {
+      const res = await axios.get(process.env.NEXT_PUBLIC_API_BASE_URL!, {
         params: { keyword: props.word },
       });
       setNovels(res.data);

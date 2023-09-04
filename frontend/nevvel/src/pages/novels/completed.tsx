@@ -184,7 +184,7 @@ export async function getServerSideProps(context: {
     pageNum = Number(context.query.pageNum);
   }
   try {
-    const res = await axios.get("https://www.nevvel.net:8081/api/covers", {
+    const res = await axios.get(process.env.NEXT_PUBLIC_API_BASE_URL!, {
       params: {
         sorttype: sort,
         page: pageNum,

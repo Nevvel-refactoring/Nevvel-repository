@@ -20,10 +20,41 @@ export const postCover = async (formData: FormData) => {
 };
 
 // 소설의 전체 에피소드 목록
+export const getCoverSeries = async (Id: number) => {
+  try {
+    const data = await springApi.get(`/covers/${Id}`);
+    return data;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
 
 // 소설 정보 수정
+export const putCover = async (Id: number, formData: FormData) => {
+  try {
+    const data = await springApi.put(`/covers/${Id}`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return data;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
 
 // 소설 좋아요
+export const postCoverLike = async (Id: number) => {
+  try {
+    const data = await springApi.post(`/covers/likes/${Id}`);
+    return data;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
 
 // 좋아요한 소설 목록
 export const getLikedNovel = async () => {
