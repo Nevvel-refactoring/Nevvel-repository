@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { NovelCardType } from "novel";
 
 function NovelCard(props: NovelCardType) {
-  console.log(props);
+  // console.log(props);
   // const isUploaded = props.isUploaded;
 
   const router = useRouter();
