@@ -61,6 +61,12 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
     }
   }, [saveToast]);
 
+  useEffect(() => {
+    if (postEpisode?.statusType == "TEMPORARY") {
+      postHandler();
+    }
+  }, [postEpisode]);
+
   //////////////////////////// 함수 //////////////////////////////////////
 
   // any 바꾸기, 에피소드 제목 바꾸는 함수
@@ -69,6 +75,17 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
       ...episode,
       [e.target.name]: e.target.value,
     });
+  };
+
+  const postHandler = async () => {
+    try {
+      const res = await springApi.post("/episodes", postEpisode);
+      if (res.status === 201) {
+        setPostedEpisodeId(res.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   // 발행하기 모달함수
@@ -108,7 +125,7 @@ function EditorHead({ episode, setEpisode }: EditorHeadProps) {
   // 발행 예약하기 함수
   const ReservationHandler = async () => {
     try {
-      const res = await springApi.post("/episodes");
+      const res = await springApi.post("/episodes",postEpisode);
       if (res.status === 201) {
         setPostedEpisodeId(res.data);
       }
