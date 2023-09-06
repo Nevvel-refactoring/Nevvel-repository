@@ -14,7 +14,6 @@ import ImgUpload from "@/src/components/assetstore/ImgUpload";
 import AudUpload from "@/src/components/assetstore/AudUpload";
 
 import TagData from "@/src/components/assetstore/DummyTagData.json";
-import { NewvelApi } from "@/src/api/instance";
 import TagAddModal from "@/src/components/assetstore/TagAddModal";
 
 import type { GetServerSideProps, GetServerSidePropsContext, NextPage } from "next"
@@ -22,6 +21,7 @@ import { Props } from "next/dist/client/script";
 
 import { BiImage } from "react-icons/bi";
 import { AiOutlineSound } from "react-icons/ai";
+import { getTagList } from "@/src/api/tags";
 
 
 type TagData = {
@@ -30,7 +30,7 @@ type TagData = {
   useCount: number;
 };
 
-function assetstore({ content }: any) {
+function assetstore() {
 
   // 에셋리스트로 props하는 reaxios 신호
   const [reaxiosTrigger, setReaxiosTrigger] = useState<boolean>(false)
@@ -87,7 +87,7 @@ function assetstore({ content }: any) {
 
   useEffect(() => {
     const getTagData = async () => {
-      const res = await NewvelApi.tagsList();
+      const res = await getTagList();
       setTagData(res.data.content);
       // console.log(res)
     };
@@ -133,7 +133,6 @@ function assetstore({ content }: any) {
 
   return (
     <Wrapper>
-      {content}
       <AssetstoreBanner />
       <SearchBtnDiv>
         <SearchBar>

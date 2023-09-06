@@ -1,7 +1,7 @@
 import GenreList from "./GenreList";
 import styled from "styled-components";
 import { useState, useEffect, useRef } from "react";
-import { NewvelApi } from "@/src/api/instance";
+import { getGenre } from "@/src/api/genre";
 
 interface Nav {
   nav: string;
@@ -61,9 +61,11 @@ function NovelNav({ nav, pageNum }: Nav) {
 
   useEffect(() => {
     const getGenres = async () => {
-      const res = await NewvelApi.allGenres();
-      setGenres(res.data.genres);
-      // console.log(res.data.genres);
+      const res = await getGenre();
+      if (res != null) {
+        setGenres(res.data.genres);
+        // console.log(res.data.genres);
+      }
     };
     getGenres();
   }, []);
