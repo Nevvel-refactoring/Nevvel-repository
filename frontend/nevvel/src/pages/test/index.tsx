@@ -1,5 +1,6 @@
 import { getAssets } from "@/src/api/assets";
 import { useState } from "react";
+import styled from "styled-components";
 
 export default function Test() {
   const [assetType, setAssetType] = useState<string | undefined>(undefined);
@@ -49,13 +50,36 @@ export default function Test() {
 
   return (
     <div>
-      <input type="text" value={assetType} onChange={assetTypeHandler} />
-      <input type="text" value={tags} onChange={tagsHandler} />
-      <input type="text" value={page} onChange={pageHandler} />
-      <input type="text" value={size} onChange={sizeHandler} />
-      <input type="text" value={searchType} onChange={searchTypeypeHandler} />
-      <input type="text" value={sort} onChange={sortHandler} />
-      <button value="테스트" onClick={onClickHandler} />
+      <Div>
+        <label htmlFor="assetType">assetType</label>
+        <input
+          type="text"
+          value={assetType}
+          id="assetType"
+          onChange={assetTypeHandler}
+        />
+        <label htmlFor="tags">tags</label>
+        <input type="text" value={tags} id="tags" onChange={tagsHandler} />
+        <label htmlFor="page">page</label>
+        <input type="text" value={page} id="page" onChange={pageHandler} />
+        <label htmlFor="size">size</label>
+        <input type="text" value={size} id="size" onChange={sizeHandler} />
+        <label htmlFor="searchType">searchType</label>
+        <input
+          type="text"
+          value={searchType}
+          id="searchType"
+          onChange={searchTypeypeHandler}
+        />
+        <label htmlFor="sort">sort</label>
+        <input type="text" value={sort} id="sort" onChange={sortHandler} />
+      </Div>
+      <button onClick={onClickHandler}>테스트</button>
     </div>
   );
 }
+
+const Div = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
