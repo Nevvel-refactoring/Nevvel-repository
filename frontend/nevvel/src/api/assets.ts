@@ -57,9 +57,23 @@ export const getAssets = async ({
       urlDetail += `&sort=${sort}`;
     }
   }
-  console.log(urlDetail);
   try {
     const data = await springApi.get(`/assets${urlDetail}`);
+    return data;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
+
+// 구매한 에셋 조회
+export const getPurchasedAssets = async (assetType: string | undefined) => {
+  let urlDetail = '?'
+  if (assetType) {
+    urlDetail = `?assettype=${assetType}`
+  }
+  try {
+    const data = await springApi.get(`/assets/purchased-on${urlDetail}`);
     return data;
   } catch (error) {
     console.log(error);

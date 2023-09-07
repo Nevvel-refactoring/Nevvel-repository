@@ -8,6 +8,7 @@ import { Modal } from "../common/Modal";
 import AssetDetailModal from "../assetstore/AssetDetailModal";
 import { useAtomValue } from "jotai";
 import { userInfoAtom } from "@/src/store/Login";
+import { getPurchasedAssets } from "@/src/api/assets";
 
 interface Content {
   id: number;
@@ -97,17 +98,19 @@ function MyAsset() {
   );
   const [purchasedMore, setPurchasedMore] = useState("");
   useEffect(() => {
-    const getPurchasedAssets = async () => {
-      const res = await NewvelApi.purchasedAssets();
-      // console.log(res.data);
-      setPurchasedAsset(res.data);
-      if (res.data.empty) {
-        setPurchasedMore("");
-      } else {
-        setPurchasedMore("/myPage/purchasedAsset");
+    const getPurchasedAsset = async () => {
+      const res = await getPurchasedAssets(undefined);
+      if (res != null) {
+        // console.log(res.data);
+        setPurchasedAsset(res.data);
+        if (res.data.empty) {
+          setPurchasedMore("");
+        } else {
+          setPurchasedMore("/myPage/purchasedAsset");
+        }
       }
     };
-    getPurchasedAssets();
+    getPurchasedAsset();
   }, []);
   // 구매한 에셋 5개 받아오기
   useEffect(() => {

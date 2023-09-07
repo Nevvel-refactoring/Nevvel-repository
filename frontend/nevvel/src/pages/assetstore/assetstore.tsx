@@ -30,7 +30,7 @@ type TagData = {
   useCount: number;
 };
 
-function assetstore({ content }: any) {
+function assetstore() {
 
   // 에셋리스트로 props하는 reaxios 신호
   const [reaxiosTrigger, setReaxiosTrigger] = useState<boolean>(false)
@@ -135,7 +135,6 @@ function assetstore({ content }: any) {
 
   return (
     <Wrapper>
-      {content}
       <AssetstoreBanner />
       <SearchBtnDiv>
         <SearchBar>

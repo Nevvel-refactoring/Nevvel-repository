@@ -13,6 +13,7 @@ import { useAtom } from "jotai";
 import { cover } from "series";
 import { userInfoAtom, loginAtom } from "@/src/store/Login";
 import { NextPageContext } from "next";
+import { getPurchasedAssets } from "@/src/api/assets";
 
 function index(props: { userDTO: string }) {
   const userDTO = props.userDTO === "" ? "" : JSON.parse(props.userDTO);
@@ -85,10 +86,8 @@ function index(props: { userDTO: string }) {
   // 이미지 get 요청
   const getAssetImgData = async () => {
     try {
-      const res = await springApi.get(
-        "assets/own?assettype=IMAGE"
-      );
-      if (res) {
+      const res = await getPurchasedAssets("IMAGE");
+      if (res != null) {
         // console.log(res);
         setAssetImageData(res.data.content);
       }
@@ -100,10 +99,8 @@ function index(props: { userDTO: string }) {
   // 오디오 get 요청
   const getAssetAudioData = async () => {
     try {
-      const res = await springApi.get(
-        "assets/own?assettype=AUDIO"
-      );
-      if (res) {
+      const res = await getPurchasedAssets("AUDIO");
+      if (res != null) {
         // console.log(res);
         setAssetAudioData(res.data.content);
       }
