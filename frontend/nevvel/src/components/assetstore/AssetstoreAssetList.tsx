@@ -8,6 +8,7 @@ import { Modal } from "../common/Modal";
 import AssetDetailModal from "./AssetDetailModal";
 
 import springApi from "@/src/api/instance";
+import { getAssets } from "@/src/api/assets";
 
 
 interface AssetTag {
@@ -40,6 +41,13 @@ interface AssetstorePorps {
   setAfterUpload : React.Dispatch<React.SetStateAction<boolean>>;
   reaxiosTrigger : boolean;
   setReaxiosTrigger : React.Dispatch<React.SetStateAction<boolean>>;
+  queryData: {
+    assettype: string;
+    tags: string;
+    page: number;
+    searchtype: string;
+    sort: string;
+  };
   queryString : string;
 }
 
@@ -63,20 +71,40 @@ function AssetstoreAssetList(props : AssetstorePorps) {
   // axios로 데이터 get받아오기
   useEffect(() => {
     const getAssetList = async() => {
-      const res = await springApi.get(`${axiosURI}`)
-      // console.log(res.data.content)
-      setAssetData(res.data.content)
+      const res = await getAssets({
+        assetType: "IMAGE",
+        tags: undefined,
+        page: 1,
+        size: undefined,
+        searchType: "ALL",
+        sort: "downloadCount, desc",
+      });
+      // const res = await springApi.get(`${axiosURI}`)
+      if (res != null) {
+        // console.log(res.data.content)
+        setAssetData(res.data.content)
+      }
     }
-    getAssetList()
+    getAssetList();
   },[])
 
   // reaxios로 데이터 get 받아오기
   useEffect(() => {
     const getAssetList = async() => {
-      const res = await springApi.get(`${axiosURI}`)
-      // console.log(res.data.content)
-      setAssetData(res.data.content)
-      setUritoAxios(false)
+      const res = await getAssets({
+        assetType: props.queryData.assettype,
+        tags: props.queryData.tags,
+        page: props.queryData.page,
+        size: 1,
+        searchType: props.queryData.searchtype,
+        sort: props.queryData.sort,
+      });
+      // const res = await springApi.get(`${axiosURI}`)
+      if (res != null) {
+        // console.log(res.data.content)
+        setAssetData(res.data.content)
+        setUritoAxios(false)
+      }
     }
     if (uritoAxios === true){
       getAssetList()
@@ -90,18 +118,28 @@ function AssetstoreAssetList(props : AssetstorePorps) {
 
   useEffect(() => {
     const getAssetList = async() => {
-      const res = await springApi.get(`/assets?assettype=IMAGE&pageNum=1&searchtype=ALL&sort =downloadCount`)
+      const res = await getAssets({
+        assetType: "IMAGE",
+        tags: undefined,
+        page: 1,
+        size: undefined,
+        searchType: "ALL",
+        sort: "downloadCount",
+      });
+      // const res = await springApi.get(`/assets?assettype=IMAGE&pageNum=1&searchtype=ALL&sort =downloadCount`)
       // console.log(res.data.content)
-      setAssetData(res.data.content)
-      setAxiosReloaer(false)
-      props.setAfterUpload(false)
+      if (res != null) {
+        setAssetData(res.data.content)
+        setAxiosReloaer(false)
+        props.setAfterUpload(false)
+      }
     }
     if (axiosReloader === true) {
-      getAssetList()
+      getAssetList();
     }
-    if (axiosReloader === true){
-      getAssetList()
-    }
+    // if (axiosReloader === true){
+    //   getAssetList();
+    // }
   },[axiosReloader, props.afterUpload])  
 
 

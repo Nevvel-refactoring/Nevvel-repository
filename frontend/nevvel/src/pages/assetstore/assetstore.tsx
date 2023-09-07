@@ -30,7 +30,7 @@ type TagData = {
   useCount: number;
 };
 
-function assetstore() {
+function assetstore({ content }: any) {
 
   // 에셋리스트로 props하는 reaxios 신호
   const [reaxiosTrigger, setReaxiosTrigger] = useState<boolean>(false)
@@ -53,7 +53,7 @@ function assetstore() {
   const [popNewTrigger, setPopNewTrigger] = useState<string>("downloadCount,desc")
 
   // 필터 정보를 받아서 axios할 쿼리스트링 구성해주기
-  const queryString = `/assets?assettype=${imgAudTrigger}${appliedTags}&page=${paginationNum}&searchtype=ALL&sort=${popNewTrigger}`
+  const queryString = `/assets?assettype=${imgAudTrigger}&tags=${appliedTags}&page=${paginationNum}&searchtype=ALL&sort=${popNewTrigger}`
 
   useEffect(() => {
     // console.log(queryString)
@@ -133,6 +133,7 @@ function assetstore() {
 
   return (
     <Wrapper>
+      {content}
       <AssetstoreBanner />
       <SearchBtnDiv>
         <SearchBar>
@@ -200,6 +201,7 @@ function assetstore() {
         setAfterUpload={setAfterUpload}
         reaxiosTrigger={reaxiosTrigger}
         setReaxiosTrigger={setReaxiosTrigger}
+        queryData={{assettype:imgAudTrigger, tags:appliedTags, page:paginationNum, searchtype:'ALL', sort:popNewTrigger}}
         queryString={queryString}
       />
 

@@ -7,7 +7,6 @@ import BestDetails from "../components/main/BestDetails";
 import AssetSwiper from "../components/main/AssetSwiper";
 import axios from "axios";
 import styled from "styled-components";
-import springApi from "@/src/api/instance";
 import DummyAssetData_audio from "@/src/components/assetstore/DummyAssetData_Audio.json";
 import DummyAssetData_image from "@/src/components/assetstore/DummyAssetData_Image.json";
 import { ImageAssetAtom, AudioAssetAtom } from "@/src/store/EditorAssetStore";
@@ -15,6 +14,7 @@ import React from "react";
 import { useState } from "react";
 import { Novel } from "novel";
 import { getTagList } from "../api/tags";
+import { getAssets } from "../api/assets";
 
 interface AssetTag {
   id: number;
@@ -91,10 +91,15 @@ export default function Home(props: {
   // 이미지 get 요청
   const getAssetImgData = async () => {
     try {
-      const res = await springApi.get(
-        "assets/purchased-on?assettype=IMAGE&page=1&size=10&sort=createdDateTime"
-      );
-      if (res) {
+      const res = await getAssets({
+        assetType: "IMAGE",
+        tags: undefined,
+        page: 1,
+        size: 10,
+        searchType: undefined,
+        sort: "createdDateTime",
+      });
+      if (res != null) {
         // console.log(res);
         setAssetImageData(res.data.content);
       }
@@ -106,10 +111,15 @@ export default function Home(props: {
   // 오디오 get 요청
   const getAssetAudioData = async () => {
     try {
-      const res = await springApi.get(
-        "assets/purchased-on?assettype=AUDIO&page=1&size=10&sort=createdDateTime"
-      );
-      if (res) {
+      const res = await getAssets({
+        assetType: "AUDIO",
+        tags: undefined,
+        page: 1,
+        size: 10,
+        searchType: undefined,
+        sort: "createdDateTime",
+      });
+      if (res != null) {
         // console.log(res);
         setAssetAudioData(res.data.content);
       }
