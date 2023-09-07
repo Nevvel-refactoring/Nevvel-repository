@@ -7,6 +7,7 @@ import { ModalonModal } from "../common/ModalonModal";
 import AskUploadModalContent from "./AskUploadModalContent";
 
 import springApi from "@/src/api/instance";
+import { postAsset } from "@/src/api/assets";
 
 
 type assetstoreProps = {
@@ -166,16 +167,10 @@ function ImgUpload(props:assetstoreProps) {
 
       // console.log('엑시오스 아직 비활성화', axiosTrigger)
 
-      await springApi.post("/assets", formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      }).then(res => {
-        // console.log(res)
-      }).catch(err => {
-        console.log("에러남 error")
-      })
-      
+      const res = await postAsset(formData)
+      if (res != null) {
+        console.log('이미지업로드');
+      }
     }
     catch (error) {
       alert('업로드 과정에서 문제가 발생하였습니다.')

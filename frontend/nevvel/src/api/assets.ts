@@ -68,12 +68,38 @@ export const getAssets = async ({
 
 // 구매한 에셋 조회
 export const getPurchasedAssets = async (assetType: string | undefined) => {
-  let urlDetail = '?'
+  let urlDetail = "?";
   if (assetType) {
-    urlDetail = `?assettype=${assetType}`
+    urlDetail = `?assettype=${assetType}`;
   }
   try {
     const data = await springApi.get(`/assets/purchased-on${urlDetail}`);
+    return data;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
+
+// 에셋 생성하기
+export const postAsset = async (formData: FormData) => {
+  try {
+    const data = await springApi.post("/assets", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return data;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
+
+// 에셋 상태(사용 가능 여부) 수정
+export const putAsset = async (assetId: number) => {
+  try {
+    const data = await springApi.put(`/assets/${assetId}`);
     return data;
   } catch (error) {
     console.log(error);

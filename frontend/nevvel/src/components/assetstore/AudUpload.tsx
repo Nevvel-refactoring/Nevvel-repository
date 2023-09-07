@@ -3,6 +3,7 @@ import { useState, useRef } from "react";
 import styled from "styled-components";
 import TagSearchBar from "./TagSearchBar";
 import springApi from "@/src/api/instance";
+import { postAsset } from "@/src/api/assets";
 
 
 type assetstoreProps = {
@@ -141,17 +142,10 @@ function AudUpload(props:assetstoreProps) {
       // formData.append('assetRegistDto', JSON.stringify(jsonDatas))
       formData.append('assetRegistDto', new Blob([JSON.stringify(jsonDatas)], {type: "application/json"}))
       
-
-      await springApi.post("/assets", formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      }).then(res => {
-        // console.log(res)
-      }).catch(err => {
-        console.log("에러남 error")
-      })
-      
+      const res = await postAsset(formData)
+      if (res != null) {
+        console.log('오디오업로드');
+      }
     }
     catch (error) {
       alert('업로드 과정에서 문제가 발생하였습니다.')
