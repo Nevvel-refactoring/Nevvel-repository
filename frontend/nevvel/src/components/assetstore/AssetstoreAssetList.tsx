@@ -95,7 +95,7 @@ function AssetstoreAssetList(props : AssetstorePorps) {
         assetType: props.queryData.assettype,
         tags: props.queryData.tags,
         page: props.queryData.page,
-        size: 1,
+        size: undefined,
         searchType: props.queryData.searchtype,
         sort: props.queryData.sort,
       });

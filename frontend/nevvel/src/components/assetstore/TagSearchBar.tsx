@@ -28,9 +28,11 @@ function TagSearchBar(props:ImageUploadProps){
   useEffect(() => {
     const getTagData = async () => {
       const res = await getTagList();
-      const TagObjtoList = await (res.data.content).map((obj:TagData) => (obj.tagName))
-      setTagLIst(TagObjtoList);
-      // console.log(res)
+      if (res != null) {
+        const TagObjtoList = await (res.data.content).map((obj:TagData) => (obj.tagName))
+        setTagLIst(TagObjtoList);
+        // console.log(res)
+      }
     };
     getTagData();
   }, []);

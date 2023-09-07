@@ -88,8 +88,10 @@ function assetstore({ content }: any) {
   useEffect(() => {
     const getTagData = async () => {
       const res = await getTagList();
-      setTagData(res.data.content);
-      // console.log(res)
+      if (res != null) {
+        setTagData(res.data.content);
+        // console.log(res)
+      }
     };
     getTagData();
   }, []);
