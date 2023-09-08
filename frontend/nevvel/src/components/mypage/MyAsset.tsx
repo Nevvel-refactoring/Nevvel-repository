@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import SemiTitle from "./SemiTitle";
 import styled from "styled-components";
-import springApi, { NewvelApi } from "@/src/api/instance";
 import AssetCard from "../common/AssetCard";
 import { Modal } from "../common/Modal";
 import AssetDetailModal from "../assetstore/AssetDetailModal";

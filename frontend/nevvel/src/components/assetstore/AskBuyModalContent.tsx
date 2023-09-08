@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import springApi from "@/src/api/instance";
 import { postPurchaseAsset } from "@/src/api/assets";
 
 
@@ -18,7 +17,6 @@ function AskBuyModalContent({setModalonModalOpen, setModalChanger, AssetId, setB
     // axios
     const res = await postPurchaseAsset(AssetId);
     if (res != null) {
-      console.log(res);
       if (res.status === 201) {
         setModalChanger(true);
         setBuyBtnChanger(true);

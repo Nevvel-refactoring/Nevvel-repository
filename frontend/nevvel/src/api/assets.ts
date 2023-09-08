@@ -135,3 +135,31 @@ export const postPurchaseAsset = async (AssetId: number) => {
     return null;
   }
 };
+
+// 에셋 검색
+interface getSearchAssetsType {
+  keyword: string;
+  tags: string[] | undefined;
+  assetType: string | undefined;
+}
+
+export const getSearchAsset = async ({
+  keyword,
+  tags,
+  assetType,
+}: getSearchAssetsType) => {
+  let urlDetail = `?keyword=${keyword}`;
+  if (tags) {
+    urlDetail += `&tags=${tags}`;
+  }
+  if (assetType) {
+    urlDetail += `&assettype=${assetType}`;
+  }
+  try {
+    const data = await springApi.get(`/assets/search${urlDetail}`);
+    return data;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};

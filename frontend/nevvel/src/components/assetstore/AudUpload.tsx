@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { useState, useRef } from "react";
 import styled from "styled-components";
 import TagSearchBar from "./TagSearchBar";
-import springApi from "@/src/api/instance";
 import { postAsset } from "@/src/api/assets";
 
 

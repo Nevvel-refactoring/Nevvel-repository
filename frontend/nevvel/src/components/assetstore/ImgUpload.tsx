@@ -6,7 +6,6 @@ import TagSearchBar from "./TagSearchBar";
 import { ModalonModal } from "../common/ModalonModal";
 import AskUploadModalContent from "./AskUploadModalContent";
 
-import springApi from "@/src/api/instance";
 import { postAsset } from "@/src/api/assets";
 
 
