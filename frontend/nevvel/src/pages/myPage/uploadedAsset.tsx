@@ -5,12 +5,12 @@ import { useAtom } from "jotai";
 import AssetCard from "@/src/components/common/AssetCard";
 import { Modal } from "../../components/common/Modal";
 import AssetDetailModal from "../../components/assetstore/AssetDetailModal";
-import springApi from "@/src/api/instance";
 import Image from "next/image";
 import nevvel_m_dark from "../../assets/img/nevvel_m_dark.png";
 import styled from "styled-components";
 
 import { NextPageContext } from "next";
+import { getUploadedAsset } from "@/src/api/assets";
 
 interface Content {
   id: number;
@@ -90,14 +90,18 @@ function UploadedAsset(props: { userDTO: string }) {
   );
   useEffect(() => {
     const getUploadedAssets = async () => {
-      const res = await springApi.get(`/assets/uploader/${userInfoStatus?.id}`)
-      // console.log(res.data);
-      setUploadedAsset(res.data);
+      if (userInfoStatus) {
+        const res = await getUploadedAsset(userInfoStatus.id, undefined);
+        if (res != null) {
+          // console.log(res.data);
+          setUploadedAsset(res.data);
+        }
+      }
     };
     // if (!loginStatus) {
     //   router.push({ pathname: "/" });
     // } else {
-        getUploadedAssets();
+    getUploadedAssets();
     // }
   }, []);
 

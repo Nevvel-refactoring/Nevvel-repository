@@ -14,7 +14,6 @@ import ImgUpload from "@/src/components/assetstore/ImgUpload";
 import AudUpload from "@/src/components/assetstore/AudUpload";
 
 import TagData from "@/src/components/assetstore/DummyTagData.json";
-import { NewvelApi } from "@/src/api/instance";
 import TagAddModal from "@/src/components/assetstore/TagAddModal";
 
 import type { GetServerSideProps, GetServerSidePropsContext, NextPage } from "next"
@@ -22,6 +21,7 @@ import { Props } from "next/dist/client/script";
 
 import { BiImage } from "react-icons/bi";
 import { AiOutlineSound } from "react-icons/ai";
+import { getTagList } from "@/src/api/tags";
 
 
 type TagData = {
@@ -30,7 +30,7 @@ type TagData = {
   useCount: number;
 };
 
-function assetstore({ content }: any) {
+function assetstore() {
 
   // 에셋리스트로 props하는 reaxios 신호
   const [reaxiosTrigger, setReaxiosTrigger] = useState<boolean>(false)
@@ -53,7 +53,7 @@ function assetstore({ content }: any) {
   const [popNewTrigger, setPopNewTrigger] = useState<string>("downloadCount,desc")
 
   // 필터 정보를 받아서 axios할 쿼리스트링 구성해주기
-  const queryString = `/assets?assettype=${imgAudTrigger}${appliedTags}&page=${paginationNum}&searchtype=ALL&sort=${popNewTrigger}`
+  const queryString = `/assets?assettype=${imgAudTrigger}&tags=${appliedTags}&page=${paginationNum}&searchtype=ALL&sort=${popNewTrigger}`
 
   useEffect(() => {
     // console.log(queryString)
@@ -87,9 +87,11 @@ function assetstore({ content }: any) {
 
   useEffect(() => {
     const getTagData = async () => {
-      const res = await NewvelApi.tagsList();
-      setTagData(res.data.content);
-      // console.log(res)
+      const res = await getTagList();
+      if (res != null) {
+        setTagData(res.data.content);
+        // console.log(res)
+      }
     };
     getTagData();
   }, []);
@@ -133,7 +135,6 @@ function assetstore({ content }: any) {
 
   return (
     <Wrapper>
-      {content}
       <AssetstoreBanner />
       <SearchBtnDiv>
         <SearchBar>
@@ -201,6 +202,7 @@ function assetstore({ content }: any) {
         setAfterUpload={setAfterUpload}
         reaxiosTrigger={reaxiosTrigger}
         setReaxiosTrigger={setReaxiosTrigger}
+        queryData={{assettype:imgAudTrigger, tags:appliedTags, page:paginationNum, searchtype:'ALL', sort:popNewTrigger}}
         queryString={queryString}
       />
 

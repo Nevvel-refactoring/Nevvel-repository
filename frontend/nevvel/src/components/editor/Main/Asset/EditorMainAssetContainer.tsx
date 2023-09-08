@@ -13,6 +13,7 @@ import { AiOutlineSound } from "react-icons/ai";
 import { MdStorefront } from "react-icons/md"
 import springApi from "@/src/api/instance";
 import { Asset } from "editor";
+import { getAssets } from "@/src/api/assets";
 
 
 type EditorMainAssetContainerProps = {
@@ -36,15 +37,24 @@ function EditorMainAssetContainer({
 
   const getAssetStoreData = async () => {
     try{
-      const res = await springApi.get(
-        `assets?assettype=${assetType}&pageNum=1&searchtype=NOT_PURCHASED&sort=createdDateTime`
-      );
-      if (res) {
+      const res = await getAssets({
+        assetType: assetType,
+        tags: undefined,
+        page: 1,
+        size: undefined,
+        searchType: 'NOT_PURCHASED',
+        sort: 'createdDateTime',
+      });
+      // const res = await springApi.get(
+      //   `assets?assettype=${assetType}&pageNum=1&searchtype=NOT_PURCHASED&sort=createdDateTime`
+      // );
+      if (res != null) {
         // console.log(res);
         setAssetStore(res.data.content);
-        setAxiosReloaer(false)
-    }}catch(error){
-      console.log(error)
+        setAxiosReloaer(false);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 

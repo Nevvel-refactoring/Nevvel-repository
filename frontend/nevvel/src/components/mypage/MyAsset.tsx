@@ -2,12 +2,12 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import SemiTitle from "./SemiTitle";
 import styled from "styled-components";
-import springApi, { NewvelApi } from "@/src/api/instance";
 import AssetCard from "../common/AssetCard";
 import { Modal } from "../common/Modal";
 import AssetDetailModal from "../assetstore/AssetDetailModal";
 import { useAtomValue } from "jotai";
 import { userInfoAtom } from "@/src/store/Login";
+import { getPurchasedAssets, getUploadedAsset } from "@/src/api/assets";
 
 interface Content {
   id: number;
@@ -71,13 +71,17 @@ function MyAsset() {
   const [uploadedMore, setUploadedMore] = useState("");
   useEffect(() => {
     const getUploadedAssets = async () => {
-      const res = await springApi.get(`/assets/uploader/${userInfoStatus?.id}`);
-      // console.log(res.data);
-      setUploadedAsset(res.data);
-      if (res.data.empty) {
-        setUploadedMore("");
-      } else {
-        setUploadedMore("/myPage/uploadedAsset");
+      if (userInfoStatus) {
+        const res = await getUploadedAsset(userInfoStatus.id, undefined);
+        if (res != null) {
+          // console.log(res.data);
+          setUploadedAsset(res.data);
+          if (res.data.empty) {
+            setUploadedMore("");
+          } else {
+            setUploadedMore("/myPage/uploadedAsset");
+          }
+        }
       }
     };
     getUploadedAssets();
@@ -97,17 +101,19 @@ function MyAsset() {
   );
   const [purchasedMore, setPurchasedMore] = useState("");
   useEffect(() => {
-    const getPurchasedAssets = async () => {
-      const res = await NewvelApi.purchasedAssets();
-      // console.log(res.data);
-      setPurchasedAsset(res.data);
-      if (res.data.empty) {
-        setPurchasedMore("");
-      } else {
-        setPurchasedMore("/myPage/purchasedAsset");
+    const getPurchasedAsset = async () => {
+      const res = await getPurchasedAssets(undefined);
+      if (res != null) {
+        // console.log(res.data);
+        setPurchasedAsset(res.data);
+        if (res.data.empty) {
+          setPurchasedMore("");
+        } else {
+          setPurchasedMore("/myPage/purchasedAsset");
+        }
       }
     };
-    getPurchasedAssets();
+    getPurchasedAsset();
   }, []);
   // 구매한 에셋 5개 받아오기
   useEffect(() => {

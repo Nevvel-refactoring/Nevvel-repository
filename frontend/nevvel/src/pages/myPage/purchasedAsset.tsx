@@ -5,12 +5,12 @@ import { useAtom } from "jotai";
 import AssetCard from "@/src/components/common/AssetCard";
 import { Modal } from "../../components/common/Modal";
 import AssetDetailModal from "../../components/assetstore/AssetDetailModal";
-import { NewvelApi } from "@/src/api/instance";
 import Image from "next/image";
 import nevvel_m_dark from "../../assets/img/nevvel_m_dark.png";
 import styled from "styled-components";
 
 import { NextPageContext } from "next";
+import { getPurchasedAssets } from "@/src/api/assets";
 
 interface Content {
   id: number;
@@ -89,15 +89,17 @@ function purchasedAsset(props: { userDTO: string }) {
     undefined
   );
   useEffect(() => {
-    const getPurchasedAssets = async () => {
-      const res = await NewvelApi.purchasedAssets();
-      // console.log(res.data);
-      setPurchasedAsset(res.data);
+    const getPurchasedAsset = async () => {
+      const res = await getPurchasedAssets(undefined);
+      if (res != null) {
+        // console.log(res.data);
+        setPurchasedAsset(res.data);
+      }
     };
     // if (!loginStatus) {
     //   router.push({ pathname: "/" });
     // } else {
-    getPurchasedAssets();
+    getPurchasedAsset();
     // }
   }, []);
 
