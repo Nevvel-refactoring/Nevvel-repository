@@ -8,7 +8,7 @@ import { Modal } from "../common/Modal";
 import AssetDetailModal from "../assetstore/AssetDetailModal";
 import { useAtomValue } from "jotai";
 import { userInfoAtom } from "@/src/store/Login";
-import { getPurchasedAssets } from "@/src/api/assets";
+import { getPurchasedAssets, getUploadedAsset } from "@/src/api/assets";
 
 interface Content {
   id: number;
@@ -72,13 +72,17 @@ function MyAsset() {
   const [uploadedMore, setUploadedMore] = useState("");
   useEffect(() => {
     const getUploadedAssets = async () => {
-      const res = await springApi.get(`/assets/uploader/${userInfoStatus?.id}`);
-      // console.log(res.data);
-      setUploadedAsset(res.data);
-      if (res.data.empty) {
-        setUploadedMore("");
-      } else {
-        setUploadedMore("/myPage/uploadedAsset");
+      if (userInfoStatus) {
+        const res = await getUploadedAsset(userInfoStatus.id, undefined);
+        if (res != null) {
+          // console.log(res.data);
+          setUploadedAsset(res.data);
+          if (res.data.empty) {
+            setUploadedMore("");
+          } else {
+            setUploadedMore("/myPage/uploadedAsset");
+          }
+        }
       }
     };
     getUploadedAssets();

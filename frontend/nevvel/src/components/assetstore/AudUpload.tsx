@@ -142,10 +142,7 @@ function AudUpload(props:assetstoreProps) {
       // formData.append('assetRegistDto', JSON.stringify(jsonDatas))
       formData.append('assetRegistDto', new Blob([JSON.stringify(jsonDatas)], {type: "application/json"}))
       
-      const res = await postAsset(formData)
-      if (res != null) {
-        console.log('오디오업로드');
-      }
+      const res = await postAsset(formData);
     }
     catch (error) {
       alert('업로드 과정에서 문제가 발생하였습니다.')

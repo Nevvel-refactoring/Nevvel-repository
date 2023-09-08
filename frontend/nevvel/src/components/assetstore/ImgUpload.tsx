@@ -167,10 +167,7 @@ function ImgUpload(props:assetstoreProps) {
 
       // console.log('엑시오스 아직 비활성화', axiosTrigger)
 
-      const res = await postAsset(formData)
-      if (res != null) {
-        console.log('이미지업로드');
-      }
+      const res = await postAsset(formData);
     }
     catch (error) {
       alert('업로드 과정에서 문제가 발생하였습니다.')

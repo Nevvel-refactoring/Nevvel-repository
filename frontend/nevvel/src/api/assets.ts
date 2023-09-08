@@ -106,3 +106,22 @@ export const putAsset = async (assetId: number) => {
     return null;
   }
 };
+
+// 특정 유저가 만든 에셋 목록 조회
+export const getUploadedAsset = async (
+  userId: number,
+  assetType: string | undefined
+) => {
+  let urlDetail = "?";
+  if (assetType) {
+    urlDetail = `?assettype=${assetType}`;
+  }
+  console.log(urlDetail);
+  try {
+    const data = await springApi.get(`/assets/uploader/${userId}${userId}`);
+    return data;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
