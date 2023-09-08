@@ -116,9 +116,19 @@ export const getUploadedAsset = async (
   if (assetType) {
     urlDetail = `?assettype=${assetType}`;
   }
-  console.log(urlDetail);
   try {
-    const data = await springApi.get(`/assets/uploader/${userId}${userId}`);
+    const data = await springApi.get(`/assets/uploader/${userId}${urlDetail}`);
+    return data;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
+
+// 에셋 구매하기
+export const postPurchaseAsset = async (AssetId: number) => {
+  try {
+    const data = await springApi.post(`/assets/purchasing/${AssetId}`);
     return data;
   } catch (error) {
     console.log(error);
