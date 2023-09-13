@@ -9,7 +9,7 @@ function SearchNovel(props: { word: string }) {
 
   useEffect(() => {
     const getSearchNovel = async () => {
-      const res = await axios.get("https://www.nevvel.net:8081/api/covers", {
+      const res = await axios.get(process.env.API_COVER_URL!, {
         params: { keyword: props.word },
       });
       setNovels(res.data);
