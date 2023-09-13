@@ -3,13 +3,13 @@ import { useRouter } from "next/router";
 import { loginAtom, userInfoAtom } from "@/src/store/Login";
 import { useAtom } from "jotai";
 import NovelCard from "@/src/components/common/NovelCard";
-import springApi from "@/src/api/instance";
 import Image from "next/image";
 import nevvel_m_dark from "../../assets/img/nevvel_m_dark.png";
 import styled from "styled-components";
 
 import { NextPageContext } from "next";
 import { Novel } from "novel";
+import { getUploadedNovel } from "@/src/api/covers";
 
 function UploadedNovel(props: { userDTO: string }) {
   const userDTO = props.userDTO === "" ? "" : JSON.parse(props.userDTO);
@@ -39,9 +39,13 @@ function UploadedNovel(props: { userDTO: string }) {
   );
   useEffect(() => {
     const getUploadedCovers = async () => {
-      const res = await springApi.get(`/covers/uploader/${userInfoStatus?.id}`);
-      // console.log(res.data);
-      setUploadedNovel(res.data);
+      if (userInfoStatus) {
+        const res = await getUploadedNovel(userInfoStatus.id);
+        if (res != null) {
+          console.log(res.data);
+          setUploadedNovel(res.data);
+        }
+      }
     };
     // if (!loginStatus) {
     //   router.push({ pathname: "/" });

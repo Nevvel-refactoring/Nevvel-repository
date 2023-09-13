@@ -2,10 +2,6 @@ import springApi from "./instance";
 
 // 새 소설 생성하기
 export const postCover = async (formData: FormData) => {
-  console.log("api");
-  for (const x of formData) {
-    console.log(x);
-  }
   try {
     const data = await springApi.post("/covers", formData, {
       headers: {

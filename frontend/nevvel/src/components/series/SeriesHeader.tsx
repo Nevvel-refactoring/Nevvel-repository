@@ -14,7 +14,6 @@ import { mobile, tabletH } from "@/src/util/Mixin";
 import { useRouter } from "next/router";
 import { Modal } from "../common/Modal";
 import SeriesSelected from "./SeriesSelected";
-import springApi from "@/src/api/instance";
 import { userInfoAtom, loginAtom } from "@/src/store/Login";
 import { useAtomValue } from "jotai";
 import SeriesEdit from "./SeriesEdit";

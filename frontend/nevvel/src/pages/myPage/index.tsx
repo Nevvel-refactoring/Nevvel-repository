@@ -38,51 +38,6 @@ function MyPage(props: { userDTO: string }) {
   //   }
   // }, []);
 
-  // // 작성한 소설
-  // useEffect(() => {
-  //   const getUploadedCovers = async () => {
-  //     // const res = await springApi.get(`/covers/uploader/${}`)
-  //     // console.log(res)
-  //   };
-  //   getUploadedCovers();
-  // }, []);
-
-  // // 구매한 소설
-  // useEffect(() => {
-  //   const getPurchasedCovers = async () => {
-  //     const res = await NewvelApi.purchasedCovers();
-  //     console.log(res);
-  //   };
-  //   getPurchasedCovers();
-  // }, []);
-
-  // // 좋아요한 소설
-  // useEffect(() => {
-  //   const getLikeCovers = async () => {
-  //     const res = await NewvelApi.likesCovers();
-  //     console.log(res);
-  //   };
-  //   getLikeCovers();
-  // }, []);
-
-  // // 구매한 에셋
-  // useEffect(() => {
-  //   const getPurchasedAssets = async () => {
-  //     const res = await NewvelApi.purchasedAssets();
-  //     console.log(res);
-  //   };
-  //   getPurchasedAssets();
-  // }, []);
-
-  // // 만든 에셋
-  // useEffect(() => {
-  //   const getUploadedAssets = async () => {
-  //     // const res = await springApi.get(`/assets/uploader/${}`)
-  //     // console.log(res)
-  //   };
-  //   getUploadedAssets();
-  // }, []);
-
   return (
     <Wrapper>
       {/* {loginStatus ? (

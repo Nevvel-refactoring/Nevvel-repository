@@ -1,6 +1,5 @@
 import { postCover } from "@/src/api/covers";
 import { getGenre } from "@/src/api/genre";
-import springApi from "@/src/api/instance";
 import { useRouter } from "next/router";
 import React, {
   Dispatch,
@@ -129,30 +128,11 @@ function CreateNewNovel({ setModalOpen }: Props) {
         new Blob([JSON.stringify(jsonDatas)], { type: "application/json" })
       );
 
-      console.log("create");
-      for (const x of formData) {
-        console.log(x);
-       };
-
       const res = await postCover(formData);
       if (res != null) {
-        console.log(res.data);
+        // console.log(res.data);
         router.push({ pathname: `/series/${res.data}` });
       }
-      // await springApi
-      //   .post("/covers", formData, {
-      //     headers: {
-      //       "Content-Type": "multipart/form-data",
-      //     },
-      //   })
-      //   .then((res) => {
-      //     // console.log(res.data);
-      //     router.push({ pathname: `/series/${res.data}` });
-      //   })
-      //   .catch((err) => {
-      //     // console.log("에러남 error");
-      //     console.log(err);
-      //   });
     } catch (error) {
       alert("업로드 과정에서 문제가 발생하였습니다.");
     }

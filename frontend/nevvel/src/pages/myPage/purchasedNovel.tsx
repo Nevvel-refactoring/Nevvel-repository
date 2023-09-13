@@ -3,13 +3,13 @@ import { useRouter } from "next/router";
 import { loginAtom, userInfoAtom } from "@/src/store/Login";
 import { useAtom } from "jotai";
 import NovelCard from "@/src/components/common/NovelCard";
-import { NewvelApi } from "@/src/api/instance";
 import Image from "next/image";
 import nevvel_m_dark from "../../assets/img/nevvel_m_dark.png";
 import styled from "styled-components";
 
 import { NextPageContext } from "next";
 import { Novel } from "novel";
+import { getPurchasedNovel } from "@/src/api/covers";
 
 function PurchasedNovel(props: { userDTO: string }) {
   const userDTO = props.userDTO === "" ? "" : JSON.parse(props.userDTO);
@@ -39,9 +39,11 @@ function PurchasedNovel(props: { userDTO: string }) {
   );
   useEffect(() => {
     const getPurchasedCovers = async () => {
-      const res = await NewvelApi.purchasedCovers();
-      // console.log(res.data);
-      setPurchasedNovel(res.data);
+      const res = await getPurchasedNovel();
+      if (res != null) {
+        console.log(res.data);
+        setPurchasedNovel(res.data);
+      }
     };
     // if (!loginStatus) {
     //   router.push({ pathname: "/" });
