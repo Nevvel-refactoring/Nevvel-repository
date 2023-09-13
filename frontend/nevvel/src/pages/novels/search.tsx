@@ -1,18 +1,24 @@
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 import NovelCard from "@/src/components/common/NovelCard";
-import axios from "axios";
-import { Novel } from "novel"
+import { Novel } from "novel";
+import { getNovels } from "@/src/api/covers";
 
 function SearchNovel(props: { word: string }) {
   const [novels, setNovels] = useState<Novel | undefined>(undefined);
 
   useEffect(() => {
     const getSearchNovel = async () => {
-      const res = await axios.get(process.env.API_COVER_URL!, {
-        params: { keyword: props.word },
+      const res = await getNovels({
+        sortType: undefined,
+        status: undefined,
+        genre: undefined,
+        page: undefined,
+        keyword: props.word,
       });
-      setNovels(res.data);
+      if (res != null) {
+        setNovels(res.data);
+      }
     };
     getSearchNovel();
   }, [props.word]);

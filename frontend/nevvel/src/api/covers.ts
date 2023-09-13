@@ -87,3 +87,59 @@ export const getPurchasedNovel = async () => {
 };
 
 // 분류별 소설 목록 (장르, 완결, 최신, 검색)
+interface getNovelsType {
+  sortType: string | undefined;
+  status: string | undefined;
+  genre: number | undefined;
+  page: number | undefined;
+  keyword: string | undefined;
+}
+
+export const getNovels = async ({
+  sortType,
+  status,
+  genre,
+  page,
+  keyword,
+}: getNovelsType) => {
+  let urlDetail = "?";
+  if (sortType) {
+    urlDetail += `sorttype=${sortType}`;
+  }
+  if (status) {
+    if (urlDetail === "?") {
+      urlDetail += `status=${status}`;
+    } else {
+      urlDetail += `&status=${status}`;
+    }
+  }
+  if (genre) {
+    if (urlDetail === "?") {
+      urlDetail += `genre=${genre}`;
+    } else {
+      urlDetail += `&genre=${genre}`;
+    }
+  }
+  if (page) {
+    if (urlDetail === "?") {
+      urlDetail += `page=${page}`;
+    } else {
+      urlDetail += `&page=${page}`;
+    }
+  }
+  if (keyword) {
+    if (urlDetail === "?") {
+      urlDetail += `keyword=${keyword}`;
+    } else {
+      urlDetail += `&keyword=${keyword}`;
+    }
+  }
+  console.log(urlDetail);
+  try {
+    const data = await springApi.get(`/covers${urlDetail}`);
+    return data;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
