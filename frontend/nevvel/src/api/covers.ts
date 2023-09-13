@@ -134,7 +134,6 @@ export const getNovels = async ({
       urlDetail += `&keyword=${keyword}`;
     }
   }
-  console.log(urlDetail);
   try {
     const data = await springApi.get(`/covers${urlDetail}`);
     return data;
