@@ -173,7 +173,7 @@ export async function getServerSideProps({ req }: NextPageContext) {
 
   let novels = undefined;
   try {
-    const res = await axios.get("https://www.nevvel.net:8081/api/covers");
+    const res = await axios.get(process.env.API_COVER_URL!);
     novels = res.data;
   } catch (error) {
     console.log(error);
@@ -181,7 +181,7 @@ export async function getServerSideProps({ req }: NextPageContext) {
 
   let assets = undefined;
   try {
-    const res = await axios.get("https://www.nevvel.net:8081/api/assets", {
+    const res = await axios.get(process.env.API_ASSET_URL!, {
       params: {
         sort: "downloadCount,desc",
       },
