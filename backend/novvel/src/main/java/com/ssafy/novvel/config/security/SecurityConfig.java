@@ -40,11 +40,11 @@ public class SecurityConfig {
     private final LogoutSuccessHandler logoutSuccessHandler;
 
     public SecurityConfig(
-            AuthenticationSuccessHandler OAuth2LoginSuccessHandler,
-            OAuth2UserService<OidcUserRequest, OidcUser> oidcUserService,
-            JWTProvider jwtProvider,
-            UserDtoUtils userDtoUtils, MemberRepository memberRepository,
-            LogoutSuccessHandler logoutSuccessHandler) {
+        AuthenticationSuccessHandler OAuth2LoginSuccessHandler,
+        OAuth2UserService<OidcUserRequest, OidcUser> oidcUserService,
+        JWTProvider jwtProvider,
+        UserDtoUtils userDtoUtils, MemberRepository memberRepository,
+        LogoutSuccessHandler logoutSuccessHandler) {
         this.OAuth2LoginSuccessHandler = OAuth2LoginSuccessHandler;
         this.oidcUserService = oidcUserService;
         this.jwtProvider = jwtProvider;
@@ -57,13 +57,12 @@ public class SecurityConfig {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowedOrigins(
-                Arrays.asList(
-                        "https://nevvel.net",
-                        "https://nevvel.net:3000",
-                        "http://localhost:3000",
-                        "http://localhost"));
-        corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        corsConfiguration.setAllowedHeaders(Arrays.asList("Authorization", "KA", "Origin", "X-Requested-With", "Content-Type", "Accept", "Cookie"));
+            Arrays.asList("https://nevvel.net", "https://nevvel.net:3000"));
+        corsConfiguration.setAllowedMethods(
+            Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        corsConfiguration.setAllowedHeaders(
+            Arrays.asList("Authorization", "KA", "Origin", "X-Requested-With", "Content-Type",
+                "Accept", "Cookie"));
         corsConfiguration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
@@ -76,49 +75,49 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf().disable()
-                .cors()
-                .and()
-                .authorizeHttpRequests(authorize -> authorize
-                        .antMatchers(HttpMethod.GET,
-                                "/default/**",
-                                "/covers",
-                                "/covers/*",
-                                "/covers/uploader/*",
-                                "/genres",
-                                "/assets",
-                                "/assets/search",
-                                "/assets/uploader/**",
-                                "/tags/search",
-                                "/tags"
-                        ).permitAll()
-                        .anyRequest().authenticated()
+            .csrf().disable()
+            .cors()
+            .and()
+            .authorizeHttpRequests(authorize -> authorize
+                .antMatchers(HttpMethod.GET,
+                    "/default/**",
+                    "/covers",
+                    "/covers/*",
+                    "/covers/uploader/*",
+                    "/genres",
+                    "/assets",
+                    "/assets/search",
+                    "/assets/uploader/**",
+                    "/tags/search",
+                    "/tags"
+                ).permitAll()
+                .anyRequest().authenticated()
+            )
+            .oauth2Login(oauth2 -> oauth2
+                .userInfoEndpoint(userInfo -> userInfo
+                    .oidcUserService(oidcUserService)
                 )
-                .oauth2Login(oauth2 -> oauth2
-                        .userInfoEndpoint(userInfo -> userInfo
-                                .oidcUserService(oidcUserService)
-                        )
-                        .successHandler(OAuth2LoginSuccessHandler)
-                )
-                .logout(logout -> logout
-                        .logoutUrl("/users/signout")
-                        .deleteCookies(JWTProvider.getAccessToken(), JWTProvider.getRefreshToken())
-                        .logoutSuccessHandler(logoutSuccessHandler)
-                )
-                .addFilterBefore(new JwtAuthenticationProcessingFilter(jwtProvider, memberRepository,
-                                userDtoUtils),
-                        LogoutFilter.class);
+                .successHandler(OAuth2LoginSuccessHandler)
+            )
+            .logout(logout -> logout
+                .logoutUrl("/users/signout")
+                .deleteCookies(JWTProvider.getAccessToken(), JWTProvider.getRefreshToken())
+                .logoutSuccessHandler(logoutSuccessHandler)
+            )
+            .addFilterBefore(new JwtAuthenticationProcessingFilter(jwtProvider, memberRepository,
+                    userDtoUtils),
+                LogoutFilter.class);
 
         //todo 에러발생시 처리 로직 수정 필요
         http.exceptionHandling()
-                .authenticationEntryPoint((request, response, authException) -> {
-                    authException.printStackTrace();
-                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                })
-                .accessDeniedHandler((request, response, accessDeniedException) -> {
-                    accessDeniedException.printStackTrace();
-                    response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-                });
+            .authenticationEntryPoint((request, response, authException) -> {
+                authException.printStackTrace();
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            })
+            .accessDeniedHandler((request, response, accessDeniedException) -> {
+                accessDeniedException.printStackTrace();
+                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            });
         return http.build();
     }
 }
