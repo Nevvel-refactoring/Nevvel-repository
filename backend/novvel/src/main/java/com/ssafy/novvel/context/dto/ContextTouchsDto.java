@@ -23,7 +23,7 @@ public class ContextTouchsDto {
      *     },
      *   ]
      */
-    private Long idx;
+    private String idx;
 
     private String context;
 
